@@ -40,6 +40,10 @@ public class Controler {
                             case install:
                                 Installer.install(boxes);
                                 break;
+                            case uninstall:
+                                Installer.uninstall(boxes);
+                                break;
+
                             case ee:
                                 Installer.ee = Boolean.parseBoolean(words[1]);
                                 break;

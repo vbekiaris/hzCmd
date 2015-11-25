@@ -21,7 +21,7 @@ public class Controler{
 
     public static String homeUser;
     public static String homeIp;
-    public static String homeCwd;
+    public static String homeCwd = System.getProperty("user.dir");
     public static String homeInfile;
 
     private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -36,6 +36,7 @@ public class Controler{
     }
 
     public void run(){
+        System.out.println("CWD="+homeCwd);
         try{
             while (true){
                 String line=in.readLine();
@@ -68,9 +69,6 @@ public class Controler{
                             break;
                         case homeIp:
                             homeIp=words[1];
-                            break;
-                        case homeCwd:
-                            homeCwd=words[1];
                             break;
                         case homeInfile:
                             homeInfile=words[1];
