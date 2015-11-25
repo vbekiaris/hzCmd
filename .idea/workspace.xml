@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1e2fbd24-4d2e-446e-8abd-7bc3e76658d9" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/global/Args.java" afterPath="$PROJECT_DIR$/src/main/java/global/Args.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/local/Controler.java" afterPath="$PROJECT_DIR$/src/main/java/local/Controler.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/remote/Controler.java" afterPath="$PROJECT_DIR$/src/main/java/remote/Controler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/local/Installer.java" afterPath="$PROJECT_DIR$/src/main/java/local/Installer.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="hazellite.iws" />
@@ -81,8 +78,8 @@
       <file leaf-file-name="Controler.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/remote/Controler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.40592784">
-              <caret line="38" column="41" selection-start-line="38" selection-start-column="41" selection-end-line="38" selection-end-column="41" />
+            <state vertical-scroll-proportion="0.36726806">
+              <caret line="34" column="43" selection-start-line="34" selection-start-column="43" selection-end-line="34" selection-end-column="43" />
               <folding />
             </state>
           </provider>
@@ -802,7 +799,13 @@
       <option name="project" value="LOCAL" />
       <updated>1448483914916</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="run">
+      <created>1448485390797</created>
+      <option name="number" value="00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1448485390797</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1259,8 +1262,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/remote/Controler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.40592784">
-          <caret line="38" column="41" selection-start-line="38" selection-start-column="41" selection-end-line="38" selection-end-column="41" />
+        <state vertical-scroll-proportion="0.36726806">
+          <caret line="34" column="43" selection-start-line="34" selection-start-column="43" selection-end-line="34" selection-end-column="43" />
           <folding />
         </state>
       </provider>

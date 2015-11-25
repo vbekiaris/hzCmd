@@ -32,11 +32,11 @@ public class Controler{
 
 
     public Controler(HazelcastInstance hazelcastInstance){
+        System.out.println("CWD="+homeCwd);
         this.hazelcastInstance = hazelcastInstance;
     }
 
     public void run(){
-        System.out.println("CWD="+homeCwd);
         try{
             while (true){
                 String line=in.readLine();
