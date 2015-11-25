@@ -27,7 +27,7 @@ public class Controler{
     private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
     private ExecutorService executorService =  Executors.newCachedThreadPool();
 
-    private Map<String, Task> tasks = new HashMap<>();
+    private Map<String, Task> tasks = new HashMap();
     private HazelcastInstance hazelcastInstance;
 
 
@@ -108,6 +108,7 @@ public class Controler{
                 running.add(t);
         }
         executorService.invokeAll(running);
+        sendBack("all "+function+" finished");
     }
 
     private void stop(){
@@ -128,21 +129,21 @@ public class Controler{
     }
 
     private void info(){
-        String out = new String();
+        String info = new String();
         if(isMember(hazelcastInstance)){
-            out+="Member"+"\n";
+            info+="Member"+"\n";
         }else{
-            out+="Client"+"\n";
+            info+="Client"+"\n";
         }
 
-        out += homeUser+"\n";
-        out += homeIp+"\n";
-        out += homeCwd+"\n";
-        out += homeInfile+"\n";
+        info += homeUser+"\n";
+        info += homeIp+"\n";
+        info += homeCwd+"\n";
+        info += homeInfile+"\n";
 
         for(Task t : tasks.values()){
-            out += t.toString();
+            info += t.toString();
         }
-        sendBack(out);
+        sendBack(info);
     }
 }

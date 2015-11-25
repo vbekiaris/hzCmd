@@ -27,5 +27,8 @@
         <module name="remoter" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="remoter" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
 </project>

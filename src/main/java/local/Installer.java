@@ -35,10 +35,12 @@ public abstract class Installer {
             memberJar = Bash.find(path, hazelcast + version + jar);
             clientJar = Bash.find(path, hazelcastClient + version + jar);
         }
+        String mainJars = Bash.find(path, "hazellite-1.0-SNAPSHOT.jar");
+
         boxes.sshCmd("rm -fr lib");
         boxes.sshCmd("mkdir -p lib");
         boxes.upload(memberJar, "lib/");
         boxes.upload(clientJar, "lib/");
-        boxes.upload("hazellite-1.0-SNAPSHOT.jar", "lib/");
+        boxes.upload(mainJars, "lib/");
     }
 }

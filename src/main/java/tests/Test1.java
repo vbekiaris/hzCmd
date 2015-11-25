@@ -25,14 +25,13 @@ public class Test1 extends Test {
             int i = random.nextInt(3);
             map.put(keyPrefix+i, i);
         }
-        send(this.getClass().getName()+": "+map.keySet().toString());
+
+        send(map.keySet().toString());
     }
 
     @Execute(where=Execute.On.ALL, with=Execute.On.ONE)
     public void tearDown(){
         System.out.println("TEST1 "+map.keySet());
     }
-
-
 
 }

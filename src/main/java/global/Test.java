@@ -31,7 +31,7 @@ public class Test{
     }
 
     public void send(String msg) {
-        remote.Utils.sendBack(msg);
+        remote.Utils.sendBack(this.toString()+" "+msg);
     }
 
     public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {

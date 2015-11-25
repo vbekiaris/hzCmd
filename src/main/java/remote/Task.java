@@ -9,6 +9,7 @@ import java.util.concurrent.Callable;
 
 import static remote.Utils.instantiate;
 import static remote.Utils.sendBack;
+import static remote.Utils.sendBackError;
 
 public class Task implements Callable<Object> {
 
@@ -40,8 +41,10 @@ public class Task implements Callable<Object> {
         try {
             if (method!=null) {
                 System.out.println(infoStart());
+                sendBack(infoStart());
                 test.setRunning(true);
                 method.invoke(test);
+                sendBack(infoStop());
                 System.out.println(infoStop());
             }
         }catch (Exception e){
@@ -109,16 +112,12 @@ public class Task implements Callable<Object> {
 
     private void onException(Exception e){
         System.out.println(infoString()+" "+e);
-        sendBack(infoString()+" "+e);
+        sendBackError(infoString() + " " + e);
     }
 
-    protected String infoStart(){
-        return "start" + infoString();
-    }
+    protected String infoStart(){ return infoString() + " start"; }
 
-    protected String infoStop(){
-        return "stop" + infoString();
-    }
+    protected String infoStop(){ return infoString() +  " stop"; }
 
     protected String infoString(){
         return test.getId()+" " + test.getClass().getSimpleName() + " " + method.getName();
