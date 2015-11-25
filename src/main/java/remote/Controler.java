@@ -122,8 +122,12 @@ public class Controler{
             return;
         }
 
-        Task task = new Task(taskId, className, hazelcastInstance);
-        tasks.put(task.getId(), task);
+        try{
+            Task task = new Task(taskId, className, hazelcastInstance);
+            tasks.put(task.getId(), task);
+        }catch (Exception e){
+            sendBackError("id="+taskId+" className="+className+" "+e.getMessage());
+        }
     }
 
     private void info(){

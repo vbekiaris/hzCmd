@@ -19,7 +19,7 @@ public abstract class Installer {
     public static String hazelcastClient = hazelcast+"client-";
     public static String hazelcastClientEE = hazelcastEE+"client-";
 
-    public static String version = "3.4";
+    public static String version = "???";
     public static String jar = ".jar";
 
     public static void install(RemoteBoxes boxes) throws IOException, InterruptedException {
