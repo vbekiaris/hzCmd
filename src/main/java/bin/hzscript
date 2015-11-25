@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+#from scr
+
+if [ -z "${HZSCRIPT_HOME}" ] ; then
+    export SIMULATOR_HOME=~/hz-script/target
+fi
+
+ops="-Xms32m -Xmx128m"
+
+
+java -cp "${HZSCRIPT_HOME}/*" ${ops} local.Controler $@
