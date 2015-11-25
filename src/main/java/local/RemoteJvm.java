@@ -60,6 +60,11 @@ public class RemoteJvm {
         Bash.ssh(RemoteBoxes.getUser(), ips.pub, "rm -r " + dir);
     }
 
+    public void killAllJava() throws IOException, InterruptedException {
+        Bash.ssh(RemoteBoxes.getUser(), ips.pub, "killall -9 java");
+    }
+
+
     public void send(String cmd) throws IOException, InterruptedException{
         Bash.ssh(RemoteBoxes.getUser(), ips.pub, "echo "+cmd+" >> "+dir+"/"+inFile);
     }

@@ -61,6 +61,12 @@ public class RemoteJvmManager {
         }
     }
 
+    public void killAllJava() throws IOException, InterruptedException {
+        for(RemoteJvm jvm : jvms){
+            jvm.killAllJava();
+        }
+    }
+
     public void send(String cmd) throws IOException, InterruptedException {
         for(RemoteJvm jvm : jvms){
             jvm.send(cmd);

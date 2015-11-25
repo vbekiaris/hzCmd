@@ -49,6 +49,7 @@ public class RemoteBoxes {
 
     public void clean( ) throws IOException, InterruptedException {
         jvmManager.clean();
+        jvmManager.killAllJava();
     }
 
     public void send(String cmd) throws IOException, InterruptedException {
