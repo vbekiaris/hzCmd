@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 #from scr
 
-if [ -z "${HZ-SCRIPT_HOME}" ] ; then
-    export HZ-SCRIPT_HOME=~/hz-script/target
+if [ -z "${HZ_SCRIPT_HOME}" ] ; then
+    export HZ_SCRIPT_HOME=~/hz-script/target
 fi
 
 ops="-Xms32m -Xmx128m"
 
 
-java -cp "${HZ-SCRIPT_HOME}/*" ${ops} local.Controler $@
+java -cp "${HZ_SCRIPT_HOME}/*" ${ops} local.Controler $@
