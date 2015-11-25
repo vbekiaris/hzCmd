@@ -31,9 +31,7 @@ public class RemoteJvm {
         this.dir = getDirName();
     }
 
-    private String getDirName(){
-        return type.name()+id;
-    }
+    private String getDirName(){ return Installer.REMOTE_ROOT+"/"+type.name()+id; }
 
     public void start() throws IOException, InterruptedException {
 
@@ -41,13 +39,13 @@ public class RemoteJvm {
 
         Bash.ssh(RemoteBoxes.getUser(), ips.pub, "mkdir -p " + dir + ";  cd " + dir + ";  touch in.txt");
 
-        String clasz;
+        String type;
         if (isMember()){
-            clasz = Member.class.getName();
+            type = Member.class.getName();
             Bash.scpUp(RemoteBoxes.getUser(), ips.pub, "hazelcast.xml", dir+"/");
 
         }else{
-            clasz = Client.class.getName();
+            type = Client.class.getName();
             Bash.scpUp(RemoteBoxes.getUser(), ips.pub, "client-hazelcast.xml", dir+"/");
         }
         send("homeUser "+System.getProperty("user.name"));
@@ -55,7 +53,7 @@ public class RemoteJvm {
         send("homeCwd " + System.getProperty("user.dir"));
         send("homeInfile " + Controler.msgFile);
 
-        Bash.ssh(RemoteBoxes.getUser(), ips.pub, "cd "+dir+"; nohup java "+classPath+" "+clasz+" < "+inFile+" &> "+outFile+" &");
+        Bash.ssh(RemoteBoxes.getUser(), ips.pub, "cd "+dir+"; nohup java "+classPath+" "+type+" < "+inFile+" &> "+outFile+" &");
     }
 
     public void clean() throws IOException, InterruptedException {
