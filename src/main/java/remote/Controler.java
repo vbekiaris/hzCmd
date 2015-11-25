@@ -21,7 +21,7 @@ public class Controler{
 
     public static String homeUser;
     public static String homeIp;
-    public static String homeCwd = System.getProperty("user.dir");
+    public static String homeCwd;
     public static String homeInfile;
 
     private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -31,10 +31,7 @@ public class Controler{
     private HazelcastInstance hazelcastInstance;
 
 
-    public Controler(HazelcastInstance hazelcastInstance){
-        System.out.println("CWD="+homeCwd);
-        this.hazelcastInstance = hazelcastInstance;
-    }
+    public Controler(HazelcastInstance hazelcastInstance){ this.hazelcastInstance = hazelcastInstance; }
 
     public void run(){
         try{
@@ -69,6 +66,9 @@ public class Controler{
                             break;
                         case homeIp:
                             homeIp=words[1];
+                            break;
+                        case homeCwd:
+                            homeCwd=words[1];
                             break;
                         case homeInfile:
                             homeInfile=words[1];
