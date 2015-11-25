@@ -41,7 +41,7 @@ public abstract class Bash {
         p.waitFor();
         BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
-        String line = "";
+        String line;
         while ((line = reader.readLine())!= null) {
             System.out.println(line);
             output.append(line + "\n");
