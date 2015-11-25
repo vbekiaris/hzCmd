@@ -39,8 +39,13 @@ public abstract class Bash {
 
         Process p = Runtime.getRuntime().exec(command);
         p.waitFor();
-        System.out.println("exit code = "+p.exitValue());
         BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+        int exitCode = p.exitValue();
+        if (exitCode != 0 ){
+            System.out.println("ERROR exit code = "+p.exitValue());
+            reader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+        }
 
         String line;
         while ((line = reader.readLine())!= null) {
