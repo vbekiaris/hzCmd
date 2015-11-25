@@ -48,7 +48,7 @@ public class RemoteJvmManager {
             if(jvm.isMember())
                 jvm.start();
         }
-        sleepSeconds(7);
+        sleepSeconds(10);
         for(RemoteJvm jvm : jvms){
             if(jvm.isClient())
                 jvm.start();
