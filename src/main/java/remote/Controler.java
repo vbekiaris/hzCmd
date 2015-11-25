@@ -135,15 +135,15 @@ public class Controler{
     private void info(){
         String info = new String();
         if(isMember(hazelcastInstance)){
-            info+="Member"+"\n";
+            info+="Member ";
         }else{
-            info+="Client"+"\n";
+            info+="Client ";
         }
 
-        info += homeUser+"\n";
-        info += homeIp+"\n";
-        info += homeCwd+"\n";
-        info += homeInfile+"\n";
+        info += homeUser+" ";
+        info += homeIp+" ";
+        info += homeCwd+" ";
+        info += homeInfile+" ";
 
         for(Task t : tasks.values()){
             info += t.toString();
