@@ -9,7 +9,7 @@ import java.net.InetAddress;
 
 public class RemoteJvm {
 
-    public static final String classPath="-cp \"$HOME/lib/*\"";
+    public static final String classPath="-cp \"$HOME"+Installer.REMOTE_ROOT+"/lib/*\"";
 
     public static final String inFile  =  "in.txt";
     public static final String outFile =  "out.txt";

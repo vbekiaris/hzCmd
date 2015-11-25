@@ -6,6 +6,7 @@ import java.io.IOException;
 
 public abstract class Installer {
 
+    public static String REMOTE_ROOT = "hzCluster";
     public static String M2_HOME = "M2_HOME";
     public static String HOME = "HOME";
 
@@ -37,10 +38,10 @@ public abstract class Installer {
         }
         String mainJars = Bash.find(path, "hazellite-1.0-SNAPSHOT.jar");
 
-        boxes.sshCmd("rm -fr lib");
-        boxes.sshCmd("mkdir -p lib");
-        boxes.upload(memberJar, "lib/");
-        boxes.upload(clientJar, "lib/");
-        boxes.upload(mainJars, "lib/");
+        boxes.sshCmd("rm -fr "+REMOTE_ROOT);
+        boxes.sshCmd("mkdir -p "+REMOTE_ROOT+"/lib");
+        boxes.upload(memberJar, REMOTE_ROOT+"/lib/");
+        boxes.upload(clientJar, REMOTE_ROOT+"/lib/");
+        boxes.upload(mainJars, REMOTE_ROOT+"/lib/");
     }
 }
