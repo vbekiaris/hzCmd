@@ -7,8 +7,9 @@ import java.io.IOException;
 public abstract class Installer {
 
     public static String REMOTE_ROOT = "hzCluster";
-    public static String M2_HOME = "M2_HOME";
     public static String HOME = "HOME";
+    public static String M2_DIR = "/.m2/";
+    public static String M2_Repo = System.getenv(HOME)+M2_DIR;
 
     public static boolean ee = false;
 
@@ -22,21 +23,17 @@ public abstract class Installer {
     public static String jar = ".jar";
 
     public static void install(RemoteBoxes boxes) throws IOException, InterruptedException {
-        String path = System.getenv(M2_HOME);
 
-        if( path == null ){
-            path = System.getenv(HOME)+"/.m2/";
-        }
         String memberJar;
         String clientJar;
         if(ee){
-            memberJar = Bash.find(path, hazelcastEE + version + jar);
-            clientJar = Bash.find(path, hazelcastClientEE + version + jar);
+            memberJar = Bash.find(M2_Repo, hazelcastEE + version + jar);
+            clientJar = Bash.find(M2_Repo, hazelcastClientEE + version + jar);
         }else {
-            memberJar = Bash.find(path, hazelcast + version + jar);
-            clientJar = Bash.find(path, hazelcastClient + version + jar);
+            memberJar = Bash.find(M2_Repo, hazelcast + version + jar);
+            clientJar = Bash.find(M2_Repo, hazelcastClient + version + jar);
         }
-        String mainJars = Bash.find(path, "hazellite-1.0-SNAPSHOT.jar");
+        String mainJars = Bash.find(M2_Repo, "hazellite-1.0-SNAPSHOT.jar");
 
         boxes.sshCmd("rm -fr "+REMOTE_ROOT);
         boxes.sshCmd("mkdir -p "+REMOTE_ROOT+"/lib");
