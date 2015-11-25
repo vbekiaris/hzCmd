@@ -26,4 +26,8 @@ public abstract class Utils {
     public static void sleepSeconds(int sec){
         sleepMilli(sec*1000);
     }
+
+    public static String exceptionStacktraceToString(Exception e) {
+        return Arrays.toString(e.getStackTrace());
+    }
 }

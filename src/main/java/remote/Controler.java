@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.concurrent.*;
 
 import static global.Bash.killAllJava;
+import static global.Utils.exceptionStacktraceToString;
 import static global.Utils.sleepMilli;
 import static remote.Utils.isMember;
 import static remote.Utils.sendBack;
@@ -86,6 +87,7 @@ public class Controler{
             }
         }catch(Exception e){
             e.printStackTrace();
+            sendBackError(exceptionStacktraceToString(e));
         }
     }
 
@@ -125,7 +127,7 @@ public class Controler{
         try{
             Task task = new Task(taskId, className, hazelcastInstance);
             tasks.put(task.getId(), task);
-        }catch (Exception e){
+        } catch (Exception e){
             sendBackError("id="+taskId+" className="+className+" "+e.getMessage());
         }
     }
