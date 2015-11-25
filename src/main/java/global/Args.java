@@ -1,0 +1,15 @@
+package global;
+
+import local.Installer;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+
+public enum  Args{
+    exit, install, ee, version, user, start, load, invoke, bench, stop, ssh, info, membersOnly, members, clients,
+    msg, sleep, homeUser, homeIp, homeCwd, homeInfile, clean, stopped,
+}
+
