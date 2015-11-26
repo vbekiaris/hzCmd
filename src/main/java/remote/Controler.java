@@ -78,7 +78,6 @@ public class Controler{
                             homeInfile=words[1];
                             break;
                         case info:
-                            sendBack("SimpleTests");
                             info();
                             break;
                     }

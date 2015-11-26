@@ -61,7 +61,7 @@ public class RemoteJvm {
     }
 
     public void killAllJava() throws IOException, InterruptedException {
-        Bash.ssh(RemoteBoxes.getUser(), ips.pub, "sudo killall -9 java");
+        Bash.ssh(RemoteBoxes.getUser(), ips.pub, "killall -9 java");
     }
 
 
