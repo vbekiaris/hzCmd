@@ -38,8 +38,9 @@ public class Tasks {
 
         for(Task t : tasks.values()){
             t.setMethod(function);
-            if(t.willExicute())
+            if(t.willExicute()){
                 running.add(t);
+            }
         }
         executorService.invokeAll(running);
         sendBack("all "+function+" finished");
@@ -54,7 +55,7 @@ public class Tasks {
     public void loadClass(String taskId, String className){
 
         if(tasks.containsKey(taskId)){
-            sendBackError("duplicate task ID "+taskId);
+            sendBackError(Args.ID +"="+Controler.ID +" duplicate task ID "+taskId);
             return;
         }
 

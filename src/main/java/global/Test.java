@@ -9,7 +9,7 @@ public class Test{
     protected String id;
     protected Random random = new Random();
     protected HazelcastInstance hazelcastInstance;
-    protected volatile boolean running=true;
+    protected volatile boolean running=false;
 
     public void setRunning(boolean running){
         this.running=running;

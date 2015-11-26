@@ -88,14 +88,14 @@ public class RemoteBoxes {
     @Override
     public String toString() {
 
-        String str = "\n";
+        String ips="";
         for(IpPair ipPair : boxes){
-            str+=ipPair+"\n";
+            ips+=ipPair+", ";
         }
 
         return "RemoteBoxes{" +
                 "user='" + user + '\'' +
-                ", boxes=" + str +
+                ", boxes="+boxes.size()+" ["+ ips +"] " +
                 "jvmManager=" + jvmManager;
     }
 }

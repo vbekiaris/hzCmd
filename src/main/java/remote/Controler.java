@@ -73,9 +73,8 @@ public class Controler{
     @Override
     public String toString() {
         return "Controler{" +
-                "hazelcastInstance=" + hazelcastInstance.getName() +
+                "ID=" + ID +
                 ", tasks=" + tasks +
-                ", home=" + home +
                 '}';
     }
 }

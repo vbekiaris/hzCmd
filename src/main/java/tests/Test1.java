@@ -19,7 +19,7 @@ public class Test1 extends Test {
         keyPrefix = Utils.getUniqueKeyPrefix(hazelcastInstance);
     }
 
-    @Execute(where=Execute.On.CLIENT, with=Execute.On.ALL)
+    @Execute(where=Execute.On.MEMBER, with=Execute.On.ALL)
     public void run() throws InterruptedException {
         while (isRunning()) {
             int i = random.nextInt(3);
