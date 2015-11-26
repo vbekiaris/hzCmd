@@ -77,7 +77,16 @@ public class RemoteJvmManager {
         for(RemoteJvm jvm : jvms){
             if(jvm.isMember()){
                 System.out.println(jvm);
-                jvm.catLogs();
+                jvm.cat();
+            }
+        }
+    }
+
+    public void grepMembers(String args) throws IOException, InterruptedException {
+        for(RemoteJvm jvm : jvms){
+            if(jvm.isMember()){
+                System.out.println(jvm);
+                jvm.grep(args);
             }
         }
     }

@@ -79,6 +79,9 @@ public class RemoteBoxes {
         jvmManager.catMemberLogs();
     }
 
+    public void grepMembers(String args) throws IOException, InterruptedException {
+        jvmManager.grepMembers(args);
+    }
 
 
     public static void setUser(String userName) {user = userName;}

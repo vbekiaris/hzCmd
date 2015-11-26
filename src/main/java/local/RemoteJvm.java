@@ -78,9 +78,14 @@ public class RemoteJvm {
         Bash.ssh(RemoteBoxes.getUser(), ips.pub, "echo "+cmd+" >> "+dir+"/"+inFile);
     }
 
-    public void catLogs() throws IOException, InterruptedException {
+    public void cat() throws IOException, InterruptedException {
         Bash.ssh(RemoteBoxes.getUser(), ips.pub, "cat "+dir+"/"+outFile);
     }
+
+    public void grep(String args) throws IOException, InterruptedException {
+        Bash.ssh(RemoteBoxes.getUser(), ips.pub, "grep "+args+" "+dir+"/"+outFile);
+    }
+
 
     public String toString() {
         return "RemoteHzJvm{" +

@@ -89,6 +89,9 @@ public class Controler {
                             case membersLogs:
                                 boxes.catMemberLogs();
                                 break;
+                            case grep:
+                                boxes.grepMembers(words[1]);
+                                break;
 
 
                             case msg:
