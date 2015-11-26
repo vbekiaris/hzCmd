@@ -23,7 +23,8 @@ public abstract class Utils {
 
     public static <T> T instantiate(final String className, final Class<T> type){
         try {
-            Object o = type.getConstructor().newInstance();
+            Class<?> c = Class.forName(className);
+            Object o = c.getConstructor().newInstance();
             return type.cast(o);
         } catch (Exception e) {
             e.printStackTrace();
