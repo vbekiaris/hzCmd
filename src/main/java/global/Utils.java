@@ -11,7 +11,8 @@ public abstract class Utils {
     public static final Escaper SHELL_ESCAPE;
     static {
         final Escapers.Builder builder = Escapers.builder();
-        builder.addEscape('(', ")");
+        builder.addEscape('(', " ");
+        builder.addEscape(')', " ");
         SHELL_ESCAPE = builder.build();
     }
 
