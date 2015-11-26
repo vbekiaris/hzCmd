@@ -73,7 +73,7 @@ public class Controler{
                 }
             }
         }catch(Exception e){
-            e.printStackTrace();
+            System.out.println("Main loop "+e);
             sendBackError(exceptionStacktraceToString(e));
         }
     }
