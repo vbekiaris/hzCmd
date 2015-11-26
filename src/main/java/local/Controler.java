@@ -74,7 +74,6 @@ public class Controler {
                                 break;
 
                             case clean:
-                                Bash.rmDir(commsFile);
                                 boxes.clean();
                                 break;
                             case membersOnly:

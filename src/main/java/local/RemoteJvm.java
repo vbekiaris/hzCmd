@@ -67,7 +67,7 @@ public class RemoteJvm {
     }
 
     public void clean() throws IOException, InterruptedException {
-        Bash.ssh(RemoteBoxes.getUser(), ips.pub, "rm -r " + dir);
+        Bash.ssh(RemoteBoxes.getUser(), ips.pub, "rm " + dir+"/*");
     }
 
     public void killAllJava() throws IOException, InterruptedException {
