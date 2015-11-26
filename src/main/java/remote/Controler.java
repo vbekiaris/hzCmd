@@ -36,7 +36,6 @@ public class Controler{
                     Args arg = Args.valueOf(words[0]);
                     switch (arg) {
                         case exit:
-                            killAllJava();
                             System.exit(0);
 
                         case load:

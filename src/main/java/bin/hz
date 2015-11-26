@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-#from scr
 
 if [ -z "${HZ_CLUSTER_BIN}" ] ; then
     export HZ_CLUSTER_BIN=~/hz-script/target
