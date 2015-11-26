@@ -30,7 +30,7 @@ public class Task implements Callable<Object> {
         } catch (NoSuchMethodException e) {
             method = null;
             execute = null;
-            e.printStackTrace();
+            onException(e);
         }
     }
 
@@ -94,8 +94,8 @@ public class Task implements Callable<Object> {
     }
 
     private void onException(Exception e){
-        System.out.println(infoString()+" "+e);
-        sendBackError(infoString() + " " + e);
+        e.printStackTrace();
+        sendBackError(infoString() + " " + e.getMessage());
     }
 
     protected String infoStart(){ return infoString() + " initilize"; }
