@@ -75,8 +75,10 @@ public class RemoteJvmManager {
 
     public void catMemberLogs() throws IOException, InterruptedException {
         for(RemoteJvm jvm : jvms){
-            if(jvm.isMember())
+            if(jvm.isMember()){
+                System.out.println(jvm);
                 jvm.catLogs();
+            }
         }
     }
 

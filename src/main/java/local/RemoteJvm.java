@@ -50,9 +50,9 @@ public class RemoteJvm {
             Bash.scpUp(RemoteBoxes.getUser(), ips.pub, "client-hazelcast.xml", dir+"/");
         }
         send(Args.homeUser+" "+System.getProperty("user.name"));
-        send(Args.homeIp + InetAddress.getLocalHost().getHostAddress());
-        send(Args.homeCwd + System.getProperty("user.dir"));
-        send(Args.homeInfile + Controler.commsFile);
+        send(Args.homeIp.name()+" "+ InetAddress.getLocalHost().getHostAddress());
+        send(Args.homeCwd.name()+" "+ System.getProperty("user.dir"));
+        send(Args.homeInfile.name()+" "+ Controler.commsFile);
 
         Bash.ssh(RemoteBoxes.getUser(), ips.pub, "cd " + dir + "; nohup java " + classPath + " " + type + " < " + inFile + " &> " + outFile + " &");
     }
@@ -78,6 +78,7 @@ public class RemoteJvm {
                 "ips=" + ips +
                 ", type=" + type +
                 ", id=" + id +
+                ", dir=" + dir +
                 '}';
     }
 
