@@ -30,6 +30,7 @@ public class Task implements Callable<Object> {
         } catch (NoSuchMethodException e) {
             method = null;
             execute = null;
+            e.printStackTrace();
         }
     }
 
@@ -102,7 +103,7 @@ public class Task implements Callable<Object> {
     protected String infoStop(){ return infoString() +  " stop"; }
 
     protected String infoString(){
-        return test.getId()+" " + test.getClass().getSimpleName() + " " + method.getName();
+        return Controler.ID+" "+test.getId()+" "+test.getClass().getSimpleName()+" "+method.getName();
     }
 
 
