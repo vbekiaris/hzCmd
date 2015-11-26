@@ -24,12 +24,9 @@ public abstract class Installer {
     public static String jar = ".jar";
 
 
-    public static final String target = System.getenv("HZ_CLUSTER_BIN");
+    //public static final String target = System.getenv("HZ_CLUSTER_BIN");
 
     public static void install(RemoteBoxes boxes) throws IOException, InterruptedException {
-
-
-
 
         String memberJar;
         String clientJar;
@@ -43,7 +40,6 @@ public abstract class Installer {
         String mainJars = Bash.find(M2_Repo, "hazellite-1.0-SNAPSHOT.jar");
 
         boxes.sshCmd("mkdir -p "+REMOTE_ROOT+"/lib");
-        boxes.upload(target+"/lib", "REMOTE_ROOT");
         boxes.upload(memberJar, REMOTE_ROOT+"/lib/");
         boxes.upload(clientJar, REMOTE_ROOT+"/lib/");
         //boxes.upload(mainJars, REMOTE_ROOT+"/lib/");
