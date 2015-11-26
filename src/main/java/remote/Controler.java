@@ -51,21 +51,6 @@ public class Controler{
                             tasks.stop();
                             break;
 
-                        /*
-                        case homeUser:
-                            home.user = words[1];
-                            break;
-                        case homeIp:
-                            home.ip = words[1];
-                            break;
-                        case homeCwd:
-                            home.cwd = words[1];
-                            break;
-                        case homeInfile:
-                            home.inputFile = words[1];
-                            break;
-                        */
-
                         case clean:
                             home.inputFile = words[1];
                             break;
