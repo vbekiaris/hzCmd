@@ -1,19 +1,18 @@
 package global;
 
-import com.hazelcast.cache.ICache;
-import com.hazelcast.cache.impl.HazelcastServerCachingProvider;
-import com.hazelcast.cache.impl.nearcache.NearCache;
-import com.hazelcast.cache.impl.nearcache.NearCacheManager;
-import com.hazelcast.client.cache.impl.HazelcastClientCacheManager;
-import com.hazelcast.client.cache.impl.HazelcastClientCachingProvider;
-import com.hazelcast.config.CacheConfig;
-import com.hazelcast.core.*;
-import com.hazelcast.instance.HazelcastInstanceProxy;
-import javax.cache.CacheManager;
-import javax.cache.spi.CachingProvider;
+import com.google.common.escape.Escaper;
+import com.google.common.escape.Escapers;
+
 import java.util.*;
 
 public abstract class Utils {
+
+    public static final Escaper SHELL_ESCAPE;
+    static {
+        final Escapers.Builder builder = Escapers.builder();
+        builder.addEscape('(', ")");
+        SHELL_ESCAPE = builder.build();
+    }
 
     public static void sleepMilli(int mills){
         try {
@@ -24,10 +23,10 @@ public abstract class Utils {
     }
 
     public static void sleepSeconds(int sec){
-        sleepMilli(sec*1000);
+        sleepMilli(sec * 1000);
     }
 
     public static String exceptionStacktraceToString(Exception e) {
-        return Arrays.toString(e.getStackTrace());
+        return SHELL_ESCAPE.escape( Arrays.toString(e.getStackTrace()) );
     }
 }

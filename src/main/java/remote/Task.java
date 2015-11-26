@@ -1,6 +1,5 @@
 package remote;
 
-import com.google.common.escape.Escapers;
 import com.hazelcast.core.HazelcastInstance;
 import global.Execute;
 import global.Test;
@@ -13,7 +12,6 @@ import static remote.Utils.instantiate;
 import static remote.Utils.sendBack;
 import static remote.Utils.sendBackError;
 
-import com.google.common.escape.Escaper;
 
 
 public class Task implements Callable<Object> {
@@ -23,12 +21,6 @@ public class Task implements Callable<Object> {
     private Method method;
     private Execute execute;
 
-    public static final Escaper SHELL_ESCAPE;
-    static {
-        final Escapers.Builder builder = Escapers.builder();
-        builder.addEscape('(', ")");
-        SHELL_ESCAPE = builder.build();
-    }
 
     public Task(String id, String clasz, HazelcastInstance hazelcastInstance){
         test = instantiate(clasz, Test.class);
@@ -109,7 +101,7 @@ public class Task implements Callable<Object> {
 
     private void onException(Exception e){
         e.printStackTrace();
-        sendBackError(infoString() + " " + SHELL_ESCAPE.escape( exceptionStacktraceToString(e) ));
+        sendBackError(infoString() + " " +  exceptionStacktraceToString(e) );
     }
 
     protected String infoStart(){ return infoString() + " initilize"; }
