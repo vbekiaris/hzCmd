@@ -41,7 +41,7 @@ public abstract class Bash {
 
     private static String executeCommand(String command) throws IOException, InterruptedException {
 
-        System.out.println(command);
+        //System.out.println(command);
 
         StringBuffer output = new StringBuffer();
 
@@ -51,7 +51,7 @@ public abstract class Bash {
 
         int exitCode = p.exitValue();
         if (exitCode != 0 ){
-            System.out.println("ERROR exit code = "+p.exitValue());
+            System.out.println("ERROR exit code = "+p.exitValue()+" cmd="+command);
             reader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
         }
 
