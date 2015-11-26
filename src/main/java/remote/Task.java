@@ -7,6 +7,7 @@ import global.Test;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
+import static global.Utils.exceptionStacktraceToString;
 import static remote.Utils.instantiate;
 import static remote.Utils.sendBack;
 import static remote.Utils.sendBackError;
@@ -97,7 +98,7 @@ public class Task implements Callable<Object> {
 
     private void onException(Exception e){
         e.printStackTrace();
-        sendBackError(infoString() + " " + e);
+        sendBackError(infoString() + " " + exceptionStacktraceToString(e));
     }
 
     protected String infoStart(){ return infoString() + " initilize"; }
