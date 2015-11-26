@@ -7,12 +7,14 @@ import java.util.*;
 
 public abstract class Utils {
 
+    /*
     public static final Escaper SHELL_ESCAPE;
     static {
         final Escapers.Builder builder = Escapers.builder();
         builder.addEscape('(', ")");
         SHELL_ESCAPE = builder.build();
     }
+    */
 
     public static void sleepMilli(int mills){
         try {
@@ -26,7 +28,9 @@ public abstract class Utils {
         sleepMilli(sec * 1000);
     }
 
+
     public static String exceptionStacktraceToString(Exception e) {
-        return SHELL_ESCAPE.escape( Arrays.toString(e.getStackTrace()) );
+        //return SHELL_ESCAPE.escape(
+        return Arrays.toString(e.getStackTrace());
     }
 }

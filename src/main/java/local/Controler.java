@@ -93,7 +93,6 @@ public class Controler {
                                 boxes.grepMembers(words[1]);
                                 break;
 
-
                             case msg:
                                 System.out.println(line);
                                 break;
