@@ -44,7 +44,7 @@ public class Controler{
                             break;
 
                         case invoke:
-                            tasks.submit(words[1]);
+                            tasks.invoke(words[1]);
                             break;
 
                         case stop:

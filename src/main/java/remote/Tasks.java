@@ -25,13 +25,6 @@ public class Tasks {
         this.hazelcastInstance = hazelcastInstance;
     }
 
-    public void submit(String function) throws InterruptedException, ExecutionException {
-        for(Task t : tasks.values()){
-            t.setMethod(function);
-            if(t.willExicute())
-                executorService.submit(t);
-        }
-    }
 
     public void invoke(String function) throws InterruptedException, ExecutionException {
         Collection<Task> running = new ArrayList();
@@ -43,7 +36,6 @@ public class Tasks {
             }
         }
         executorService.invokeAll(running);
-        sendBack("all "+function+" finished");
     }
 
     public void stop(){
