@@ -36,7 +36,7 @@ public class Controler{
                     Args arg = Args.valueOf(words[0]);
                     switch (arg) {
                         case exit:
-                            System.exit(0);
+                            //System.exit(0);
 
                         case load:
                             tasks.loadClass(words[1], words[2]);
