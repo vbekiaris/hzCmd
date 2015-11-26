@@ -50,19 +50,19 @@ public class Controler{
                             break;
 
                         case homeUser:
-                            home.user =words[1];
+                            home.user = words[1];
                             break;
                         case homeIp:
-                            home.ip =words[1];
+                            home.ip = words[1];
                             break;
                         case homeCwd:
-                            home.cwd =words[1];
+                            home.cwd = words[1];
                             break;
                         case homeInfile:
-                            home.inputFile =words[1];
+                            home.inputFile = words[1];
                             break;
                         case clean:
-                            home.inputFile =words[1];
+                            home.inputFile = words[1];
                             break;
                         case info:
                             sendBack(this.toString());
@@ -73,7 +73,9 @@ public class Controler{
                 }
             }
         }catch(Exception e){
-            System.out.println("Main loop "+e);
+            System.out.println("Main loop "+e.getMessage());
+            System.out.println(exceptionStacktraceToString(e));
+
             sendBackError(exceptionStacktraceToString(e));
         }
     }
