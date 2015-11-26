@@ -18,6 +18,12 @@ public abstract class Bash {
         executeCommand("mkdir -p " + dir);
     }
 
+    public static String rmDir(String dir) throws IOException, InterruptedException {
+        return executeCommand("rm -fr " + dir);
+    }
+
+
+
     public static void ssh(String user, String ip, String cmd) throws IOException, InterruptedException {
         executeCommand("ssh "+user+"@"+ip+" "+cmd);
     }
@@ -30,6 +36,8 @@ public abstract class Bash {
         mkdir(to+"/"+ip+"/");
         executeCommand("scp -r +" + user + "@" + ip + ":" + from + " " + to + "/" + ip + "/");
     }
+
+
 
     private static String executeCommand(String command) throws IOException, InterruptedException {
 

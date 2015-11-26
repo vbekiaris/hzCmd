@@ -1,6 +1,7 @@
 package local;
 
 import global.Args;
+import global.Bash;
 
 import java.io.*;
 
@@ -73,6 +74,7 @@ public class Controler {
                                 break;
 
                             case clean:
+                                Bash.rmDir(commsFile);
                                 boxes.clean();
                                 break;
                             case membersOnly:
