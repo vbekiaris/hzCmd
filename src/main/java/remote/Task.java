@@ -53,20 +53,6 @@ public class Task implements Callable<Object> {
         return null;
     }
 
-    public Object bench() {
-        try {
-            if (method!=null) {
-                System.out.println("bench "+infoStart());
-                test.setRunning(true);
-                test.runBench(method);
-                System.out.println("bench "+infoStop());
-            }
-        }catch (Exception e){
-            onException(e);
-        }
-        return null;
-    }
-
     public boolean willExicute(){
         if (method==null)
             return false;
