@@ -1,4 +1,0 @@
-msg Member danny 127.0.0.1 /Users/danny/IdeaProjects/hazellite/target msg.txt
-msg Member danny 127.0.0.1 /Users/danny/IdeaProjects/hazellite/target msg.txt
-msg Member danny 127.0.0.1 /Users/danny/IdeaProjects/hazellite/target msg.txt
-msg Member danny 127.0.0.1 /Users/danny/IdeaProjects/hazellite/target msg.txt
