@@ -1,5 +1,6 @@
 package local;
 
+import global.Args;
 import global.Bash;
 import remote.Client;
 import remote.Member;
@@ -48,12 +49,12 @@ public class RemoteJvm {
             type = Client.class.getName();
             Bash.scpUp(RemoteBoxes.getUser(), ips.pub, "client-hazelcast.xml", dir+"/");
         }
-        send("user "+System.getProperty("user.name"));
-        send("ip " + InetAddress.getLocalHost().getHostAddress());
-        send("cwd " + System.getProperty("user.dir"));
-        send("inputFile " + Controler.commsFile);
+        send(Args.homeUser+" "+System.getProperty("user.name"));
+        send(Args.homeIp + InetAddress.getLocalHost().getHostAddress());
+        send(Args.homeCwd + System.getProperty("user.dir"));
+        send(Args.homeInfile + Controler.commsFile);
 
-        Bash.ssh(RemoteBoxes.getUser(), ips.pub, "cd "+dir+"; nohup java "+classPath+" "+type+" < "+inFile+" &> "+outFile+" &");
+        Bash.ssh(RemoteBoxes.getUser(), ips.pub, "cd " + dir + "; nohup java " + classPath + " " + type + " < " + inFile + " &> " + outFile + " &");
     }
 
     public void clean() throws IOException, InterruptedException {
@@ -64,9 +65,12 @@ public class RemoteJvm {
         Bash.ssh(RemoteBoxes.getUser(), ips.pub, "killall -9 java");
     }
 
-
     public void send(String cmd) throws IOException, InterruptedException{
         Bash.ssh(RemoteBoxes.getUser(), ips.pub, "echo "+cmd+" >> "+dir+"/"+inFile);
+    }
+
+    public void catLogs() throws IOException, InterruptedException {
+        Bash.ssh(RemoteBoxes.getUser(), ips.pub, "cat "+dir+"/"+outFile);
     }
 
     public String toString() {

@@ -84,6 +84,11 @@ public class Controler {
                                 boxes.setClientsCount(Integer.parseInt(words[1]));
                                 break;
 
+                            case membersLogs:
+                                boxes.catMemberLogs();
+                                break;
+
+
                             case msg:
                                 System.out.println(line);
                                 break;

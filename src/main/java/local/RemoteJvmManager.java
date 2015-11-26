@@ -73,6 +73,13 @@ public class RemoteJvmManager {
         }
     }
 
+    public void catMemberLogs() throws IOException, InterruptedException {
+        for(RemoteJvm jvm : jvms){
+            if(jvm.isMember())
+                jvm.catLogs();
+        }
+    }
+
     public void setMembersOnlyCount(int membersOnlyCount) {
         this.membersOnlyCount = membersOnlyCount;
     }

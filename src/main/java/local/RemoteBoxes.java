@@ -75,6 +75,11 @@ public class RemoteBoxes {
         setJvmToBoxes();
     }
 
+    public void catMemberLogs( ) throws IOException, InterruptedException {
+        jvmManager.catMemberLogs();
+    }
+
+
 
     public static void setUser(String userName) {user = userName;}
 
