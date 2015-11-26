@@ -28,7 +28,7 @@ public class Controler {
         try{
             while (true){
                 String line=in.readLine();
-                if (line!=null) {
+                if (line!=null && !line.startsWith("#")) {
                     String[] words = line.split("\\s+");
                     try {
                         Args arg = Args.valueOf(words[0]);
