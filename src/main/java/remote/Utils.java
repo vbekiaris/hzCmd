@@ -5,6 +5,8 @@ import com.hazelcast.instance.HazelcastInstanceProxy;
 import global.Bash;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 public abstract class Utils {
 
@@ -16,16 +18,31 @@ public abstract class Utils {
         return ! isMember(instance);
     }
 
+
+
+
     public static <T> T instantiate(final String className, final Class<T> type){
+
+
+        try {
+            Object o = type.getConstructor().newInstance("foo");
+            return type.cast(o);
+        } catch (Exception e) {
+            System.out.println("YESS !!!");
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        }
+
+//        return null;
+        /*
         try{
             return type.cast(Class.forName(className).newInstance());
         } catch(final InstantiationException e){
             throw new IllegalStateException(e);
         } catch(final IllegalAccessException e){
             throw new IllegalStateException(e);
-        } catch(final ClassNotFoundException e){
-            throw new IllegalStateException(e);
         }
+        */
     }
 
     public static void sendBackError(String msg){

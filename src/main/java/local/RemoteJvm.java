@@ -49,6 +49,8 @@ public class RemoteJvm {
             type = Client.class.getName();
             Bash.scpUp(RemoteBoxes.getUser(), ips.pub, "client-hazelcast.xml", dir+"/");
         }
+
+        //TODO set these at system properties in remote JVM.
         send(Args.homeUser+" "+System.getProperty("user.name"));
         send(Args.homeIp.name()+" "+ InetAddress.getLocalHost().getHostAddress());
         send(Args.homeCwd.name()+" "+ System.getProperty("user.dir"));
