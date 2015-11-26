@@ -8,4 +8,4 @@ fi
 ops="-Xms32m -Xmx128m"
 
 
-java -cp "${HZ_CLUSTER_BIN}/*" ${ops} local.Controler $@
+java -cp "${HZ_CLUSTER_BIN}/lib/*" ${ops} local.Controler $@
