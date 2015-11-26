@@ -102,7 +102,7 @@ public class Controler {
                     sleepMilli(500);
                 }
 
-                if ( (line = msg.readLine()) != null ){
+                while ( (line = msg.readLine()) != null ){
                     System.out.println(line);
                 }
             }
