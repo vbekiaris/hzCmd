@@ -53,7 +53,6 @@ public class Task implements Callable<Object> {
         return null;
     }
 
-
     public Object bench() {
         try {
             if (method!=null) {
@@ -67,9 +66,6 @@ public class Task implements Callable<Object> {
         }
         return null;
     }
-
-
-
 
     public boolean willExicute(){
         if (method==null)

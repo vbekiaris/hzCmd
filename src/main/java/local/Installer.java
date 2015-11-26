@@ -35,7 +35,7 @@ public abstract class Installer {
         }
         String mainJars = Bash.find(M2_Repo, "hazellite-1.0-SNAPSHOT.jar");
 
-        boxes.sshCmd("rm -fr "+REMOTE_ROOT);
+        uninstall(boxes);
         boxes.sshCmd("mkdir -p "+REMOTE_ROOT+"/lib");
         boxes.upload(memberJar, REMOTE_ROOT+"/lib/");
         boxes.upload(clientJar, REMOTE_ROOT+"/lib/");

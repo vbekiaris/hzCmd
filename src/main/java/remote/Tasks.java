@@ -61,6 +61,9 @@ public class Tasks {
             Task task = new Task(taskId, className, hazelcastInstance);
             tasks.put(task.getId(), task);
         } catch (Exception e){
+
+            System.out.println(" !!! LoadClass !!!  "+e);
+
             sendBackError("id="+taskId+" className="+className+" "+e.getMessage());
         }
     }
