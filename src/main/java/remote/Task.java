@@ -104,9 +104,9 @@ public class Task implements Callable<Object> {
         sendBackError(infoString() + " " +  exceptionStacktraceToString(e) );
     }
 
-    protected String infoStart(){ return infoString() + " initilize"; }
+    protected String infoStart(){ return infoString() + " started"; }
 
-    protected String infoStop(){ return infoString() +  " stop"; }
+    protected String infoStop(){ return infoString() +  " stopped"; }
 
     protected String infoString(){
         return Controler.ID+" "+test.getId()+" "+test.getClass().getSimpleName()+" "+targetFunction;
