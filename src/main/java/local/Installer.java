@@ -36,11 +36,16 @@ public abstract class Installer {
             clientJar = Bash.find(M2_Repo, hazelcastClient + version + jar);
         }
         String mainJars = Bash.find(M2_Repo, "hazellite-1.0-SNAPSHOT.jar");
+        String cacheJars = Bash.find(M2_Repo, "cache-api-1.0.0.jar");
+        String guavaars = Bash.find(M2_Repo, "guava-15.0-rc1.jar");
 
         boxes.sshCmd("mkdir -p "+REMOTE_ROOT+"/lib");
         boxes.upload(memberJar, REMOTE_ROOT+"/lib/");
         boxes.upload(clientJar, REMOTE_ROOT+"/lib/");
         boxes.upload(mainJars, REMOTE_ROOT+"/lib/");
+        boxes.upload(cacheJars, REMOTE_ROOT+"/lib/");
+        boxes.upload(guavaars, REMOTE_ROOT+"/lib/");
+
     }
 
     public static void uninstall(RemoteBoxes boxes) throws IOException, InterruptedException {

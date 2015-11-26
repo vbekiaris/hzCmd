@@ -13,7 +13,6 @@ public class Test1 extends Test {
 
     @Execute(where=Execute.On.ALL, with=Execute.On.ALL)
     public void setup(){
-        System.out.println(hazelcastInstance.getName());
         map = hazelcastInstance.getMap(mapName);
         System.out.println(map.getName()+" = "+map.size());
         keyPrefix = Utils.getUniqueKeyPrefix(hazelcastInstance);
