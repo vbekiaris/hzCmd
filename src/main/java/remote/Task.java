@@ -14,6 +14,7 @@ import static remote.Utils.sendBackError;
 public class Task implements Callable<Object> {
 
     Test test;
+    private String targetFunction;
     private Method method;
     private Execute execute;
 
@@ -24,6 +25,7 @@ public class Task implements Callable<Object> {
     }
 
     public void setMethod(String function){
+        targetFunction = function;
         try {
             method = test.getClass().getMethod(function);
             execute = method.getAnnotation(Execute.class);
@@ -103,7 +105,7 @@ public class Task implements Callable<Object> {
     protected String infoStop(){ return infoString() +  " stop"; }
 
     protected String infoString(){
-        return Controler.ID+" "+test.getId()+" "+test.getClass().getSimpleName()+" "+method.getName();
+        return Controler.ID+" "+test.getId()+" "+test.getClass().getSimpleName()+" "+targetFunction;
     }
 
 

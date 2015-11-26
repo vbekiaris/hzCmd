@@ -63,10 +63,9 @@ public class Controler{
                 }
             }
         }catch(Exception e){
-            System.out.println("Main loop "+e.getMessage());
-            System.out.println(exceptionStacktraceToString(e));
-
-            sendBackError(exceptionStacktraceToString(e));
+            System.out.println("Main loop");
+            e.printStackTrace();
+            sendBackError("Main loop "+e.getMessage());
         }
     }
 
