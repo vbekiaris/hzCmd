@@ -97,7 +97,7 @@ public class Task implements Callable<Object> {
 
     private void onException(Exception e){
         e.printStackTrace();
-        sendBackError(infoString() + " " + e.getMessage());
+        sendBackError(infoString() + " " + e);
     }
 
     protected String infoStart(){ return infoString() + " initilize"; }
