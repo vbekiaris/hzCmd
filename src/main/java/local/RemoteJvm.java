@@ -48,10 +48,10 @@ public class RemoteJvm {
             type = Client.class.getName();
             Bash.scpUp(RemoteBoxes.getUser(), ips.pub, "client-hazelcast.xml", dir+"/");
         }
-        send("homeUser "+System.getProperty("user.name"));
-        send("homeIp " + InetAddress.getLocalHost().getHostAddress());
-        send("homeCwd " + System.getProperty("user.dir"));
-        send("homeInfile " + Controler.msgFile);
+        send("user "+System.getProperty("user.name"));
+        send("ip " + InetAddress.getLocalHost().getHostAddress());
+        send("cwd " + System.getProperty("user.dir"));
+        send("inputFile " + Controler.commsFile);
 
         Bash.ssh(RemoteBoxes.getUser(), ips.pub, "cd "+dir+"; nohup java "+classPath+" "+type+" < "+inFile+" &> "+outFile+" &");
     }

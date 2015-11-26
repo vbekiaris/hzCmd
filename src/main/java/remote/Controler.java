@@ -5,34 +5,25 @@ import global.Args;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.*;
 
 import static global.Bash.killAllJava;
 import static global.Utils.exceptionStacktraceToString;
 import static global.Utils.sleepMilli;
-import static remote.Utils.isMember;
 import static remote.Utils.sendBack;
 import static remote.Utils.sendBackError;
 
 public class Controler{
 
-    public static String homeUser;
-    public static String homeIp;
-    public static String homeCwd;
-    public static String homeInfile;
-
     private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-    private ExecutorService executorService =  Executors.newCachedThreadPool();
-
-    private Map<String, Task> tasks = new HashMap();
     private HazelcastInstance hazelcastInstance;
 
+    public static HomeSettings home = new HomeSettings();
+    private static Tasks tasks;
 
-    public Controler(HazelcastInstance hazelcastInstance){ this.hazelcastInstance = hazelcastInstance; }
+    public Controler(HazelcastInstance hazelcastInstance){
+        this.hazelcastInstance = hazelcastInstance;
+        tasks = new Tasks(hazelcastInstance);
+    }
 
     public void run(){
         try{
@@ -47,38 +38,34 @@ public class Controler{
                             System.exit(0);
 
                         case load:
-                            loadClass(words[1], words[2]);
+                            tasks.loadClass(words[1], words[2]);
                             break;
 
                         case invoke:
-                            invoke(words[1]);
-                            break;
-
-                        case bench:
-                            //bench(words[1]);
+                            tasks.invoke(words[1]);
                             break;
 
                         case stop:
-                            stop();
+                            tasks.stop();
                             break;
 
                         case homeUser:
-                            homeUser=words[1];
+                            home.user =words[1];
                             break;
                         case homeIp:
-                            homeIp=words[1];
+                            home.ip =words[1];
                             break;
                         case homeCwd:
-                            homeCwd=words[1];
+                            home.cwd =words[1];
                             break;
                         case homeInfile:
-                            homeInfile=words[1];
+                            home.inputFile =words[1];
                             break;
                         case clean:
-                            homeInfile=words[1];
+                            home.inputFile =words[1];
                             break;
                         case info:
-                            info();
+                            sendBack(this.toString());
                             break;
                     }
                 }else {
@@ -91,63 +78,12 @@ public class Controler{
         }
     }
 
-    private void submit(String function) throws InterruptedException, ExecutionException {
-        for(Task t : tasks.values()){
-            t.setMethod(function);
-            if(t.willExicute())
-                executorService.submit(t);
-        }
-    }
-
-    private void invoke(String function) throws InterruptedException, ExecutionException {
-        Collection<Task> running = new ArrayList();
-
-        for(Task t : tasks.values()){
-            t.setMethod(function);
-            if(t.willExicute())
-                running.add(t);
-        }
-        executorService.invokeAll(running);
-        sendBack("all "+function+" finished");
-    }
-
-    private void stop(){
-        for(Task t : tasks.values()){
-            t.stop();
-        }
-    }
-
-    private void loadClass(String taskId, String className){
-
-        if(tasks.containsKey(taskId)){
-            sendBackError("duplicate task ID "+taskId);
-            return;
-        }
-
-        try{
-            Task task = new Task(taskId, className, hazelcastInstance);
-            tasks.put(task.getId(), task);
-        } catch (Exception e){
-            sendBackError("id="+taskId+" className="+className+" "+e.getMessage());
-        }
-    }
-
-    private void info(){
-        String info = new String();
-        if(isMember(hazelcastInstance)){
-            info+="Member ";
-        }else{
-            info+="Client ";
-        }
-
-        info += homeUser+" ";
-        info += homeIp+" ";
-        info += homeCwd+" ";
-        info += homeInfile+" ";
-
-        for(Task t : tasks.values()){
-            info += t.toString();
-        }
-        sendBack(info);
+    @Override
+    public String toString() {
+        return "Controler{" +
+                "hazelcastInstance=" + hazelcastInstance.getName() +
+                ", tasks=" + tasks +
+                ", home=" + home +
+                '}';
     }
 }

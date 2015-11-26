@@ -9,19 +9,19 @@ import static global.Utils.sleepSeconds;
 
 public class Controler {
 
-    public static String msgFile = "msg.txt";
+    public static String commsFile = "commsIn.txt";
 
     private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-    private BufferedReader msg;
+    private BufferedReader commsIn;
     private RemoteBoxes boxes = new RemoteBoxes();
 
     public Controler() throws IOException {
 
-        File f = new File(msgFile);
+        File f = new File(commsFile);
         if(!f.exists()) {
             f.createNewFile();
         }
-        msg = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
+        commsIn = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
     }
 
     public void run(){
@@ -102,7 +102,7 @@ public class Controler {
                     sleepMilli(500);
                 }
 
-                while ( (line = msg.readLine()) != null ){
+                while ( (line = commsIn.readLine()) != null ){
                     System.out.println(line);
                 }
             }
