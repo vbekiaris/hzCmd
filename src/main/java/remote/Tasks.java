@@ -1,6 +1,7 @@
 package remote;
 
 import com.hazelcast.core.HazelcastInstance;
+import global.Args;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -61,10 +62,7 @@ public class Tasks {
             Task task = new Task(taskId, className, hazelcastInstance);
             tasks.put(task.getId(), task);
         } catch (Exception e){
-
-            System.out.println(" !!! LoadClass !!!  "+e);
-
-            sendBackError("id="+taskId+" className="+className+" "+e.getMessage());
+            sendBackError(Args.ID +"="+Controler.ID +" taskId=" + taskId + " className=" + className + " " + e.getMessage());
         }
     }
 

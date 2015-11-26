@@ -15,48 +15,55 @@ public class RemoteJvm {
     public static final String inFile  =  "in.txt";
     public static final String outFile =  "out.txt";
 
-    private String dir;
 
     public static enum JVM_TYPE {
         Client, Member
     }
 
-    IpPair ips;
-    JVM_TYPE type;
-    int id;
+    private final IpPair ips;
+    private final JVM_TYPE type;
+    private final int count;
+    private final String id;
+    private final String dir;
 
-    public RemoteJvm(IpPair ips, JVM_TYPE type, int id){
+    public RemoteJvm(IpPair ips, JVM_TYPE type, int count) {
         this.ips = ips;
         this.type = type;
-        this.id = id;
-        this.dir = getDirName();
+        this.count = count;
+        this.id = type.name()+count;
+        this.dir = Installer.REMOTE_ROOT+"/"+id;
     }
 
-    private String getDirName(){ return Installer.REMOTE_ROOT+"/"+type.name()+id; }
+    public void initilize() throws IOException, InterruptedException {
 
-    public void start() throws IOException, InterruptedException {
-
-        System.out.println("start "+this);
+        System.out.println("initilize "+this);
 
         Bash.ssh(RemoteBoxes.getUser(), ips.pub, "mkdir -p " + dir + ";  cd " + dir + ";  touch in.txt");
 
-        String type;
+        String classToRun;
         if (isMember()){
-            type = Member.class.getName();
+            classToRun = Member.class.getName();
             Bash.scpUp(RemoteBoxes.getUser(), ips.pub, "hazelcast.xml", dir+"/");
 
         }else{
-            type = Client.class.getName();
+            classToRun = Client.class.getName();
             Bash.scpUp(RemoteBoxes.getUser(), ips.pub, "client-hazelcast.xml", dir+"/");
         }
 
         //TODO set these at system properties in remote JVM.
-        send(Args.homeUser+" "+System.getProperty("user.name"));
-        send(Args.homeIp.name()+" "+ InetAddress.getLocalHost().getHostAddress());
-        send(Args.homeCwd.name()+" "+ System.getProperty("user.dir"));
-        send(Args.homeInfile.name()+" "+ Controler.commsFile);
+        //send(Args.homeUser+" "+System.getProperty("user.name"));
+        //send(Args.homeIp.name()+" "+ InetAddress.getLocalHost().getHostAddress());
+        //send(Args.homeCwd.name()+" "+ System.getProperty("user.dir"));
+        //send(Args.homeInfile.name() + " " + Controler.commsFile);
 
-        Bash.ssh(RemoteBoxes.getUser(), ips.pub, "cd " + dir + "; nohup java " + classPath + " " + type + " < " + inFile + " &> " + outFile + " &");
+        String jvmArgs = new String();
+        jvmArgs += "-D"+Args.homeUser+"="+System.getProperty("user.name")+" ";
+        jvmArgs += "-D"+Args.homeIp+"="+InetAddress.getLocalHost().getHostAddress()+" ";
+        jvmArgs += "-D"+Args.homeCwd+"="+System.getProperty("user.dir")+" ";
+        jvmArgs += "-D"+Args.homeInfile+"="+Controler.commsFile+" ";
+        jvmArgs += "-D"+Args.ID +"="+id+" ";
+
+        Bash.ssh(RemoteBoxes.getUser(), ips.pub, "cd " + dir + "; nohup java " + classPath + " " + jvmArgs + " " + classToRun + " < " + inFile + " &> " + outFile + " &");
     }
 
     public void clean() throws IOException, InterruptedException {
@@ -79,7 +86,7 @@ public class RemoteJvm {
         return "RemoteHzJvm{" +
                 "ips=" + ips +
                 ", type=" + type +
-                ", id=" + id +
+                ", ID=" + id +
                 ", dir=" + dir +
                 '}';
     }

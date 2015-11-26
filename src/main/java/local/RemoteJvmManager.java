@@ -43,15 +43,15 @@ public class RemoteJvmManager {
         return min+mod;
     }
 
-    public void startJvms() throws IOException, InterruptedException {
+    public void initilizeJvms() throws IOException, InterruptedException {
         for(RemoteJvm jvm : jvms){
             if(jvm.isMember())
-                jvm.start();
+                jvm.initilize();
         }
         sleepSeconds(10);
         for(RemoteJvm jvm : jvms){
             if(jvm.isClient())
-                jvm.start();
+                jvm.initilize();
         }
     }
 

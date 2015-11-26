@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 
 public enum  Args{
-    exit, install, uninstall, ee, version, user, start, load, invoke, bench, stop, ssh, info, membersOnly, members, clients,
-    msg, sleep, homeUser, homeIp, homeCwd, homeInfile, clean, stopped, membersLogs,
+    exit, install, uninstall, ee, version, user, init, load, invoke, bench, stop, ssh, info, membersOnly, members, clients,
+    msg, sleep, homeUser, homeIp, homeCwd, homeInfile, clean, stopped, membersLogs, ID
 }
 

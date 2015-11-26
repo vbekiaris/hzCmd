@@ -54,9 +54,10 @@ public class Controler {
                             case user:
                                 boxes.setUser(words[1]);
                                 break;
-                            case start:
-                                boxes.startJvms();
+                            case init:
+                                boxes.initilizeJvms();
                                 break;
+
                             case load:
                             case invoke:
                             case stop:

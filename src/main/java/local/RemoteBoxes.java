@@ -43,8 +43,8 @@ public class RemoteBoxes {
         boxes = ips;
     }
 
-    public void startJvms( ) throws IOException, InterruptedException {
-        jvmManager.startJvms();
+    public void initilizeJvms() throws IOException, InterruptedException {
+        jvmManager.initilizeJvms();
     }
 
     public void clean( ) throws IOException, InterruptedException {

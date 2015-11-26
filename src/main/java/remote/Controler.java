@@ -20,6 +20,8 @@ public class Controler{
     public static HomeSettings home = new HomeSettings();
     private static Tasks tasks;
 
+    public static final String ID = System.getProperty(Args.ID.name());
+
     public Controler(HazelcastInstance hazelcastInstance){
         this.hazelcastInstance = hazelcastInstance;
         tasks = new Tasks(hazelcastInstance);
@@ -49,6 +51,7 @@ public class Controler{
                             tasks.stop();
                             break;
 
+                        /*
                         case homeUser:
                             home.user = words[1];
                             break;
@@ -61,6 +64,8 @@ public class Controler{
                         case homeInfile:
                             home.inputFile = words[1];
                             break;
+                        */
+
                         case clean:
                             home.inputFile = words[1];
                             break;

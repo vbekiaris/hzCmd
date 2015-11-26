@@ -111,7 +111,7 @@ public class Task implements Callable<Object> {
         sendBackError(infoString() + " " + e);
     }
 
-    protected String infoStart(){ return infoString() + " start"; }
+    protected String infoStart(){ return infoString() + " initilize"; }
 
     protected String infoStop(){ return infoString() +  " stop"; }
 
