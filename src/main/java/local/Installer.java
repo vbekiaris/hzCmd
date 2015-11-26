@@ -24,8 +24,6 @@ public abstract class Installer {
     public static String jar = ".jar";
 
 
-    //public static final String target = System.getenv("HZ_CLUSTER_BIN");
-
     public static void install(RemoteBoxes boxes) throws IOException, InterruptedException {
 
         String memberJar;
@@ -42,7 +40,6 @@ public abstract class Installer {
         boxes.sshCmd("mkdir -p "+REMOTE_ROOT+"/lib");
         boxes.upload(memberJar, REMOTE_ROOT+"/lib/");
         boxes.upload(clientJar, REMOTE_ROOT+"/lib/");
-        //boxes.upload(mainJars, REMOTE_ROOT+"/lib/");
     }
 
     public static void uninstall(RemoteBoxes boxes) throws IOException, InterruptedException {
