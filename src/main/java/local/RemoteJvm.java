@@ -56,6 +56,7 @@ public class RemoteJvm {
         jvmArgs += "-D"+Args.ID +"="+id+" ";
 
         pid = Bash.ssh(RemoteBoxes.getUser(), ips.pub, "cd " + dir + "; nohup java " + classPath + " " + jvmArgs + " " + classToRun + " < " + inFile + " &> " + outFile + " & echo $!");
+        pid = pid.trim();
         System.out.println("started "+this);
     }
 
