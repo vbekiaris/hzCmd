@@ -23,8 +23,7 @@ public class Controler {
             f.createNewFile();
         }
         commsIn = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
-
-        RemoteBoxManager boxes = new RemoteBoxManager(getBoxes());
+        boxes = new RemoteBoxManager(getBoxes());
     }
 
     public void run(){
