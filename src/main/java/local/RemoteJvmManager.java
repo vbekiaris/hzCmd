@@ -38,6 +38,7 @@ public class RemoteJvmManager {
     }
 
     public void addMember(){
+        System.out.println("membersOnlyCount="+membersOnlyCount);
         int memberIdx = rangeMap(memberCount++, 0, membersOnlyCount);
         RemoteJvm jvm = new RemoteJvm(boxes.get(memberIdx), RemoteJvm.JVM_TYPE.Member, memberCount);
         jvms.put(jvm.getId(), jvm);
