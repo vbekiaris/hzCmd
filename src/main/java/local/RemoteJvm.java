@@ -24,7 +24,7 @@ public class RemoteJvm {
     private final int count;
     private final String id;
     private final String dir;
-    private int pid = 0;
+    private String pid = "0";
 
     public RemoteJvm(IpPair ips, JVM_TYPE type, int count) {
         this.ips = ips;
@@ -55,13 +55,7 @@ public class RemoteJvm {
         jvmArgs += "-D"+Args.homeInfile+"="+Controler.commsFile+" ";
         jvmArgs += "-D"+Args.ID +"="+id+" ";
 
-        String pidStr = Bash.ssh(RemoteBoxes.getUser(), ips.pub, "cd " + dir + "; nohup java " + classPath + " " + jvmArgs + " " + classToRun + " < " + inFile + " &> " + outFile + " & echo $!");
-
-
-        System.out.println("pidStr ="+pidStr);
-
-        pid = Integer.getInteger(pidStr);
-
+        pid = Bash.ssh(RemoteBoxes.getUser(), ips.pub, "cd " + dir + "; nohup java " + classPath + " " + jvmArgs + " " + classToRun + " < " + inFile + " &> " + outFile + " & echo $!");
         System.out.println("started "+this);
     }
 
