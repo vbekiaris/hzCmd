@@ -30,6 +30,9 @@ public class Controler {
             while (true){
                 String line=in.readLine();
                 if (line!=null && !line.equals("") && !line.startsWith("#")) {
+
+                    System.out.println("=>"+line);
+
                     String[] words = line.split("\\s+");
                     try {
                         Args arg = Args.valueOf(words[0]);

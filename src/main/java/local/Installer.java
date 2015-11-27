@@ -1,6 +1,5 @@
 package local;
 
-import global.Args;
 import global.Bash;
 
 import java.io.IOException;
@@ -26,6 +25,7 @@ public abstract class Installer {
 
     public static void install(RemoteBoxes boxes) throws IOException, InterruptedException {
 
+        System.out.println("install on"+boxes.count());
         String memberJar;
         String clientJar;
         if(ee){

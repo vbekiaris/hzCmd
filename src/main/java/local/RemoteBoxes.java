@@ -88,6 +88,9 @@ public class RemoteBoxes {
 
     public static String getUser(){return user;}
 
+    public int count(){return boxes.size();}
+
+
     @Override
     public String toString() {
 

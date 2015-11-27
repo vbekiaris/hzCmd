@@ -35,6 +35,7 @@ public class RemoteJvm {
     }
 
     public void initilize() throws IOException, InterruptedException {
+        System.out.println("starting "+this);
 
         Bash.ssh(RemoteBoxes.getUser(), ips.pub, "mkdir -p " + dir + ";  cd " + dir + ";  touch in.txt");
 
@@ -57,7 +58,7 @@ public class RemoteJvm {
         String pidStr = Bash.ssh(RemoteBoxes.getUser(), ips.pub, "cd " + dir + "; nohup java " + classPath + " " + jvmArgs + " " + classToRun + " < " + inFile + " &> " + outFile + " & echo $!");
         pid = Integer.getInteger(pidStr);
 
-        System.out.println("starting "+this);
+        System.out.println("started "+this);
     }
 
     public void clean() throws IOException, InterruptedException {
