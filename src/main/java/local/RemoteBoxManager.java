@@ -12,12 +12,12 @@ import java.util.List;
 public class RemoteBoxManager {
 
     private static String user;
-    private BufferedReader agents = new BufferedReader(new InputStreamReader(new FileInputStream("agents.txt")));
     private List<IpPair> boxes;
-    private RemoteJvmManager jvmManager = new RemoteJvmManager();
+    private RemoteJvmManager jvmManager;
 
-    public RemoteBoxManager() throws IOException {
-        setBoxes();
+    public RemoteBoxManager(List<IpPair> boxes) throws IOException {
+        this.boxes=boxes;
+        jvmManager = new RemoteJvmManager(boxes);
     }
 
     public void upload(String souce, String dest) throws IOException, InterruptedException {
@@ -32,16 +32,6 @@ public class RemoteBoxManager {
         }
     }
 
-    public void setBoxes() throws IOException {
-        List<IpPair> ips = new ArrayList();
-        String input;
-        while( (input=agents.readLine()) !=null ){
-            String[] split = input.split(",");
-            IpPair ip = new IpPair(split[0], split[1]);
-            ips.add(ip);
-        }
-        boxes = ips;
-    }
 
     public void initilizeJvms() throws IOException, InterruptedException {
         jvmManager.initilizeJvms();
@@ -56,23 +46,16 @@ public class RemoteBoxManager {
         jvmManager.send(cmd);
     }
 
-    private void setJvmToBoxes() throws IOException {
-        jvmManager.pinJvmsToBoxes(boxes);
-    }
-
     public void setMembersOnlyCount(int membersOnlyCount) throws IOException {
         jvmManager.setMembersOnlyCount(membersOnlyCount);
-        setJvmToBoxes();
     }
 
-    public void setMembersCount(int membersCount) throws IOException {
-        jvmManager.setMembersCount(membersCount);
-        setJvmToBoxes();
+    public void setMembersCount(int qty) throws IOException {
+        jvmManager.addMembers(qty);
     }
 
-    public void setClientsCount(int clientsCount) throws IOException {
-        jvmManager.setClientsCount(clientsCount);
-        setJvmToBoxes();
+    public void setClientsCount(int qty) throws IOException {
+       jvmManager.addClients(qty);
     }
 
     public void catMemberLogs( ) throws IOException, InterruptedException {

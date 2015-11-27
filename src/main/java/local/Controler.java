@@ -4,6 +4,7 @@ import global.Args;
 
 import java.io.*;
 
+import static global.Utils.getBoxes;
 import static global.Utils.sleepMilli;
 import static global.Utils.sleepSeconds;
 
@@ -13,7 +14,7 @@ public class Controler {
 
     private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
     private BufferedReader commsIn;
-    private RemoteBoxManager boxes = new RemoteBoxManager();
+    private RemoteBoxManager boxes;
 
     public Controler() throws IOException {
 
@@ -22,6 +23,8 @@ public class Controler {
             f.createNewFile();
         }
         commsIn = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
+
+        RemoteBoxManager boxes = new RemoteBoxManager(getBoxes());
     }
 
     public void run(){
