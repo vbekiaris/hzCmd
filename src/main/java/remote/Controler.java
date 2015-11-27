@@ -71,7 +71,7 @@ public class Controler{
     }
 
     public String idString(){
-        return "Controler{" + "ID=" + ID + "jvmPidId=" + jvmPidId + '}';
+        return "Controler{" + "ID=" + ID +", "+ "jvmPidId=" + jvmPidId + '}';
     }
 
     @Override

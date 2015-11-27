@@ -31,6 +31,6 @@ public abstract class Utils {
 
 
     public static String exceptionStacktraceToString(Exception e) {
-        return SHELL_ESCAPE.escape( e.getMessage() +" "+Arrays.toString(e.getStackTrace()) );
+        return SHELL_ESCAPE.escape( e +" "+Arrays.toString(e.getStackTrace()) );
     }
 }
