@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static global.Utils.rangeMap;
 import static global.Utils.sleepSeconds;
 
 public class RemoteJvmManager {
@@ -50,14 +51,6 @@ public class RemoteJvmManager {
         int clientIdx = rangeMap(clientCount++, membersOnlyCount, boxes.size());
         RemoteJvm jvm = new RemoteJvm(boxes.get(clientIdx), RemoteJvm.JVM_TYPE.Client, clientCount);
         jvms.put(jvm.getId(), jvm);
-    }
-
-    private int rangeMap(int val, int min, int max) {
-        int p = max-min;
-        int mod = (val-min)%p;
-        if(mod<0)
-            mod += p;
-        return min+mod;
     }
 
     public void initilizeJvms() throws IOException, InterruptedException {

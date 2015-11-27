@@ -60,4 +60,13 @@ public abstract class Utils {
         return ips;
     }
 
+
+    public static int rangeMap(int val, int min_inclusive, int max_exclusive) {
+        int p = max_exclusive-min_inclusive;
+        int mod = (val-min_inclusive)%p;
+        if(mod<0)
+            mod += p;
+        return min_inclusive+mod;
+    }
+
 }
