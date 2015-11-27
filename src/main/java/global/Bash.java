@@ -40,21 +40,21 @@ public abstract class Bash {
 
 
     private static String executeCommand(String command) throws IOException, InterruptedException {
-
         //System.out.println(command);
-
-        StringBuffer output = new StringBuffer();
 
         Process p = Runtime.getRuntime().exec(command);
         p.waitFor();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-
         int exitCode = p.exitValue();
+
+        BufferedReader reader;
         if (exitCode != 0 ){
             System.out.println("ERROR exit code = "+p.exitValue()+" cmd="+command);
             reader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+        }else{
+            reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
         }
 
+        StringBuffer output = new StringBuffer();
         String line;
         while ((line = reader.readLine())!= null) {
             output.append(line + "\n");
