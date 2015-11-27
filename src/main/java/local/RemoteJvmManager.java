@@ -27,9 +27,10 @@ public class RemoteJvmManager {
 
     public void setMembersOnlyCount(int count) {
         if(count <= 0 || count > boxes.size()){
-            count=boxes.size();
+            membersOnlyCount = boxes.size();
+        }else{
+            membersOnlyCount = count;
         }
-        this.membersOnlyCount = count;
     }
 
     public void addMembers(int qty) {
