@@ -63,7 +63,9 @@ public class RemoteJvm {
         jvmArgs += "-D"+Args.homeInfile+"="+Controler.commsFile+" ";
         jvmArgs += "-D"+Args.ID +"="+id+" ";
 
-        Bash.ssh(RemoteBoxes.getUser(), ips.pub, "cd " + dir + "; nohup java " + classPath + " " + jvmArgs + " " + classToRun + " < " + inFile + " &> " + outFile + " &");
+        String pidStr = Bash.ssh(RemoteBoxes.getUser(), ips.pub, "cd " + dir + "; nohup java " + classPath + " " + jvmArgs + " " + classToRun + " < " + inFile + " &> " + outFile + " &; echo $!");
+
+        System.out.println("ANY PIN IN HEAR ?? "+pidStr);
     }
 
     public void clean() throws IOException, InterruptedException {

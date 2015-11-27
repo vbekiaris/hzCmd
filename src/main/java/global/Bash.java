@@ -24,8 +24,8 @@ public abstract class Bash {
 
 
 
-    public static void ssh(String user, String ip, String cmd) throws IOException, InterruptedException {
-        executeCommand("ssh "+user+"@"+ip+" "+cmd);
+    public static String ssh(String user, String ip, String cmd) throws IOException, InterruptedException {
+        return executeCommand("ssh "+user+"@"+ip+" "+cmd);
     }
 
     public static void scpUp(String user, String ip, String from, String to) throws IOException, InterruptedException {
