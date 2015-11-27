@@ -41,7 +41,7 @@ public abstract class Bash {
 
     private static String executeCommand(String command) throws IOException, InterruptedException {
 
-        System.out.println(command);
+        //System.out.println(command);
 
         StringBuffer output = new StringBuffer();
 
@@ -57,8 +57,11 @@ public abstract class Bash {
 
         String line;
         while ((line = reader.readLine())!= null) {
-            System.out.println(line);
             output.append(line + "\n");
+        }
+
+        if (exitCode != 0 ){
+            System.out.println( output.toString() );
         }
 
         return output.toString();

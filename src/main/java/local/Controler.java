@@ -105,7 +105,7 @@ public class Controler {
                                 break;
 
                             default:
-                                System.out.println(line + " ???");
+                                System.out.println(line + " DEFAULT ");
                         }
                     }catch (Exception e){
                         System.out.println(line+" ???");
