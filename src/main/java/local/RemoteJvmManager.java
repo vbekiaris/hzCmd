@@ -22,13 +22,14 @@ public class RemoteJvmManager {
     public RemoteJvmManager(List<IpPair> boxes){
         this.boxes=boxes;
         membersOnlyCount=boxes.size();
+        System.out.println("membersOnlyCount="+membersOnlyCount);
     }
 
-    public void setMembersOnlyCount(int membersOnlyCount) {
-        if(membersOnlyCount <= 0 || membersOnlyCount > boxes.size()){
-            membersOnlyCount=boxes.size();
+    public void setMembersOnlyCount(int count) {
+        if(count <= 0 || count > boxes.size()){
+            count=boxes.size();
         }
-        this.membersOnlyCount = membersOnlyCount;
+        this.membersOnlyCount = count;
     }
 
     public void addMembers(int qty) {
@@ -38,7 +39,7 @@ public class RemoteJvmManager {
 
     public void addMember(){
         int memberIdx = rangeMap(memberCount++, 0, membersOnlyCount);
-        RemoteJvm jvm = new RemoteJvm(boxes.get(memberIdx), RemoteJvm.JVM_TYPE.Member, memberCount);;
+        RemoteJvm jvm = new RemoteJvm(boxes.get(memberIdx), RemoteJvm.JVM_TYPE.Member, memberCount);
         jvms.put(jvm.getId(), jvm);
     }
 

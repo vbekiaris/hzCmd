@@ -45,7 +45,7 @@ public abstract class Utils {
         try {
             agents = new BufferedReader(new InputStreamReader(new FileInputStream("agents.txt")));
         } catch (final Exception e) {
-            throw new Error(e);
+            //throw new Error(e);
         }
     }
 
