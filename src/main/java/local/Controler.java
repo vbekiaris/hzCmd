@@ -125,11 +125,11 @@ public class Controler {
     }
 
     public static void main(String[] args) throws InterruptedException, IOException {
-        //Controler c = new Controler();
-        //c.run();
+        Controler c = new Controler();
+        c.run();
 
-        for(int i=-10; i<20; i++){
-            System.out.println( rangeMap( i, 0, 0) );
-        }
+        //for(int i=-10; i<20; i++){
+        //    System.out.println( rangeMap( i, 0, 0) );
+        //}
     }
 }
