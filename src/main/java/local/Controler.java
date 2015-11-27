@@ -105,10 +105,11 @@ public class Controler {
                                 break;
 
                             default:
-                                System.out.println(line + " DEFAULT ");
+                                System.out.println("unknown cmd =>"+line);
                         }
                     }catch (Exception e){
-                        System.out.println(line+" ???");
+                        System.out.println("CMD =>"+line);
+                        e.printStackTrace();
                     }
                 }else {
                     sleepMilli(500);
