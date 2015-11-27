@@ -63,7 +63,7 @@ public class RemoteJvm {
         jvmArgs += "-D"+Args.homeInfile+"="+Controler.commsFile+" ";
         jvmArgs += "-D"+Args.ID +"="+id+" ";
 
-        String pidStr = Bash.ssh(RemoteBoxes.getUser(), ips.pub, "cd " + dir + "; nohup java " + classPath + " " + jvmArgs + " " + classToRun + " < " + inFile + " &> " + outFile + " &; echo $!");
+        String pidStr = Bash.ssh(RemoteBoxes.getUser(), ips.pub, "cd " + dir + "; nohup java " + classPath + " " + jvmArgs + " " + classToRun + " < " + inFile + " &> " + outFile + " & echo $!");
 
         System.out.println("ANY PIN IN HEAR ?? "+pidStr);
     }
