@@ -13,7 +13,7 @@ public class Controler {
 
     private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
     private BufferedReader commsIn;
-    private RemoteBoxes boxes = new RemoteBoxes();
+    private RemoteBoxManager boxes = new RemoteBoxManager();
 
     public Controler() throws IOException {
 

@@ -9,14 +9,14 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RemoteBoxes {
+public class RemoteBoxManager {
 
     private static String user;
     private BufferedReader agents = new BufferedReader(new InputStreamReader(new FileInputStream("agents.txt")));
     private List<IpPair> boxes;
     private RemoteJvmManager jvmManager = new RemoteJvmManager();
 
-    public RemoteBoxes() throws IOException {
+    public RemoteBoxManager() throws IOException {
         setBoxes();
     }
 
@@ -48,8 +48,8 @@ public class RemoteBoxes {
     }
 
     public void clean( ) throws IOException, InterruptedException {
-        jvmManager.killAllJava();
         jvmManager.clean();
+        jvmManager.killAllJava();
     }
 
     public void send(String cmd) throws IOException, InterruptedException {
@@ -102,7 +102,7 @@ public class RemoteBoxes {
             ips+=ipPair+", ";
         }
 
-        return "RemoteBoxes{" +
+        return "RemoteBoxManager{" +
                 "user='" + user + '\'' +
                 ", boxes="+boxes.size()+" ["+ ips +"] " +
                 "jvmManager=" + jvmManager;

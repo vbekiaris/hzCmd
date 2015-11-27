@@ -65,6 +65,7 @@ public class RemoteJvmManager {
         for(RemoteJvm jvm : jvms){
             jvm.killAllJava();
         }
+        jvms.clear();
     }
 
     public void send(String cmd) throws IOException, InterruptedException {
@@ -115,7 +116,7 @@ public class RemoteJvmManager {
         return "RemoteJvmManager{" +
                 "membersOnlyCount=" + membersOnlyCount +
                 ", membersCount=" + membersCount +
-                ", clientsCount=" + clientsCount +
+                ", clientsCount=" + clientsCount +"," + "jvms" +
                 "\n"+jvms +
                 "}";
     }

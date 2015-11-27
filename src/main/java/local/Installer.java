@@ -23,7 +23,7 @@ public abstract class Installer {
     public static String jar = ".jar";
 
 
-    public static void install(RemoteBoxes boxes) throws IOException, InterruptedException {
+    public static void install(RemoteBoxManager boxes) throws IOException, InterruptedException {
 
         System.out.println("install on "+boxes.count()+" boxes");
         String memberJar;
@@ -47,7 +47,7 @@ public abstract class Installer {
         boxes.upload(guavaars, REMOTE_ROOT+"/lib/");
     }
 
-    public static void uninstall(RemoteBoxes boxes) throws IOException, InterruptedException {
+    public static void uninstall(RemoteBoxManager boxes) throws IOException, InterruptedException {
         boxes.sshCmd("rm -fr "+REMOTE_ROOT);
     }
 }
