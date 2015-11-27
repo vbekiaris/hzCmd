@@ -35,6 +35,13 @@ public class RemoteJvmManager {
         }
     }
 
+    private void zeroOut(){
+        membersOnlyCount=0;
+        membersCount=0;
+        clientsCount=0;
+        jvms.clear();
+    }
+
     private int rangeMap(int val, int min, int max) {
         int p = max-min;
         int mod = (val-min)%p;
@@ -65,7 +72,7 @@ public class RemoteJvmManager {
         for(RemoteJvm jvm : jvms){
             jvm.killAllJava();
         }
-        jvms.clear();
+        zeroOut();
     }
 
     public void send(String cmd) throws IOException, InterruptedException {
