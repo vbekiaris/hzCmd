@@ -15,7 +15,6 @@ public class RemoteJvm {
     public static final String inFile  =  "in.txt";
     public static final String outFile =  "out.txt";
 
-
     public static enum JVM_TYPE {
         Client, Member
     }
@@ -25,6 +24,7 @@ public class RemoteJvm {
     private final int count;
     private final String id;
     private final String dir;
+    private int pid = 0;
 
     public RemoteJvm(IpPair ips, JVM_TYPE type, int count) {
         this.ips = ips;
@@ -36,25 +36,16 @@ public class RemoteJvm {
 
     public void initilize() throws IOException, InterruptedException {
 
-        System.out.println("initilize "+this);
-
         Bash.ssh(RemoteBoxes.getUser(), ips.pub, "mkdir -p " + dir + ";  cd " + dir + ";  touch in.txt");
 
         String classToRun;
         if (isMember()){
             classToRun = Member.class.getName();
             Bash.scpUp(RemoteBoxes.getUser(), ips.pub, "hazelcast.xml", dir+"/");
-
         }else{
             classToRun = Client.class.getName();
             Bash.scpUp(RemoteBoxes.getUser(), ips.pub, "client-hazelcast.xml", dir+"/");
         }
-
-        //TODO set these at system properties in remote JVM.
-        //send(Args.homeUser+" "+System.getProperty("user.name"));
-        //send(Args.homeIp.name()+" "+ InetAddress.getLocalHost().getHostAddress());
-        //send(Args.homeCwd.name()+" "+ System.getProperty("user.dir"));
-        //send(Args.homeInfile.name() + " " + Controler.commsFile);
 
         String jvmArgs = new String();
         jvmArgs += "-D"+Args.homeUser+"="+System.getProperty("user.name")+" ";
@@ -64,8 +55,9 @@ public class RemoteJvm {
         jvmArgs += "-D"+Args.ID +"="+id+" ";
 
         String pidStr = Bash.ssh(RemoteBoxes.getUser(), ips.pub, "cd " + dir + "; nohup java " + classPath + " " + jvmArgs + " " + classToRun + " < " + inFile + " &> " + outFile + " & echo $!");
+        pid = Integer.getInteger(pidStr);
 
-        System.out.println("ANY PIN IN HEAR ?? "+pidStr);
+        System.out.println("starting "+this);
     }
 
     public void clean() throws IOException, InterruptedException {
@@ -84,17 +76,22 @@ public class RemoteJvm {
         Bash.ssh(RemoteBoxes.getUser(), ips.pub, "cat "+dir+"/"+outFile);
     }
 
+    public void tail() throws IOException, InterruptedException {
+        Bash.ssh(RemoteBoxes.getUser(), ips.pub, "tail "+dir+"/"+outFile);
+    }
+
     public void grep(String args) throws IOException, InterruptedException {
         Bash.ssh(RemoteBoxes.getUser(), ips.pub, "grep "+args+" "+dir+"/"+outFile);
     }
 
 
     public String toString() {
-        return "RemoteHzJvm{" +
+        return "RemoteJvm{" +
                 "ips=" + ips +
                 ", type=" + type +
                 ", ID=" + id +
                 ", dir=" + dir +
+                ", pid=" + pid +
                 '}';
     }
 
