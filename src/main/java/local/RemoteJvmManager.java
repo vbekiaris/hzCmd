@@ -10,7 +10,7 @@ import static global.Utils.sleepSeconds;
 
 public class RemoteJvmManager {
 
-    private int membersOnlyCount=0;
+    private int membersOnlyCount;
     private Map<String, RemoteJvm> jvms = new HashMap();;
 
     private int memberCount=0;
@@ -20,6 +20,7 @@ public class RemoteJvmManager {
 
     public RemoteJvmManager(List<IpPair> boxes){
         this.boxes=boxes;
+        membersOnlyCount=boxes.size();
     }
 
     public void setMembersOnlyCount(int membersOnlyCount) {
