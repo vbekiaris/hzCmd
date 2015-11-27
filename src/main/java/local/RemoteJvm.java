@@ -35,7 +35,6 @@ public class RemoteJvm {
     }
 
     public void initilize() throws IOException, InterruptedException {
-        System.out.println("starting "+this);
 
         Bash.ssh(RemoteBoxes.getUser(), ips.pub, "mkdir -p " + dir + ";  cd " + dir + ";  touch in.txt");
 

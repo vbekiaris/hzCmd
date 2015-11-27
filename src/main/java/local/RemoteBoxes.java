@@ -48,8 +48,8 @@ public class RemoteBoxes {
     }
 
     public void clean( ) throws IOException, InterruptedException {
-        jvmManager.clean();
         jvmManager.killAllJava();
+        jvmManager.clean();
     }
 
     public void send(String cmd) throws IOException, InterruptedException {
@@ -90,6 +90,9 @@ public class RemoteBoxes {
 
     public int count(){return boxes.size();}
 
+    public void jvmLayout(){
+        System.out.println(jvmManager);
+    }
 
     @Override
     public String toString() {

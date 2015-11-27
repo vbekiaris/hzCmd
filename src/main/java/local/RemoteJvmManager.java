@@ -33,8 +33,6 @@ public class RemoteJvmManager {
             RemoteJvm hz = new RemoteJvm(boxes.get(clientIdx), RemoteJvm.JVM_TYPE.Client, i+1);
             jvms.add(hz);
         }
-
-        System.out.println("JVM Layout " + this.toString());
     }
 
     private int rangeMap(int val, int min, int max) {
@@ -108,15 +106,17 @@ public class RemoteJvmManager {
     @Override
     public String toString() {
 
-        String str = new String();
-        for(RemoteJvm jvm : jvms){
-            str+=jvm+"\n";
+        String jvms = new String();
+        for(RemoteJvm jvm : this.jvms){
+            jvms+=jvm+"\n";
         }
+        jvms=jvms.trim();
 
         return "RemoteJvmManager{" +
                 "membersOnlyCount=" + membersOnlyCount +
                 ", membersCount=" + membersCount +
                 ", clientsCount=" + clientsCount +
-                "}\n" + str;
+                "\n"+jvms +
+                "}";
     }
 }

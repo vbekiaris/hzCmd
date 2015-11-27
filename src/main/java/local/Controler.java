@@ -1,7 +1,6 @@
 package local;
 
 import global.Args;
-import global.Bash;
 
 import java.io.*;
 
@@ -65,7 +64,6 @@ public class Controler {
                             case load:
                             case invoke:
                             case stop:
-                            case homeIp:
                                 boxes.send(line);
                                 break;
                             case ssh:
@@ -75,6 +73,8 @@ public class Controler {
                                 System.out.println(boxes);
                                 boxes.send(line);
                                 break;
+                            case layout:
+                                boxes.jvmLayout();
 
                             case clean:
                                 boxes.clean();
