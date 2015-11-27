@@ -5,6 +5,7 @@ import global.Args;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.management.ManagementFactory;
 
 import static global.Bash.killAllJava;
 import static global.Utils.exceptionStacktraceToString;
@@ -21,8 +22,10 @@ public class Controler{
     private static Tasks tasks;
 
     public static final String ID = System.getProperty(Args.ID.name());
+    public static final String jvmPidId = ManagementFactory.getRuntimeMXBean().getName();
 
     public Controler(HazelcastInstance hazelcastInstance){
+
         this.hazelcastInstance = hazelcastInstance;
         tasks = new Tasks(hazelcastInstance);
     }
@@ -62,16 +65,20 @@ public class Controler{
                 }
             }
         }catch(Exception e){
-            System.out.println("Main loop");
             e.printStackTrace();
-            sendBackError("Main loop "+e.getMessage());
+            sendBackError(idString()+" "+exceptionStacktraceToString(e));
         }
+    }
+
+    public String idString(){
+        return "Controler{" + "ID=" + ID + "jvmPidId=" + jvmPidId + '}';
     }
 
     @Override
     public String toString() {
         return "Controler{" +
                 "ID=" + ID +
+                "jvmPidId=" + jvmPidId +
                 ", tasks=" + tasks +
                 '}';
     }
