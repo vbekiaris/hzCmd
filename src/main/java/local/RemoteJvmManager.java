@@ -69,7 +69,7 @@ public class RemoteJvmManager {
     }
 
     private void zeroOut(){
-        membersOnlyCount=0;
+        membersOnlyCount=boxes.size();
         memberCount=0;
         clientCount=0;
         jvms.clear();
