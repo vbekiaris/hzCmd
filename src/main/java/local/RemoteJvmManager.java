@@ -34,7 +34,7 @@ public class RemoteJvmManager {
             jvms.add(hz);
         }
 
-        System.out.println("JVM Layout" + this.toString());
+        System.out.println("JVM Layout " + this.toString());
     }
 
     private int rangeMap(int val, int min, int max) {

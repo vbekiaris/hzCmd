@@ -41,7 +41,7 @@ public abstract class Bash {
 
     private static String executeCommand(String command) throws IOException, InterruptedException {
 
-        //System.out.println(command);
+        System.out.println(command);
 
         StringBuffer output = new StringBuffer();
 

@@ -25,7 +25,7 @@ public abstract class Installer {
 
     public static void install(RemoteBoxes boxes) throws IOException, InterruptedException {
 
-        System.out.println("install on"+boxes.count());
+        System.out.println("install on "+boxes.count()+" boxes");
         String memberJar;
         String clientJar;
         if(ee){
@@ -45,7 +45,6 @@ public abstract class Installer {
         boxes.upload(mainJars, REMOTE_ROOT+"/lib/");
         boxes.upload(cacheJars, REMOTE_ROOT+"/lib/");
         boxes.upload(guavaars, REMOTE_ROOT+"/lib/");
-
     }
 
     public static void uninstall(RemoteBoxes boxes) throws IOException, InterruptedException {
