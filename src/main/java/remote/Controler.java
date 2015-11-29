@@ -35,6 +35,7 @@ public class Controler{
             while (true){
                 String line=in.readLine();
                 if (line!=null){
+                    System.out.println(line);
                     String[] words = line.split("\\s+");
                     Args arg = Args.valueOf(words[0]);
                     switch (arg) {
