@@ -108,8 +108,8 @@ public class RemoteJvmManager {
     public void catMemberLogs() throws IOException, InterruptedException {
         for(RemoteJvm jvm : jvms.values()){
             if(jvm.isMember()){
-                System.out.println(jvm);
-                jvm.cat();
+                //System.out.println(jvm);
+                System.out.println( jvm.cat() );
             }
         }
     }

@@ -81,8 +81,8 @@ public class RemoteJvm {
         Bash.ssh(user, ips.pub, "echo "+cmd+" >> "+dir+"/"+inFile);
     }
 
-    public void cat() throws IOException, InterruptedException {
-        Bash.ssh(user, ips.pub, "cat "+dir+"/"+outFile);
+    public String cat() throws IOException, InterruptedException {
+        return Bash.ssh(user, ips.pub, "cat "+dir+"/"+outFile);
     }
 
     public void tail() throws IOException, InterruptedException {
