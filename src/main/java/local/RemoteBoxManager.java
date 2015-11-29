@@ -16,8 +16,8 @@ public class RemoteBoxManager {
     private List<IpPair> boxes = new ArrayList();
 
     public RemoteBoxManager(String file) throws IOException, InterruptedException {
-        //agents = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-        //init();
+        agents = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+        init();
     }
 
     private void init() throws IOException {
