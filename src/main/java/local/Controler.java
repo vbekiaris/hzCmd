@@ -3,6 +3,7 @@ package local;
 import global.Args;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ public class Controler {
 
     private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
     private BufferedReader commsIn;
+    private List<String> history = new ArrayList();
 
     private RemoteBoxManager boxes = new RemoteBoxManager("agents.txt");
     private Map<String, RemoteJvmManager> clusters = new HashMap();
@@ -27,6 +29,8 @@ public class Controler {
             f.createNewFile();
         }
         commsIn = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
+
+
     }
 
     public void run(){
@@ -34,7 +38,7 @@ public class Controler {
             while (true){
                 String line=in.readLine();
                 if (line!=null && !line.equals("") && !line.startsWith("#")) {
-
+                    history.add(line);
                     System.out.println("=>"+line);
 
                     String[] words = line.split("\\s+");
