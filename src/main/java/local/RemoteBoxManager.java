@@ -53,7 +53,7 @@ public class RemoteBoxManager {
 
     public void sshCmd(String cmd) throws IOException, InterruptedException {
         for(IpPair ip : boxes){
-            System.out.println( Bash.ssh(user, ip.pub, cmd) );
+            Bash.ssh(user, ip.pub, cmd);
         }
     }
 
