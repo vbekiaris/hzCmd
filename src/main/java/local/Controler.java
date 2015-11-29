@@ -1,12 +1,6 @@
 package local;
 
-import antlr4.AntlrDrinkListener;
-import antlr4.HzCmdLexer;
-import antlr4.HzCmdParser;
 import global.Args;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import java.io.*;
 import java.util.ArrayList;
