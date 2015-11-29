@@ -37,28 +37,30 @@ public class RemoteJvmManager {
         }
     }
 
-    public void addMembers(int qty) {
+    public void addMembers(int qty) throws IOException, InterruptedException {
         for(int i=0; i<qty; i++)
             addMember();
     }
 
-    public void addMember(){
+    public void addMember() throws IOException, InterruptedException {
         int memberIdx = rangeMap(memberCount++, 0, membersOnlyCount);
         String id = RemoteJvm.JVM_TYPE.Member.name() + memberCount + clusterId;
         RemoteJvm jvm = new RemoteJvm(user, boxes.get(memberIdx), RemoteJvm.JVM_TYPE.Member, id);
         jvms.put(jvm.getId(), jvm);
+        jvm.initilize();
     }
 
-    public void addClients(int qty) {
+    public void addClients(int qty) throws IOException, InterruptedException {
         for(int i=0; i<qty; i++)
             addClient();
     }
 
-    public void addClient(){
+    public void addClient() throws IOException, InterruptedException {
         int clientIdx = rangeMap(clientCount++, membersOnlyCount, boxes.size());
         String id =  RemoteJvm.JVM_TYPE.Client.name() + memberCount + clusterId;
         RemoteJvm jvm = new RemoteJvm(user, boxes.get(clientIdx), RemoteJvm.JVM_TYPE.Client, id);
         jvms.put(jvm.getId(), jvm);
+        jvm.initilize();
     }
 
     public void initilizeJvms() throws IOException, InterruptedException {
