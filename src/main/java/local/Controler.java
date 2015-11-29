@@ -101,6 +101,8 @@ public class Controler {
 
                             case clean:
                                 cluster.clean();
+
+
                                 break;
                             case membersOnly:
                                 cluster.setMembersOnlyCount(Integer.parseInt(words[1]));

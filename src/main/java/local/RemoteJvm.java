@@ -55,7 +55,7 @@ public class RemoteJvm {
         jvmArgs += "-D"+Args.ID +"="+id+" ";
 
         String pidStr = Bash.ssh(user, ips.pub, "cd " + dir + "; nohup java " + classPath + " " + jvmArgs + " " + classToRun + " < " + inFile + " &> " + outFile + " & echo $!");
-        pid = Integer.parseInt( pidStr.trim() );
+        pid = Integer.parseInt(pidStr.trim());
         System.out.println("started "+this);
     }
 
@@ -93,6 +93,7 @@ public class RemoteJvm {
 
     public String toString() {
         return "RemoteJvm{" +
+                " ip=" + ips +
                 ", ID=" + id +
                 ", running=" + (pid==0 ? "False" : "True") +
                 ", pid=" + pid +
