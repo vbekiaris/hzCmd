@@ -49,16 +49,15 @@ public class Controler {
 
                             case cluster:
                                 if (words.length == 4){
-                                    for (int i = 0; i < words.length; i++) {
-                                        System.out.println(words[i]);
-                                    }
                                     String clusterID = words[1];
                                     int start = Integer.parseInt(words[2]);
                                     int end = Integer.parseInt(words[3]);
+
                                     List<IpPair> ips = boxes.getBoxes(start, end);
                                     RemoteJvmManager jvmManager = new RemoteJvmManager(boxes.getUser(), clusterID, ips);
                                     clusters.put(jvmManager.getClusterId(), jvmManager);
                                     cluster=jvmManager;
+
                                     System.out.println(cluster);
                                 }
                                 break;
