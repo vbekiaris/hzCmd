@@ -1,6 +1,12 @@
 package local;
 
+import antlr4.AntlrDrinkListener;
+import antlr4.HzCmdLexer;
+import antlr4.HzCmdParser;
 import global.Args;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -158,7 +164,35 @@ public class Controler {
     }
 
     public static void main(String[] args) throws InterruptedException, IOException {
-        Controler c = new Controler();
-        c.run();
+
+        printDrink("cluster abc 0 7");
+
+        //Controler c = new Controler();
+        //c.run();
+    }
+
+    private static  void printDrink(String drinkSentence) {
+        // Get our lexer
+        HzCmdLexer lexer = new HzCmdLexer(new ANTLRInputStream(drinkSentence));
+
+        // Get a list of matched tokens
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+
+        // Pass the tokens to the parser
+        HzCmdParser parser = new HzCmdParser(tokens);
+
+        // Specify our entry point
+        HzCmdParser.StatementContext hzCmdStatment = parser.statement();
+
+
+        System.out.println("ID = " + hzCmdStatment.CLUSTER());
+        System.out.println("ID = " + hzCmdStatment.ID());
+        System.out.println("ID = "+hzCmdStatment.NUMBER(0));
+        System.out.println("ID = "+hzCmdStatment.NUMBER(1));
+
+        // Walk it and attach our listener
+        //ParseTreeWalker walker = new ParseTreeWalker();
+        //AntlrDrinkListener listener = new AntlrDrinkListener();
+        //walker.walk(listener, hzCmdStatment);
     }
 }
