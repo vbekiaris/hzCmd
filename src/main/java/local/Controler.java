@@ -29,8 +29,6 @@ public class Controler {
             f.createNewFile();
         }
         commsIn = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
-
-
     }
 
     public void run(){
