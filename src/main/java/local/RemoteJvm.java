@@ -68,8 +68,13 @@ public class RemoteJvm {
         pid=0;
     }
 
-    public boolean running()  throws IOException, InterruptedException {
-        return Bash.sshWithExitCode(user, ips.pub, "ps -p "+pid) == 0;
+    public boolean running() {
+        try {
+            return Bash.sshWithExitCode(user, ips.pub, "ps -p "+pid) == 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public void send(String cmd) throws IOException, InterruptedException {
@@ -92,10 +97,13 @@ public class RemoteJvm {
     public String getId(){ return id; }
 
     public String toString() {
+
+        boolean running = running();
+
         return "RemoteJvm{" +
                 " ip=" + ips +
                 ", ID=" + id +
-                ", running=" + (pid==0 ? "False" : "True") +
+                ", running=" + running +
                 ", pid=" + pid +
                 ", type=" + type +
                 ", dir=" + dir +
