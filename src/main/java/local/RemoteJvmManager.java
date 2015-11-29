@@ -1,7 +1,6 @@
 package local;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,18 +10,23 @@ import static global.Utils.sleepSeconds;
 
 public class RemoteJvmManager {
 
-    private int membersOnlyCount;
-    private Map<String, RemoteJvm> jvms = new HashMap();;
+    private final String user;
 
+    private final String clusterId;
+
+    private Map<String, RemoteJvm> jvms = new HashMap();
+    private List<IpPair> boxes;
+
+    private int membersOnlyCount;
     private int memberCount=0;
     private int clientCount=0;
 
-    private List<IpPair> boxes;
 
-    public RemoteJvmManager(List<IpPair> boxes){
+    public RemoteJvmManager(String user, String clusterId, List<IpPair> boxes){
+        this.user=user;
+        this.clusterId =clusterId;
         this.boxes=boxes;
         membersOnlyCount=boxes.size();
-        System.out.println("membersOnlyCount="+membersOnlyCount);
     }
 
     public void setMembersOnlyCount(int count) {
@@ -39,9 +43,9 @@ public class RemoteJvmManager {
     }
 
     public void addMember(){
-        System.out.println("membersOnlyCount="+membersOnlyCount);
         int memberIdx = rangeMap(memberCount++, 0, membersOnlyCount);
-        RemoteJvm jvm = new RemoteJvm(boxes.get(memberIdx), RemoteJvm.JVM_TYPE.Member, memberCount);
+        String id = RemoteJvm.JVM_TYPE.Member.name() + memberCount + clusterId;
+        RemoteJvm jvm = new RemoteJvm(user, boxes.get(memberIdx), RemoteJvm.JVM_TYPE.Member, id);
         jvms.put(jvm.getId(), jvm);
     }
 
@@ -52,7 +56,8 @@ public class RemoteJvmManager {
 
     public void addClient(){
         int clientIdx = rangeMap(clientCount++, membersOnlyCount, boxes.size());
-        RemoteJvm jvm = new RemoteJvm(boxes.get(clientIdx), RemoteJvm.JVM_TYPE.Client, clientCount);
+        String id =  RemoteJvm.JVM_TYPE.Client.name() + memberCount + clusterId;
+        RemoteJvm jvm = new RemoteJvm(user, boxes.get(clientIdx), RemoteJvm.JVM_TYPE.Client, id);
         jvms.put(jvm.getId(), jvm);
     }
 
@@ -61,6 +66,7 @@ public class RemoteJvmManager {
             if(jvm.isMember())
                 jvm.initilize();
         }
+
         sleepSeconds(10);
         for(RemoteJvm jvm : jvms.values()){
             if(jvm.isClient())
@@ -81,11 +87,14 @@ public class RemoteJvmManager {
         }
     }
 
-    public void killAllJava() throws IOException, InterruptedException {
-        for(RemoteJvm jvm : jvms.values()){
-            jvm.killAllJava();
-        }
-        zeroOut();
+    public void kill(String id) throws IOException, InterruptedException {
+        RemoteJvm jvm = jvms.get(id);
+        jvm.kill();
+    }
+
+    public void start(String id) throws IOException, InterruptedException {
+        RemoteJvm jvm = jvms.get(id);
+        jvm.initilize();
     }
 
     public void send(String cmd) throws IOException, InterruptedException {
@@ -112,8 +121,19 @@ public class RemoteJvmManager {
         }
     }
 
+    public String getClusterId() {
+        return clusterId;
+    }
+
+
     @Override
     public String toString() {
+
+        String ips="";
+        for(IpPair ipPair : boxes){
+            ips+=ipPair+", ";
+        }
+
 
         String jvms = new String();
         for(RemoteJvm jvm : this.jvms.values()){
@@ -122,10 +142,12 @@ public class RemoteJvmManager {
         jvms=jvms.trim();
 
         return "RemoteJvmManager{" +
-                "membersOnlyCount=" + membersOnlyCount +
+                " clusterId=" + clusterId +
+                ", membersOnlyCount=" + membersOnlyCount +
                 ", memberCount=" + memberCount +
-                ", clientCount=" + clientCount +"," + "jvms" +
-                "\n"+jvms +
+                ", clientCount=" + clientCount +
+                ", " + ips +
+                ", jvms=" + jvms +
                 "}";
     }
 }

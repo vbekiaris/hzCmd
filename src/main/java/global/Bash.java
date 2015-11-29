@@ -28,6 +28,10 @@ public abstract class Bash {
         return executeCommand("ssh "+user+"@"+ip+" "+cmd);
     }
 
+    public static int sshWithExitCode(String user, String ip, String cmd) throws IOException, InterruptedException {
+        return executeCommandWithExitCode("ssh "+user+"@"+ip+" "+cmd);
+    }
+
     public static void scpUp(String user, String ip, String from, String to) throws IOException, InterruptedException {
         executeCommand("scp -r " + from + " " + user + "@" + ip + ":" + to);
     }
@@ -65,5 +69,11 @@ public abstract class Bash {
         }
 
         return output.toString();
+    }
+
+    private static int executeCommandWithExitCode(String command) throws IOException, InterruptedException {
+        Process p = Runtime.getRuntime().exec(command);
+        p.waitFor();
+        return p.exitValue();
     }
 }

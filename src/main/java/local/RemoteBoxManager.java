@@ -11,13 +11,38 @@ import java.util.List;
 
 public class RemoteBoxManager {
 
-    private static String user;
-    private List<IpPair> boxes;
-    private RemoteJvmManager jvmManager;
+    private BufferedReader agents;
+    private String user;
+    private List<IpPair> boxes = new ArrayList();
 
-    public RemoteBoxManager(List<IpPair> boxes) throws IOException {
-        this.boxes=boxes;
-        jvmManager = new RemoteJvmManager(boxes);
+    public RemoteBoxManager(String file) throws IOException, InterruptedException {
+        //agents = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+        //init();
+    }
+
+    private void init() throws IOException {
+        String line;
+        while( (line=agents.readLine()) !=null ){
+            add(line);
+        }
+    }
+
+    public void add(String ipString) {
+        String[] split = ipString.split(",");
+        IpPair ip = new IpPair(split[0], split[1]);
+        boxes.add(ip);
+    }
+
+    public void setUser(String user){
+        this.user=user;
+    }
+
+    public String getUser(){
+        return user;
+    }
+
+    public List<IpPair> getBoxes(int start, int end){
+        return boxes.subList(start-1,  end);
     }
 
     public void upload(String souce, String dest) throws IOException, InterruptedException {
@@ -32,50 +57,14 @@ public class RemoteBoxManager {
         }
     }
 
-
-    public void initilizeJvms() throws IOException, InterruptedException {
-        jvmManager.initilizeJvms();
+    public void jps() throws IOException, InterruptedException {
+        sshCmd("jps");
     }
-
-    public void clean( ) throws IOException, InterruptedException {
-        jvmManager.clean();
-        jvmManager.killAllJava();
-    }
-
-    public void send(String cmd) throws IOException, InterruptedException {
-        jvmManager.send(cmd);
-    }
-
-    public void setMembersOnlyCount(int membersOnlyCount) throws IOException {
-        jvmManager.setMembersOnlyCount(membersOnlyCount);
-    }
-
-    public void setMembersCount(int qty) throws IOException {
-        jvmManager.addMembers(qty);
-    }
-
-    public void setClientsCount(int qty) throws IOException {
-       jvmManager.addClients(qty);
-    }
-
-    public void catMemberLogs( ) throws IOException, InterruptedException {
-        jvmManager.catMemberLogs();
-    }
-
-    public void grepMembers(String args) throws IOException, InterruptedException {
-        jvmManager.grepMembers(args);
-    }
-
-
-    public static void setUser(String userName) {user = userName;}
-
-    public static String getUser(){return user;}
 
     public int count(){return boxes.size();}
 
-    public void jvmLayout(){
-        System.out.println(jvmManager);
-    }
+
+
 
     @Override
     public String toString() {
@@ -87,7 +76,6 @@ public class RemoteBoxManager {
 
         return "RemoteBoxManager{" +
                 "user='" + user + '\'' +
-                ", boxes="+boxes.size()+" ["+ ips +"] " +
-                "jvmManager=" + jvmManager;
+                ", boxes="+boxes.size()+" ["+ ips +"] ";
     }
 }

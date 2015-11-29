@@ -15,36 +15,36 @@ public class RemoteJvm {
     public static final String inFile  =  "in.txt";
     public static final String outFile =  "out.txt";
 
-    public static enum JVM_TYPE {
+    public enum JVM_TYPE {
         Client, Member
     }
 
+    private final String user;
     private final IpPair ips;
     private final JVM_TYPE type;
-    private final int count;
     private final String id;
     private final String dir;
     private int pid = 0;
 
-    public RemoteJvm(IpPair ips, JVM_TYPE type, int count) {
+    public RemoteJvm(String user, IpPair ips, JVM_TYPE type, String id) {
+        this.user = user;
         this.ips = ips;
         this.type = type;
-        this.count = count;
-        this.id = type.name()+count;
+        this.id = id;
         this.dir = Installer.REMOTE_ROOT+"/"+id;
     }
 
     public void initilize() throws IOException, InterruptedException {
 
-        Bash.ssh(RemoteBoxManager.getUser(), ips.pub, "mkdir -p " + dir + ";  cd " + dir + ";  touch in.txt");
+        Bash.ssh(user, ips.pub, "mkdir -p " + dir + ";  cd " + dir + ";  touch in.txt");
 
         String classToRun;
         if (isMember()){
             classToRun = Member.class.getName();
-            Bash.scpUp(RemoteBoxManager.getUser(), ips.pub, "hazelcast.xml", dir+"/");
+            Bash.scpUp(user, ips.pub, "hazelcast.xml", dir+"/");
         }else{
             classToRun = Client.class.getName();
-            Bash.scpUp(RemoteBoxManager.getUser(), ips.pub, "client-hazelcast.xml", dir+"/");
+            Bash.scpUp(user, ips.pub, "client-hazelcast.xml", dir+"/");
         }
 
         String jvmArgs = new String();
@@ -54,33 +54,38 @@ public class RemoteJvm {
         jvmArgs += "-D"+Args.homeInfile+"="+Controler.commsFile+" ";
         jvmArgs += "-D"+Args.ID +"="+id+" ";
 
-        String pidStr = Bash.ssh(RemoteBoxManager.getUser(), ips.pub, "cd " + dir + "; nohup java " + classPath + " " + jvmArgs + " " + classToRun + " < " + inFile + " &> " + outFile + " & echo $!");
+        String pidStr = Bash.ssh(user, ips.pub, "cd " + dir + "; nohup java " + classPath + " " + jvmArgs + " " + classToRun + " < " + inFile + " &> " + outFile + " & echo $!");
         pid = Integer.getInteger( pidStr.trim() );
         System.out.println("started "+this);
     }
 
     public void clean() throws IOException, InterruptedException {
-        Bash.ssh(RemoteBoxManager.getUser(), ips.pub, "rm " + dir+"/*");
+        Bash.ssh(user, ips.pub, "rm " + dir+"/*");
     }
 
-    public void killAllJava() throws IOException, InterruptedException {
-        Bash.ssh(RemoteBoxManager.getUser(), ips.pub, "killall -9 java");
+    public void kill() throws IOException, InterruptedException {
+        Bash.ssh(user, ips.pub, "kill -9 "+pid);
+        pid=0;
     }
 
-    public void send(String cmd) throws IOException, InterruptedException{
-        Bash.ssh(RemoteBoxManager.getUser(), ips.pub, "echo "+cmd+" >> "+dir+"/"+inFile);
+    public boolean running()  throws IOException, InterruptedException {
+        return Bash.sshWithExitCode(user, ips.pub, "ps -p "+pid) == 0;
+    }
+
+    public void send(String cmd) throws IOException, InterruptedException {
+        Bash.ssh(user, ips.pub, "echo "+cmd+" >> "+dir+"/"+inFile);
     }
 
     public void cat() throws IOException, InterruptedException {
-        Bash.ssh(RemoteBoxManager.getUser(), ips.pub, "cat "+dir+"/"+outFile);
+        Bash.ssh(user, ips.pub, "cat "+dir+"/"+outFile);
     }
 
     public void tail() throws IOException, InterruptedException {
-        Bash.ssh(RemoteBoxManager.getUser(), ips.pub, "tail "+dir+"/"+outFile);
+        Bash.ssh(user, ips.pub, "tail "+dir+"/"+outFile);
     }
 
     public void grep(String args) throws IOException, InterruptedException {
-        Bash.ssh(RemoteBoxManager.getUser(), ips.pub, "grep "+args+" "+dir+"/"+outFile);
+        Bash.ssh(user, ips.pub, "grep "+args+" "+dir+"/"+outFile);
     }
 
 

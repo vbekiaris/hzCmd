@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public abstract class Installer {
 
-    public static String REMOTE_ROOT = "hzCluster";
+    public static String REMOTE_ROOT = "hzCmd";
     public static String HOME = "HOME";
     public static String M2_DIR = "/.m2/";
     public static String M2_Repo = System.getenv(HOME)+M2_DIR;

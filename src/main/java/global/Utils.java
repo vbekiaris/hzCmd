@@ -40,27 +40,6 @@ public abstract class Utils {
     }
 
 
-    public static BufferedReader agents;
-    static {
-        try {
-            agents = new BufferedReader(new InputStreamReader(new FileInputStream("agents.txt")));
-        } catch (final Exception e) {
-            //throw new Error(e);
-        }
-    }
-
-    public static List<IpPair> getBoxes() throws IOException {
-        List<IpPair> ips = new ArrayList();
-        String input;
-        while( (input=agents.readLine()) !=null ){
-            String[] split = input.split(",");
-            IpPair ip = new IpPair(split[0], split[1]);
-            ips.add(ip);
-        }
-        return ips;
-    }
-
-
     public static int rangeMap(int val, int min_inclusive, int max_exclusive) {
         int p = max_exclusive-min_inclusive;
         int mod = (val-min_inclusive)%p;
