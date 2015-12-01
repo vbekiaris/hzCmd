@@ -15,6 +15,11 @@ public class Test {
 
         //Style
 
+        //TODO what state should be preserved so we can stop and start hzCmd and still inter act with the cluster
+        // proabley remote box obj,  cluster obj,
+        // what classes have been loaded,  is preserved on the running cluster
+        // what methods are running are presereved on the running cluster
+
         //variable assignment
         cmd("v1 = 3.5");
         cmd("v2 = 3.6");
@@ -75,10 +80,15 @@ public class Test {
         //grep example
         cmd("grep A member1 -A10 -B3 starting.*Now");
 
+
+        //download
+        cmd("download * * file/path/");
+
         cmd("sleep 10");
 
         //await for some regx string to match a msg
         cmd("await some regx to match string send to hzCmd");
+
 
         cmd("save scenario.hz");
 
