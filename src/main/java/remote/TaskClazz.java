@@ -2,7 +2,7 @@ package remote;
 
 import com.hazelcast.core.HazelcastInstance;
 import global.Execute;
-import global.Test;
+import global.Task;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
@@ -13,25 +13,24 @@ import static remote.Utils.sendBack;
 import static remote.Utils.sendBackError;
 
 
+public class TaskClazz implements Callable<Object> {
 
-public class Task implements Callable<Object> {
-
-    Test test;
+    Task task;
     private String targetFunction;
     private Method method;
     private Execute execute;
 
 
-    public Task(String id, String clasz, HazelcastInstance hazelcastInstance){
-        test = instantiate(clasz, Test.class);
-        test.setId(id);
-        test.setHazelcastInstance(hazelcastInstance);
+    public TaskClazz(String id, String clasz, HazelcastInstance hazelcastInstance){
+        task = instantiate(clasz, Task.class);
+        task.setId(id);
+        task.setHazelcastInstance(hazelcastInstance);
     }
 
     public void setMethod(String function){
         targetFunction = function;
         try {
-            method = test.getClass().getMethod(function);
+            method = task.getClass().getMethod(function);
             execute = method.getAnnotation(Execute.class);
         } catch (NoSuchMethodException e) {
             method = null;
@@ -41,7 +40,7 @@ public class Task implements Callable<Object> {
     }
 
     public void stop(){
-        test.setRunning(false);
+        task.setRunning(false);
     }
 
     public Object call() {
@@ -49,8 +48,8 @@ public class Task implements Callable<Object> {
             if (method!=null) {
                 System.out.println(infoStart());
                 sendBack(infoStart());
-                test.setRunning(true);
-                method.invoke(test);
+                task.setRunning(true);
+                method.invoke(task);
                 sendBack(infoStop());
                 System.out.println(infoStop());
             }
@@ -60,13 +59,19 @@ public class Task implements Callable<Object> {
         return null;
     }
 
+    private void onException(Exception e){
+        e.printStackTrace();
+        sendBackError(infoString() + " " +  exceptionStacktraceToString(e) );
+    }
+
+
     public boolean willExicute(){
         if (method==null)
             return false;
         if (executeOnMember() && executeOnClient())
             return true;
 
-        HazelcastInstance hz = test.getHazelcastInstance();
+        HazelcastInstance hz = task.getHazelcastInstance();
 
         return Utils.isMember(hz) == executeOnMember() || Utils.isClient(hz) == executeOnClient();
     }
@@ -96,27 +101,23 @@ public class Task implements Callable<Object> {
     }
 
     protected String getId(){
-        return test.getId();
+        return task.getId();
     }
 
-    private void onException(Exception e){
-        e.printStackTrace();
-        sendBackError(infoString() + " " +  exceptionStacktraceToString(e) );
-    }
 
     protected String infoStart(){ return infoString() + " started"; }
 
     protected String infoStop(){ return infoString() +  " stopped"; }
 
     protected String infoString(){
-        return Controler.ID+" "+test.getId()+" "+test.getClass().getSimpleName()+" "+targetFunction;
+        return Controler.ID+" "+ task.getId()+" "+ task.getClass().getSimpleName()+" "+targetFunction;
     }
 
 
     @Override
     public String toString() {
-        return "Task{" +
-                "test=" + test +
+        return "TaskClazz{" +
+                "task=" + task +
                 ", method=" + method +
                 ", execute=" + execute +
                 '}';

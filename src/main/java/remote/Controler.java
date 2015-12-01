@@ -7,7 +7,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
 
-import static global.Bash.killAllJava;
 import static global.Utils.exceptionStacktraceToString;
 import static global.Utils.sleepMilli;
 import static remote.Utils.sendBack;
@@ -19,7 +18,7 @@ public class Controler{
     private HazelcastInstance hazelcastInstance;
 
     public static HomeSettings home = new HomeSettings();
-    private static Tasks tasks;
+    private static TaskManager tasks;
 
     public static final String ID = System.getProperty(Args.ID.name());
     public static final String jvmPidId = ManagementFactory.getRuntimeMXBean().getName();
@@ -27,7 +26,7 @@ public class Controler{
     public Controler(HazelcastInstance hazelcastInstance){
 
         this.hazelcastInstance = hazelcastInstance;
-        tasks = new Tasks(hazelcastInstance);
+        tasks = new TaskManager(hazelcastInstance);
     }
 
     public void run(){
@@ -40,14 +39,14 @@ public class Controler{
                     Args arg = Args.valueOf(words[0]);
                     switch (arg) {
                         case exit:
-                            ///System.exit(0);
+                            System.exit(0);
 
                         case load:
                             tasks.loadClass(words[1], words[2]);
                             break;
 
                         case invoke:
-                            tasks.invoke(words[1]);
+                            tasks.invokeNonBlocking(words[1], "*", 1);
                             break;
 
                         case stop:

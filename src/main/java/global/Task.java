@@ -4,7 +4,7 @@ import com.hazelcast.core.HazelcastInstance;
 
 import java.util.Random;
 
-public class Test{
+public class Task {
 
     protected String id;
     protected Random random = new Random();
@@ -42,7 +42,7 @@ public class Test{
 
     @Override
     public String toString() {
-        return "Test{" +
+        return "Task{" +
                 "ID=" + id +
                 ", class=" + this.getClass().getName() +
                 ", running=" + running +

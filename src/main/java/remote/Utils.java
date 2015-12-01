@@ -18,9 +18,6 @@ public abstract class Utils {
         return ! isMember(instance);
     }
 
-
-
-
     public static <T> T instantiate(final String className, final Class<T> type){
         try {
             Class<?> c = Class.forName(className);
