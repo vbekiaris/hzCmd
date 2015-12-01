@@ -10,12 +10,12 @@ import java.util.Map;
 
 import static global.Utils.*;
 
-public class Controler {
+public class HzCmd {
 
-    public static String commsFile = "commsIn.txt";
+
+    private ReadComms readComms = new ReadComms();
 
     private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-    private BufferedReader commsIn;
     private List<String> history = new ArrayList();
 
     private RemoteBoxManager boxes = new RemoteBoxManager("agents.txt");
@@ -23,16 +23,12 @@ public class Controler {
     private RemoteJvmManager cluster ;
 
 
-    //TODO need are variables map,  to store strings
+    //TODO need a variables map,  to store strings
     // v1 = 3.6
     // bigJvm = -xmxm16G -xmsx8G -Dblar=blar
-    public Controler() throws IOException, InterruptedException {
+    public HzCmd() throws IOException, InterruptedException {
 
-        File f = new File(commsFile);
-        if(!f.exists()) {
-            f.createNewFile();
-        }
-        commsIn = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
+        readComms.start();
     }
 
     public void run(){
@@ -48,8 +44,7 @@ public class Controler {
                         Args arg = Args.valueOf(words[0]);
                         switch (arg) {
                             case exit:
-                                cluster.send(line);
-                                System.exit(0);
+                                exit();
 
                             case cluster:
                                 if (words.length == 4){
@@ -67,7 +62,7 @@ public class Controler {
                                 break;
 
                             case addip:
-                                boxes.add(words[1]);
+                                boxes.addIp(words[1]);
                                 break;
 
                             case install:
@@ -150,18 +145,22 @@ public class Controler {
                 }else {
                     sleepMilli(500);
                 }
-
-                while ( (line = commsIn.readLine()) != null ){
-                    System.out.println(line);
-                }
             }
         }catch(Exception e){
             e.printStackTrace();
         }
     }
 
+    public void exit(){
+        readComms.running=false;
+        while (! readComms.dead() ){
+            sleepMilli(100);
+        }
+        System.exit(0);
+    }
+
     public static void main(String[] args) throws InterruptedException, IOException {
-        Controler c = new Controler();
+        HzCmd c = new HzCmd();
         c.run();
     }
 

@@ -18,7 +18,8 @@ public class Test {
         //TODO what state should be preserved so we can stop and start hzCmd and still inter act with the cluster
         // proabley remote box obj,  cluster obj,
         // what classes have been loaded,  is preserved on the running cluster
-        // what methods are running are presereved on the running cluster
+        // what methods are running are presereved on the running cluster though hidden in the executor
+        // all though the stoped started messages are in the in message file.
 
         //variable assignment
         cmd("v1 = 3.5");

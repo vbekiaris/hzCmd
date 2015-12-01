@@ -56,7 +56,7 @@ public class RemoteJvm {
         jvmArgs += "-D"+Args.homeUser+"="+System.getProperty("user.name")+" ";
         jvmArgs += "-D"+Args.homeIp+"="+InetAddress.getLocalHost().getHostAddress()+" ";
         jvmArgs += "-D"+Args.homeCwd+"="+System.getProperty("user.dir")+" ";
-        jvmArgs += "-D"+Args.homeInfile+"="+Controler.commsFile+" ";
+        jvmArgs += "-D"+Args.homeInfile+"="+ HzCmd.commsFile+" ";
         jvmArgs += "-D"+Args.ID +"="+id+" ";
 
         String pidStr = Bash.ssh(user, ips.pub, "cd " + dir + "; nohup java " + classPath + " " + jvmArgs + " " + classToRun + " < " + inFile + " &> " + outFile + " & echo $!");

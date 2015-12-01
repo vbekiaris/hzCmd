@@ -71,12 +71,12 @@ public class Controler{
     }
 
     public String idString(){
-        return "Controler{" + "ID=" + ID +", "+ "jvmPidId=" + jvmPidId + '}';
+        return "HzCmd{" + "ID=" + ID +", "+ "jvmPidId=" + jvmPidId + '}';
     }
 
     @Override
     public String toString() {
-        return "Controler{" +
+        return "HzCmd{" +
                 "ID=" + ID +
                 "jvmPidId=" + jvmPidId +
                 ", tasks=" + tasks +
