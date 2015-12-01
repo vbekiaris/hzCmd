@@ -13,18 +13,7 @@ public class Test {
 
     public static void main(String[] args) throws InterruptedException, IOException {
 
-        //style 1
-        cmd("user danny");
-        cmd("ee true");
-        cmd("ee tru");
-        cmd("version 3.6-RC2");
-        cmd("cluster A 0 10");
-        cmd("cluster A");      //set current working cluster
-        cmd("cluster B 3 8");
-        cmd("kill member1A");
-
-
-        //style 2
+        //Style
 
         //variable assignment
         cmd("v1 = 3.5");
@@ -34,13 +23,12 @@ public class Test {
         cmd("wanSingle=com.hazelcast.enterprise.wan.replication.WanNoDelayReplication");
         cmd("wanBatch=com.hazelcast.enterprise.wan.replication.WanBatchReplication");
 
-
         //set globals
         cmd("user danny");
 
         //adds ips to box manager from file or one by one
-        cmd("addIps agents.txt");
-        cmd("addIp 000.00.0.0,111,11,1,11");
+        cmd("add Ips agents.txt");
+        cmd("add Ip 000.00.0.0,111,11,1,11");
 
         //define cluster name and which boxes it runs on
         //(makes copy of hazelCast xml for this cluster,  e.g. puts these ip in members list)
@@ -51,18 +39,21 @@ public class Test {
         cmd("replicate A B wanReplication wanSingle");
         cmd("replicate B A wanReplication wanBatch");
 
-
         //install / upload hz jars to cluster
         cmd("install * OS v1 v2");
         cmd("install A EE v1 v2");
 
         //add member / clients to clusters and start its jvm
-        cmd("member A 2 v1 bigJvm");
-        cmd("member B 1 v2 smlJvm");
+        cmd("add member A 2 v1 bigJvm");
+        cmd("add member B 1 v2 smlJvm");
 
         //load a task up to cluster
         cmd("load * task1 com.some.task");
         cmd("load A task1 com.some.task");
+
+        //set the public vars of loaded test class
+        cmd("set task1.count=2");
+        cmd("set task1.mapName=map22");
 
         //call a method of 1 or more task's, in a cluster, on a member / client
         cmd("invoke method * 3 * *");
@@ -71,12 +62,25 @@ public class Test {
         cmd("invoke method task1 3 A member*");
         cmd("invoke method task1 4 A member1");
 
-        //perform operation on a jvm in a cluster, one a member / client    [cat | jps | tail | clean | start | kill]
+        //perform operation in a cluster, one a member/client [cat | jps | tail | clean | start | kill]
         cmd("kill * *");
         cmd("kill A *");
         cmd("kill A member*");
         cmd("kill A member1");
 
+        //start the member jvm what was killed,  however the tasks which were loaded to the jvm are gone
+        // for this reason it could be better to require explisit start after every cluster deff and add members
+        cmd("start A member*");
+
+        //grep example
+        cmd("grep A member1 -A10 -B3 starting.*Now");
+
+        cmd("sleep 10");
+
+        //await for some regx string to match a msg
+        cmd("await some regx to match string send to hzCmd");
+
+        cmd("save scenario.hz");
 
         //cmd("// not used line");
     }
