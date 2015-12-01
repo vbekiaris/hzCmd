@@ -16,18 +16,19 @@ public class RemoteBoxManager {
     private List<IpPair> boxes = new ArrayList();
 
     public RemoteBoxManager(String file) throws IOException, InterruptedException {
-        agents = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-        init();
+
     }
 
-    private void init() throws IOException {
+    public void addIps(String file) throws IOException {
+        agents = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+
         String line;
         while( (line=agents.readLine()) !=null ){
-            add(line);
+            addIp(line);
         }
     }
 
-    public void add(String ipString) {
+    public void addIp(String ipString) {
         String[] split = ipString.split(",");
         IpPair ip = new IpPair(split[0], split[1]);
         boxes.add(ip);

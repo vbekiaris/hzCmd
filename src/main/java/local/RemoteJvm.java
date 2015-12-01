@@ -10,6 +10,11 @@ import java.net.InetAddress;
 
 public class RemoteJvm {
 
+
+    //TODO remote JVM needs HZ jars version.
+    //Installer.REMOTE_ROOT+"/lib/"+version+"/*"
+    //e.g. members 3 3.5.1
+    //or   members 1 3.6 jvmOpStr
     public static final String classPath="-cp \"$HOME/"+Installer.REMOTE_ROOT+"/lib/*\"";
 
     public static final String inFile  =  "in.txt";

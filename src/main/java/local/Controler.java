@@ -22,6 +22,10 @@ public class Controler {
     private Map<String, RemoteJvmManager> clusters = new HashMap();
     private RemoteJvmManager cluster ;
 
+
+    //TODO need are variables map,  to store strings
+    // v1 = 3.6
+    // bigJvm = -xmxm16G -xmsx8G -Dblar=blar
     public Controler() throws IOException, InterruptedException {
 
         File f = new File(commsFile);

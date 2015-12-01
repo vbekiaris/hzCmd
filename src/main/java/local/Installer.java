@@ -23,6 +23,8 @@ public abstract class Installer {
     public static String jar = ".jar";
 
 
+    //TODO multi HZ versions upload hz jars to REMOTE_ROOT+"/lib/version
+    // install ee=ture | false  3.5.1,  3.5.2, 3.5.4, ...../
     public static void install(RemoteBoxManager boxes) throws IOException, InterruptedException {
 
         System.out.println("install on "+boxes.count()+" boxes");
