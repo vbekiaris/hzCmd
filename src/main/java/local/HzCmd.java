@@ -13,7 +13,8 @@ import static global.Utils.*;
 public class HzCmd {
 
 
-    private ReadComms readComms = new ReadComms();
+    public static String commsFile = "commsIn.txt";
+    private ReadComms readComms = new ReadComms(commsFile);
 
     private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
     private List<String> history = new ArrayList();

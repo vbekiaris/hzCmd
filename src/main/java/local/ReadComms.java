@@ -5,14 +5,15 @@ import java.io.*;
 public class ReadComms extends Thread {
 
 
-    public static String commsFile = "commsIn.txt";
+    private String commsFile;
     private BufferedReader commsIn;
 
     public volatile boolean running = true;
 
     private volatile boolean dead = false;
 
-    public ReadComms() throws IOException {
+    public ReadComms(String file) throws IOException {
+        commsFile =  file;
         File f = new File(commsFile);
         if(!f.exists()) {
             f.createNewFile();

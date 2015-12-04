@@ -22,19 +22,21 @@ public class Test {
         // all though the stoped started messages are in the in message file.
 
         //variable assignment
-        cmd("v1 = 3.5");
-        cmd("v2 = 3.6");
-        cmd("bigJvm = -xmx16G");
-        cmd("smlJvm = -xmx2G");
-        cmd("wanSingle=com.hazelcast.enterprise.wan.replication.WanNoDelayReplication");
-        cmd("wanBatch=com.hazelcast.enterprise.wan.replication.WanBatchReplication");
+        cmd("v1 = \"3.5\"");
+
+        cmd("v2 = \"3.6\" ");
+        cmd("bigJvm = \"-xmx16G\"");
+        cmd("smlJvm =\"-xms2G -xmx4G --XXGc\"");
+        cmd("wanSingle=\"com.hazelcast.enterprise.wan.replication.WanNoDelayReplication\"");
+        cmd("wanBatch=\"com.hazelcast.enterprise.wan.replication.WanBatchReplication\"");
+
 
         //set globals
-        cmd("user danny");
+        cmd("user \"danny\"");
 
         //adds ips to box manager from file or one by one
-        cmd("add Ips agents.txt");
-        cmd("add Ip 000.00.0.0,111,11,1,11");
+        cmd("add file \"agent.txt\"");
+        cmd("add ip 52.91.246.155,10.0.0.101");
 
         //define cluster name and which boxes it runs on
         //(makes copy of hazelCast xml for this cluster,  e.g. puts these ip in members list)
@@ -42,11 +44,11 @@ public class Test {
         cmd("cluster B 1 5");
 
         //set up wan replication in xml using wan-replication-ref name="wanReplication" and repImplClass="com.hazelcast.enterprise.wan.replication.WanNoDelayReplication"
-        cmd("replicate A B wanReplication wanSingle");
+        cmd("replicate A B \"wanReplication\" wanSingle");
         cmd("replicate B A wanReplication wanBatch");
 
         //install / upload hz jars to cluster
-        cmd("install * OS v1 v2");
+        cmd("install * OS v1");
         cmd("install A EE v1 v2");
 
         //add member / clients to clusters and start its jvm
@@ -54,46 +56,57 @@ public class Test {
         cmd("add member B 1 v2 smlJvm");
 
         //load a task up to cluster
-        cmd("load * task1 com.some.task");
-        cmd("load A task1 com.some.task");
+        cmd("load * task1 \"com.some.task\"");
+        cmd("load A task1 \"com.some.task\"");
 
         //set the public vars of loaded test class
-        cmd("set task1.count=2");
-        cmd("set task1.mapName=map22");
+        cmd("set task1.count=\"2\"");
+        cmd("set task1.mapName=\"map22\"");
 
         //call a method of 1 or more task's, in a cluster, on a member / client
-        cmd("invoke method * 3 * *");
-        cmd("invoke method task1 3 * *");
-        cmd("invoke method task1 3 A *");
-        cmd("invoke method task1 3 A member*");
-        cmd("invoke method task1 4 A member1");
+        cmd("invoke 2  method * * *");
+        cmd("invoke 6  method task1 * *");
+        cmd("invoke 8  method task1 A *");
+        cmd("invoke 15 method task1 A member*");
+        cmd("invoke 32 method task1 A memberA1");
 
         //perform operation in a cluster, one a member/client [cat | jps | tail | clean | start | kill]
         cmd("kill * *");
         cmd("kill A *");
-        cmd("kill A member*");
-        cmd("kill A member1");
+        cmd("kill newYork member*");
+        cmd("kill london memberA4");
+        cmd("kill istanbul client*");
+        cmd("kill A clientA5");
 
-        //start the member jvm what was killed,  however the tasks which were loaded to the jvm are gone
-        // for this reason it could be better to require explisit start after every cluster deff and add members
+        cmd("start * *");
         cmd("start A member*");
-
-        //grep example
-        cmd("grep A member1 -A10 -B3 starting.*Now");
-
-
-        //download
-        cmd("download * * file/path/");
+        cmd("start A memberX72");
 
         cmd("sleep 10");
 
+
+        //start the member jvm what was killed,  however the tasks which were loaded to the jvm are gone
+        // for this reason it could be better to require explisit start after every cluster deff and add members
+
+
+        //grep example
+        //cmd("grep A member1 -A10 -B3 starting.*Now");
+
+
+        //download
+        //cmd("download * * file/path/");
+
+
         //await for some regx string to match a msg
-        cmd("await some regx to match string send to hzCmd");
+        //cmd("await \"some regx to match string send to hzCmd\"");
+
+        cmd("save \"scenario.hz\"");
 
 
-        cmd("save scenario.hz");
 
         //cmd("// not used line");
+
+
     }
 
     private static  void cmd(String drinkSentence) {
@@ -102,12 +115,19 @@ public class Test {
         // Get a list of matched tokens
         CommonTokenStream tokens = new CommonTokenStream(lexer);
 
+
         // Pass the tokens to the parser
         HzCmdParser parser = new HzCmdParser(tokens);
         // Specify our entry point
         HzCmdParser.StatementContext hzCmdStatment = parser.statement();
 
+        System.out.println(hzCmdStatment.getText() );
 
+        if (hzCmdStatment.exception !=null){
+            System.out.println( hzCmdStatment.exception.getOffendingToken().getText());
+        }
+
+        /*
         switch (hzCmdStatment.start.getType()){
             case HzCmdParser.CLUSTER:
                 System.out.println("NODE 0="+hzCmdStatment.getChild(0).getText());
@@ -121,8 +141,15 @@ public class Test {
                 System.out.println("START = " + hzCmdStatment.start);
                 System.out.println("ID = " + hzCmdStatment.ID());
         }
+        */
 
         System.out.println("");
+
+        /*try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
     }
 
 
