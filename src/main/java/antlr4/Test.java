@@ -127,7 +127,22 @@ public class Test {
             System.out.println( hzCmdStatment.exception.getOffendingToken().getText());
         }
 
+
+        System.out.println( hzCmdStatment.getRuleContext().getText() +" "+ hzCmdStatment.getRuleContext());
+
+        System.out.println(hzCmdStatment.start.getText());
+
+        switch (hzCmdStatment.start.getType()) {
+            case HzCmdParser.VAR:
+                System.out.println("NODE 0=" + hzCmdStatment.getChild(0).getText());
+                System.out.println("START = " + hzCmdStatment.start.getTokenSource());
+                System.out.println("rules = " + hzCmdStatment.getRuleIndex());
+                System.out.println( HzCmdParser.ruleNames[ hzCmdStatment.getRuleIndex() ] );
+                break;
+        }
+
         /*
+
         switch (hzCmdStatment.start.getType()){
             case HzCmdParser.CLUSTER:
                 System.out.println("NODE 0="+hzCmdStatment.getChild(0).getText());
