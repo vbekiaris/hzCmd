@@ -24,7 +24,7 @@ public class Test {
         //variable assignment
         cmd("v1 = \"3.5\"");
 
-        cmd("v2 = \"3.6\" ");
+        cmd("v2 = \"3.6-RC2-SNAPSHOT\" ");
         cmd("bigJvm = \"-xmx16G\"");
         cmd("smlJvm =\"-xms2G -xmx4G --XXGc\"");
         cmd("wanSingle=\"com.hazelcast.enterprise.wan.replication.WanNoDelayReplication\"");

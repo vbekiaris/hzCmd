@@ -15,7 +15,9 @@ public class RemoteJvm {
     //Installer.REMOTE_ROOT+"/lib/"+version+"/*"
     //e.g. members 3 3.5.1
     //or   members 1 3.6 jvmOpStr
-    public static final String classPath="-cp \"$HOME/"+Installer.REMOTE_ROOT+"/lib/*\"";
+    public static final String libPath ="$HOME/"+Installer.REMOTE_ROOT+"/lib/*";
+    public static final String hzPath ="$HOME/"+Installer.REMOTE_ROOT+"/hz-lib/";
+
 
     public static final String inFile  =  "in.txt";
     public static final String outFile =  "out.txt";
@@ -39,7 +41,7 @@ public class RemoteJvm {
         this.dir = Installer.REMOTE_ROOT+"/"+id;
     }
 
-    public void initilize() throws IOException, InterruptedException {
+    public void initilize(String hzVersion) throws IOException, InterruptedException {
 
         Bash.ssh(user, ips.pub, "mkdir -p " + dir + ";  cd " + dir + ";  touch in.txt");
 
@@ -59,7 +61,9 @@ public class RemoteJvm {
         jvmArgs += "-D"+Args.homeInfile+"="+ HzCmd.commsFile+" ";
         jvmArgs += "-D"+Args.ID +"="+id+" ";
 
-        String pidStr = Bash.ssh(user, ips.pub, "cd " + dir + "; nohup java " + classPath + " " + jvmArgs + " " + classToRun + " < " + inFile + " &> " + outFile + " & echo $!");
+
+        String hzLib = hzPath+hzVersion+"/*";
+        String pidStr = Bash.ssh(user, ips.pub, "cd " + dir + "; nohup java -cp \"" + libPath +":"+ hzLib + "\" " + jvmArgs + " " + classToRun + " < " + inFile + " &> " + outFile + " & echo $!");
         pid = Integer.parseInt(pidStr.trim());
         System.out.println("started "+this);
     }

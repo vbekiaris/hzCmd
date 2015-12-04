@@ -67,18 +67,12 @@ public class HzCmd {
                                 break;
 
                             case install:
-                                Installer.install(boxes);
+                                Installer.install(boxes, false, "3.5");
                                 break;
                             case uninstall:
                                 Installer.uninstall(boxes);
                                 break;
 
-                            case ee:
-                                Installer.ee = Boolean.parseBoolean(words[1]);
-                                break;
-                            case version:
-                                Installer.version = words[1];
-                                break;
 
                             case user:
                                 boxes.setUser(words[1]);
