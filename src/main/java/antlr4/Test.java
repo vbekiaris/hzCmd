@@ -127,9 +127,7 @@ public class Test {
             System.out.println( hzCmdStatment.exception.getOffendingToken().getText());
         }
 
-
         System.out.println( hzCmdStatment.getRuleContext().getText() +" "+ hzCmdStatment.getRuleContext());
-
         System.out.println(hzCmdStatment.start.getText());
 
         switch (hzCmdStatment.start.getType()) {

@@ -3,8 +3,14 @@ grammar HzCmd;
 // Parser Rules   antlr4 HzCmd.g4 -package antlr4
 
 
-script : statement+ ;
+script
+    : statement
+    ;
 
+
+//assignment
+//    : VAR ASSIGN STRING
+//    ;
 
 statement
     : VAR ASSIGN STRING
@@ -48,6 +54,8 @@ INVOKE : 'invoke' ;
 
 KILL : 'kill';
 START : 'start';
+SLEEP : 'sleep';
+SAVE : 'save';
 
 
 ALL : '*';
@@ -60,16 +68,10 @@ MEMBER_VAR : 'member'VAR;
 CLIENT_ALL : 'client'ALL;
 CLIENT_VAR : 'client'VAR;
 
-
-
 MEMBERS_ONLY : 'membersOnly';
 MEMBERS : 'members';
 CLIENTS : 'clients';
 
-
-
-SLEEP : 'sleep';
-SAVE : 'save';
 
 ASSIGN : '=' ;
 BOOL : TRUE | FALSE;
@@ -77,31 +79,19 @@ TRUE : 'true';
 FALSE : 'false';
 
 
-
 VAR : ([a-z]|[A-Z])([a-z]|[A-Z]|[0-9]|'_')* ;
-TEXT : [a-z]+ ;
 NUMBER : [0-9]+ ;
-
-//fragment CHAR   :'a'..'z'|'A'..'Z'|'0'..'9'|'/'|'_'|'.'|'-';
 
 WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+ -> skip ;
 
-
-CHAR   :( [a-z]|[A-Z]|[0-9]|'/'|'_'|'.'|'-'|' ' );
-
+fragment CHAR   :( [a-z]|[A-Z]|[0-9]|'/'|'_'|'.'|'-'|' ' );
 STRING : '"'CHAR+'"';
-//STRING : [a-z][a-zA-Z0-9]+ ;
-//STRING : ('a'..'z'|'A'..'Z'|'0'..'9'|'_'|'.'|'-')+ ;
-
-
-
 
 
 IP_PAIR : IP_STR','IP_STR;
 IP_STR : Octet '.' Octet '.' Octet '.' Octet ;
 
-Octet :  Digit Digit Digit | Digit Digit | Digit ;
-
+fragment Octet :  Digit Digit Digit | Digit Digit | Digit ;
 fragment Digit : '0'..'9';
 
 COMMENT : '//' ~[\r\n]* -> skip ;
