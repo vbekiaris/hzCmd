@@ -16,7 +16,7 @@ public class RemoteBoxManager {
     private List<IpPair> boxes = new ArrayList();
 
     public RemoteBoxManager(String file) throws IOException, InterruptedException {
-
+        addIps(file);
     }
 
     public void addIps(String file) throws IOException {
