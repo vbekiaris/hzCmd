@@ -37,44 +37,53 @@ public class RemoteJvmManager {
         }
     }
 
-    public void addMembers(int qty) throws IOException, InterruptedException {
+    public void addMembers(int qty, String hzVersion) throws IOException, InterruptedException {
         for(int i=0; i<qty; i++)
-            addMember();
+            addMember(hzVersion);
     }
 
-    public void addMember() throws IOException, InterruptedException {
+    public void addMember(String hzVersion) throws IOException, InterruptedException {
         int memberIdx = rangeMap(memberCount++, 0, membersOnlyCount);
         String id = RemoteJvm.JVM_TYPE.Member.name() + memberCount + clusterId;
         RemoteJvm jvm = new RemoteJvm(user, boxes.get(memberIdx), RemoteJvm.JVM_TYPE.Member, id);
         jvms.put(jvm.getId(), jvm);
-        jvm.initilize();
+        jvm.initilize(hzVersion);
     }
 
-    public void addClients(int qty) throws IOException, InterruptedException {
+    public void addClients(int qty, String hzVersion) throws IOException, InterruptedException {
         for(int i=0; i<qty; i++)
-            addClient();
+            addClient(hzVersion);
     }
 
-    public void addClient() throws IOException, InterruptedException {
+    public void addClient(String hzVersion) throws IOException, InterruptedException {
         int clientIdx = rangeMap(clientCount++, membersOnlyCount, boxes.size());
         String id =  RemoteJvm.JVM_TYPE.Client.name() + memberCount + clusterId;
         RemoteJvm jvm = new RemoteJvm(user, boxes.get(clientIdx), RemoteJvm.JVM_TYPE.Client, id);
         jvms.put(jvm.getId(), jvm);
-        jvm.initilize();
+        jvm.initilize(hzVersion);
     }
 
-    public void initilizeJvms() throws IOException, InterruptedException {
+    /*
+    public void start(String id) throws IOException, InterruptedException {
+        RemoteJvm jvm = jvms.get(id);
+        jvm.initilize();
+    }
+    */
+
+
+    public void restartJmvs(String hzVersion) throws IOException, InterruptedException {
         for(RemoteJvm jvm : jvms.values()){
             if(jvm.isMember())
-                jvm.initilize();
+                jvm.initilize(hzVersion);
         }
 
         sleepSeconds(10);
         for(RemoteJvm jvm : jvms.values()){
             if(jvm.isClient())
-                jvm.initilize();
+                jvm.initilize(hzVersion);
         }
     }
+
 
     private void zeroOut(){
         membersOnlyCount=boxes.size();
@@ -92,11 +101,6 @@ public class RemoteJvmManager {
     public void kill(String id) throws IOException, InterruptedException {
         RemoteJvm jvm = jvms.get(id);
         jvm.kill();
-    }
-
-    public void start(String id) throws IOException, InterruptedException {
-        RemoteJvm jvm = jvms.get(id);
-        jvm.initilize();
     }
 
     public void send(String cmd) throws IOException, InterruptedException {

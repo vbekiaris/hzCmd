@@ -10,13 +10,8 @@ import java.net.InetAddress;
 
 public class RemoteJvm {
 
-
-    //TODO remote JVM needs HZ jars version.
-    //Installer.REMOTE_ROOT+"/lib/"+version+"/*"
-    //e.g. members 3 3.5.1
-    //or   members 1 3.6 jvmOpStr
-    public static final String libPath ="$HOME/"+Installer.REMOTE_ROOT+"/lib/*";
-    public static final String hzPath ="$HOME/"+Installer.REMOTE_ROOT+"/hz-lib/";
+    public static final String libPath ="$HOME/"+Installer.REMOTE_LIB+"/*";
+    public static final String hzPath ="$HOME/"+Installer.REMOTE_HZ_LIB+"/";
 
 
     public static final String inFile  =  "in.txt";
@@ -42,6 +37,11 @@ public class RemoteJvm {
     }
 
     public void initilize(String hzVersion) throws IOException, InterruptedException {
+
+        if(running()){
+            System.out.println(this + "is running !");
+            return;
+        }
 
         Bash.ssh(user, ips.pub, "mkdir -p " + dir + ";  cd " + dir + ";  touch in.txt");
 

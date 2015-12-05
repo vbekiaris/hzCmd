@@ -21,6 +21,7 @@ public class HzCmd {
 
     private RemoteBoxManager boxes = new RemoteBoxManager("agents.txt");
     private Map<String, RemoteJvmManager> clusters = new HashMap();
+
     private RemoteJvmManager cluster ;
 
 
@@ -67,7 +68,7 @@ public class HzCmd {
                                 break;
 
                             case install:
-                                Installer.install(boxes, false, "3.5");
+                                Installer.install(boxes, false, "3.5", "3.6-EA2");
                                 break;
                             case uninstall:
                                 Installer.uninstall(boxes);
@@ -78,7 +79,7 @@ public class HzCmd {
                                 boxes.setUser(words[1]);
                                 break;
                             case init:
-                                cluster.initilizeJvms();
+                                cluster.restartJmvs("3.5");
                                 break;
 
                             case load:
@@ -102,10 +103,10 @@ public class HzCmd {
                                 cluster.setMembersOnlyCount(Integer.parseInt(words[1]));
                                 break;
                             case members:
-                                cluster.addMembers(Integer.parseInt(words[1]));
+                                cluster.addMembers(Integer.parseInt(words[1]), "3.5");
                                 break;
                             case clients:
-                                cluster.addClients(Integer.parseInt(words[1]));
+                                cluster.addClients(Integer.parseInt(words[1]), "3.5");
                                 break;
 
                             case ssh:

@@ -7,6 +7,9 @@ import java.io.IOException;
 public abstract class Installer {
 
     public static String REMOTE_ROOT = "hzCmd";
+    public static String REMOTE_LIB = REMOTE_ROOT + "/lib";
+    public static String REMOTE_HZ_LIB = REMOTE_ROOT + "/hz-lib";
+
     public static String HOME = "HOME";
     public static String M2_DIR = "/.m2/";
     public static String M2_Repo = System.getenv(HOME)+M2_DIR;
@@ -20,8 +23,6 @@ public abstract class Installer {
     public static String jar = ".jar";
 
 
-    //TODO multi HZ versions upload hz jars to REMOTE_ROOT+"/lib/version
-    // install ee=ture | false  3.5.1,  3.5.2, 3.5.4, ...../
     public static void install(RemoteBoxManager boxes, boolean ee,  String... versions) throws IOException, InterruptedException {
 
         System.out.println("install on "+boxes.count()+" boxes");
@@ -32,10 +33,10 @@ public abstract class Installer {
         String cacheJars = Bash.find(M2_Repo, "cache-api-1.0.0.jar");
         String guavaars = Bash.find(M2_Repo, "guava-15.0-rc1.jar");
 
-        boxes.sshCmd("mkdir -p "+REMOTE_ROOT+"/lib");
-        boxes.upload(mainJars, REMOTE_ROOT+"/lib/");
-        boxes.upload(cacheJars, REMOTE_ROOT+"/lib/");
-        boxes.upload(guavaars, REMOTE_ROOT+"/lib/");
+        boxes.sshCmd("mkdir -p "+REMOTE_LIB);
+        boxes.upload(mainJars, REMOTE_LIB);
+        boxes.upload(cacheJars, REMOTE_LIB);
+        boxes.upload(guavaars, REMOTE_LIB);
 
         for (String version : versions) {
             if (ee) {
@@ -45,9 +46,9 @@ public abstract class Installer {
                 memberJar = Bash.find(M2_Repo, hazelcast + version + jar);
                 clientJar = Bash.find(M2_Repo, hazelcastClient + version + jar);
             }
-            boxes.sshCmd("mkdir -p " + REMOTE_ROOT + "/hz-lib/" + version);
-            boxes.upload(memberJar, REMOTE_ROOT + "/hz-lib/" + version);
-            boxes.upload(clientJar, REMOTE_ROOT + "/hz-lib/" + version);
+            boxes.sshCmd("mkdir -p " + REMOTE_HZ_LIB+"/"+version);
+            boxes.upload(memberJar,  REMOTE_HZ_LIB+"/"+version);
+            boxes.upload(clientJar,  REMOTE_HZ_LIB+"/"+version);
         }
     }
 

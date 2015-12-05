@@ -15,6 +15,7 @@ import static remote.Utils.sendBackError;
 
 public class TaskClazz implements Callable<Object> {
 
+    private final String id;
     Task task;
     private String targetFunction;
     private Method method;
@@ -22,6 +23,7 @@ public class TaskClazz implements Callable<Object> {
 
 
     public TaskClazz(String id, String clasz, HazelcastInstance hazelcastInstance){
+        this.id=id;
         task = instantiate(clasz, Task.class);
         task.setId(id);
         task.setHazelcastInstance(hazelcastInstance);
@@ -44,8 +46,7 @@ public class TaskClazz implements Callable<Object> {
     }
 
 
-    //TODO
-    //KEEP track of number of threads exicuting a task method in a map
+    //TODO KEEP track of number of threads exicuting a task method in a map
     //key taskId-method value thread count
     public Object call() {
         try {
@@ -63,6 +64,7 @@ public class TaskClazz implements Callable<Object> {
         return null;
     }
 
+    //TODO write exception out to file
     private void onException(Exception e){
         e.printStackTrace();
         sendBackError(infoString() + " " +  exceptionStacktraceToString(e) );
