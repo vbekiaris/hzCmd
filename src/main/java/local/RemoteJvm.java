@@ -17,18 +17,14 @@ public class RemoteJvm {
     public static final String inFile  =  "in.txt";
     public static final String outFile =  "out.txt";
 
-    public enum JVM_TYPE {
-        Client, Member
-    }
-
     private final String user;
     private final IpPair ips;
-    private final JVM_TYPE type;
+    private final JvmType.hz type;
     private final String id;
     private final String dir;
     private int pid = 0;
 
-    public RemoteJvm(String user, IpPair ips, JVM_TYPE type, String id) {
+    public RemoteJvm(String user, IpPair ips, JvmType.hz type, String id) {
         this.user = user;
         this.ips = ips;
         this.type = type;
@@ -120,10 +116,10 @@ public class RemoteJvm {
     }
 
     public boolean isMember(){
-        return type == JVM_TYPE.Member;
+        return type == JvmType.hz.Member;
     }
 
     public boolean isClient(){
-        return type == JVM_TYPE.Client;
+        return type == JvmType.hz.Client;
     }
 }

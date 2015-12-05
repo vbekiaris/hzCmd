@@ -1,7 +1,14 @@
 package remote;
 
+import com.hazelcast.client.HazelcastClient;
+import com.hazelcast.client.config.ClientConfig;
+import com.hazelcast.client.config.XmlClientConfigBuilder;
+import com.hazelcast.config.Config;
+import com.hazelcast.config.XmlConfigBuilder;
+import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import global.Args;
+import local.JvmType;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -23,9 +30,22 @@ public class Controler{
     public static final String ID = System.getProperty(Args.ID.name());
     public static final String jvmPidId = ManagementFactory.getRuntimeMXBean().getName();
 
-    public Controler(HazelcastInstance hazelcastInstance){
+    public Controler(JvmType.hz type){
 
-        this.hazelcastInstance = hazelcastInstance;
+        try {
+            if (type == JvmType.hz.Member) {
+                XmlConfigBuilder configBuilder = new XmlConfigBuilder("hazelcast.xml");
+                Config config = configBuilder.build();
+                hazelcastInstance = Hazelcast.newHazelcastInstance(config);
+            } else {
+                XmlClientConfigBuilder configBuilder = new XmlClientConfigBuilder("client-hazelcast.xml");
+                ClientConfig config = configBuilder.build();
+                hazelcastInstance = HazelcastClient.newHazelcastClient(config);
+            }
+        }catch (Exception e){
+            sendBackError("starting "+idString()+" "+exceptionStacktraceToString(e));
+            throw new RuntimeException( e );
+        }
         tasks = new TaskManager(hazelcastInstance);
     }
 

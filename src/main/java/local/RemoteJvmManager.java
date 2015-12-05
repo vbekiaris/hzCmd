@@ -44,8 +44,8 @@ public class RemoteJvmManager {
 
     public void addMember(String hzVersion) throws IOException, InterruptedException {
         int memberIdx = rangeMap(memberCount++, 0, membersOnlyCount);
-        String id = RemoteJvm.JVM_TYPE.Member.name() + memberCount + clusterId;
-        RemoteJvm jvm = new RemoteJvm(user, boxes.get(memberIdx), RemoteJvm.JVM_TYPE.Member, id);
+        String id = JvmType.hz.Member.name() + memberCount + clusterId;
+        RemoteJvm jvm = new RemoteJvm(user, boxes.get(memberIdx), JvmType.hz.Member, id);
         jvms.put(jvm.getId(), jvm);
         jvm.initilize(hzVersion);
     }
@@ -57,8 +57,8 @@ public class RemoteJvmManager {
 
     public void addClient(String hzVersion) throws IOException, InterruptedException {
         int clientIdx = rangeMap(clientCount++, membersOnlyCount, boxes.size());
-        String id =  RemoteJvm.JVM_TYPE.Client.name() + memberCount + clusterId;
-        RemoteJvm jvm = new RemoteJvm(user, boxes.get(clientIdx), RemoteJvm.JVM_TYPE.Client, id);
+        String id = JvmType.hz.Client.name() + memberCount + clusterId;
+        RemoteJvm jvm = new RemoteJvm(user, boxes.get(clientIdx), JvmType.hz.Client, id);
         jvms.put(jvm.getId(), jvm);
         jvm.initilize(hzVersion);
     }
