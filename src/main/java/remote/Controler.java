@@ -66,7 +66,7 @@ public class Controler{
                             break;
 
                         case invoke:
-                            tasks.invokeNonBlocking(words[1], "*", 1);
+                            tasks.invokeNonBlocking("*", words[1], 1);
                             break;
 
                         case stop:
