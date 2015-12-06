@@ -112,7 +112,7 @@ public class HzCmd {
 
                             case kill:
                                 String clusterid = (words[1]);
-                                clusters.get(clusterid).kill("*");
+                                clusters.get(clusterid).kill(words[2]);
                                 break;
                             case ssh:
                                 boxes.sshCmd(line.replace("ssh", ""));
