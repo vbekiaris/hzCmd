@@ -87,12 +87,14 @@ public class RemoteJvmManager {
     }
 
 
+    /*
     private void zeroOut(){
         membersOnlyCount=boxes.size();
         memberCount=0;
         clientCount=0;
         jvms.clear();
     }
+    */
 
     public void clean() throws IOException, InterruptedException {
         for(RemoteJvm jvm : jvms.values()){
@@ -101,8 +103,14 @@ public class RemoteJvmManager {
     }
 
     public void kill(String id) throws IOException, InterruptedException {
-        RemoteJvm jvm = jvms.get(id);
-        jvm.kill();
+        if("*".equals(id)){
+            for(RemoteJvm jvm : jvms.values()){
+                jvm.kill();
+            }
+        } else {
+            RemoteJvm jvm = jvms.get(id);
+            jvm.kill();
+        }
     }
 
     public void send(String cmd) throws IOException, InterruptedException {
