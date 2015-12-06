@@ -23,8 +23,6 @@ public class ReadComms extends Thread {
 
 
     public void run() {
-
-        System.out.println("ReadComms STARTED");
         String line;
         while ( running ) {
             try {
