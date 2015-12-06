@@ -43,7 +43,11 @@ public class ReadComms extends Thread {
             }
 
         }
-        /*
+        clearFile();
+        dead = true;
+    }
+
+    private void clearFile(){
         PrintWriter writer = null;
         try {
             writer = new PrintWriter(commsFile);
@@ -52,8 +56,6 @@ public class ReadComms extends Thread {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        */
-        dead = true;
     }
 
     public boolean dead() {
