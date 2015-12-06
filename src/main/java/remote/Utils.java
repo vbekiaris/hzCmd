@@ -35,7 +35,7 @@ public abstract class Utils {
 
     public static void sendBack(String msg) {
         try {
-            Bash.ssh(Controler.home.user, Controler.home.ip, "echo msg " + msg + " >> " + Controler.home.cwd + "/" + Controler.home.inputFile);
+            Bash.ssh(Controler.home.user, Controler.home.ip, "echo " + msg + " >> " + Controler.home.cwd + "/" + Controler.home.inputFile);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
