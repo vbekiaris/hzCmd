@@ -44,7 +44,7 @@ public class Controler{
             }
         }catch (Exception e){
             sendBackError("starting "+idString()+" "+exceptionStacktraceToString(e));
-            throw new RuntimeException( e );
+            //throw new RuntimeException( e );
         }
         tasks = new TaskManager(hazelcastInstance);
     }
