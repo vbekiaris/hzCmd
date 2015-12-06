@@ -8,7 +8,7 @@ public abstract class Installer {
 
     public static String REMOTE_ROOT = "hzCmd";
     public static String REMOTE_LIB = REMOTE_ROOT + "/lib";
-    public static String REMOTE_HZ_LIB = REMOTE_ROOT + "/hz-lib";
+    public static String REMOTE_HZ_LIB = REMOTE_ROOT + "/hzType-lib";
 
     public static String HOME = "HOME";
     public static String M2_DIR = "/.m2/";

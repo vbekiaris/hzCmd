@@ -47,7 +47,7 @@ public class Test {
         cmd("replicate A B \"wanReplication\" wanSingle");
         cmd("replicate B A wanReplication wanBatch");
 
-        //install / upload hz jars to cluster
+        //install / upload hzType jars to cluster
         cmd("install * OS v1");
         cmd("install A EE v1 v2");
 
@@ -100,7 +100,7 @@ public class Test {
         //await for some regx string to match a msg
         //cmd("await \"some regx to match string send to hzCmd\"");
 
-        cmd("save \"scenario.hz\"");
+        cmd("save \"scenario.hzType\"");
 
 
 

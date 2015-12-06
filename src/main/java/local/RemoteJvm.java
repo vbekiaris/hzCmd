@@ -2,6 +2,7 @@ package local;
 
 import global.Args;
 import global.Bash;
+import global.HzType;
 import remote.Client;
 import remote.Member;
 
@@ -19,12 +20,12 @@ public class RemoteJvm {
 
     private final String user;
     private final IpPair ips;
-    private final JvmType.hz type;
+    private final HzType type;
     private final String id;
     private final String dir;
     private int pid = 0;
 
-    public RemoteJvm(String user, IpPair ips, JvmType.hz type, String id) {
+    public RemoteJvm(String user, IpPair ips, HzType type, String id) {
         this.user = user;
         this.ips = ips;
         this.type = type;
@@ -116,10 +117,10 @@ public class RemoteJvm {
     }
 
     public boolean isMember(){
-        return type == JvmType.hz.Member;
+        return type == HzType.Member;
     }
 
     public boolean isClient(){
-        return type == JvmType.hz.Client;
+        return type == HzType.Client;
     }
 }

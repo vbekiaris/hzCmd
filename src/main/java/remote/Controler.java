@@ -8,7 +8,7 @@ import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import global.Args;
-import local.JvmType;
+import global.HzType;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -30,10 +30,10 @@ public class Controler{
     public static final String ID = System.getProperty(Args.ID.name());
     public static final String jvmPidId = ManagementFactory.getRuntimeMXBean().getName();
 
-    public Controler(JvmType.hz type){
+    public Controler(HzType type){
 
         try {
-            if (type == JvmType.hz.Member) {
+            if (type == HzType.Member) {
                 XmlConfigBuilder configBuilder = new XmlConfigBuilder("hazelcast.xml");
                 Config config = configBuilder.build();
                 hazelcastInstance = Hazelcast.newHazelcastInstance(config);

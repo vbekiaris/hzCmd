@@ -1,5 +1,7 @@
 package local;
 
+import global.HzType;
+
 import java.io.*;
 import java.util.HashMap;
 import java.util.List;
@@ -44,8 +46,8 @@ public class RemoteJvmManager {
 
     public void addMember(String hzVersion) throws IOException, InterruptedException {
         int memberIdx = rangeMap(memberCount++, 0, membersOnlyCount);
-        String id = JvmType.hz.Member.name() + memberCount + clusterId;
-        RemoteJvm jvm = new RemoteJvm(user, boxes.get(memberIdx), JvmType.hz.Member, id);
+        String id = HzType.Member.name() + memberCount + clusterId;
+        RemoteJvm jvm = new RemoteJvm(user, boxes.get(memberIdx), HzType.Member, id);
         jvms.put(jvm.getId(), jvm);
         jvm.initilize(hzVersion);
     }
@@ -57,8 +59,8 @@ public class RemoteJvmManager {
 
     public void addClient(String hzVersion) throws IOException, InterruptedException {
         int clientIdx = rangeMap(clientCount++, membersOnlyCount, boxes.size());
-        String id = JvmType.hz.Client.name() + memberCount + clusterId;
-        RemoteJvm jvm = new RemoteJvm(user, boxes.get(clientIdx), JvmType.hz.Client, id);
+        String id = HzType.Client.name() + memberCount + clusterId;
+        RemoteJvm jvm = new RemoteJvm(user, boxes.get(clientIdx), HzType.Client, id);
         jvms.put(jvm.getId(), jvm);
         jvm.initilize(hzVersion);
     }
