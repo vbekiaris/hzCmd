@@ -150,7 +150,7 @@ public class HzCmd {
 
         int threadQty = Integer.parseInt(cmd.NUMBER(0).getText());
 
-        String version = cmd.VAR(0).getText();
+        String version = cmd.VAR(1).getText();
         version = vars.get(version);
 
         for (ClusterManager jvmManager : c) {
