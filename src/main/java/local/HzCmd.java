@@ -2,7 +2,6 @@ package local;
 
 import antlr4.HzCmdLexer;
 import antlr4.HzCmdParser;
-import global.Args;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -14,7 +13,6 @@ import static global.Utils.*;
 
 public class HzCmd {
 
-
     public static String commsFile = "commsIn.txt";
     private ReadComms readComms = new ReadComms(commsFile);
 
@@ -22,7 +20,7 @@ public class HzCmd {
     private List<String> history = new ArrayList();
 
     private RemoteBoxManager boxes = new RemoteBoxManager("agents.txt");
-    private Map<String, RemoteJvmManager> clusters = new HashMap();
+    private Map<String, ClusterManager> clusters = new HashMap();
     private Map<String, String> vars = new HashMap();
 
 
@@ -44,6 +42,7 @@ public class HzCmd {
                     CommonTokenStream tokens = new CommonTokenStream(lexer);
                     HzCmdParser parser = new HzCmdParser(tokens);
                     HzCmdParser.StatementContext cmd = parser.statement();
+                    history.add(line);
 
                     switch (cmd.start.getType()) {
                         case HzCmdParser.VAR:
@@ -60,6 +59,9 @@ public class HzCmd {
                             break;
                         case HzCmdParser.ADD:
                             add(cmd);
+                            break;
+                        case HzCmdParser.KILL:
+                            kill(cmd);
                             break;
                     }
 
@@ -100,7 +102,7 @@ public class HzCmd {
         int end = Integer.parseInt( cmd.NUMBER(1).getText() );
 
         List<IpPair> ips = boxes.getBoxes(start, end);
-        RemoteJvmManager jvmManager = new RemoteJvmManager(boxes.getUser(), clusterID, ips);
+        ClusterManager jvmManager = new ClusterManager(boxes.getUser(), clusterID, ips);
         clusters.put(jvmManager.getClusterId(), jvmManager);
 
         System.out.println(jvmManager);
@@ -131,9 +133,8 @@ public class HzCmd {
     }
 
     private void add(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
-        //cmd("add member A 2 v1 bigJvm");
 
-        Collection<RemoteJvmManager> c = new ArrayList();
+        Collection<ClusterManager> c = new ArrayList();
         if( cmd.ALL(0) != null) {
             c = clusters.values();
         }else {
@@ -146,12 +147,31 @@ public class HzCmd {
         String version = cmd.VAR(0).getText();
         version = vars.get(version);
 
-        for (RemoteJvmManager jvmManager : c) {
+        for (ClusterManager jvmManager : c) {
             if( cmd.MEMBER() != null) {
                 jvmManager.addMembers(threadQty, version);
             }else {
                 jvmManager.addClients(threadQty, version);
             }
+        }
+
+    }
+
+    private void kill(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
+
+        Collection<ClusterManager> c = new ArrayList();
+        if( cmd.ALL(0) != null) {
+            c = clusters.values();
+        }else {
+            String clusterId = cmd.VAR(0).getText();
+            c.add( clusters.get(clusterId) );
+        }
+
+        String version = cmd.VAR(0).getText();
+        version = vars.get(version);
+
+        for (ClusterManager jvmManager : c) {
+           jvmManager.killAll();
         }
 
     }
@@ -180,7 +200,7 @@ public class HzCmd {
                         int end = Integer.parseInt(words[3]);
 
                         List<IpPair> ips = boxes.getBoxes(start, end);
-                        RemoteJvmManager jvmManager = new RemoteJvmManager(boxes.getUser(), clusterID, ips);
+                        ClusterManager jvmManager = new ClusterManager(boxes.getUser(), clusterID, ips);
                         clusters.put(jvmManager.getClusterId(), jvmManager);
                         cluster=jvmManager;
 

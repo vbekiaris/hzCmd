@@ -10,7 +10,7 @@ import java.util.Map;
 import static global.Utils.rangeMap;
 import static global.Utils.sleepSeconds;
 
-public class RemoteJvmManager {
+public class ClusterManager {
 
     private final String user;
 
@@ -24,7 +24,7 @@ public class RemoteJvmManager {
     private int clientCount=0;
 
 
-    public RemoteJvmManager(String user, String clusterId, List<IpPair> boxes){
+    public ClusterManager(String user, String clusterId, List<IpPair> boxes){
         this.user=user;
         this.clusterId =clusterId;
         this.boxes=boxes;
@@ -87,15 +87,6 @@ public class RemoteJvmManager {
     }
 
 
-    /*
-    private void zeroOut(){
-        membersOnlyCount=boxes.size();
-        memberCount=0;
-        clientCount=0;
-        jvms.clear();
-    }
-    */
-
     public void clean() throws IOException, InterruptedException {
         for(RemoteJvm jvm : jvms.values()){
             jvm.clean();
@@ -103,15 +94,31 @@ public class RemoteJvmManager {
     }
 
     public void kill(String id) throws IOException, InterruptedException {
-        if("*".equals(id)){
-            for(RemoteJvm jvm : jvms.values()){
-                jvm.kill();
+        RemoteJvm jvm = jvms.get(id);
+        jvm.kill();
+    }
+
+    public void killAll() throws IOException, InterruptedException {
+        killClients();
+        killMembers();
+    }
+
+    public void killMembers() throws IOException, InterruptedException {
+        for(RemoteJvm jvm : jvms.values()){
+            if(jvm.isMember()){
+               jvm.kill();
             }
-        } else {
-            RemoteJvm jvm = jvms.get(id);
-            jvm.kill();
         }
     }
+
+    public void killClients() throws IOException, InterruptedException {
+        for(RemoteJvm jvm : jvms.values()){
+            if(jvm.isClient()){
+                jvm.kill();
+            }
+        }
+    }
+
 
     public void send(String cmd) throws IOException, InterruptedException {
         for(RemoteJvm jvm : jvms.values()){
@@ -119,14 +126,22 @@ public class RemoteJvmManager {
         }
     }
 
-    public void catMemberLogs() throws IOException, InterruptedException {
+    public void catMember() throws IOException, InterruptedException {
         for(RemoteJvm jvm : jvms.values()){
             if(jvm.isMember()){
-                //System.out.println(jvm);
                 System.out.println( jvm.cat() );
             }
         }
     }
+
+    public void catClients() throws IOException, InterruptedException {
+        for(RemoteJvm jvm : jvms.values()){
+            if(jvm.isClient()){
+                System.out.println( jvm.cat() );
+            }
+        }
+    }
+
 
     public void grepMembers(String args) throws IOException, InterruptedException {
         for(RemoteJvm jvm : jvms.values()){
@@ -157,12 +172,12 @@ public class RemoteJvmManager {
         }
         jvms=jvms.trim();
 
-        return "RemoteJvmManager{" +
+        return "ClusterManager{" +
                 " clusterId=" + clusterId +
                 ", membersOnlyCount=" + membersOnlyCount +
                 ", memberCount=" + memberCount +
                 ", clientCount=" + clientCount +
-                ", " + ips +
+                ", ips=" + ips +
                 ", jvms=" + jvms +
                 "}";
     }
