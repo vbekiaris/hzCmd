@@ -127,11 +127,11 @@ public class HzCmd {
         }
 
         List<TerminalNode> ids = cmd.VAR();
-        String[] versions = new String[ids.size()];
+        String[] versions = new String[ids.size()-1];
 
-        for (int i = 0; i < ids.size(); i++) {
+        for (int i = 1; i < ids.size(); i++) {
             String key = ids.get(i).getText();
-            versions[i]=(vars.get(key));
+            versions[i-1]=(vars.get(key));
             System.out.println(key +"  "+versions[i]);
         }
 
