@@ -109,9 +109,9 @@ public class Test {
 
     }
 
-    private static  void cmd(String drinkSentence) {
+    private static  void cmd(String line) {
         // Get our lexer
-        HzCmdLexer lexer = new HzCmdLexer(new ANTLRInputStream(drinkSentence));
+        HzCmdLexer lexer = new HzCmdLexer(new ANTLRInputStream(line));
         // Get a list of matched tokens
         CommonTokenStream tokens = new CommonTokenStream(lexer);
 
@@ -128,14 +128,15 @@ public class Test {
         }
 
         System.out.println( hzCmdStatment.getRuleContext().getText() +" "+ hzCmdStatment.getRuleContext());
-        System.out.println(hzCmdStatment.start.getText());
 
         switch (hzCmdStatment.start.getType()) {
             case HzCmdParser.VAR:
-                System.out.println("NODE 0=" + hzCmdStatment.getChild(0).getText());
-                System.out.println("START = " + hzCmdStatment.start.getTokenSource());
-                System.out.println("rules = " + hzCmdStatment.getRuleIndex());
-                System.out.println( HzCmdParser.ruleNames[ hzCmdStatment.getRuleIndex() ] );
+                System.out.println("var name =" + hzCmdStatment.start.getText());
+                if( hzCmdStatment.ASSIGN() != null){
+                    String value = hzCmdStatment.STRING(0).getText().replace("\"", "");
+                    System.out.println("value="+value);
+
+                }
                 break;
         }
 
