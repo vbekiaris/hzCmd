@@ -42,9 +42,10 @@ public class Controler{
                 ClientConfig config = configBuilder.build();
                 hazelcastInstance = HazelcastClient.newHazelcastClient(config);
             }
-        }catch (Exception e){
+        }catch (Throwable e){
+            e.printStackTrace();
             sendBackError("starting "+idString()+" "+exceptionStacktraceToString(e));
-            //throw new RuntimeException( e );
+            throw new RuntimeException( e );
         }
         tasks = new TaskManager(hazelcastInstance);
     }
