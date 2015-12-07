@@ -40,7 +40,7 @@ public class RemoteJvm {
             return;
         }
 
-        Bash.ssh(user, ips.pub, "mkdir -p " + dir + ";  cd " + dir + ";  touch in.txt");
+        Bash.ssh(user, ips.pub, "mkdir -p " + dir + ";  cd " + dir + ";  touch in.txt; > in.txt");
 
         String classToRun;
         if (isMember()){
