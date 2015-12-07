@@ -32,7 +32,6 @@ public class Controler{
 
     public Controler(HzType type){
         try {
-            System.out.println("==Controler==");
             if (type == HzType.Member) {
                 XmlConfigBuilder configBuilder = new XmlConfigBuilder("hazelcast.xml");
                 Config config = configBuilder.build();
@@ -43,8 +42,6 @@ public class Controler{
                 hazelcastInstance = HazelcastClient.newHazelcastClient(config);
             }
         }catch (Throwable e){
-            System.out.println("hz init error ");
-            e.printStackTrace();
             sendBackError("starting "+idString()+" "+exceptionStacktraceToString(e));
             throw new RuntimeException( e );
         }
