@@ -31,7 +31,6 @@ public class Controler{
     public static final String jvmPidId = ManagementFactory.getRuntimeMXBean().getName();
 
     public Controler(HzType type){
-
         try {
             if (type == HzType.Member) {
                 XmlConfigBuilder configBuilder = new XmlConfigBuilder("hazelcast.xml");
@@ -43,6 +42,7 @@ public class Controler{
                 hazelcastInstance = HazelcastClient.newHazelcastClient(config);
             }
         }catch (Throwable e){
+            System.out.println("hz init error ");
             e.printStackTrace();
             sendBackError("starting "+idString()+" "+exceptionStacktraceToString(e));
             throw new RuntimeException( e );
