@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 
 public abstract class Bash {
 
+    public static boolean showSSH=true;
+
     public static String killAllJava() throws IOException, InterruptedException {
         return executeCommand("killall -9 java");
     }
@@ -44,7 +46,9 @@ public abstract class Bash {
 
 
     private static String executeCommand(String command) throws IOException, InterruptedException {
-        System.out.println(command);
+        if (showSSH) {
+            System.out.println(command);
+        }
 
         Process p = Runtime.getRuntime().exec(command);
         p.waitFor();
@@ -64,8 +68,11 @@ public abstract class Bash {
             output.append(line + "\n");
         }
 
-        if (exitCode != 0 ){
-            System.out.println( output.toString() );
+        if(showSSH){
+            System.out.println(command);
+        }
+        else if (exitCode != 0) {
+            System.out.println(output.toString());
         }
 
         return output.toString();
