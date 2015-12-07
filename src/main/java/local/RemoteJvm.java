@@ -66,7 +66,7 @@ public class RemoteJvm {
     }
 
     public void clean() throws IOException, InterruptedException {
-        Bash.ssh(user, ips.pub, "rm -f" + dir+"/*");
+        Bash.ssh(user, ips.pub, "rm -f " + dir+"/*");
     }
 
     public void kill() throws IOException, InterruptedException {
