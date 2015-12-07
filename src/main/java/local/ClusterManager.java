@@ -177,8 +177,9 @@ public class ClusterManager {
                 ", membersOnlyCount=" + membersOnlyCount +
                 ", memberCount=" + memberCount +
                 ", clientCount=" + clientCount +
+                ", boxCount==" + boxes.size() +
                 ", ips=" + ips +
-                ", jvms=" + jvms +
+                " jvms=" + jvms +
                 "}";
     }
 }
