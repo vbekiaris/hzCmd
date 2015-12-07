@@ -38,11 +38,15 @@ public class HzCmd {
                 String line=in.readLine();
                 if (line!=null && !line.equals("") && !line.startsWith("#") && !line.startsWith("//")) {
 
+
+
                     HzCmdLexer lexer = new HzCmdLexer(new ANTLRInputStream(line));
                     CommonTokenStream tokens = new CommonTokenStream(lexer);
                     HzCmdParser parser = new HzCmdParser(tokens);
                     HzCmdParser.StatementContext cmd = parser.statement();
+
                     history.add(line);
+                    System.out.println("=>"+line);
 
                     switch (cmd.start.getType()) {
                         case HzCmdParser.VAR:
@@ -87,7 +91,6 @@ public class HzCmd {
 
 
     private void assignment(HzCmdParser.StatementContext cmd){
-        System.out.println(cmd.getText());
         if( cmd.ASSIGN() != null){
             String var = cmd.start.getText();
             String value = cmd.STRING(0).getText().replace("\"", "");
