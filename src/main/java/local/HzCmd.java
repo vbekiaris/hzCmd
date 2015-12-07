@@ -63,10 +63,12 @@ public class HzCmd {
                             case HzCmdParser.KILL:
                                 kill(cmd);
                                 break;
+                            case HzCmdParser.CAT:
+                                cat(cmd);
+                                break;
                             case HzCmdParser.SLEEP:
                                 sleep(cmd);
                                 break;
-
                             case HzCmdParser.EXIT:
                                 exit();
                                 break;
@@ -180,6 +182,25 @@ public class HzCmd {
         }
 
     }
+
+    private void cat(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
+
+        Collection<ClusterManager> c = new ArrayList();
+        if( cmd.ALL(0) != null) {
+            c = clusters.values();
+        }else {
+            String clusterId = cmd.VAR(0).getText();
+            c.add( clusters.get(clusterId) );
+        }
+
+        if( cmd.ALL(1) != null) {
+            for (ClusterManager jvmManager : c) {
+                jvmManager.catMember();
+            }
+        }
+
+    }
+
 
     private void sleep(HzCmdParser.StatementContext cmd){
         int seconds = Integer.parseInt(cmd.NUMBER(0).getText());
