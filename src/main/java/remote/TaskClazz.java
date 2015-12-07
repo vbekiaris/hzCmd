@@ -1,7 +1,6 @@
 package remote;
 
 import com.hazelcast.core.HazelcastInstance;
-import global.Execute;
 import global.Task;
 
 import java.lang.reflect.Method;
@@ -19,8 +18,6 @@ public class TaskClazz implements Callable<Object> {
     Task task;
     private String targetFunction;
     private Method method;
-    private Execute execute;
-
 
     public TaskClazz(String id, String clasz, HazelcastInstance hazelcastInstance){
         this.id=id;
@@ -33,10 +30,8 @@ public class TaskClazz implements Callable<Object> {
         targetFunction = function;
         try {
             method = task.getClass().getMethod(function);
-            execute = method.getAnnotation(Execute.class);
         } catch (NoSuchMethodException e) {
             method = null;
-            execute = null;
             onException(e);
         }
     }
@@ -71,45 +66,9 @@ public class TaskClazz implements Callable<Object> {
     }
 
 
-    public boolean willExicute(){
-        if (method==null)
-            return false;
-        if (executeOnMember() && executeOnClient())
-            return true;
-
-        HazelcastInstance hz = task.getHazelcastInstance();
-
-        return Utils.isMember(hz) == executeOnMember() || Utils.isClient(hz) == executeOnClient();
-    }
-
-    protected boolean executeOnClient(){
-        if(execute==null || execute.where() == Execute.On.ALL)
-            return true;
-        return execute.where() == Execute.On.CLIENT;
-    }
-
-    protected boolean executeOnMember(){
-        if(execute==null || execute.where() == Execute.On.ALL)
-            return true;
-        return execute.where() == Execute.On.MEMBER;
-    }
-
-    protected boolean executeOnAll(){
-        if(execute==null)
-            return true;
-        return execute.with() == Execute.On.ALL;
-    }
-
-    protected boolean executeOnOne(){
-        if(execute==null)
-            return false;
-        return execute.with() == Execute.On.ONE;
-    }
-
     protected String getId(){
         return task.getId();
     }
-
 
     protected String infoStart(){ return infoString() + " started"; }
 
@@ -125,7 +84,6 @@ public class TaskClazz implements Callable<Object> {
         return "TaskClazz{" +
                 "task=" + task +
                 ", method=" + method +
-                ", execute=" + execute +
                 '}';
     }
 }

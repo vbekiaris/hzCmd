@@ -1,7 +1,6 @@
 package tests;
 
 import com.hazelcast.core.IMap;
-import global.Execute;
 import global.Task;
 
 public class Task1 extends Task {
@@ -11,14 +10,12 @@ public class Task1 extends Task {
     private IMap map;
     private String keyPrefix;
 
-    @Execute(where=Execute.On.ALL, with=Execute.On.ALL)
     public void setup(){
         map = hazelcastInstance.getMap(mapName);
-        System.out.println(map.getName()+" = "+map.size());
         keyPrefix = Utils.getUniqueKeyPrefix(hazelcastInstance);
+        send("keyPrefix="+keyPrefix);
     }
 
-    @Execute(where=Execute.On.MEMBER, with=Execute.On.ALL)
     public void run() throws InterruptedException {
         while (isRunning()) {
             int i = random.nextInt(3);
@@ -26,11 +23,6 @@ public class Task1 extends Task {
         }
 
         send(map.keySet().toString());
-    }
-
-    @Execute(where=Execute.On.ALL, with=Execute.On.ONE)
-    public void tearDown(){
-        System.out.println("TEST1 "+map.keySet());
     }
 
 }
