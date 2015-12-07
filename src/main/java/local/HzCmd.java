@@ -85,6 +85,7 @@ public class HzCmd {
 
 
     private void assignment(HzCmdParser.StatementContext cmd){
+        System.out.println(cmd.getText());
         if( cmd.ASSIGN() != null){
             String var = cmd.start.getText();
             String value = cmd.STRING(0).getText().replace("\"", "");
