@@ -31,53 +31,53 @@ public class HzCmd {
         readComms.start();
     }
 
-    public void run(){
-        try{
+    public void run() throws IOException {
             while (true){
                 String line=in.readLine();
                 if (line!=null && !line.equals("") && !line.startsWith("#") && !line.startsWith("//")) {
+                    try{
+                        HzCmdLexer lexer = new HzCmdLexer(new ANTLRInputStream(line));
+                        CommonTokenStream tokens = new CommonTokenStream(lexer);
+                        HzCmdParser parser = new HzCmdParser(tokens);
+                        HzCmdParser.StatementContext cmd = parser.statement();
 
+                        history.add(line);
+                        System.out.println("=>"+line);
 
+                        switch (cmd.start.getType()) {
+                            case HzCmdParser.VAR:
+                                assignment(cmd);
+                                break;
+                            case HzCmdParser.USER:
+                                user(cmd);
+                                break;
+                            case HzCmdParser.CLUSTER:
+                                cluster(cmd);
+                                break;
+                            case HzCmdParser.INSTALL:
+                                install(cmd);
+                                break;
+                            case HzCmdParser.ADD:
+                                add(cmd);
+                                break;
+                            case HzCmdParser.KILL:
+                                kill(cmd);
+                                break;
+                            case HzCmdParser.SLEEP:
+                                sleep(cmd);
+                                break;
 
-                    HzCmdLexer lexer = new HzCmdLexer(new ANTLRInputStream(line));
-                    CommonTokenStream tokens = new CommonTokenStream(lexer);
-                    HzCmdParser parser = new HzCmdParser(tokens);
-                    HzCmdParser.StatementContext cmd = parser.statement();
-
-                    history.add(line);
-                    System.out.println("=>"+line);
-
-                    switch (cmd.start.getType()) {
-                        case HzCmdParser.VAR:
-                            assignment(cmd);
-                            break;
-                        case HzCmdParser.USER:
-                            user(cmd);
-                            break;
-                        case HzCmdParser.CLUSTER:
-                            cluster(cmd);
-                            break;
-                        case HzCmdParser.INSTALL:
-                            install(cmd);
-                            break;
-                        case HzCmdParser.ADD:
-                            add(cmd);
-                            break;
-                        case HzCmdParser.KILL:
-                            kill(cmd);
-                            break;
-                        case HzCmdParser.EXIT:
-                            exit();
-                            break;
+                            case HzCmdParser.EXIT:
+                                exit();
+                                break;
+                        }
+                    }catch(Exception e){
+                        e.printStackTrace();
                     }
-
                 }else {
                     sleepMilli(500);
                 }
             }
-        }catch(Exception e){
-            e.printStackTrace();
-        }
     }
 
     public void exit(){
@@ -173,13 +173,17 @@ public class HzCmd {
             c.add( clusters.get(clusterId) );
         }
 
-        String version = cmd.VAR(0).getText();
-        version = vars.get(version);
-
-        for (ClusterManager jvmManager : c) {
-           jvmManager.killAll();
+        if( cmd.ALL(1) != null) {
+            for (ClusterManager jvmManager : c) {
+                jvmManager.killAll();
+            }
         }
 
+    }
+
+    private void sleep(HzCmdParser.StatementContext cmd){
+        int seconds = Integer.parseInt(cmd.NUMBER(0).getText());
+        sleepSeconds(seconds);
     }
 
 
