@@ -80,6 +80,7 @@ public class RemoteJvm {
             if(!running){
                 pid=0;
             }
+            return running;
         } catch (Exception e) {
             e.printStackTrace();
         }
