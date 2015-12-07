@@ -63,8 +63,10 @@ public class HzCmd {
                         case HzCmdParser.KILL:
                             kill(cmd);
                             break;
+                        case HzCmdParser.EXIT:
+                            exit();
+                            break;
                     }
-
 
                 }else {
                     sleepMilli(500);

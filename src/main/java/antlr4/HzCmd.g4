@@ -31,6 +31,7 @@ statement
     | SLEEP NUMBER
     | MEMBERS_ONLY NUMBER
     | SAVE STRING
+    | EXIT
 
     | COMMENT
     ;
@@ -56,6 +57,7 @@ KILL : 'kill';
 START : 'start';
 SLEEP : 'sleep';
 SAVE : 'save';
+EXIT : 'exit';
 
 
 ALL : '*';
