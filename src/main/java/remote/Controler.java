@@ -32,6 +32,7 @@ public class Controler{
 
     public Controler(HzType type){
         try {
+            System.out.println("==Controler==");
             if (type == HzType.Member) {
                 XmlConfigBuilder configBuilder = new XmlConfigBuilder("hazelcast.xml");
                 Config config = configBuilder.build();

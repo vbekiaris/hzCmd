@@ -76,7 +76,10 @@ public class RemoteJvm {
 
     public boolean running() {
         try {
-            return Bash.sshWithExitCode(user, ips.pub, "ps -p "+pid) == 0;
+            boolean running =  Bash.sshWithExitCode(user, ips.pub, "ps -p "+pid) == 0;
+            if(!running){
+                pid=0;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
