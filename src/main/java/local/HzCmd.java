@@ -28,7 +28,6 @@ public class HzCmd {
     // v1 = 3.6
     // bigJvm = -xmxm16G -xmsx8G -Dblar=blar
     public HzCmd() throws IOException, InterruptedException {
-
         readComms.start();
     }
 
@@ -128,14 +127,16 @@ public class HzCmd {
         }
 
         List<TerminalNode> ids = cmd.VAR();
-        List<String> versions = new ArrayList();
+        String[] versions = new String[ids.size()];
 
-        for (TerminalNode id : ids) {
-            String key = id.getText();
-            versions.add(vars.get(key));
+        for (int i = 0; i < ids.size(); i++) {
+            String key = ids.get(i).getText();
+            versions[i]=(vars.get(key));
+            System.out.println(key +"  "+versions[i]);
         }
 
-        Installer.install(boxes, ee, (String[]) versions.toArray() );
+
+        Installer.install(boxes, ee, versions);
     }
 
     private void add(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {

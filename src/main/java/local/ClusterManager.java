@@ -179,7 +179,7 @@ public class ClusterManager {
                 ", clientCount=" + clientCount +
                 ", boxCount==" + boxes.size() +
                 ", ips=" + ips +
-                " jvms=" + jvms +
+                "jvms=" + jvms +
                 "}";
     }
 }
