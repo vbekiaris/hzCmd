@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-if [ -z "${HZ_CLUSTER_BIN}" ] ; then
-    export HZ_CLUSTER_BIN=~/hzCmd/target
+if [ -z "${HZ_CMD_BIN}" ] ; then
+    export HZ_CMD_BIN=~/hzCmd/target
 fi
 
 ops="-Xms32m -Xmx128m"
 
 
-java -cp "${HZ_CLUSTER_BIN}/*:${HZ_CLUSTER_BIN}/lib/*" ${ops} local.HzCmd $@
+java -cp "${HZ_CMD_BIN}/*:${HZ_CMD_BIN}/lib/*" ${ops} local.HzCmd $@
