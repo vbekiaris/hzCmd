@@ -66,11 +66,11 @@ ALL : '*';
 MEMBER : 'member';
 CLIENT : 'client';
 
-MEMBER_ALL : 'member'ALL;
-MEMBER_VAR : 'member'VAR;
+MEMBER_ALL : 'Member'ALL;
+MEMBER_VAR : 'Member'NUMBER;
 
-CLIENT_ALL : 'client'ALL;
-CLIENT_VAR : 'client'VAR;
+CLIENT_ALL : 'Client'ALL;
+CLIENT_VAR : 'Client'NUMBER;
 
 MEMBERS_ONLY : 'membersOnly';
 MEMBERS : 'members';

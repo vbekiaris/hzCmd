@@ -178,9 +178,36 @@ public class HzCmd {
         if( cmd.ALL(1) != null) {
             for (ClusterManager jvmManager : c) {
                 jvmManager.killAll();
+                return;
             }
         }
 
+        if( cmd.MEMBER_ALL() != null) {
+            for (ClusterManager jvmManager : c) {
+                jvmManager.killMembers();
+                return;
+            }
+        }
+
+        if( cmd.CLIENT_ALL() != null) {
+            for (ClusterManager jvmManager : c) {
+                jvmManager.killClients();
+                return;
+            }
+        }
+
+        String id = "";
+        if( cmd.MEMBER_VAR() != null) {
+            id = cmd.MEMBER_VAR().getText();
+        }
+        if( cmd.CLIENT_VAR() != null) {
+            id = cmd.CLIENT_VAR().getText();
+        }
+
+        for (ClusterManager jvmManager : c) {
+            jvmManager.kill(id + jvmManager.getClusterId());
+            return;
+        }
     }
 
     private void cat(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
