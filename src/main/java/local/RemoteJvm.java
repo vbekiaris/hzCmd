@@ -57,7 +57,7 @@ public class RemoteJvm {
         jvmArgs += "-D"+Args.homeCwd+"="+System.getProperty("user.dir")+" ";
         jvmArgs += "-D"+Args.homeInfile+"="+ HzCmd.commsFile+" ";
         jvmArgs += "-D"+Args.ID +"="+id+" ";
-        jvmArgs += "-XX:OnOutOfMemoryError=\"touch "+id+".oome\"";
+        jvmArgs += "-XX:OnOutOfMemoryError=\"touch " +id+".oome"+"\" ";
 
 
         String hzLib = hzPath+hzVersion+"/*";
