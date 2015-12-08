@@ -11,6 +11,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static remote.Utils.sendBack;
 import static remote.Utils.sendBackError;
 
 public class TaskManager {
@@ -37,6 +38,7 @@ public class TaskManager {
         try{
             TaskClazz taskManager = new TaskClazz(taskId, className, hazelcastInstance);
             tasks.put(taskManager.getId(), taskManager);
+            sendBack(Args.ID +"="+Controler.ID+" "+taskId+" "+className+" loaded");
         } catch (Exception e){
             sendBackError(Args.ID +"="+Controler.ID +" taskId=" + taskId + " className=" + className + " " + e.getMessage());
         }

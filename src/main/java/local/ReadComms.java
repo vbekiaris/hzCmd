@@ -1,5 +1,7 @@
 package local;
 
+import global.Bash;
+
 import java.io.*;
 
 public class ReadComms extends Thread {
@@ -33,7 +35,13 @@ public class ReadComms extends Thread {
 
             try {
                 while ( (line = commsIn.readLine()) != null ){
-                    System.out.println(line);
+
+                    String color = Bash.ANSI_BLUE;
+                    if(line.startsWith("ERROR")){
+                     color = Bash.ANSI_RED;
+                    }
+
+                    System.out.println(color+line+Bash.ANSI_RESET);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
