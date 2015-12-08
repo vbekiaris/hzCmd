@@ -36,11 +36,11 @@ public abstract class Bash {
 
 
     public static String ssh(String user, String ip, String cmd) throws IOException, InterruptedException {
-        return executeCommand("ssh "+user+"@"+ip+" "+cmd);
+        return executeCommand("ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "+user+"@"+ip+" "+cmd);
     }
 
     public static int sshWithExitCode(String user, String ip, String cmd) throws IOException, InterruptedException {
-        return executeCommandWithExitCode("ssh "+user+"@"+ip+" "+cmd);
+        return executeCommandWithExitCode("ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "+user+"@"+ip+" "+cmd);
     }
 
     public static void scpUp(String user, String ip, String from, String to) throws IOException, InterruptedException {
