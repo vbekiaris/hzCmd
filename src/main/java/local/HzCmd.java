@@ -161,8 +161,8 @@ public class HzCmd {
         String version = cmd.VAR(1).getText();
         version = vars.get(version);
 
-        String options = cmd.VAR(1).getText();
-        options = vars.get(version);
+        String options = cmd.VAR(2).getText();
+        options = vars.get(options);
 
         for (ClusterManager jvmManager : c) {
             if( cmd.MEMBER() != null) {
@@ -232,8 +232,8 @@ public class HzCmd {
         String version = cmd.VAR(1).getText();
         version = vars.get(version);
 
-        String options = cmd.VAR(1).getText();
-        options = vars.get(version);
+        String options = cmd.VAR(2).getText();
+        options = vars.get(options);
 
         if( cmd.ALL(1) != null) {
             for (ClusterManager jvmManager : c) {
