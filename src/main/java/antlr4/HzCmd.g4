@@ -29,7 +29,7 @@ statement
     | SAVE STRING
     | EXIT
     | SHOWSSH BOOL
-    | HOMEIP IP
+    | HOMEIP STRING
 
     | COMMENT
     ;

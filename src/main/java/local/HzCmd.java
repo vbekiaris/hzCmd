@@ -120,7 +120,7 @@ public class HzCmd {
     }
 
     private void setHomeIp(HzCmdParser.StatementContext cmd){
-        homeIp = cmd.IP().getText();
+        homeIp = cmd.STRING(0).getText();
     }
 
 
