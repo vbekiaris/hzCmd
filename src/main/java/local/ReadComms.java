@@ -28,7 +28,7 @@ public class ReadComms extends Thread {
         String line;
         while ( running ) {
             try {
-                Thread.sleep(250);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
