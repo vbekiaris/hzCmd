@@ -38,7 +38,7 @@ public class ReadComms extends Thread {
 
                     String color = Bash.ANSI_BLUE;
                     if(line.startsWith("ERROR")){
-                     color = Bash.ANSI_RED;
+                        color = Bash.ANSI_RED;
                     }
 
                     System.out.println(color+line+Bash.ANSI_RESET);
@@ -47,7 +47,6 @@ public class ReadComms extends Thread {
                 e.printStackTrace();
                 running=false;
             }
-
         }
         clearFile();
         dead = true;
