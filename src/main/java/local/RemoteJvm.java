@@ -24,6 +24,7 @@ public class RemoteJvm {
     private final String id;
     private final String dir;
     private int pid = 0;
+    private String version;
 
     public RemoteJvm(String user, IpPair ips, HzType type, String id) {
         this.user = user;
@@ -34,7 +35,7 @@ public class RemoteJvm {
     }
 
     public void initilize(String hzVersion, String options) throws IOException, InterruptedException {
-
+        version = hzVersion;
         if(running()){
             System.out.println(this + "is running !");
             return;
@@ -122,6 +123,7 @@ public class RemoteJvm {
                 ", pid=" + pid +
                 ", type=" + type +
                 ", dir=" + dir +
+                ", version=" + version +
                 '}' + Bash.ANSI_RESET;
     }
 
