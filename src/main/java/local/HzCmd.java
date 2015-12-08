@@ -20,6 +20,7 @@ import static global.Utils.*;
 //TODO exampe 3 3node cluster wan replicate ring, with hotrestart,  members putting,  clients getting,  kill restart members,  man center running
 public class HzCmd {
 
+    public static String homeIp;
     public static String commsFile = "commsIn.txt";
     private ReadComms readComms = new ReadComms(commsFile);
 
@@ -53,6 +54,9 @@ public class HzCmd {
                                 break;
                             case HzCmdParser.USER:
                                 user(cmd);
+                                break;
+                            case HzCmdParser.HOMEIP:
+                                setHomeIp(cmd);
                                 break;
                             case HzCmdParser.CLUSTER:
                                 cluster(cmd);
@@ -114,6 +118,11 @@ public class HzCmd {
     private void user(HzCmdParser.StatementContext cmd){
         boxes.setUser( cmd.STRING(0).getText().replace("\"", "") );
     }
+
+    private void setHomeIp(HzCmdParser.StatementContext cmd){
+        homeIp = cmd.IP().getText();
+    }
+
 
     private void cluster(HzCmdParser.StatementContext cmd){
         String clusterID = cmd.VAR(0).getText();

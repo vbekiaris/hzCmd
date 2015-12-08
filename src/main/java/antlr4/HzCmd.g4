@@ -29,12 +29,14 @@ statement
     | SAVE STRING
     | EXIT
     | SHOWSSH BOOL
+    | HOMEIP IP
 
     | COMMENT
     ;
 
 
 
+HOMEIP : 'homeIp';
 USER : 'user' ;
 VERSION : 'version';
 ADD : 'add';

@@ -52,9 +52,14 @@ public class RemoteJvm {
             Bash.scpUp(user, ips.pub, "client-hazelcast.xml", dir+"/");
         }
 
+        String ip = InetAddress.getLocalHost().getHostAddress();
+        if(HzCmd.homeIp!=null){
+            ip = HzCmd.homeIp;
+        }
+
         String jvmArgs = new String();
         jvmArgs += "-D"+Args.homeUser+"="+System.getProperty("user.name")+" ";
-        jvmArgs += "-D"+Args.homeIp+"="+InetAddress.getLocalHost().getHostAddress()+" ";
+        jvmArgs += "-D"+Args.homeIp+"="+ip+" ";
         jvmArgs += "-D"+Args.homeCwd+"="+System.getProperty("user.dir")+" ";
         jvmArgs += "-D"+Args.homeInfile+"="+ HzCmd.commsFile+" ";
         jvmArgs += "-D"+Args.ID +"="+id+" ";
