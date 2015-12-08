@@ -38,30 +38,30 @@ public class ClusterManager {
         }
     }
 
-    public void addMembers(int qty, String hzVersion) throws IOException, InterruptedException {
+    public void addMembers(int qty, String hzVersion, String options) throws IOException, InterruptedException {
         for(int i=0; i<qty; i++)
-            addMember(hzVersion);
+            addMember(hzVersion, options);
     }
 
-    public void addMember(String hzVersion) throws IOException, InterruptedException {
+    public void addMember(String hzVersion, String options) throws IOException, InterruptedException {
         int memberIdx = rangeMap(memberCount++, 0, membersOnlyCount);
         String id = HzType.Member.name() + memberCount + clusterId;
         RemoteJvm jvm = new RemoteJvm(user, boxes.get(memberIdx), HzType.Member, id);
         jvms.put(jvm.getId(), jvm);
-        jvm.initilize(hzVersion);
+        jvm.initilize(hzVersion, options);
     }
 
-    public void addClients(int qty, String hzVersion) throws IOException, InterruptedException {
+    public void addClients(int qty, String hzVersion, String options) throws IOException, InterruptedException {
         for(int i=0; i<qty; i++)
-            addClient(hzVersion);
+            addClient(hzVersion, options);
     }
 
-    public void addClient(String hzVersion) throws IOException, InterruptedException {
+    public void addClient(String hzVersion, String options) throws IOException, InterruptedException {
         int clientIdx = rangeMap(clientCount++, membersOnlyCount, boxes.size());
         String id = HzType.Client.name() + memberCount + clusterId;
         RemoteJvm jvm = new RemoteJvm(user, boxes.get(clientIdx), HzType.Client, id);
         jvms.put(jvm.getId(), jvm);
-        jvm.initilize(hzVersion);
+        jvm.initilize(hzVersion, options);
     }
 
 
@@ -98,28 +98,28 @@ public class ClusterManager {
     }
 
 
-    public void reStart(String id, String version) throws IOException, InterruptedException {
+    public void reStart(String id, String version, String options) throws IOException, InterruptedException {
         RemoteJvm jvm = jvms.get(id);
-        jvm.initilize(version);
+        jvm.initilize(version, options);
     }
 
-    public void reStartAll(String version) throws IOException, InterruptedException {
-        reStartClients(version);
-        reStartMembers(version);
+    public void reStartAll(String version, String options) throws IOException, InterruptedException {
+        reStartClients(version, options);
+        reStartMembers(version, options);
     }
 
-    public void reStartMembers(String version) throws IOException, InterruptedException {
+    public void reStartMembers(String version, String options) throws IOException, InterruptedException {
         for(RemoteJvm jvm : jvms.values()){
             if(jvm.isMember()){
-                jvm.initilize(version);
+                jvm.initilize(version, options);
             }
         }
     }
 
-    public void reStartClients(String version) throws IOException, InterruptedException {
+    public void reStartClients(String version, String options) throws IOException, InterruptedException {
         for(RemoteJvm jvm : jvms.values()){
             if(jvm.isClient()){
-                jvm.initilize(version);
+                jvm.initilize(version, options);
             }
         }
     }

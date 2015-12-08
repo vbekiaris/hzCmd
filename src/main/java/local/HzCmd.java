@@ -11,6 +11,13 @@ import java.util.*;
 
 import static global.Utils.*;
 
+
+//TODO pass JVM OPTIONS from script to remote jvm
+//TODO hzXml generation add members from cluster ips
+//TODO WAN REP xml SETUP
+//TODO man center integ
+//TODO tail -f grepping logs and pop up display
+//TODO exampe 3 3node cluster wan replicate ring, with hotrestart,  members putting,  clients getting,  kill restart members,  man center running
 public class HzCmd {
 
     public static String commsFile = "commsIn.txt";
@@ -114,6 +121,7 @@ public class HzCmd {
         System.out.println(jvmManager);
     }
 
+    //TODO really install into cluster
     private void install(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
         String clusterID;
         if( cmd.ALL(0) != null) {
@@ -153,11 +161,14 @@ public class HzCmd {
         String version = cmd.VAR(1).getText();
         version = vars.get(version);
 
+        String options = cmd.VAR(1).getText();
+        options = vars.get(version);
+
         for (ClusterManager jvmManager : c) {
             if( cmd.MEMBER() != null) {
-                jvmManager.addMembers(threadQty, version);
+                jvmManager.addMembers(threadQty, version, options);
             }else {
-                jvmManager.addClients(threadQty, version);
+                jvmManager.addClients(threadQty, version, options);
             }
         }
 
@@ -221,24 +232,26 @@ public class HzCmd {
         String version = cmd.VAR(1).getText();
         version = vars.get(version);
 
+        String options = cmd.VAR(1).getText();
+        options = vars.get(version);
 
         if( cmd.ALL(1) != null) {
             for (ClusterManager jvmManager : c) {
-                jvmManager.reStartAll(version);
+                jvmManager.reStartAll(version, options);
                 return;
             }
         }
 
         if( cmd.MEMBER_ALL() != null) {
             for (ClusterManager jvmManager : c) {
-                jvmManager.reStartMembers(version);
+                jvmManager.reStartMembers(version, options);
                 return;
             }
         }
 
         if( cmd.CLIENT_ALL() != null) {
             for (ClusterManager jvmManager : c) {
-                jvmManager.reStartClients(version);
+                jvmManager.reStartClients(version, options);
                 return;
             }
         }
@@ -252,7 +265,7 @@ public class HzCmd {
         }
 
         for (ClusterManager jvmManager : c) {
-            jvmManager.reStart(id + jvmManager.getClusterId(), version);
+            jvmManager.reStart(id + jvmManager.getClusterId(), version, options);
             return;
         }
     }

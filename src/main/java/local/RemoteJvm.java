@@ -33,7 +33,7 @@ public class RemoteJvm {
         this.dir = Installer.REMOTE_ROOT+"/"+id;
     }
 
-    public void initilize(String hzVersion) throws IOException, InterruptedException {
+    public void initilize(String hzVersion, String options) throws IOException, InterruptedException {
 
         if(running()){
             System.out.println(this + "is running !");
@@ -60,7 +60,7 @@ public class RemoteJvm {
 
 
         String hzLib = hzPath+hzVersion+"/*";
-        String pidStr = Bash.ssh(user, ips.pub, "cd " + dir + "; nohup java -cp \"" + libPath +":"+ hzLib + "\" " + jvmArgs + " " + classToRun + " < " + inFile + " &>> " + outFile + " & echo $!");
+        String pidStr = Bash.ssh(user, ips.pub, "cd " + dir + "; nohup java -cp \"" + libPath +":"+ hzLib + "\" " + jvmArgs + " "+options+" "+ classToRun + " < " + inFile + " &>> " + outFile + " & echo $!");
         pid = Integer.parseInt(pidStr.trim());
         System.out.println("started "+this);
     }
