@@ -178,7 +178,7 @@ public class HzCmd {
 
         Collection<ClusterManager> clusterManagers = getClusterManagers(cmd);
 
-        String taskId = cmd.VAR(1).getText();
+        String taskId = cmd.VAR(0).getText();
         String className = cmd.STRING(0).getText().replace("\"", "");
 
         for (ClusterManager c : clusterManagers) {
