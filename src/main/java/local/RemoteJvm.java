@@ -57,10 +57,11 @@ public class RemoteJvm {
         jvmArgs += "-D"+Args.homeCwd+"="+System.getProperty("user.dir")+" ";
         jvmArgs += "-D"+Args.homeInfile+"="+ HzCmd.commsFile+" ";
         jvmArgs += "-D"+Args.ID +"="+id+" ";
+        jvmArgs += "-XX:OnOutOfMemoryError=touch "+id+".oome"+" ";
 
 
         String hzLib = hzPath+hzVersion+"/*";
-        String pidStr = Bash.ssh(user, ips.pub, "cd " + dir + "; nohup java -cp \"" + libPath +":"+ hzLib + "\" " + jvmArgs + " "+options+" "+ classToRun + " < " + inFile + " &>> " + outFile + " & echo $!");
+        String pidStr = Bash.ssh(user, ips.pub, "cd " + dir + "; nohup java -cp \"" + libPath +":"+ hzLib + "\" " + jvmArgs +" "+ options +" "+ classToRun + " < " + inFile + " &>> " + outFile + " & echo $!");
         pid = Integer.parseInt(pidStr.trim());
         System.out.println("started "+this);
     }

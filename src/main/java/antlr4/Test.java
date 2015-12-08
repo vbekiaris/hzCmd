@@ -28,6 +28,7 @@ public class Test {
         cmd("smlJvm =\"-xms2G -xmx4G --XXGc\"");
         cmd("wanSingle=\"com.hazelcast.enterprise.wan.replication.WanNoDelayReplication\"");
         cmd("wanBatch=\"com.hazelcast.enterprise.wan.replication.WanBatchReplication\"");
+        //TODO assign variable to variable e.g. v1 = v2 + "string" + v3
 
 
         //set globals
@@ -82,6 +83,9 @@ public class Test {
         cmd("restart A member2 v1 bigJvm");
 
         cmd("sleep 10");
+
+        cmd("showSSH true");
+        cmd("showSSH false");
 
 
         //start the member jvm what was killed,  however the tasks which were loaded to the jvm are gone

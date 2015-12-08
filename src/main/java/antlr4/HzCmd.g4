@@ -28,6 +28,7 @@ statement
     | MEMBERS_ONLY NUMBER
     | SAVE STRING
     | EXIT
+    | SHOWSSH BOOL
 
     | COMMENT
     ;
@@ -55,6 +56,7 @@ RESTART : 'restart';
 SLEEP : 'sleep';
 SAVE : 'save';
 EXIT : 'exit';
+SHOWSSH : 'showSSH';
 
 
 ALL : '*';

@@ -30,6 +30,7 @@ public class Controler{
     public static final String ID = System.getProperty(Args.ID.name());
     public static final String jvmPidId = ManagementFactory.getRuntimeMXBean().getName();
 
+    //TODO why arnt theses errors sent bck to the home, user box
     public Controler(HzType type){
         try {
             if (type == HzType.Member) {

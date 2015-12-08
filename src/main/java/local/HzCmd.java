@@ -2,6 +2,7 @@ package local;
 
 import antlr4.HzCmdLexer;
 import antlr4.HzCmdParser;
+import global.Bash;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -12,7 +13,6 @@ import java.util.*;
 import static global.Utils.*;
 
 
-//TODO pass JVM OPTIONS from script to remote jvm
 //TODO hzXml generation add members from cluster ips
 //TODO WAN REP xml SETUP
 //TODO man center integ
@@ -75,9 +75,13 @@ public class HzCmd {
                             case HzCmdParser.SLEEP:
                                 sleep(cmd);
                                 break;
+                            case HzCmdParser.SHOWSSH:
+                                showSSH(cmd);
+                                break;
                             case HzCmdParser.EXIT:
                                 exit();
                                 break;
+
                         }
                     }catch(Exception e){
                         e.printStackTrace();
@@ -95,7 +99,6 @@ public class HzCmd {
         }
         System.exit(0);
     }
-
 
     private void assignment(HzCmdParser.StatementContext cmd){
         if( cmd.ASSIGN() != null){
@@ -295,6 +298,11 @@ public class HzCmd {
     }
 
 
+
+    private void showSSH(HzCmdParser.StatementContext cmd){
+        boolean show = Boolean.parseBoolean( cmd.BOOL().getText() );
+        Bash.showSSH = show;
+    }
 
 
 
