@@ -1,5 +1,6 @@
 package local;
 
+import global.Args;
 import global.HzType;
 
 import java.io.*;
@@ -29,6 +30,29 @@ public class ClusterManager {
         this.boxes=boxes;
         membersOnlyCount=boxes.size();
     }
+
+    private void sendAll(String cmd) throws IOException, InterruptedException {
+        for(RemoteJvm jvm : jvms.values()){
+            jvm.send(cmd);
+        }
+    }
+
+    private void sendMembers(String cmd) throws IOException, InterruptedException {
+        for(RemoteJvm jvm : jvms.values()){
+            if(jvm.isMember()){
+                jvm.send(cmd);
+            }
+        }
+    }
+
+    private void sendClients(String cmd) throws IOException, InterruptedException {
+        for(RemoteJvm jvm : jvms.values()){
+            if(jvm.isClient()){
+                jvm.send(cmd);
+            }
+        }
+    }
+
 
     public void setMembersOnlyCount(int count) {
         if(count <= 0 || count > boxes.size()){
@@ -69,6 +93,11 @@ public class ClusterManager {
         for(RemoteJvm jvm : jvms.values()){
             jvm.clean();
         }
+    }
+
+
+    public void loadAll(String taskId, String className) throws IOException, InterruptedException {
+        sendAll(Args.load +" "+taskId+" "+className);
     }
 
     public void kill(String id) throws IOException, InterruptedException {
@@ -124,14 +153,17 @@ public class ClusterManager {
         }
     }
 
-
-    public void send(String cmd) throws IOException, InterruptedException {
-        for(RemoteJvm jvm : jvms.values()){
-            jvm.send(cmd);
-        }
+    public void cat(String id) throws IOException, InterruptedException {
+        RemoteJvm jvm = jvms.get(id);
+        System.out.println( jvm.cat() );
     }
 
-    public void catMember() throws IOException, InterruptedException {
+    public void catAll() throws IOException, InterruptedException {
+        catMembers();
+        catClients();
+    }
+
+    public void catMembers() throws IOException, InterruptedException {
         for(RemoteJvm jvm : jvms.values()){
             if(jvm.isMember()){
                 System.out.println( jvm.cat() );

@@ -63,6 +63,9 @@ public class HzCmd {
                             case HzCmdParser.ADD:
                                 add(cmd);
                                 break;
+                            case HzCmdParser.LOAD:
+                                load(cmd);
+                                break;
                             case HzCmdParser.KILL:
                                 kill(cmd);
                                 break;
@@ -151,13 +154,7 @@ public class HzCmd {
 
     private void add(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
 
-        Collection<ClusterManager> c = new ArrayList();
-        if( cmd.ALL(0) != null) {
-            c = clusters.values();
-        }else {
-            String clusterId = cmd.VAR(0).getText();
-            c.add( clusters.get(clusterId) );
-        }
+        Collection<ClusterManager> c = getClusterManagers(cmd);
 
         int threadQty = Integer.parseInt(cmd.NUMBER(0).getText());
 
@@ -177,15 +174,23 @@ public class HzCmd {
 
     }
 
+    private void load(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
+
+        Collection<ClusterManager> clusterManagers = getClusterManagers(cmd);
+
+        String taskId = cmd.VAR(1).getText();
+        String className = cmd.STRING(0).getText().replace("\"", "");
+
+        for (ClusterManager c : clusterManagers) {
+            c.loadAll(taskId, className);
+        }
+
+    }
+
+
     private void kill(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
 
-        Collection<ClusterManager> c = new ArrayList();
-        if( cmd.ALL(0) != null) {
-            c = clusters.values();
-        }else {
-            String clusterId = cmd.VAR(0).getText();
-            c.add( clusters.get(clusterId) );
-        }
+        Collection<ClusterManager> c = getClusterManagers(cmd);
 
         if( cmd.ALL(1) != null) {
             for (ClusterManager jvmManager : c) {
@@ -224,13 +229,7 @@ public class HzCmd {
 
     private void restart(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
 
-        Collection<ClusterManager> c = new ArrayList();
-        if( cmd.ALL(0) != null) {
-            c = clusters.values();
-        }else {
-            String clusterId = cmd.VAR(0).getText();
-            c.add( clusters.get(clusterId) );
-        }
+        Collection<ClusterManager> c = getClusterManagers(cmd);
 
         String version = cmd.VAR(1).getText();
         version = vars.get(version);
@@ -275,17 +274,11 @@ public class HzCmd {
 
     private void cat(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
 
-        Collection<ClusterManager> c = new ArrayList();
-        if( cmd.ALL(0) != null) {
-            c = clusters.values();
-        }else {
-            String clusterId = cmd.VAR(0).getText();
-            c.add( clusters.get(clusterId) );
-        }
+        Collection<ClusterManager> c = getClusterManagers(cmd);
 
         if( cmd.ALL(1) != null) {
             for (ClusterManager jvmManager : c) {
-                jvmManager.catMember();
+                jvmManager.catMembers();
             }
         }
 
@@ -305,6 +298,17 @@ public class HzCmd {
     }
 
 
+
+    private Collection<ClusterManager> getClusterManagers(HzCmdParser.StatementContext cmd) {
+        Collection<ClusterManager> c = new ArrayList();
+        if( cmd.ALL(0) != null) {
+            c = clusters.values();
+        }else {
+            String clusterId = cmd.VAR(0).getText();
+            c.add( clusters.get(clusterId) );
+        }
+        return c;
+    }
 
 
 /*
