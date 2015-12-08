@@ -133,7 +133,6 @@ public class HzCmd {
         for (int i = 1; i < ids.size(); i++) {
             String key = ids.get(i).getText();
             versions[i-1]=(vars.get(key));
-            System.out.println(key +"  "+versions[i-1]);
         }
 
         Installer.install(boxes, ee, versions);
