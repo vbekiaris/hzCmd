@@ -23,8 +23,7 @@ public class Test {
 
         //variable assignment
         cmd("v1 = \"3.5\"");
-
-        cmd("v2 = \"3.6-RC2-SNAPSHOT\" ");
+        cmd("v2 = \"3.6-RC2-SNAPSHOT\"");
         cmd("bigJvm = \"-xmx16G\"");
         cmd("smlJvm =\"-xms2G -xmx4G --XXGc\"");
         cmd("wanSingle=\"com.hazelcast.enterprise.wan.replication.WanNoDelayReplication\"");
@@ -78,9 +77,9 @@ public class Test {
         cmd("kill istanbul client*");
         cmd("kill A clientA5");
 
-        cmd("start * *");
-        cmd("start A member*");
-        cmd("start A memberX72");
+        cmd("restart * * v1 bigJvm");
+        cmd("restart A member* v1 bigJvm");
+        cmd("restart A member2 v1 bigJvm");
 
         cmd("sleep 10");
 

@@ -23,10 +23,6 @@ public class HzCmd {
     private Map<String, ClusterManager> clusters = new HashMap();
     private Map<String, String> vars = new HashMap();
 
-
-    //TODO need a variables map,  to store strings
-    // v1 = 3.6
-    // bigJvm = -xmxm16G -xmsx8G -Dblar=blar
     public HzCmd() throws IOException, InterruptedException {
         readComms.start();
     }
@@ -62,6 +58,9 @@ public class HzCmd {
                                 break;
                             case HzCmdParser.KILL:
                                 kill(cmd);
+                                break;
+                            case HzCmdParser.RESTART:
+                                restart(cmd);
                                 break;
                             case HzCmdParser.CAT:
                                 cat(cmd);
@@ -210,6 +209,55 @@ public class HzCmd {
         }
     }
 
+    private void restart(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
+
+        Collection<ClusterManager> c = new ArrayList();
+        if( cmd.ALL(0) != null) {
+            c = clusters.values();
+        }else {
+            String clusterId = cmd.VAR(0).getText();
+            c.add( clusters.get(clusterId) );
+        }
+
+        String version = cmd.VAR(1).getText();
+        version = vars.get(version);
+
+
+        if( cmd.ALL(1) != null) {
+            for (ClusterManager jvmManager : c) {
+                jvmManager.reStartAll(version);
+                return;
+            }
+        }
+
+        if( cmd.MEMBER_ALL() != null) {
+            for (ClusterManager jvmManager : c) {
+                jvmManager.reStartMembers(version);
+                return;
+            }
+        }
+
+        if( cmd.CLIENT_ALL() != null) {
+            for (ClusterManager jvmManager : c) {
+                jvmManager.reStartClients(version);
+                return;
+            }
+        }
+
+        String id = "";
+        if( cmd.MEMBER_VAR() != null) {
+            id = cmd.MEMBER_VAR().getText();
+        }
+        if( cmd.CLIENT_VAR() != null) {
+            id = cmd.CLIENT_VAR().getText();
+        }
+
+        for (ClusterManager jvmManager : c) {
+            jvmManager.reStart(id + jvmManager.getClusterId(), version);
+            return;
+        }
+    }
+
     private void cat(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
 
         Collection<ClusterManager> c = new ArrayList();
@@ -240,48 +288,16 @@ public class HzCmd {
 
 
 /*
-    public void processLine(String line ){
-        history.add(line);
-        System.out.println("=>"+line);
-
-        String[] words = line.split("\\s+");
-        try {
-            Args arg = Args.valueOf(words[0]);
-            switch (arg) {
-                case exit:
-                    exit();
-
-                case cluster:
-                    if (words.length == 4){
-                        String clusterID = words[1];
-                        int start = Integer.parseInt(words[2]);
-                        int end = Integer.parseInt(words[3]);
-
-                        List<IpPair> ips = boxes.getBoxes(start, end);
-                        ClusterManager jvmManager = new ClusterManager(boxes.getUser(), clusterID, ips);
-                        clusters.put(jvmManager.getClusterId(), jvmManager);
-                        cluster=jvmManager;
-
-                        System.out.println(cluster);
-                    }
-                    break;
-
-                case addip:
+               case addip:
                     boxes.addIp(words[1]);
                     break;
 
-                case install:
-                    Installer.install(boxes, false, "3.5", "3.6-EA2");
-                    break;
                 case uninstall:
                     Installer.uninstall(boxes);
                     break;
 
 
-                case user:
-                    boxes.setUser(words[1]);
-                    break;
-                case init:
+                 case init:
                     cluster.restartJmvs("3.5");
                     break;
 
@@ -299,29 +315,18 @@ public class HzCmd {
 
                 case clean:
                     cluster.clean();
-
-
                     break;
                 case membersOnly:
                     cluster.setMembersOnlyCount(Integer.parseInt(words[1]));
                     break;
-                case members:
-                    cluster.addMembers(Integer.parseInt(words[1]), "3.5");
-                    break;
+
                 case clients:
                     cluster.addClients(Integer.parseInt(words[1]), "3.5");
                     break;
 
 
-                case kill:
-                    String clusterid = (words[1]);
-                    clusters.get(clusterid).kill(words[2]);
-                    break;
-                case ssh:
+                 case ssh:
                     boxes.sshCmd(line.replace("ssh", ""));
-                    break;
-                case cat:
-                    cluster.catMemberLogs();
                     break;
                 case grep:
                     cluster.grepMembers(words[1]);
@@ -329,24 +334,6 @@ public class HzCmd {
                 case jps:
                     boxes.jps();
                     break;
-
-
-                case msg:
-                    System.out.println(line);
-                    break;
-
-                case sleep:
-                    sleepSeconds(Integer.parseInt(words[1]));
-                    break;
-
-                default:
-                    System.out.println("unknown cmd =>"+line);
-            }
-        }catch (Exception e){
-            System.out.println("CMD =>"+line);
-            e.printStackTrace();
-        }
-    }
 */
 
 

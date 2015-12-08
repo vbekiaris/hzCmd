@@ -18,11 +18,11 @@ public class HzCmdParser extends Parser {
 		new PredictionContextCache();
 	public static final int
 		USER=1, VERSION=2, ADD=3, FILE=4, IP=5, CLUSTER=6, REPLICATE=7, INSTALL=8, 
-		EE=9, OS=10, LOAD=11, SET=12, INVOKE=13, KILL=14, CAT=15, START=16, SLEEP=17, 
-		SAVE=18, EXIT=19, ALL=20, MEMBER=21, CLIENT=22, MEMBER_ALL=23, MEMBER_VAR=24, 
-		CLIENT_ALL=25, CLIENT_VAR=26, MEMBERS_ONLY=27, MEMBERS=28, CLIENTS=29, 
-		ASSIGN=30, BOOL=31, TRUE=32, FALSE=33, VAR=34, NUMBER=35, WHITESPACE=36, 
-		STRING=37, IP_PAIR=38, IP_STR=39, COMMENT=40;
+		EE=9, OS=10, LOAD=11, SET=12, INVOKE=13, KILL=14, CAT=15, RESTART=16, 
+		SLEEP=17, SAVE=18, EXIT=19, ALL=20, MEMBER=21, CLIENT=22, MEMBER_ALL=23, 
+		MEMBER_VAR=24, CLIENT_ALL=25, CLIENT_VAR=26, MEMBERS_ONLY=27, MEMBERS=28, 
+		CLIENTS=29, ASSIGN=30, BOOL=31, TRUE=32, FALSE=33, VAR=34, NUMBER=35, 
+		WHITESPACE=36, STRING=37, IP_PAIR=38, IP_STR=39, COMMENT=40;
 	public static final int
 		RULE_script = 0, RULE_statement = 1;
 	public static final String[] ruleNames = {
@@ -32,13 +32,13 @@ public class HzCmdParser extends Parser {
 	private static final String[] _LITERAL_NAMES = {
 		null, "'user'", "'version'", "'add'", "'file'", "'ip'", "'cluster'", "'replicate'", 
 		"'install'", "'EE'", "'OS'", "'load'", "'set'", "'invoke'", "'kill'", 
-		"'cat'", "'start'", "'sleep'", "'save'", "'exit'", "'*'", "'member'", 
+		"'cat'", "'restart'", "'sleep'", "'save'", "'exit'", "'*'", "'member'", 
 		"'client'", null, null, null, null, "'membersOnly'", "'members'", "'clients'", 
 		"'='", null, "'true'", "'false'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
 		null, "USER", "VERSION", "ADD", "FILE", "IP", "CLUSTER", "REPLICATE", 
-		"INSTALL", "EE", "OS", "LOAD", "SET", "INVOKE", "KILL", "CAT", "START", 
+		"INSTALL", "EE", "OS", "LOAD", "SET", "INVOKE", "KILL", "CAT", "RESTART", 
 		"SLEEP", "SAVE", "EXIT", "ALL", "MEMBER", "CLIENT", "MEMBER_ALL", "MEMBER_VAR", 
 		"CLIENT_ALL", "CLIENT_VAR", "MEMBERS_ONLY", "MEMBERS", "CLIENTS", "ASSIGN", 
 		"BOOL", "TRUE", "FALSE", "VAR", "NUMBER", "WHITESPACE", "STRING", "IP_PAIR", 
@@ -172,7 +172,7 @@ public class HzCmdParser extends Parser {
 		public TerminalNode CLIENT_VAR() { return getToken(HzCmdParser.CLIENT_VAR, 0); }
 		public TerminalNode KILL() { return getToken(HzCmdParser.KILL, 0); }
 		public TerminalNode CAT() { return getToken(HzCmdParser.CAT, 0); }
-		public TerminalNode START() { return getToken(HzCmdParser.START, 0); }
+		public TerminalNode RESTART() { return getToken(HzCmdParser.RESTART, 0); }
 		public TerminalNode SLEEP() { return getToken(HzCmdParser.SLEEP, 0); }
 		public TerminalNode MEMBERS_ONLY() { return getToken(HzCmdParser.MEMBERS_ONLY, 0); }
 		public TerminalNode SAVE() { return getToken(HzCmdParser.SAVE, 0); }
@@ -197,8 +197,8 @@ public class HzCmdParser extends Parser {
 		enterRule(_localctx, 2, RULE_statement);
 		int _la;
 		try {
-			setState(79);
-			switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
+			setState(85);
+			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
@@ -479,7 +479,7 @@ public class HzCmdParser extends Parser {
 				enterOuterAlt(_localctx, 15);
 				{
 				setState(68);
-				match(START);
+				match(RESTART);
 				setState(69);
 				_la = _input.LA(1);
 				if ( !(_la==ALL || _la==VAR) ) {
@@ -494,46 +494,62 @@ public class HzCmdParser extends Parser {
 				} else {
 					consume();
 				}
+				setState(71);
+				match(VAR);
+				setState(73); 
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				do {
+					{
+					{
+					setState(72);
+					match(VAR);
+					}
+					}
+					setState(75); 
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				} while ( _la==VAR );
 				}
 				break;
 			case 16:
 				enterOuterAlt(_localctx, 16);
 				{
-				setState(71);
+				setState(77);
 				match(SLEEP);
-				setState(72);
+				setState(78);
 				match(NUMBER);
 				}
 				break;
 			case 17:
 				enterOuterAlt(_localctx, 17);
 				{
-				setState(73);
+				setState(79);
 				match(MEMBERS_ONLY);
-				setState(74);
+				setState(80);
 				match(NUMBER);
 				}
 				break;
 			case 18:
 				enterOuterAlt(_localctx, 18);
 				{
-				setState(75);
+				setState(81);
 				match(SAVE);
-				setState(76);
+				setState(82);
 				match(STRING);
 				}
 				break;
 			case 19:
 				enterOuterAlt(_localctx, 19);
 				{
-				setState(77);
+				setState(83);
 				match(EXIT);
 				}
 				break;
 			case 20:
 				enterOuterAlt(_localctx, 20);
 				{
-				setState(78);
+				setState(84);
 				match(COMMENT);
 				}
 				break;
@@ -551,29 +567,31 @@ public class HzCmdParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3*T\4\2\t\2\4\3\t\3"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3*Z\4\2\t\2\4\3\t\3"+
 		"\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
 		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\6\3#\n\3\r\3\16\3$\3\3\3\3"+
 		"\3\3\3\3\3\3\3\3\6\3-\n\3\r\3\16\3.\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
 		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
-		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\5\3R\n\3\3\3\2\2\4\2\4\2\7\4\2$$\'\'\4\2"+
-		"\26\26$$\3\2\13\f\3\2\27\30\4\2\26\26\31\34f\2\6\3\2\2\2\4Q\3\2\2\2\6"+
-		"\7\5\4\3\2\7\3\3\2\2\2\b\t\7$\2\2\t\n\7 \2\2\nR\7\'\2\2\13\f\7\3\2\2\f"+
-		"R\7\'\2\2\r\16\7\4\2\2\16R\7\'\2\2\17\20\7\5\2\2\20\21\7\7\2\2\21R\7("+
-		"\2\2\22\23\7\5\2\2\23\24\7\6\2\2\24R\7\'\2\2\25\26\7\b\2\2\26\27\7$\2"+
-		"\2\27\30\7%\2\2\30R\7%\2\2\31\32\7\t\2\2\32\33\7$\2\2\33\34\7$\2\2\34"+
-		"\35\t\2\2\2\35R\t\2\2\2\36\37\7\n\2\2\37 \t\3\2\2 \"\t\4\2\2!#\7$\2\2"+
-		"\"!\3\2\2\2#$\3\2\2\2$\"\3\2\2\2$%\3\2\2\2%R\3\2\2\2&\'\7\5\2\2\'(\t\5"+
-		"\2\2()\t\3\2\2)*\7%\2\2*,\7$\2\2+-\7$\2\2,+\3\2\2\2-.\3\2\2\2.,\3\2\2"+
-		"\2./\3\2\2\2/R\3\2\2\2\60\61\7\r\2\2\61\62\t\3\2\2\62\63\7$\2\2\63R\7"+
-		"\'\2\2\64\65\7\16\2\2\65\66\7$\2\2\66\67\13\2\2\2\678\7$\2\289\7 \2\2"+
-		"9R\7\'\2\2:;\7\17\2\2;<\7%\2\2<=\7$\2\2=>\t\3\2\2>?\t\3\2\2?R\t\6\2\2"+
-		"@A\7\20\2\2AB\t\3\2\2BR\t\6\2\2CD\7\21\2\2DE\t\3\2\2ER\t\6\2\2FG\7\22"+
-		"\2\2GH\t\3\2\2HR\t\6\2\2IJ\7\23\2\2JR\7%\2\2KL\7\35\2\2LR\7%\2\2MN\7\24"+
-		"\2\2NR\7\'\2\2OR\7\25\2\2PR\7*\2\2Q\b\3\2\2\2Q\13\3\2\2\2Q\r\3\2\2\2Q"+
-		"\17\3\2\2\2Q\22\3\2\2\2Q\25\3\2\2\2Q\31\3\2\2\2Q\36\3\2\2\2Q&\3\2\2\2"+
-		"Q\60\3\2\2\2Q\64\3\2\2\2Q:\3\2\2\2Q@\3\2\2\2QC\3\2\2\2QF\3\2\2\2QI\3\2"+
-		"\2\2QK\3\2\2\2QM\3\2\2\2QO\3\2\2\2QP\3\2\2\2R\5\3\2\2\2\5$.Q";
+		"\3\3\6\3L\n\3\r\3\16\3M\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\5\3X\n\3\3\3\2"+
+		"\2\4\2\4\2\7\4\2$$\'\'\4\2\26\26$$\3\2\13\f\3\2\27\30\4\2\26\26\31\34"+
+		"m\2\6\3\2\2\2\4W\3\2\2\2\6\7\5\4\3\2\7\3\3\2\2\2\b\t\7$\2\2\t\n\7 \2\2"+
+		"\nX\7\'\2\2\13\f\7\3\2\2\fX\7\'\2\2\r\16\7\4\2\2\16X\7\'\2\2\17\20\7\5"+
+		"\2\2\20\21\7\7\2\2\21X\7(\2\2\22\23\7\5\2\2\23\24\7\6\2\2\24X\7\'\2\2"+
+		"\25\26\7\b\2\2\26\27\7$\2\2\27\30\7%\2\2\30X\7%\2\2\31\32\7\t\2\2\32\33"+
+		"\7$\2\2\33\34\7$\2\2\34\35\t\2\2\2\35X\t\2\2\2\36\37\7\n\2\2\37 \t\3\2"+
+		"\2 \"\t\4\2\2!#\7$\2\2\"!\3\2\2\2#$\3\2\2\2$\"\3\2\2\2$%\3\2\2\2%X\3\2"+
+		"\2\2&\'\7\5\2\2\'(\t\5\2\2()\t\3\2\2)*\7%\2\2*,\7$\2\2+-\7$\2\2,+\3\2"+
+		"\2\2-.\3\2\2\2.,\3\2\2\2./\3\2\2\2/X\3\2\2\2\60\61\7\r\2\2\61\62\t\3\2"+
+		"\2\62\63\7$\2\2\63X\7\'\2\2\64\65\7\16\2\2\65\66\7$\2\2\66\67\13\2\2\2"+
+		"\678\7$\2\289\7 \2\29X\7\'\2\2:;\7\17\2\2;<\7%\2\2<=\7$\2\2=>\t\3\2\2"+
+		">?\t\3\2\2?X\t\6\2\2@A\7\20\2\2AB\t\3\2\2BX\t\6\2\2CD\7\21\2\2DE\t\3\2"+
+		"\2EX\t\6\2\2FG\7\22\2\2GH\t\3\2\2HI\t\6\2\2IK\7$\2\2JL\7$\2\2KJ\3\2\2"+
+		"\2LM\3\2\2\2MK\3\2\2\2MN\3\2\2\2NX\3\2\2\2OP\7\23\2\2PX\7%\2\2QR\7\35"+
+		"\2\2RX\7%\2\2ST\7\24\2\2TX\7\'\2\2UX\7\25\2\2VX\7*\2\2W\b\3\2\2\2W\13"+
+		"\3\2\2\2W\r\3\2\2\2W\17\3\2\2\2W\22\3\2\2\2W\25\3\2\2\2W\31\3\2\2\2W\36"+
+		"\3\2\2\2W&\3\2\2\2W\60\3\2\2\2W\64\3\2\2\2W:\3\2\2\2W@\3\2\2\2WC\3\2\2"+
+		"\2WF\3\2\2\2WO\3\2\2\2WQ\3\2\2\2WS\3\2\2\2WU\3\2\2\2WV\3\2\2\2X\5\3\2"+
+		"\2\2\6$.MW";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

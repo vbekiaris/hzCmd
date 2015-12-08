@@ -7,11 +7,6 @@ script
     : statement
     ;
 
-
-//assignment
-//    : VAR ASSIGN STRING
-//    ;
-
 statement
     : VAR ASSIGN STRING
     | USER STRING
@@ -27,7 +22,7 @@ statement
     | INVOKE NUMBER VAR (ALL | VAR) (ALL | VAR) (ALL | MEMBER_ALL | MEMBER_VAR | CLIENT_ALL | CLIENT_VAR)
     | KILL (ALL | VAR) (ALL | MEMBER_ALL | MEMBER_VAR | CLIENT_ALL | CLIENT_VAR)
     | CAT (ALL | VAR) (ALL | MEMBER_ALL | MEMBER_VAR | CLIENT_ALL | CLIENT_VAR)
-    | START (ALL | VAR) (ALL | MEMBER_ALL | MEMBER_VAR | CLIENT_ALL | CLIENT_VAR)
+    | RESTART (ALL | VAR) (ALL | MEMBER_ALL | MEMBER_VAR | CLIENT_ALL | CLIENT_VAR) VAR VAR+
 
     | SLEEP NUMBER
     | MEMBERS_ONLY NUMBER
@@ -56,7 +51,7 @@ INVOKE : 'invoke' ;
 
 KILL : 'kill';
 CAT : 'cat';
-START : 'start';
+RESTART : 'restart';
 SLEEP : 'sleep';
 SAVE : 'save';
 EXIT : 'exit';

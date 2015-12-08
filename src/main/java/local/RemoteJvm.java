@@ -60,7 +60,7 @@ public class RemoteJvm {
 
 
         String hzLib = hzPath+hzVersion+"/*";
-        String pidStr = Bash.ssh(user, ips.pub, "cd " + dir + "; nohup java -cp \"" + libPath +":"+ hzLib + "\" " + jvmArgs + " " + classToRun + " < " + inFile + " &> " + outFile + " & echo $!");
+        String pidStr = Bash.ssh(user, ips.pub, "cd " + dir + "; nohup java -cp \"" + libPath +":"+ hzLib + "\" " + jvmArgs + " " + classToRun + " < " + inFile + " &>> " + outFile + " & echo $!");
         pid = Integer.parseInt(pidStr.trim());
         System.out.println("started "+this);
     }
@@ -76,7 +76,12 @@ public class RemoteJvm {
 
     public boolean running() {
         try {
+            if(pid==0){
+               return false;
+            }
+
             boolean running =  Bash.sshWithExitCode(user, ips.pub, "ps -p "+pid) == 0;
+
             if(!running){
                 pid=0;
             }

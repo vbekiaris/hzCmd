@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import static global.Utils.rangeMap;
-import static global.Utils.sleepSeconds;
 
 public class ClusterManager {
 
@@ -65,27 +64,6 @@ public class ClusterManager {
         jvm.initilize(hzVersion);
     }
 
-    /*
-    public void start(String id) throws IOException, InterruptedException {
-        RemoteJvm jvm = jvms.get(id);
-        jvm.initilize();
-    }
-    */
-
-
-    public void restartJmvs(String hzVersion) throws IOException, InterruptedException {
-        for(RemoteJvm jvm : jvms.values()){
-            if(jvm.isMember())
-                jvm.initilize(hzVersion);
-        }
-
-        sleepSeconds(10);
-        for(RemoteJvm jvm : jvms.values()){
-            if(jvm.isClient())
-                jvm.initilize(hzVersion);
-        }
-    }
-
 
     public void clean() throws IOException, InterruptedException {
         for(RemoteJvm jvm : jvms.values()){
@@ -115,6 +93,33 @@ public class ClusterManager {
         for(RemoteJvm jvm : jvms.values()){
             if(jvm.isClient()){
                 jvm.kill();
+            }
+        }
+    }
+
+
+    public void reStart(String id, String version) throws IOException, InterruptedException {
+        RemoteJvm jvm = jvms.get(id);
+        jvm.initilize(version);
+    }
+
+    public void reStartAll(String version) throws IOException, InterruptedException {
+        reStartClients(version);
+        reStartMembers(version);
+    }
+
+    public void reStartMembers(String version) throws IOException, InterruptedException {
+        for(RemoteJvm jvm : jvms.values()){
+            if(jvm.isMember()){
+                jvm.initilize(version);
+            }
+        }
+    }
+
+    public void reStartClients(String version) throws IOException, InterruptedException {
+        for(RemoteJvm jvm : jvms.values()){
+            if(jvm.isClient()){
+                jvm.initilize(version);
             }
         }
     }

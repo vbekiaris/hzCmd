@@ -15,7 +15,7 @@ import static remote.Utils.sendBackError;
 
 public class TaskManager {
 
-    //TODO map of thread adn method name count
+    //TODO map of thread and method name count
     private Map<String, TaskClazz> tasks = new HashMap();
     private ExecutorService executorService =  Executors.newCachedThreadPool();
 
