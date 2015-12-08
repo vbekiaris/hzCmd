@@ -1,6 +1,7 @@
 package local;
 
 import global.Args;
+import global.Bash;
 import global.HzType;
 
 import java.io.*;
@@ -199,9 +200,8 @@ public class ClusterManager {
 
         String ips="";
         for(IpPair ipPair : boxes){
-            ips+=ipPair+", ";
+            ips+=ipPair+"\n";
         }
-
 
         String jvms = new String();
         for(RemoteJvm jvm : this.jvms.values()){
@@ -209,14 +209,13 @@ public class ClusterManager {
         }
         jvms=jvms.trim();
 
-        return "ClusterManager{" +
+        return Bash.ANSI_YELLOW+"ClusterManager{" +
                 " clusterId=" + clusterId +
                 ", membersOnlyCount=" + membersOnlyCount +
                 ", memberCount=" + memberCount +
                 ", clientCount=" + clientCount +
                 ", boxCount==" + boxes.size() +
-                ", ips=" + ips +
-                "jvms=" + jvms +
-                "}";
+                ", \n" + ips +
+                "}"+Bash.ANSI_RESET;
     }
 }
