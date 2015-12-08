@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 
 public abstract class Bash {
 
-    public static boolean showSSH=true;
+    public static boolean showSSH=false;
 
     public static String killAllJava() throws IOException, InterruptedException {
         return executeCommand("killall -9 java");
