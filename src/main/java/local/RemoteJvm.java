@@ -116,14 +116,20 @@ public class RemoteJvm {
 
         boolean running = running();
 
-        return "RemoteJvm{" +
+        String color;
+        if(running) {
+            color = Bash.ANSI_GREEN;
+        }else{
+            color = Bash.ANSI_RED;
+        }
+        return color + "RemoteJvm{" +
                 " ip=" + ips +
                 ", ID=" + id +
                 ", running=" + running +
                 ", pid=" + pid +
                 ", type=" + type +
                 ", dir=" + dir +
-                '}';
+                '}' + Bash.ANSI_RESET;
     }
 
     public boolean isMember(){
