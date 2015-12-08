@@ -69,9 +69,10 @@ public abstract class Bash {
         }
 
         if(showSSH){
-            System.out.println(command);
+            System.out.println(output.toString());
         }
         else if (exitCode != 0) {
+            System.out.println(command);
             System.out.println(output.toString());
         }
 
