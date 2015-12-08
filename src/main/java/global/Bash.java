@@ -65,7 +65,7 @@ public abstract class Bash {
 
         BufferedReader reader;
         if (exitCode != 0 ){
-            System.out.println("ERROR exit code = "+p.exitValue()+" cmd="+command);
+            System.out.println(Bash.ANSI_RED+"ERROR exit code = "+p.exitValue()+" cmd="+command+Bash.ANSI_RESET);
             reader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
         }else{
             reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -77,12 +77,8 @@ public abstract class Bash {
             output.append(line + "\n");
         }
 
-        if(showSSH){
-            System.out.println(output.toString());
-        }
-        else if (exitCode != 0) {
-            System.out.println(command);
-            System.out.println(output.toString());
+        if (exitCode != 0) {
+            System.out.println(Bash.ANSI_RED+output.toString()+Bash.ANSI_RESET);
         }
 
         return output.toString();
