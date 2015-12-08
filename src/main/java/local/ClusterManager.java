@@ -207,7 +207,6 @@ public class ClusterManager {
         for(RemoteJvm jvm : this.jvms.values()){
             jvms+=jvm+"\n";
         }
-        jvms=jvms.trim();
 
         return Bash.ANSI_YELLOW+"ClusterManager{" +
                 " clusterId=" + clusterId +
@@ -216,6 +215,7 @@ public class ClusterManager {
                 ", clientCount=" + clientCount +
                 ", boxCount==" + boxes.size() +
                 ", \n" + ips +
+                ", " + jvms +
                 "}"+Bash.ANSI_RESET;
     }
 }

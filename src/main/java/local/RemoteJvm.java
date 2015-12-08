@@ -69,7 +69,7 @@ public class RemoteJvm {
         String hzLib = hzPath+hzVersion+"/*";
         String pidStr = Bash.ssh(user, ips.pub, "cd " + dir + "; nohup java -cp \"" + libPath +":"+ hzLib + "\" " + jvmArgs +" "+ options +" "+ classToRun + " < " + inFile + " &>> " + outFile + " & echo $!");
         pid = Integer.parseInt(pidStr.trim());
-        System.out.println(" "+this);
+        System.out.println(this);
     }
 
     public void clean() throws IOException, InterruptedException {
