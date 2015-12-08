@@ -113,15 +113,8 @@ public class RemoteJvm {
     public String getId(){ return id; }
 
     public String toString() {
-
         boolean running = running();
-
-        String color;
-        if(running) {
-            color = Bash.ANSI_GREEN;
-        }else{
-            color = Bash.ANSI_RED;
-        }
+        String color = running ? Bash.ANSI_GREEN : Bash.ANSI_RED;
         return color + "RemoteJvm{" +
                 " ip=" + ips +
                 ", ID=" + id +
