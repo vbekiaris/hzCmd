@@ -36,7 +36,7 @@ public class ReadComms extends Thread {
             try {
                 while ( (line = commsIn.readLine()) != null ){
 
-                    String color = Bash.ANSI_BLUE;
+                    String color = Bash.ANSI_PURPLE;
                     if(line.startsWith("ERROR")){
                         color = Bash.ANSI_RED;
                     }
