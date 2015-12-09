@@ -48,9 +48,7 @@ public class HzCmd {
                     HzCmdParser parser = new HzCmdParser(tokens);
                     HzCmdParser.StatementContext cmd = parser.statement();
 
-                    if(repeatProppt) {
-                        System.out.println("=>" + line);
-                    }
+                    if(repeatProppt) { System.out.println("=>" + line); }
 
                     switch (cmd.start.getType()) {
                         case HzCmdParser.BOXES:
@@ -386,47 +384,15 @@ public class HzCmd {
 
 
 /*
-               case addip:
-                    boxes.addIp(words[1]);
-                    break;
-
-                case uninstall:
-                    Installer.uninstall(boxes);
-                    break;
-
-
-                 case init:
-                    cluster.restartJmvs("3.5");
-                    break;
-
-                case load:
                 case invoke:
                 case stop:
                     cluster.send(line);
                     break;
-                case info:
-                    System.out.println(boxes);
-                    cluster.send(line);
-                    break;
-                case layout:
-                    System.out.println(cluster);
 
-                case clean:
-                    cluster.clean();
-                    break;
                 case membersOnly:
                     cluster.setMembersOnlyCount(Integer.parseInt(words[1]));
                     break;
-
-                case clients:
-                    cluster.addClients(Integer.parseInt(words[1]), "3.5");
-                    break;
-
-
-                 case ssh:
-                    boxes.sshCmd(line.replace("ssh", ""));
-                    break;
-                case grep:
+               case grep:
                     cluster.grepMembers(words[1]);
                     break;
                 case jps:
