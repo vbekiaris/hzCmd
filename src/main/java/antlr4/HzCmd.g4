@@ -31,6 +31,7 @@ statement
     | SAVE STRING
     | EXIT
     | SHOWSSH BOOL
+    | PROMPT BOOL
     | HOMEIP STRING
 
     | COMMENT
@@ -64,6 +65,7 @@ SLEEP : 'sleep';
 SAVE : 'save';
 EXIT : 'exit';
 SHOWSSH : 'showSSH';
+PROMPT : 'prompt';
 
 
 ALL : '*';

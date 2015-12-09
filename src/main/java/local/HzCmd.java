@@ -31,6 +31,8 @@ public class HzCmd {
     private Map<String, ClusterManager> clusters = new HashMap();
     private Map<String, String> vars = new HashMap();
 
+    private boolean repeatProppt = true;
+
     public HzCmd() throws IOException, InterruptedException {
         readComms.start();
     }
@@ -38,6 +40,7 @@ public class HzCmd {
     public void run() throws IOException {
         while (true){
             String line=in.readLine();
+            history.add(line);
             if (line!=null && !line.equals("") && !line.startsWith("#") && !line.startsWith("//")) {
                 try{
                     HzCmdLexer lexer = new HzCmdLexer(new ANTLRInputStream(line));
@@ -45,8 +48,9 @@ public class HzCmd {
                     HzCmdParser parser = new HzCmdParser(tokens);
                     HzCmdParser.StatementContext cmd = parser.statement();
 
-                    history.add(line);
-                    System.out.println("=>"+line);
+                    if(repeatProppt) {
+                        System.out.println("=>" + line);
+                    }
 
                     switch (cmd.start.getType()) {
                         case HzCmdParser.BOXES:
@@ -91,6 +95,9 @@ public class HzCmd {
                             break;
                         case HzCmdParser.SHOWSSH:
                             showSSH(cmd);
+                            break;
+                        case HzCmdParser.PROMPT:
+                            prompt(cmd);
                             break;
                         case HzCmdParser.EXIT:
                             exit();
@@ -360,6 +367,10 @@ public class HzCmd {
         Bash.showSSH = show;
     }
 
+    private void prompt(HzCmdParser.StatementContext cmd){
+        boolean show = Boolean.parseBoolean( cmd.BOOL().getText() );
+        repeatProppt = show;
+    }
 
 
     private Collection<ClusterManager> getClusterManagers(HzCmdParser.StatementContext cmd) {
