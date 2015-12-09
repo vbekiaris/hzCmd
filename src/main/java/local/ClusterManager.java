@@ -204,7 +204,7 @@ public class ClusterManager {
                 jvms+=jvm+"\n";
             }
         }
-        return jvms.substring(0, jvms.length()-1);
+        return jvms;
     }
 
     public String clientJvms(){
@@ -214,7 +214,7 @@ public class ClusterManager {
                 jvms+=jvm+"\n";
             }
         }
-        return jvms.substring(0, jvms.length()-1);
+        return jvms;
     }
 
     @Override
