@@ -36,67 +36,69 @@ public class HzCmd {
     }
 
     public void run() throws IOException {
-            while (true){
-                String line=in.readLine();
-                if (line!=null && !line.equals("") && !line.startsWith("#") && !line.startsWith("//")) {
-                    try{
-                        HzCmdLexer lexer = new HzCmdLexer(new ANTLRInputStream(line));
-                        CommonTokenStream tokens = new CommonTokenStream(lexer);
-                        HzCmdParser parser = new HzCmdParser(tokens);
-                        HzCmdParser.StatementContext cmd = parser.statement();
+        while (true){
+            String line=in.readLine();
+            if (line!=null && !line.equals("") && !line.startsWith("#") && !line.startsWith("//")) {
+                try{
+                    HzCmdLexer lexer = new HzCmdLexer(new ANTLRInputStream(line));
+                    CommonTokenStream tokens = new CommonTokenStream(lexer);
+                    HzCmdParser parser = new HzCmdParser(tokens);
+                    HzCmdParser.StatementContext cmd = parser.statement();
 
-                        history.add(line);
-                        System.out.println("=>"+line);
+                    history.add(line);
+                    System.out.println("=>"+line);
 
-                        switch (cmd.start.getType()) {
-                            case HzCmdParser.VAR:
-                                assignment(cmd);
-                                break;
-                            case HzCmdParser.USER:
-                                user(cmd);
-                                break;
-                            case HzCmdParser.HOMEIP:
-                                setHomeIp(cmd);
-                                break;
-                            case HzCmdParser.CLUSTER:
-                                cluster(cmd);
-                                break;
-                            case HzCmdParser.INSTALL:
-                                install(cmd);
-                                break;
-                            case HzCmdParser.ADD:
-                                add(cmd);
-                                break;
-                            case HzCmdParser.LOAD:
-                                load(cmd);
-                                break;
-                            case HzCmdParser.KILL:
-                                kill(cmd);
-                                break;
-                            case HzCmdParser.RESTART:
-                                restart(cmd);
-                                break;
-                            case HzCmdParser.CAT:
-                                cat(cmd);
-                                break;
-                            case HzCmdParser.SLEEP:
-                                sleep(cmd);
-                                break;
-                            case HzCmdParser.SHOWSSH:
-                                showSSH(cmd);
-                                break;
-                            case HzCmdParser.EXIT:
-                                exit();
-                                break;
-
-                        }
-                    }catch(Exception e){
-                        e.printStackTrace();
+                    switch (cmd.start.getType()) {
+                        case HzCmdParser.VAR:
+                            assignment(cmd);
+                            break;
+                        case HzCmdParser.USER:
+                            user(cmd);
+                            break;
+                        case HzCmdParser.HOMEIP:
+                            setHomeIp(cmd);
+                            break;
+                        case HzCmdParser.CLUSTER:
+                            cluster(cmd);
+                            break;
+                        case HzCmdParser.INSTALL:
+                            install(cmd);
+                            break;
+                        case HzCmdParser.ADD:
+                            add(cmd);
+                            break;
+                        case HzCmdParser.LOAD:
+                            load(cmd);
+                            break;
+                        case HzCmdParser.INFO:
+                            info(cmd);
+                            break;
+                        case HzCmdParser.KILL:
+                            kill(cmd);
+                            break;
+                        case HzCmdParser.RESTART:
+                            restart(cmd);
+                            break;
+                        case HzCmdParser.CAT:
+                            cat(cmd);
+                            break;
+                        case HzCmdParser.SLEEP:
+                            sleep(cmd);
+                            break;
+                        case HzCmdParser.SHOWSSH:
+                            showSSH(cmd);
+                            break;
+                        case HzCmdParser.EXIT:
+                            exit();
+                            break;
                     }
-                }else {
-                    sleepMilli(500);
+                }catch(Exception e){
+                    e.printStackTrace();
                 }
+            }else {
+                sleepMilli(500);
             }
+        }
     }
 
     public void exit(){
@@ -196,6 +198,30 @@ public class HzCmd {
 
     }
 
+    private void info(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
+
+        Collection<ClusterManager> c = getClusterManagers(cmd);
+
+        if( cmd.ALL(1) != null) {
+            for (ClusterManager jvmManager : c) {
+                System.out.println(c);
+                return;
+            }
+        }
+
+        String id = "";
+        if( cmd.MEMBER_VAR() != null) {
+            id = cmd.MEMBER_VAR().getText();
+        }
+        if( cmd.CLIENT_VAR() != null) {
+            id = cmd.CLIENT_VAR().getText();
+        }
+
+        for (ClusterManager jvmManager : c) {
+            System.out.println( jvmManager.get(id + jvmManager.getClusterId()) );
+            return;
+        }
+    }
 
     private void kill(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
 

@@ -32,6 +32,10 @@ public class ClusterManager {
         membersOnlyCount=boxes.size();
     }
 
+    public RemoteJvm get(String id){
+        return jvms.get(id);
+    }
+
     private void sendAll(String cmd) throws IOException, InterruptedException {
         for(RemoteJvm jvm : jvms.values()){
             jvm.send(cmd);

@@ -1,5 +1,6 @@
 package antlr4;
 
+import global.Bash;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
@@ -13,6 +14,16 @@ public class Test {
 
     public static void main(String[] args) throws InterruptedException, IOException {
 
+
+
+
+
+        System.out.println(Bash.ANSI_PURPLE+"blueeeee");
+        System.out.println(Bash.li_magenta+"blueeeee");
+        System.out.println(Bash.ANSI_CYAN+"blueeeee");
+        System.out.println(Bash.ANSI_BLUE+"blueeeee");
+        System.out.println(Bash.ANSI_RED+"blueeeee");
+        System.out.println(Bash.li_blue+"blueeeee");
         //Style
 
         //TODO what state should be preserved so we can stop and start hzCmd and still inter act with the cluster
