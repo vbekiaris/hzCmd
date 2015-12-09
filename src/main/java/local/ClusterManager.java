@@ -185,7 +185,8 @@ public class ClusterManager {
     public void catMembers() throws IOException, InterruptedException {
         for(RemoteJvm jvm : jvms.values()){
             if(jvm.isMember()){
-                System.out.println( jvm.cat() );
+                System.out.println(jvm);
+                System.out.println(jvm.cat());
             }
         }
     }

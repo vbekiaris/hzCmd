@@ -341,13 +341,10 @@ public class HzCmd {
 
         Collection<ClusterManager> clusters = getClusterManagers(cmd);
 
-        if( cmd.ALL(1) != null) {
-            for (ClusterManager c : clusters) {
-                c.catMembers();
-                c.catClients();
-            }
+        for (ClusterManager c : clusters) {
+            c.catMembers();
+            c.catClients();
         }
-
     }
 
 
