@@ -131,7 +131,7 @@ public class HzCmd {
     private void boxesCmd(HzCmdParser.StatementContext cmd) throws IOException {
 
         String user = cmd.STRING(0).getText().replace("\"","");
-        String file = cmd.STRING(0).getText().replace("\"","");
+        String file = cmd.STRING(1).getText().replace("\"","");
 
         boxes.addBoxes(user, file);
     }
