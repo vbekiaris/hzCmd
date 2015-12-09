@@ -86,7 +86,7 @@ public class ClusterManager {
 
     public void addClient(String hzVersion, String options) throws IOException, InterruptedException {
         int clientIdx = rangeMap(clientCount++, membersOnlyCount, boxes.size());
-        String id = HzType.Client.name() + memberCount + clusterId;
+        String id = HzType.Client.name() + clientCount + clusterId;
         RemoteJvm jvm = new RemoteJvm(user, boxes.get(clientIdx), HzType.Client, id);
         jvms.put(jvm.getId(), jvm);
         jvm.initilize(hzVersion, options);
