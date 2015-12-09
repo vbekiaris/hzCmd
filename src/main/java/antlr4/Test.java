@@ -46,8 +46,8 @@ public class Test {
         cmd("user \"danny\"");
 
         //adds ips to box manager from file or one by one
-        cmd("add file \"agent.txt\"");
-        cmd("add ip 52.91.246.155,10.0.0.101");
+
+        cmd("add boxes \"ec2-user\" \"box.txt\" ");
 
         //define cluster name and which boxes it runs on
         //(makes copy of hazelCast xml for this cluster,  e.g. puts these ip in members list)

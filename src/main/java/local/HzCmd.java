@@ -49,6 +49,9 @@ public class HzCmd {
                     System.out.println("=>"+line);
 
                     switch (cmd.start.getType()) {
+                        case HzCmdParser.BOXES:
+                            boxesCmd(cmd);
+                            break;
                         case HzCmdParser.VAR:
                             assignment(cmd);
                             break;
@@ -122,6 +125,17 @@ public class HzCmd {
     private void setHomeIp(HzCmdParser.StatementContext cmd){
         homeIp = cmd.STRING(0).getText().replace("\"", "");
     }
+
+
+
+    private void boxesCmd(HzCmdParser.StatementContext cmd) throws IOException {
+
+        String user = cmd.STRING(0).getText();
+        String file = cmd.STRING(0).getText();
+
+        boxes.addBoxes(user, file);
+    }
+
 
 
     private void cluster(HzCmdParser.StatementContext cmd){

@@ -11,8 +11,7 @@ statement
     : VAR ASSIGN STRING
     | USER STRING
     | VERSION STRING
-    | ADD (IP IP_PAIR)
-    | ADD (FILE STRING)
+    | BOXES ADD STRING STRING
     | CLUSTER VAR NUMBER NUMBER
     | REPLICATE VAR VAR (VAR | STRING) (VAR | STRING)
     | INSTALL (ALL | VAR)  (OS | EE) VAR+
@@ -44,7 +43,7 @@ USER : 'user' ;
 VERSION : 'version';
 ADD : 'add';
 
-FILE : 'file';
+BOXES : 'boxes';
 IP : 'ip';
 CLUSTER : 'cluster' ;
 REPLICATE : 'replicate' ;
