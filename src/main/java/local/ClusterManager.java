@@ -197,6 +197,25 @@ public class ClusterManager {
         return clusterId;
     }
 
+    public String memberJvms(){
+        String jvms = new String();
+        for(RemoteJvm jvm : this.jvms.values()){
+            if(jvm.isMember()){
+                jvms+=jvm+"\n";
+            }
+        }
+        return jvms.substring(0, jvms.length()-1);
+    }
+
+    public String clientJvms(){
+        String jvms = new String();
+        for(RemoteJvm jvm : this.jvms.values()){
+            if(jvm.isClient()){
+                jvms+=jvm+"\n";
+            }
+        }
+        return jvms.substring(0, jvms.length()-1);
+    }
 
     @Override
     public String toString() {
@@ -206,10 +225,8 @@ public class ClusterManager {
             ips+=ipPair+"\n";
         }
 
-        String jvms = new String();
-        for(RemoteJvm jvm : this.jvms.values()){
-            jvms+=jvm+"\n";
-        }
+        String jvms = memberJvms();
+        jvms += clientJvms();
 
         return Bash.ANSI_YELLOW+"ClusterManager{" +
                 " clusterId=" + clusterId +
