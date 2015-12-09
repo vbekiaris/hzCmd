@@ -31,7 +31,7 @@ public class Controler{
     public static final String jvmPidId = ManagementFactory.getRuntimeMXBean().getName();
 
     //TODO why arnt theses errors sent bck to the home, user box
-    public Controler(HzType type){
+    public Controler(HzType type) throws Throwable {
         try {
             if (type == HzType.Member) {
                 XmlConfigBuilder configBuilder = new XmlConfigBuilder("hazelcast.xml");
@@ -43,8 +43,8 @@ public class Controler{
                 hazelcastInstance = HazelcastClient.newHazelcastClient(config);
             }
         }catch (Throwable e){
-            sendBackError("starting "+idString()+" "+exceptionStacktraceToString(e));
-            throw new RuntimeException( e );
+            //sendBackError("starting "+idString()+" "+exceptionStacktraceToString(e));
+            throw e;
         }
         tasks = new TaskManager(hazelcastInstance);
     }

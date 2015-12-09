@@ -122,7 +122,7 @@ public class RemoteJvm {
         boolean running = running();
         String color = running ? Bash.ANSI_GREEN : Bash.ANSI_RED;
         return color + "RemoteJvm{" +
-                ", ID=" + id +
+                " ID=" + id +
                 ", running=" + running +
                 ", pid=" + pid +
                 ", type=" + type +
