@@ -219,7 +219,7 @@ public class ClusterManager {
                 ", clientCount=" + clientCount +
                 ", boxCount==" + boxes.size() +
                 ", \n" + ips +
-                ", " + jvms +
+                "" + jvms +
                 "}"+Bash.ANSI_RESET;
     }
 }
