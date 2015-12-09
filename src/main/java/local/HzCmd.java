@@ -218,7 +218,7 @@ public class HzCmd {
         }
 
         for (ClusterManager jvmManager : c) {
-            System.out.println( jvmManager.get(id + jvmManager.getClusterId()) );
+            System.out.println( c );
             return;
         }
     }
