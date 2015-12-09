@@ -91,7 +91,7 @@ public class ClusterManager {
     public void addClients(int qty, String hzVersion, String options) throws IOException, InterruptedException {
         List<RemoteJvm> check = new ArrayList();
         for(int i=0; i<qty; i++) {
-            check.add(addMember(hzVersion, options));
+            check.add(addClient(hzVersion, options));
         }
         sleepSeconds(2);
         for (RemoteJvm jvm : check) {
