@@ -228,7 +228,7 @@ public class ClusterManager {
         String jvms = memberJvms();
         jvms += clientJvms();
 
-        return Bash.ANSI_YELLOW+"ClusterManager{" +
+        return Bash.ANSI_YELLOW+"ClusterManager" +
                 " clusterId=" + clusterId +
                 ", membersOnlyCount=" + membersOnlyCount +
                 ", memberCount=" + memberCount +
@@ -236,6 +236,6 @@ public class ClusterManager {
                 ", boxCount==" + boxes.size() +
                 ", \n" + ips +
                 "" + jvms +
-                "}"+Bash.ANSI_RESET;
+                Bash.ANSI_RESET;
     }
 }
