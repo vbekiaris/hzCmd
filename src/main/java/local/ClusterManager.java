@@ -28,8 +28,10 @@ public class ClusterManager {
         this.boxes=boxes;
     }
 
-    public RemoteJvm get(String id){
-        return jvms.get(id);
+
+
+    public BoxManager getBoxManager( ){
+        return boxes;
     }
 
     private void sendAll(String cmd) throws IOException, InterruptedException {

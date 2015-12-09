@@ -136,10 +136,9 @@ public class HzCmd {
         System.out.println(jvmManager);
     }
 
-    //TODO really install into cluster
     private void install(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
 
-        Collection<ClusterManager> c = getClusterManagers(cmd);
+        Collection<ClusterManager> selected = getClusterManagers(cmd);
 
         boolean ee = false;
         if( cmd.EE() != null) {
@@ -154,14 +153,18 @@ public class HzCmd {
             versions[i-1]=(vars.get(key));
         }
 
-        Installer.install(boxes, ee, versions);
+        for (ClusterManager c : selected) {
+            Installer.install(c.getBoxManager(), ee, versions);
+        }
     }
 
     private void uninstall(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
 
-        Collection<ClusterManager> c = getClusterManagers(cmd);
+        Collection<ClusterManager> selected = getClusterManagers(cmd);
 
-        Installer.uninstall(boxes);
+        for (ClusterManager c : selected) {
+            Installer.uninstall(c.getBoxManager());
+        }
     }
 
 

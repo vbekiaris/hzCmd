@@ -23,7 +23,6 @@ public class Box {
         Bash.scpDown(user, pub, souce, dest);
     }
 
-
     public int sshWithExitCode(String cmd) throws IOException, InterruptedException {
         return Bash.sshWithExitCode(user, pub, cmd);
     }
