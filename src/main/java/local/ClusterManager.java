@@ -5,11 +5,13 @@ import global.Bash;
 import global.HzType;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static global.Utils.rangeMap;
+import static global.Utils.sleepSeconds;
 
 public class ClusterManager {
 
@@ -67,29 +69,43 @@ public class ClusterManager {
     }
 
     public void addMembers(int qty, String hzVersion, String options) throws IOException, InterruptedException {
-        for(int i=0; i<qty; i++)
-            addMember(hzVersion, options);
+        List<RemoteJvm> check = new ArrayList();
+        for(int i=0; i<qty; i++) {
+            check.add(addMember(hzVersion, options));
+        }
+        sleepSeconds(2);
+        for (RemoteJvm jvm : check) {
+            System.out.println(jvm);
+        }
     }
 
-    public void addMember(String hzVersion, String options) throws IOException, InterruptedException {
+    public RemoteJvm addMember(String hzVersion, String options) throws IOException, InterruptedException {
         int memberIdx = rangeMap(memberCount++, 0, boxes.size()-membersOnlyCount);
         String id = HzType.Member.name() + memberCount + clusterId;
         RemoteJvm jvm = new RemoteJvm(user, boxes.get(memberIdx), HzType.Member, id);
         jvms.put(jvm.getId(), jvm);
         jvm.initilize(hzVersion, options);
+        return jvm;
     }
 
     public void addClients(int qty, String hzVersion, String options) throws IOException, InterruptedException {
-        for(int i=0; i<qty; i++)
-            addClient(hzVersion, options);
+        List<RemoteJvm> check = new ArrayList();
+        for(int i=0; i<qty; i++) {
+            check.add(addMember(hzVersion, options));
+        }
+        sleepSeconds(2);
+        for (RemoteJvm jvm : check) {
+            System.out.println(jvm);
+        }
     }
 
-    public void addClient(String hzVersion, String options) throws IOException, InterruptedException {
+    public RemoteJvm addClient(String hzVersion, String options) throws IOException, InterruptedException {
         int clientIdx = rangeMap(clientCount++, membersOnlyCount, boxes.size());
         String id = HzType.Client.name() + clientCount + clusterId;
         RemoteJvm jvm = new RemoteJvm(user, boxes.get(clientIdx), HzType.Client, id);
         jvms.put(jvm.getId(), jvm);
         jvm.initilize(hzVersion, options);
+        return jvm;
     }
 
 
