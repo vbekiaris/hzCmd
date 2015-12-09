@@ -64,6 +64,10 @@ public class HzCmd {
                         case HzCmdParser.INSTALL:
                             install(cmd);
                             break;
+                        case HzCmdParser.UNINSTALL:
+                            uninstall(cmd);
+                            break;
+
                         case HzCmdParser.ADD:
                             add(cmd);
                             break;
@@ -158,6 +162,14 @@ public class HzCmd {
 
         Installer.install(boxes, ee, versions);
     }
+
+    private void uninstall(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
+
+        Collection<ClusterManager> c = getClusterManagers(cmd);
+
+        Installer.uninstall(boxes);
+    }
+
 
     private void add(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
 

@@ -11,7 +11,9 @@ import global.Args;
 import global.HzType;
 
 import java.io.BufferedReader;
+import java.io.FileWriter;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.lang.management.ManagementFactory;
 
 import static global.Utils.exceptionStacktraceToString;
@@ -30,6 +32,8 @@ public class Controler{
     public static final String ID = System.getProperty(Args.ID.name());
     public static final String jvmPidId = ManagementFactory.getRuntimeMXBean().getName();
 
+    public final PrintWriter exceptionWrite = new PrintWriter ( new FileWriter("exception.txt", true) );
+
     //TODO why arnt theses errors sent bck to the home, user box
     public Controler(HzType type) throws Throwable {
         try {
@@ -44,6 +48,7 @@ public class Controler{
             }
         }catch (Throwable e){
             //sendBackError("starting "+idString()+" "+exceptionStacktraceToString(e));
+            e.printStackTrace(exceptionWrite);
             throw e;
         }
         tasks = new TaskManager(hazelcastInstance);

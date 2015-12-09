@@ -16,6 +16,7 @@ statement
     | CLUSTER VAR NUMBER NUMBER
     | REPLICATE VAR VAR (VAR | STRING) (VAR | STRING)
     | INSTALL (ALL | VAR)  (OS | EE) VAR+
+    | UNINSTALL (ALL | VAR)
     | ADD (MEMBER | CLIENT) (ALL | VAR) NUMBER VAR VAR+
     | LOAD (ALL | VAR) VAR STRING
     | SET VAR.VAR ASSIGN STRING
@@ -48,6 +49,7 @@ IP : 'ip';
 CLUSTER : 'cluster' ;
 REPLICATE : 'replicate' ;
 INSTALL : 'install' ;
+UNINSTALL : 'uninstall' ;
 EE : 'EE';
 OS : 'OS';
 LOAD : 'load' ;
