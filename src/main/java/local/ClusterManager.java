@@ -29,7 +29,6 @@ public class ClusterManager {
         this.user=user;
         this.clusterId =clusterId;
         this.boxes=boxes;
-        membersOnlyCount=boxes.size();
     }
 
     public RemoteJvm get(String id){
@@ -73,7 +72,7 @@ public class ClusterManager {
     }
 
     public void addMember(String hzVersion, String options) throws IOException, InterruptedException {
-        int memberIdx = rangeMap(memberCount++, 0, membersOnlyCount);
+        int memberIdx = rangeMap(memberCount++, 0, boxes.size()-membersOnlyCount);
         String id = HzType.Member.name() + memberCount + clusterId;
         RemoteJvm jvm = new RemoteJvm(user, boxes.get(memberIdx), HzType.Member, id);
         jvms.put(jvm.getId(), jvm);
