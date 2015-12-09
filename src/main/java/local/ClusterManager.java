@@ -15,20 +15,15 @@ import static global.Utils.sleepSeconds;
 
 public class ClusterManager {
 
-    private final String user;
-
     private final String clusterId;
-
+    private BoxManager boxes;
     private Map<String, RemoteJvm> jvms = new HashMap();
-    private List<IpPair> boxes;
 
     private int membersOnlyCount;
     private int memberCount=0;
     private int clientCount=0;
 
-
-    public ClusterManager(String user, String clusterId, List<IpPair> boxes){
-        this.user=user;
+    public ClusterManager(String clusterId, BoxManager boxes){
         this.clusterId =clusterId;
         this.boxes=boxes;
     }
@@ -81,8 +76,10 @@ public class ClusterManager {
 
     public RemoteJvm addMember(String hzVersion, String options) throws IOException, InterruptedException {
         int memberIdx = rangeMap(memberCount++, 0, boxes.size()-membersOnlyCount);
+
         String id = HzType.Member.name() + memberCount + clusterId;
-        RemoteJvm jvm = new RemoteJvm(user, boxes.get(memberIdx), HzType.Member, id);
+
+        RemoteJvm jvm = new RemoteJvm(boxes.get(memberIdx), HzType.Member, id);
         jvms.put(jvm.getId(), jvm);
         jvm.initilize(hzVersion, options);
         return jvm;
@@ -102,7 +99,7 @@ public class ClusterManager {
     public RemoteJvm addClient(String hzVersion, String options) throws IOException, InterruptedException {
         int clientIdx = rangeMap(clientCount++, membersOnlyCount, boxes.size());
         String id = HzType.Client.name() + clientCount + clusterId;
-        RemoteJvm jvm = new RemoteJvm(user, boxes.get(clientIdx), HzType.Client, id);
+        RemoteJvm jvm = new RemoteJvm(boxes.get(clientIdx), HzType.Client, id);
         jvms.put(jvm.getId(), jvm);
         jvm.initilize(hzVersion, options);
         return jvm;
@@ -236,11 +233,6 @@ public class ClusterManager {
     @Override
     public String toString() {
 
-        String ips="";
-        for(IpPair ipPair : boxes){
-            ips+=ipPair+"\n";
-        }
-
         String jvms = memberJvms();
         jvms += clientJvms();
 
@@ -250,7 +242,7 @@ public class ClusterManager {
                 ", memberCount=" + memberCount +
                 ", clientCount=" + clientCount +
                 ", boxCount==" + boxes.size() +
-                ", \n" + ips +
+                ", \n" + boxes +
                 "" + jvms +
                 Bash.ANSI_RESET;
     }

@@ -50,7 +50,7 @@ public abstract class Bash {
     }
 
     public static void scpDown(String user, String ip, String from, String to) throws IOException, InterruptedException {
-        mkdir(to+"/"+ip+"/");
+        mkdir(to);
         executeCommand("scp -r +" + user + "@" + ip + ":" + from + " " + to + "/" + ip + "/");
     }
 

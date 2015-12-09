@@ -27,7 +27,7 @@ public class HzCmd {
     private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
     private List<String> history = new ArrayList();
 
-    private RemoteBoxManager boxes = new RemoteBoxManager("agents.txt");
+    private BoxManager boxes = new BoxManager();
     private Map<String, ClusterManager> clusters = new HashMap();
     private Map<String, String> vars = new HashMap();
 
@@ -52,10 +52,7 @@ public class HzCmd {
                         case HzCmdParser.VAR:
                             assignment(cmd);
                             break;
-                        case HzCmdParser.USER:
-                            user(cmd);
-                            break;
-                        case HzCmdParser.HOMEIP:
+                         case HzCmdParser.HOMEIP:
                             setHomeIp(cmd);
                             break;
                         case HzCmdParser.CLUSTER:
@@ -121,9 +118,6 @@ public class HzCmd {
         }
     }
 
-    private void user(HzCmdParser.StatementContext cmd){
-        boxes.setUser( cmd.STRING(0).getText().replace("\"", "") );
-    }
 
     private void setHomeIp(HzCmdParser.StatementContext cmd){
         homeIp = cmd.STRING(0).getText().replace("\"", "");
@@ -135,8 +129,8 @@ public class HzCmd {
         int start = Integer.parseInt( cmd.NUMBER(0).getText() );
         int end = Integer.parseInt( cmd.NUMBER(1).getText() );
 
-        List<IpPair> ips = boxes.getBoxes(start, end);
-        ClusterManager jvmManager = new ClusterManager(boxes.getUser(), clusterID, ips);
+        BoxManager clusterBoxes = boxes.getBoxes(start, end);
+        ClusterManager jvmManager = new ClusterManager(clusterID, clusterBoxes);
         clusters.put(jvmManager.getClusterId(), jvmManager);
 
         System.out.println(jvmManager);

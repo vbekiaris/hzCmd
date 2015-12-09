@@ -23,9 +23,7 @@ public abstract class Installer {
     public static String jar = ".jar";
 
 
-    public static void install(RemoteBoxManager boxes, boolean ee,  String... versions) throws IOException, InterruptedException {
-
-        System.out.println("install on "+boxes.count()+" boxes");
+    public static void install(BoxManager boxes, boolean ee,  String... versions) throws IOException, InterruptedException {
         String memberJar;
         String clientJar;
 
@@ -33,7 +31,7 @@ public abstract class Installer {
         String cacheJars = Bash.find(M2_Repo, "cache-api-1.0.0.jar");
         String guavaars = Bash.find(M2_Repo, "guava-15.0-rc1.jar");
 
-        boxes.sshCmd("mkdir -p "+REMOTE_LIB);
+        boxes.mkdir(REMOTE_LIB);
         boxes.upload(mainJars, REMOTE_LIB);
         boxes.upload(cacheJars, REMOTE_LIB);
         boxes.upload(guavaars, REMOTE_LIB);
@@ -46,13 +44,13 @@ public abstract class Installer {
                 memberJar = Bash.find(M2_Repo, hazelcast + version + jar);
                 clientJar = Bash.find(M2_Repo, hazelcastClient + version + jar);
             }
-            boxes.sshCmd("mkdir -p " + REMOTE_HZ_LIB+"/"+version);
+            boxes.mkdir(REMOTE_HZ_LIB+"/"+version);
             boxes.upload(memberJar,  REMOTE_HZ_LIB+"/"+version);
             boxes.upload(clientJar,  REMOTE_HZ_LIB+"/"+version);
         }
     }
 
-    public static void uninstall(RemoteBoxManager boxes) throws IOException, InterruptedException {
-        boxes.sshCmd("rm -fr "+REMOTE_ROOT);
+    public static void uninstall(BoxManager boxes) throws IOException, InterruptedException {
+        boxes.rm(REMOTE_ROOT);
     }
 }

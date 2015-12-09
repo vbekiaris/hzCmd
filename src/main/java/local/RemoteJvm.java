@@ -14,21 +14,18 @@ public class RemoteJvm {
     public static final String libPath ="$HOME/"+Installer.REMOTE_LIB+"/*";
     public static final String hzPath ="$HOME/"+Installer.REMOTE_HZ_LIB+"/";
 
-
     public static final String inFile  =  "in.txt";
     public static final String outFile =  "out.txt";
 
-    private final String user;
-    private final IpPair ips;
+    private final Box box;
     private final HzType type;
     private final String id;
     private final String dir;
     private int pid = 0;
     private String version;
 
-    public RemoteJvm(String user, IpPair ips, HzType type, String id) {
-        this.user = user;
-        this.ips = ips;
+    public RemoteJvm(Box box, HzType type, String id) {
+        this.box = box;
         this.type = type;
         this.id = id;
         this.dir = Installer.REMOTE_ROOT+"/"+id;
@@ -41,15 +38,15 @@ public class RemoteJvm {
             return;
         }
 
-        Bash.ssh(user, ips.pub, "mkdir -p " + dir + ";  cd " + dir + ";  touch in.txt; > in.txt");
+        box.ssh("mkdir -p " + dir + ";  cd " + dir + ";  touch in.txt; > in.txt");
 
         String classToRun;
         if (isMember()){
             classToRun = Member.class.getName();
-            Bash.scpUp(user, ips.pub, "hazelcast.xml", dir+"/");
+            box.upload("hazelcast.xml", dir+"/");
         }else{
             classToRun = Client.class.getName();
-            Bash.scpUp(user, ips.pub, "client-hazelcast.xml", dir+"/");
+            box.upload("client-hazelcast.xml", dir+"/");
         }
 
         String ip = InetAddress.getLocalHost().getHostAddress();
@@ -67,17 +64,17 @@ public class RemoteJvm {
 
 
         String hzLib = hzPath+hzVersion+"/*";
-        String pidStr = Bash.ssh(user, ips.pub, "cd " + dir + "; nohup java -cp \"" + libPath +":"+ hzLib + "\" " + jvmArgs +" "+ options +" "+ classToRun + " < " + inFile + " &>> " + outFile + " & echo $!");
+        String pidStr = box.ssh("cd " + dir + "; nohup java -cp \"" + libPath +":"+ hzLib + "\" " + jvmArgs +" "+ options +" "+ classToRun + " < " + inFile + " &>> " + outFile + " & echo $!");
         pid = Integer.parseInt(pidStr.trim());
     }
 
     public void clean() throws IOException, InterruptedException {
-        Bash.ssh(user, ips.pub, "rm -f " + dir+"/*");
+        box.rm(dir+"/*");
     }
 
     public void kill() throws IOException, InterruptedException {
         if(pid!=0){
-            Bash.ssh(user, ips.pub, "kill -9 "+pid);
+            box.killHard(pid);
             pid=0;
         }
     }
@@ -88,7 +85,7 @@ public class RemoteJvm {
                return false;
             }
 
-            boolean running =  Bash.sshWithExitCode(user, ips.pub, "ps -p "+pid) == 0;
+            boolean running =  box.sshWithExitCode("ps -p "+pid) == 0;
 
             if(!running){
                 pid=0;
@@ -101,21 +98,20 @@ public class RemoteJvm {
     }
 
     public void send(String cmd) throws IOException, InterruptedException {
-        Bash.ssh(user, ips.pub, "echo "+cmd+" >> "+dir+"/"+inFile);
+        box.ssh("echo " + cmd + " >> " + dir + "/" + inFile);
     }
 
     public String cat() throws IOException, InterruptedException {
-        return Bash.ssh(user, ips.pub, "cat "+dir+"/"+outFile);
+        return box.cat(dir+"/"+outFile);
     }
 
-    public void tail() throws IOException, InterruptedException {
-        Bash.ssh(user, ips.pub, "tail "+dir+"/"+outFile);
+    public String tail() throws IOException, InterruptedException {
+        return box.tail(dir+"/"+outFile);
     }
 
-    public void grep(String args) throws IOException, InterruptedException {
-        Bash.ssh(user, ips.pub, "grep "+args+" "+dir+"/"+outFile);
+    public String grep(String args) throws IOException, InterruptedException {
+        return box.grep(args+" "+dir+"/"+outFile);
     }
-
 
     public String getId(){ return id; }
 
@@ -129,7 +125,7 @@ public class RemoteJvm {
                 ", type=" + type +
                 ", dir=" + dir +
                 ", version=" + version +
-                " ip=" + ips +
+                " ip=" + box +
                 '}' + Bash.ANSI_RESET;
     }
 

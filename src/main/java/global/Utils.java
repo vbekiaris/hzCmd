@@ -2,12 +2,7 @@ package global;
 
 import com.google.common.escape.Escaper;
 import com.google.common.escape.Escapers;
-import local.IpPair;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.*;
 
 public abstract class Utils {
