@@ -316,11 +316,12 @@ public class HzCmd {
 
     private void cat(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
 
-        Collection<ClusterManager> c = getClusterManagers(cmd);
+        Collection<ClusterManager> clusters = getClusterManagers(cmd);
 
         if( cmd.ALL(1) != null) {
-            for (ClusterManager jvmManager : c) {
-                jvmManager.catMembers();
+            for (ClusterManager c : clusters) {
+                c.catMembers();
+                c.catClients();
             }
         }
 
