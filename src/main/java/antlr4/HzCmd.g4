@@ -24,6 +24,7 @@ statement
     | KILL (ALL | VAR) (ALL | MEMBER_ALL | MEMBER_VAR | CLIENT_ALL | CLIENT_VAR)
     | CAT (ALL | VAR) (ALL | MEMBER_ALL | MEMBER_VAR | CLIENT_ALL | CLIENT_VAR)
     | RESTART (ALL | VAR) (ALL | MEMBER_ALL | MEMBER_VAR | CLIENT_ALL | CLIENT_VAR) VAR VAR+
+    | CLEAN (ALL | VAR | MEMBER_VAR | CLIENT_VAR)
 
     | SLEEP NUMBER
     | MEMBERS_ONLY NUMBER
@@ -57,6 +58,7 @@ INFO : 'info';
 KILL : 'kill';
 CAT : 'cat';
 RESTART : 'restart';
+CLEAN : 'clean';
 SLEEP : 'sleep';
 SAVE : 'save';
 EXIT : 'exit';

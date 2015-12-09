@@ -140,12 +140,8 @@ public class HzCmd {
 
     //TODO really install into cluster
     private void install(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
-        String clusterID;
-        if( cmd.ALL(0) != null) {
-            clusterID = cmd.ALL(0).getText();
-        }else{
-            clusterID = cmd.VAR(0).getText();
-        }
+
+        Collection<ClusterManager> c = getClusterManagers(cmd);
 
         boolean ee = false;
         if( cmd.EE() != null) {
@@ -221,6 +217,17 @@ public class HzCmd {
             System.out.println( c );
             return;
         }
+    }
+
+    private void clean(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
+
+        Collection<ClusterManager> c = getClusterManagers(cmd);
+
+        for (ClusterManager jvmManager : c) {
+            jvmManager.clean();
+            return;
+        }
+
     }
 
     private void kill(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
