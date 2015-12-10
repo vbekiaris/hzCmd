@@ -247,7 +247,7 @@ public class HzCmd {
         Collection<ClusterManager> clusterSet = selectClusterSet(tokens.get(1));
 
         for (ClusterManager c : clusterSet) {
-            c = selectSubCluster(c, tokens.get(5));
+            c = selectSubCluster(c, tokens.get(2));
             c.info();
         }
     }
