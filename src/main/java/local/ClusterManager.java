@@ -33,8 +33,11 @@ public class ClusterManager {
         HzXml.makeClientXml(this);
     }
 
-    private ClusterManager(String clusterId) throws Exception {
+    private ClusterManager(String clusterId, BoxManager boxes, int memberCount, int clientCount) throws Exception {
         this.clusterId =clusterId;
+        this.boxes=boxes;
+        this.memberCount=memberCount;
+        this.clientCount=clientCount;
     }
 
     public String getClusterId() {
@@ -46,7 +49,7 @@ public class ClusterManager {
     }
 
     public ClusterManager getMemberManager() throws Exception {
-        ClusterManager selected = new ClusterManager(clusterId);
+        ClusterManager selected = new ClusterManager(clusterId, boxes, memberCount, clientCount);
         for(RemoteJvm jvm : this.jvms.values()){
             if(jvm.isMember()){
                 selected.jvms.put(jvm.getId(), jvm);
@@ -56,7 +59,7 @@ public class ClusterManager {
     }
 
     public ClusterManager getClientManager() throws Exception {
-        ClusterManager selected = new ClusterManager(clusterId);
+        ClusterManager selected = new ClusterManager(clusterId, boxes, memberCount, clientCount);
         for(RemoteJvm jvm : this.jvms.values()){
             if(jvm.isClient()){
                 selected.jvms.put(jvm.getId(), jvm);
@@ -66,7 +69,7 @@ public class ClusterManager {
     }
 
     public ClusterManager getIDManager(String id) throws Exception {
-        ClusterManager selected = new ClusterManager(clusterId);
+        ClusterManager selected = new ClusterManager(clusterId, boxes, memberCount, clientCount);
         selected.jvms.put(id, this.jvms.get(id));
         return selected;
     }
@@ -155,9 +158,7 @@ public class ClusterManager {
     }
 
     public void info() throws IOException, InterruptedException {
-        for(RemoteJvm jvm : jvms.values()){
-            System.out.println(jvm);
-        }
+        System.out.println(this);
     }
 
     public void cat() throws IOException, InterruptedException {
