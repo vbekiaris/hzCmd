@@ -94,7 +94,7 @@ NUMBER : [0-9]+ ;
 
 WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+ -> skip ;
 
-fragment CHAR   :( [a-z]|[A-Z]|[0-9]|'/'|'_'|'.'|'-'|' '|'=' );
+fragment CHAR   :( [a-z]|[A-Z]|[0-9]|'/'|'_'|'.'|'-'|' '|'='|'#'|':' );
 STRING : '"'CHAR+'"';
 
 
