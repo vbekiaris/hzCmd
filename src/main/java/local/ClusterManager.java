@@ -3,7 +3,7 @@ package local;
 import global.Args;
 import global.Bash;
 import global.HzType;
-import xml.HzMemberXmlHelper;
+import xml.HzXml;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -13,6 +13,8 @@ import java.util.Map;
 
 import static global.Utils.rangeMap;
 import static global.Utils.sleepSeconds;
+import static xml.HzXml.clientXml;
+import static xml.HzXml.memberXml;
 
 public class ClusterManager {
 
@@ -27,7 +29,7 @@ public class ClusterManager {
     public ClusterManager(String clusterId, BoxManager boxes) throws Exception {
         this.clusterId =clusterId;
         this.boxes=boxes;
-        HzMemberXmlHelper.makeXml(this);
+        HzXml.makeXml(this);
     }
 
 
@@ -83,7 +85,7 @@ public class ClusterManager {
 
         String id = HzType.Member.name() + memberCount + clusterId;
 
-        RemoteJvm jvm = new RemoteJvm(boxes.get(memberIdx), HzType.Member, id);
+        RemoteJvm jvm = new RemoteJvm(boxes.get(memberIdx), HzType.Member, id, memberXml(this));
         jvms.put(jvm.getId(), jvm);
         jvm.initilize(hzVersion, options);
         return jvm;
@@ -103,7 +105,7 @@ public class ClusterManager {
     public RemoteJvm addClient(String hzVersion, String options) throws IOException, InterruptedException {
         int clientIdx = rangeMap(clientCount++, membersOnlyCount, boxes.size());
         String id = HzType.Client.name() + clientCount + clusterId;
-        RemoteJvm jvm = new RemoteJvm(boxes.get(clientIdx), HzType.Client, id);
+        RemoteJvm jvm = new RemoteJvm(boxes.get(clientIdx), HzType.Client, id, clientXml(this));
         jvms.put(jvm.getId(), jvm);
         jvm.initilize(hzVersion, options);
         return jvm;

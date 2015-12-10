@@ -13,7 +13,7 @@ import java.util.*;
 import static global.Utils.*;
 
 
-//TODO hzXml generation add members from cluster ips
+//TODO memberXml generation add members from cluster ips
 //TODO WAN REP xml SETUP
 //TODO man center integ
 //TODO tail -f grepping logs and pop up display

@@ -1,34 +1,38 @@
 package xml;
 
         import java.io.File;
-        import java.io.IOException;
         import javax.xml.parsers.DocumentBuilder;
         import javax.xml.parsers.DocumentBuilderFactory;
-        import javax.xml.parsers.ParserConfigurationException;
         import javax.xml.transform.Transformer;
-        import javax.xml.transform.TransformerException;
         import javax.xml.transform.TransformerFactory;
         import javax.xml.transform.dom.DOMSource;
         import javax.xml.transform.stream.StreamResult;
 
+        import global.Bash;
         import local.Box;
         import local.ClusterManager;
         import org.w3c.dom.Document;
         import org.w3c.dom.Element;
-        import org.w3c.dom.NamedNodeMap;
-        import org.w3c.dom.Node;
-        import org.w3c.dom.NodeList;
-        import org.xml.sax.SAXException;
 
-public class HzMemberXmlHelper {
+public class HzXml {
 
-    public static final String hzXml = "hazelcast.xml";
+    public static final String xmlDir="xml";
+    static {
+        try {
+            Bash.mkdir(xmlDir);
+        } catch (Exception e) {
+           throw new RuntimeException(e);
+        }
+    }
+
+    public static final String memberXml = "hazelcast.xml";
+    public static final String clientXml = "client-hazelcast.xml";
 
     public static void makeXml(ClusterManager m) throws Exception{
 
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        Document document = documentBuilder.parse(hzXml);
+        Document document = documentBuilder.parse(memberXml);
 
 
         document.getElementsByTagName("name").item(0).setTextContent(m.getClusterId());
@@ -58,7 +62,15 @@ public class HzMemberXmlHelper {
         Transformer transformer = transformerFactory.newTransformer();
         DOMSource domSource = new DOMSource(document);
 
-        StreamResult streamResult = new StreamResult(new File(m.getClusterId()+"-"+hzXml));
+        StreamResult streamResult = new StreamResult(new File(memberXml(m)));
         transformer.transform(domSource, streamResult);
+    }
+
+    public static String memberXml(ClusterManager m ){
+        return xmlDir+"/"+m.getClusterId()+"-"+ memberXml;
+    }
+
+    public static String clientXml(ClusterManager m ){
+        return xmlDir+"/"+m.getClusterId()+"-"+ clientXml;
     }
 }

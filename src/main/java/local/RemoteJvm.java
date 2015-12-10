@@ -9,6 +9,8 @@ import remote.Member;
 import java.io.IOException;
 import java.net.InetAddress;
 
+import static xml.HzXml.memberXml;
+
 public class RemoteJvm {
 
     public static final String libPath ="$HOME/"+Installer.REMOTE_LIB+"/*";
@@ -21,14 +23,16 @@ public class RemoteJvm {
     private final HzType type;
     private final String id;
     private final String dir;
+    private final String xmlConfig;
     private int pid = 0;
     private String version;
 
-    public RemoteJvm(Box box, HzType type, String id) {
+    public RemoteJvm(Box box, HzType type, String id, String xmlConfig) {
         this.box = box;
         this.type = type;
         this.id = id;
         this.dir = Installer.REMOTE_ROOT+"/"+id;
+        this.xmlConfig = xmlConfig;
     }
 
     public void initilize(String hzVersion, String options) throws IOException, InterruptedException {
@@ -43,11 +47,11 @@ public class RemoteJvm {
         String classToRun;
         if (isMember()){
             classToRun = Member.class.getName();
-            box.upload("hazelcast.xml", dir+"/");
         }else{
             classToRun = Client.class.getName();
-            box.upload("client-hazelcast.xml", dir+"/");
         }
+
+        box.upload(xmlConfig, dir+"/");
 
         String ip = InetAddress.getLocalHost().getHostAddress();
         if(HzCmd.homeIp!=null){
