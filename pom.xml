@@ -59,7 +59,7 @@
 
     <profiles>
         <profile>
-            <id>qa</id>
+            <taskID>qa</taskID>
             <build>
                 <plugins>
                     <plugin>

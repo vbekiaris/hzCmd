@@ -22,7 +22,8 @@ public class TaskClazz implements Callable<Object> {
     public TaskClazz(String id, String clasz, HazelcastInstance hazelcastInstance){
         this.id=id;
         task = instantiate(clasz, Task.class);
-        task.setId(id);
+        task.setJvmID(Controler.ID);
+        task.setTaskID(id);
         task.setHazelcastInstance(hazelcastInstance);
     }
 
@@ -55,6 +56,7 @@ public class TaskClazz implements Callable<Object> {
             }
         }catch (Exception e){
             onException(e);
+            throw new RuntimeException(e);
         }
         return null;
     }
@@ -67,7 +69,7 @@ public class TaskClazz implements Callable<Object> {
 
 
     protected String getId(){
-        return task.getId();
+        return task.getTaskID();
     }
 
     protected String infoStart(){ return infoString() + " started"; }
@@ -75,7 +77,7 @@ public class TaskClazz implements Callable<Object> {
     protected String infoStop(){ return infoString() +  " stopped"; }
 
     protected String infoString(){
-        return Controler.ID+" "+ task.getId()+" "+ task.getClass().getSimpleName()+" "+targetFunction;
+        return Controler.ID+" "+ task.getTaskID()+" "+ task.getClass().getName()+" "+targetFunction;
     }
 
 

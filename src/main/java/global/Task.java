@@ -6,7 +6,8 @@ import java.util.Random;
 
 public class Task {
 
-    protected String id;
+    protected String jvmID;
+    protected String taskID;
     protected Random random = new Random();
     protected HazelcastInstance hazelcastInstance;
     protected volatile boolean running=false;
@@ -32,20 +33,25 @@ public class Task {
     }
 
 
-    public String getId() {
-        return id;
+    public String getTaskID() {
+        return taskID;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setTaskID(String taskID) {
+        this.taskID = taskID;
     }
+
+    public String getJvmID() {
+        return jvmID;
+    }
+
+    public void setJvmID(String jvmID) {
+        this.jvmID = jvmID;
+    }
+
 
     @Override
     public String toString() {
-        return "Task{" +
-                "ID=" + id +
-                ", class=" + this.getClass().getName() +
-                ", running=" + running +
-                '}';
+        return jvmID +" "+ taskID +" "+ this.getClass().getName()+" ";
     }
 }
