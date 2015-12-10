@@ -143,7 +143,7 @@ public class HzCmd {
 
 
 
-    private void cluster(HzCmdParser.StatementContext cmd){
+    private void cluster(HzCmdParser.StatementContext cmd) throws Exception{
         String clusterID = cmd.VAR(0).getText();
         int start = Integer.parseInt( cmd.NUMBER(0).getText() );
         int end = Integer.parseInt( cmd.NUMBER(1).getText() );

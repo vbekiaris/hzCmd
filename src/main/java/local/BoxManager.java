@@ -42,6 +42,8 @@ public class BoxManager {
         return boxes.get(i);
     }
 
+    public List<Box> getBoxList(){ return boxes; }
+
     public void upload(String souce, String dest) throws IOException, InterruptedException {
         for (Box box : boxes) {
             box.upload(souce, dest);

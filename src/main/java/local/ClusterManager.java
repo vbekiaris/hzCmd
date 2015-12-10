@@ -3,6 +3,7 @@ package local;
 import global.Args;
 import global.Bash;
 import global.HzType;
+import xml.HzMemberXmlHelper;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -23,9 +24,10 @@ public class ClusterManager {
     private int memberCount=0;
     private int clientCount=0;
 
-    public ClusterManager(String clusterId, BoxManager boxes){
+    public ClusterManager(String clusterId, BoxManager boxes) throws Exception {
         this.clusterId =clusterId;
         this.boxes=boxes;
+        HzMemberXmlHelper.makeXml(this);
     }
 
 
