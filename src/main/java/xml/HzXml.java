@@ -62,7 +62,7 @@ public class HzXml {
     }
 
 
-    public static void wanReplication(ClusterManager a,  ClusterManager b, String name) throws Exception{
+    public static void wanReplication(ClusterManager a,  ClusterManager b, String name, String repImpl) throws Exception{
 
         Document document = getDocument(memberXml(a));
 
@@ -74,7 +74,7 @@ public class HzXml {
         target.setAttribute("group-password", b.getClusterId());
 
         Element rep = document.createElement("replication-impl");
-        rep.setTextContent("com.hazelcast.enterprise.wan.replication.WanNoDelayReplication");
+        rep.setTextContent(repImpl);
 
         Element end = document.createElement("end-points");
         for (Box box : b.getBoxManager().getBoxList()) {

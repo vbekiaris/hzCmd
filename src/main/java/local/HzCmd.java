@@ -2,7 +2,9 @@ package local;
 
 import antlr4.HzCmdLexer;
 import antlr4.HzCmdParser;
+import com.sun.javafx.fxml.expression.Expression;
 import global.Bash;
+import org.antlr.runtime.Token;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -48,6 +50,11 @@ public class HzCmd {
                     HzCmdParser parser = new HzCmdParser(tokens);
                     HzCmdParser.StatementContext cmd = parser.statement();
 
+                    org.antlr.v4.runtime.Token token;
+                    for (token = lexer.nextToken(); token.getType() != Token.EOF;  token = lexer.nextToken() ) {
+                        System.out.println(token.getText());
+                    }
+
                     if(repeatProppt) { System.out.println("=>" + line); }
 
                     switch (cmd.start.getType()) {
@@ -75,6 +82,9 @@ public class HzCmd {
                             break;
                         case HzCmdParser.LOAD:
                             load(cmd);
+                            break;
+                        case HzCmdParser.INVOKE:
+                            invoke(cmd);
                             break;
                         case HzCmdParser.INFO:
                             info(cmd);
@@ -221,6 +231,27 @@ public class HzCmd {
         }
 
     }
+
+    private void invoke(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
+
+
+
+        int threadCount = Integer.parseInt(cmd.NUMBER(0).getText());
+        String method = cmd.VAR(0).getText();
+
+        String taskId = cmd.ALL(0).getText();
+
+
+        Collection<ClusterManager> clusterManagers = getClusterManagers(cmd);
+
+        String className = cmd.STRING(0).getText().replace("\"", "");
+
+        for (ClusterManager c : clusterManagers) {
+            c.loadAll(taskId, className);
+        }
+
+    }
+
 
     private void info(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
 
