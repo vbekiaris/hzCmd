@@ -2,7 +2,6 @@ package local;
 
 import antlr4.HzCmdLexer;
 import antlr4.HzCmdParser;
-import com.sun.javafx.fxml.expression.Expression;
 import global.Bash;
 import org.antlr.runtime.Token;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -84,19 +83,19 @@ public class HzCmd {
                             load(cmd);
                             break;
                         case HzCmdParser.INVOKE:
-                            invoke(cmd);
+                            invoke(tokens);
                             break;
                         case HzCmdParser.INFO:
-                            info(cmd);
+                            info(tokens);
                             break;
                         case HzCmdParser.KILL:
-                            kill(cmd);
+                            kill(tokens);
                             break;
                         case HzCmdParser.RESTART:
-                            restart(cmd);
+                            restart(tokens);
                             break;
                         case HzCmdParser.CAT:
-                            cat(cmd);
+                            cat(tokens);
                             break;
                         case HzCmdParser.SLEEP:
                             sleep(cmd);
@@ -142,15 +141,11 @@ public class HzCmd {
     }
 
 
-
     private void boxesCmd(HzCmdParser.StatementContext cmd) throws IOException {
-
         String user = cmd.STRING(0).getText().replace("\"","");
         String file = cmd.STRING(1).getText().replace("\"","");
-
         boxes.addBoxes(user, file);
     }
-
 
 
     private void cluster(HzCmdParser.StatementContext cmd) throws Exception{
@@ -166,6 +161,7 @@ public class HzCmd {
     }
 
     private void install(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
+
 
         Collection<ClusterManager> selected = getClusterManagers(cmd);
 
@@ -227,159 +223,68 @@ public class HzCmd {
         String className = cmd.STRING(0).getText().replace("\"", "");
 
         for (ClusterManager c : clusterManagers) {
-            c.loadAll(taskId, className);
+            c.load(taskId, className);
         }
 
     }
 
-    private void invoke(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
+    private void invoke(CommonTokenStream tokens ) throws Exception {
 
+        String threadCound = tokens.get(1).getText();
+        String method = tokens.get(2).getText();
+        String taksId = tokens.get(3).getText();
 
+        Collection<ClusterManager> clusterSet = selectClusterSet(tokens.get(4));
 
-        int threadCount = Integer.parseInt(cmd.NUMBER(0).getText());
-        String method = cmd.VAR(0).getText();
-
-        String taskId = cmd.ALL(0).getText();
-
-
-        Collection<ClusterManager> clusterManagers = getClusterManagers(cmd);
-
-        String className = cmd.STRING(0).getText().replace("\"", "");
-
-        for (ClusterManager c : clusterManagers) {
-            c.loadAll(taskId, className);
-        }
-
-    }
-
-
-    private void info(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
-
-        Collection<ClusterManager> c = getClusterManagers(cmd);
-
-        if( cmd.ALL(1) != null) {
-            for (ClusterManager jvmManager : c) {
-                System.out.println(c);
-                return;
-            }
-        }
-
-        String id = "";
-        if( cmd.MEMBER_VAR() != null) {
-            id = cmd.MEMBER_VAR().getText();
-        }
-        if( cmd.CLIENT_VAR() != null) {
-            id = cmd.CLIENT_VAR().getText();
-        }
-
-        for (ClusterManager jvmManager : c) {
-            System.out.println( c );
-            return;
+        for (ClusterManager c : clusterSet) {
+            c = selectSubCluster(c, tokens.get(5));
+            c.invoke(threadCound, method, taksId);
         }
     }
 
-    private void clean(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
+    private void info(CommonTokenStream tokens ) throws Exception {
 
-        Collection<ClusterManager> c = getClusterManagers(cmd);
+        Collection<ClusterManager> clusterSet = selectClusterSet(tokens.get(1));
 
-        for (ClusterManager jvmManager : c) {
-            jvmManager.clean();
-            return;
-        }
-
-    }
-
-    private void kill(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
-
-        Collection<ClusterManager> c = getClusterManagers(cmd);
-
-        if( cmd.ALL(1) != null) {
-            for (ClusterManager jvmManager : c) {
-                jvmManager.killAll();
-                return;
-            }
-        }
-
-        if( cmd.MEMBER_ALL() != null) {
-            for (ClusterManager jvmManager : c) {
-                jvmManager.killMembers();
-                return;
-            }
-        }
-
-        if( cmd.CLIENT_ALL() != null) {
-            for (ClusterManager jvmManager : c) {
-                jvmManager.killClients();
-                return;
-            }
-        }
-
-        String id = "";
-        if( cmd.MEMBER_VAR() != null) {
-            id = cmd.MEMBER_VAR().getText();
-        }
-        if( cmd.CLIENT_VAR() != null) {
-            id = cmd.CLIENT_VAR().getText();
-        }
-
-        for (ClusterManager jvmManager : c) {
-            jvmManager.kill(id + jvmManager.getClusterId());
-            return;
+        for (ClusterManager c : clusterSet) {
+            c = selectSubCluster(c, tokens.get(5));
+            c.info();
         }
     }
 
-    private void restart(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
+    private void clean(CommonTokenStream tokens) throws Exception {
+        Collection<ClusterManager> clusterSet = selectClusterSet(tokens.get(1));
 
-        Collection<ClusterManager> c = getClusterManagers(cmd);
-
-        String version = cmd.VAR(1).getText();
-        version = vars.get(version);
-
-        String options = cmd.VAR(2).getText();
-        options = vars.get(options);
-
-        if( cmd.ALL(1) != null) {
-            for (ClusterManager jvmManager : c) {
-                jvmManager.reStartAll(version, options);
-                return;
-            }
-        }
-
-        if( cmd.MEMBER_ALL() != null) {
-            for (ClusterManager jvmManager : c) {
-                jvmManager.reStartMembers(version, options);
-                return;
-            }
-        }
-
-        if( cmd.CLIENT_ALL() != null) {
-            for (ClusterManager jvmManager : c) {
-                jvmManager.reStartClients(version, options);
-                return;
-            }
-        }
-
-        String id = "";
-        if( cmd.MEMBER_VAR() != null) {
-            id = cmd.MEMBER_VAR().getText();
-        }
-        if( cmd.CLIENT_VAR() != null) {
-            id = cmd.CLIENT_VAR().getText();
-        }
-
-        for (ClusterManager jvmManager : c) {
-            jvmManager.reStart(id + jvmManager.getClusterId(), version, options);
-            return;
+        for (ClusterManager c : clusterSet) {
+            c = selectSubCluster(c, tokens.get(2));
+            c.clean();
         }
     }
 
-    private void cat(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
+    private void kill(CommonTokenStream tokens) throws Exception {
+        Collection<ClusterManager> clusterSet = selectClusterSet(tokens.get(1));
 
-        Collection<ClusterManager> clusters = getClusterManagers(cmd);
+        for (ClusterManager c : clusterSet) {
+            c = selectSubCluster(c, tokens.get(2));
+            c.kill();
+        }
+    }
 
-        for (ClusterManager c : clusters) {
-            c.catMembers();
-            c.catClients();
+    private void restart(CommonTokenStream tokens) throws Exception {
+        Collection<ClusterManager> clusterSet = selectClusterSet(tokens.get(1));
+
+        for (ClusterManager c : clusterSet) {
+            c = selectSubCluster(c, tokens.get(2));
+            //c.restart();
+        }
+    }
+
+    private void cat(CommonTokenStream tokens) throws Exception {
+        Collection<ClusterManager> clusterSet = selectClusterSet(tokens.get(1));
+
+        for (ClusterManager c : clusterSet) {
+            c = selectSubCluster(c, tokens.get(2));
+            c.cat();
         }
     }
 
@@ -402,6 +307,33 @@ public class HzCmd {
     }
 
 
+    private Collection<ClusterManager> selectClusterSet(org.antlr.v4.runtime.Token criterionToken) {
+        Collection<ClusterManager> selected = new ArrayList();
+        if(criterionToken.getType() == HzCmdParser.ALL){
+            selected = clusters.values();
+        }else{
+            selected.add(clusters.get(criterionToken.getText()));
+        }
+        return  selected;
+    }
+
+    private ClusterManager selectSubCluster(ClusterManager c, org.antlr.v4.runtime.Token criterionToken) throws Exception {
+        switch (criterionToken.getType()) {
+            case HzCmdParser.ALL:
+                return c;
+
+            case HzCmdParser.MEMBER_ALL:
+                return c.getMemberManager();
+
+            case HzCmdParser.CLIENT_ALL:
+                return c.getClientManager();
+
+            default:
+                String id = criterionToken.getText() + c.getClusterId();
+                return c.getIDManager(id);
+        }
+    }
+
     private Collection<ClusterManager> getClusterManagers(HzCmdParser.StatementContext cmd) {
         Collection<ClusterManager> c = new ArrayList();
         if( cmd.ALL(0) != null) {
@@ -412,25 +344,6 @@ public class HzCmd {
         }
         return c;
     }
-
-
-/*
-                case invoke:
-                case stop:
-                    cluster.send(line);
-                    break;
-
-                case membersOnly:
-                    cluster.setMembersOnlyCount(Integer.parseInt(words[1]));
-                    break;
-               case grep:
-                    cluster.grepMembers(words[1]);
-                    break;
-                case jps:
-                    boxes.jps();
-                    break;
-*/
-
 
     public static void main(String[] args) throws InterruptedException, IOException {
         HzCmd c = new HzCmd();

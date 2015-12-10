@@ -135,7 +135,20 @@ public class Test {
         // Specify our entry point
         HzCmdParser.StatementContext hzCmdStatment = parser.statement();
 
-        System.out.println(hzCmdStatment.getText() );
+        //System.out.println(hzCmdStatment.getText() );
+
+/*
+
+        for (Token token : tokens.getTokens()) {
+            System.out.println(token.getText());
+            if( token.getType() == HzCmdLexer.ASSIGN){
+
+                System.out.println(token.getText()+"  is a = ");
+
+
+            }
+        }
+
 
         if (hzCmdStatment.exception !=null){
             System.out.println( hzCmdStatment.exception.getOffendingToken().getText());
@@ -143,14 +156,10 @@ public class Test {
 
         System.out.println( hzCmdStatment.getRuleContext().getText() +" "+ hzCmdStatment.getRuleContext());
 
+*/
         switch (hzCmdStatment.start.getType()) {
-            case HzCmdParser.VAR:
-                System.out.println("var name =" + hzCmdStatment.start.getText());
-                if( hzCmdStatment.ASSIGN() != null){
-                    String value = hzCmdStatment.STRING(0).getText().replace("\"", "");
-                    System.out.println("value="+value);
-
-                }
+            case HzCmdParser.INVOKE:
+                invoke(tokens);
                 break;
         }
 
@@ -181,4 +190,22 @@ public class Test {
     }
 
 
+    private static void invoke(CommonTokenStream tokens )  {
+
+        String threadCound = tokens.get(1).getText();
+        String method = tokens.get(2).getText();
+        String taksId = tokens.get(3).getText();
+
+        String cluster = tokens.get(4).getText();
+
+        String individual = tokens.get(5).getText();
+
+        if(tokens.get(4).getType() == HzCmdLexer.ALL){
+
+            System.out.println("========="+cluster);
+
+        }else{
+            System.out.println("+++++++"+cluster);
+        }
+    }
 }
