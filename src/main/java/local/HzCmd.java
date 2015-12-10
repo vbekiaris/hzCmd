@@ -319,8 +319,6 @@ public class HzCmd {
 
     private ClusterManager selectSubCluster(ClusterManager c, org.antlr.v4.runtime.Token criterionToken) throws Exception {
         switch (criterionToken.getType()) {
-            case HzCmdParser.ALL:
-                return c;
 
             case HzCmdParser.MEMBER_ALL:
                 return c.getMemberManager();
@@ -328,9 +326,13 @@ public class HzCmd {
             case HzCmdParser.CLIENT_ALL:
                 return c.getClientManager();
 
-            default:
+            case HzCmdParser.CLIENT_VAR:
+            case HzCmdParser.MEMBER_VAR:
                 String id = criterionToken.getText() + c.getClusterId();
                 return c.getIDManager(id);
+
+            default:
+                return c;
         }
     }
 
