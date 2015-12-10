@@ -71,7 +71,7 @@ public class Controler{
                             break;
 
                         case invoke:
-                            tasks.invokeNonBlocking("*", words[1], 1);
+                            tasks.invokeNonBlocking(Integer.parseInt(words[1]), words[2], words[3]);
                             break;
 
                         case stop:
