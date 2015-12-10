@@ -29,7 +29,8 @@ public class ClusterManager {
     public ClusterManager(String clusterId, BoxManager boxes) throws Exception {
         this.clusterId =clusterId;
         this.boxes=boxes;
-        HzXml.makeXml(this);
+        HzXml.makeMemberXml(this);
+        HzXml.makeClientXml(this);
     }
 
 

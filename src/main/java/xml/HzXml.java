@@ -1,18 +1,22 @@
 package xml;
 
-        import java.io.File;
-        import javax.xml.parsers.DocumentBuilder;
-        import javax.xml.parsers.DocumentBuilderFactory;
-        import javax.xml.transform.Transformer;
-        import javax.xml.transform.TransformerFactory;
-        import javax.xml.transform.dom.DOMSource;
-        import javax.xml.transform.stream.StreamResult;
+import java.io.File;
+import java.io.IOException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
-        import global.Bash;
-        import local.Box;
-        import local.ClusterManager;
-        import org.w3c.dom.Document;
-        import org.w3c.dom.Element;
+import global.Bash;
+import local.Box;
+import local.ClusterManager;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 public class HzXml {
 
@@ -28,19 +32,11 @@ public class HzXml {
     public static final String memberXml = "hazelcast.xml";
     public static final String clientXml = "client-hazelcast.xml";
 
-    public static void makeXml(ClusterManager m) throws Exception{
+    public static void makeMemberXml(ClusterManager m) throws Exception{
 
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        Document document = documentBuilder.parse(memberXml);
+        Document document = getDocument(memberXml);
 
-
-        document.getElementsByTagName("name").item(0).setTextContent(m.getClusterId());
-
-        Element pass = document.createElement("password");
-        pass.setTextContent(m.getClusterId());
-        document.getElementsByTagName("group").item(0).appendChild(pass);
-
+        addGroupElement(m, document);
 
         for (Box box : m.getBoxManager().getBoxList()) {
             Element member = document.createElement("member");
@@ -48,21 +44,46 @@ public class HzXml {
             document.getElementsByTagName("tcp-ip").item(0).appendChild(member);
         }
 
+        writeXmlFile(document, memberXml(m));
+    }
 
-        Element wan = document.createElement("wan-replication");
-        wan.setAttribute("name", "wanReplication" );
+    public static void makeClientXml(ClusterManager m) throws Exception{
 
-        document.getFirstChild().appendChild(wan);
+        Document document = getDocument(clientXml);
+
+        addGroupElement(m, document);
+
+        for (Box box : m.getBoxManager().getBoxList()) {
+            Element member = document.createElement("address");
+            member.setTextContent(box.pri);
+            document.getElementsByTagName("cluster-members").item(0).appendChild(member);
+        }
+
+        writeXmlFile(document, clientXml(m));
+    }
 
 
+    private static void addGroupElement(ClusterManager m, Document document) {
+        document.getElementsByTagName("name").item(0).setTextContent(m.getClusterId());
+        Element pass = document.createElement("password");
+        pass.setTextContent(m.getClusterId());
+        document.getElementsByTagName("group").item(0).appendChild(pass);
+    }
+
+    private static Document getDocument(String file) throws ParserConfigurationException, SAXException, IOException {
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        return documentBuilder.parse(file);
+    }
+
+    private static void writeXmlFile(Document document, String file) throws TransformerException {
         document.normalizeDocument();
-
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
 
         Transformer transformer = transformerFactory.newTransformer();
         DOMSource domSource = new DOMSource(document);
 
-        StreamResult streamResult = new StreamResult(new File(memberXml(m)));
+        StreamResult streamResult = new StreamResult(new File(file));
         transformer.transform(domSource, streamResult);
     }
 

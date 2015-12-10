@@ -5,6 +5,7 @@ import global.Bash;
 import global.HzType;
 import remote.Client;
 import remote.Member;
+import xml.HzXml;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -47,11 +48,12 @@ public class RemoteJvm {
         String classToRun;
         if (isMember()){
             classToRun = Member.class.getName();
+            box.upload(xmlConfig, dir+"/"+ HzXml.memberXml);
         }else{
             classToRun = Client.class.getName();
+            box.upload(xmlConfig, dir+"/"+ HzXml.clientXml);
         }
 
-        box.upload(xmlConfig, dir+"/");
 
         String ip = InetAddress.getLocalHost().getHostAddress();
         if(HzCmd.homeIp!=null){
