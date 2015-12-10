@@ -47,6 +47,76 @@ public class HzXml {
         writeXmlFile(document, memberXml(m));
     }
 
+
+    public static void addManCenter(String file, String ip) throws Exception{
+
+        Document document = getDocument(file);
+
+        Element mc = document.createElement("management-center");
+        mc.setAttribute("enabled", "true");
+        mc.setTextContent("http://"+ ip +":8080/mancenter");
+        document.getFirstChild().appendChild(mc);
+
+
+        writeXmlFile(document, file);
+    }
+
+
+    public static void wanReplication(ClusterManager a,  ClusterManager b, String name) throws Exception{
+
+        Document document = getDocument(memberXml(a));
+
+        Element wan = document.createElement("wan-replication");
+        wan.setAttribute("name", name);
+
+        Element target = document.createElement("target-cluster");
+        target.setAttribute("group-name", b.getClusterId());
+        target.setAttribute("group-password", b.getClusterId());
+
+        Element rep = document.createElement("replication-impl");
+        rep.setTextContent("com.hazelcast.enterprise.wan.replication.WanNoDelayReplication");
+
+        Element end = document.createElement("end-points");
+        for (Box box : b.getBoxManager().getBoxList()) {
+            Element address = document.createElement("address");
+            address.setTextContent(box.pri);
+            end.appendChild(address);
+        }
+
+        wan.appendChild(target);
+        target.appendChild(rep);
+        target.appendChild(end);
+
+        document.getFirstChild().appendChild(wan);
+
+        writeXmlFile(document, memberXml(a));
+    }
+
+
+
+    /*
+    <wan-replication name="wanReplication">
+        <target-cluster group-name="group2" group-password="pass">
+            <replication-impl>
+                com.hazelcast.enterprise.wan.replication.WanNoDelayReplication
+            </replication-impl>
+            <end-points>
+                <address>10.0.0.162</address>
+                <address>10.0.0.163</address>
+            </end-points>
+        </target-cluster>
+        <target-cluster group-name="group3" group-password="pass">
+            <replication-impl>
+                com.hazelcast.enterprise.wan.replication.WanNoDelayReplication
+            </replication-impl>
+            <end-points>
+                <address>10.0.0.161</address>
+                <address>10.0.0.166</address>
+            </end-points>
+        </target-cluster>
+    </wan-replication>
+    */
+
     public static void makeClientXml(ClusterManager m) throws Exception{
 
         Document document = getDocument(clientXml);
