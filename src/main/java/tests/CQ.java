@@ -16,24 +16,20 @@ public class CQ extends Task {
     public int keyDomain = Integer.MAX_VALUE;
     private IMap map;
 
-    public void setup(){
+    public void addListener() throws InterruptedException {
         map = hazelcastInstance.getMap(mapName);
+        latency = new LatencyListener();
+        map.addEntryListener(latency, new EvenKey(), true) ;
     }
 
     public void put() throws InterruptedException {
+        map = hazelcastInstance.getMap(mapName);
         while (isRunning()) {
             int k = random.nextInt(keyDomain);
             long now = System.nanoTime();
             map.put(k, now);
         }
     }
-
-    public void addListener() throws InterruptedException {
-
-        map.addEntryListener(latency, new EvenKey(), true) ;
-
-    }
-
 
     public void printLatency() throws Exception {
 
@@ -48,7 +44,5 @@ public class CQ extends Task {
         }
 
     }
-
-
 
 }
