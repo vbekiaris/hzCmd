@@ -75,6 +75,9 @@ public class HzCmd {
                             uninstall(cmd);
                             break;
 
+                        case HzCmdParser.MEMBER_BOX:
+                            dedicatedMembers(cmd);
+                            break;
                         case HzCmdParser.ADD:
                             add(cmd);
                             break;
@@ -193,6 +196,16 @@ public class HzCmd {
         }
     }
 
+    private void dedicatedMembers(HzCmdParser.StatementContext cmd) {
+
+        Collection<ClusterManager> selected = getClusterManagers(cmd);
+
+        int memberBox = Integer.parseInt(cmd.NUMBER(1).getText());
+
+        for (ClusterManager c : selected) {
+            c.setMembersOnlyCount(memberBox);
+        }
+    }
 
     private void add(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
 

@@ -15,6 +15,7 @@ statement
     | INSTALL   (ALL | VAR) (OS | EE) VAR+
     | UNINSTALL (ALL | VAR)
 
+    | MEMBER_BOX NUMBER (ALL | VAR)
     | ADD (MEMBER | CLIENT) (ALL | VAR) NUMBER VAR VAR+
     | LOAD (ALL | VAR) VAR STRING
 
@@ -48,6 +49,7 @@ USER : 'user' ;
 VERSION : 'version';
 ADD : 'add';
 
+MEMBER_BOX : 'memberBox';
 BOXES : 'boxes';
 IP : 'ip';
 CLUSTER : 'cluster' ;

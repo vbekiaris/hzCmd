@@ -75,8 +75,8 @@ public class ClusterManager {
     }
 
     public void setMembersOnlyCount(int count) {
-        if(count <= 0 || count > boxes.size()){
-            membersOnlyCount = boxes.size();
+        if(count < 0 || count > boxes.size()){
+            membersOnlyCount=0;
         }else{
             membersOnlyCount = count;
         }

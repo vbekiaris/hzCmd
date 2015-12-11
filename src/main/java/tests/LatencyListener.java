@@ -39,7 +39,7 @@ public class LatencyListener implements EntryListener<Integer, Long>, DataSerial
         long latency = now - then;
 
         latencys[i++]=latency;
-        i %= sampleSize;
+        i = i % sampleSize;
     }
 
     public void entryRemoved(EntryEvent e) {
