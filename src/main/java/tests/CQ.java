@@ -37,12 +37,11 @@ public class CQ extends Task {
         FileOutputStream fos = new FileOutputStream(fout);
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
 
-
         for (int i = 0; i < latency.latencys.length; i++) {
             bw.write(i+", "+latency.latencys[i]);
             bw.newLine();
         }
-
+        bw.flush();
     }
 
 }
