@@ -200,7 +200,7 @@ public class HzCmd {
 
         Collection<ClusterManager> selected = getClusterManagers(cmd);
 
-        int memberBox = Integer.parseInt(cmd.NUMBER(1).getText());
+        int memberBox = Integer.parseInt(cmd.NUMBER(0).getText());
 
         for (ClusterManager c : selected) {
             c.setMembersOnlyCount(memberBox);
