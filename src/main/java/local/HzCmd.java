@@ -302,7 +302,7 @@ public class HzCmd {
     private void grep(CommonTokenStream tokens) throws Exception {
         Collection<ClusterManager> clusterSet = selectClusterSet(tokens.get(1));
 
-        String grepArgs = tokens.get(3).getText().replace("\"", "");
+        String grepArgs = tokens.get(3).getText();
 
         for (ClusterManager c : clusterSet) {
             c = selectSubCluster(c, tokens.get(2));

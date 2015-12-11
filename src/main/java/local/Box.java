@@ -4,6 +4,9 @@ import global.Bash;
 
 import java.io.IOException;
 
+import static global.Utils.escapeQuotes;
+import static global.Utils.exceptionStacktraceToString;
+
 public class Box {
     public String user;
     public String pub;
@@ -52,7 +55,8 @@ public class Box {
     }
 
     public String grep(String arg) throws IOException, InterruptedException {
-        return ssh("grep " + arg);
+
+        return ssh("grep " + escapeQuotes(arg));
     }
 
     public String jps() throws IOException, InterruptedException {

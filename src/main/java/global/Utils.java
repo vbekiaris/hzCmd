@@ -15,8 +15,17 @@ public abstract class Utils {
         builder.addEscape(')', " ");
         builder.addEscape('<', " ");
         builder.addEscape('>', " ");
-
+        builder.addEscape('"', "\"");
+        builder.addEscape('"', "\"");
         SHELL_ESCAPE = builder.build();
+    }
+
+    public static final Escaper QUOTES;
+    static {
+        final Escapers.Builder builder = Escapers.builder();
+        builder.addEscape('"', "\"");
+        builder.addEscape('"', "\"");
+        QUOTES = builder.build();
     }
 
 
@@ -32,6 +41,10 @@ public abstract class Utils {
         sleepMilli(sec * 1000);
     }
 
+
+    public static String escapeQuotes(String s) {
+        return QUOTES.escape( s );
+    }
 
     public static String exceptionStacktraceToString(Throwable e) {
         return SHELL_ESCAPE.escape( e +" "+Arrays.toString(e.getStackTrace()) );
