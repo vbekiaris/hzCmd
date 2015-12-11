@@ -86,10 +86,13 @@ public class TaskManager {
     }
 
 
-
-
-    public void stop(){
-        for(TaskClazz t : tasks.values()){
+    public void stop(String taskId){
+        if ("*".equals(taskId) ){
+            for(TaskClazz t : tasks.values()) {
+                t.stop();
+            }
+        }else{
+            TaskClazz t = tasks.get(taskId);
             t.stop();
         }
     }

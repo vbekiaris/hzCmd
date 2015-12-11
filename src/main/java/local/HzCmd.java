@@ -87,6 +87,9 @@ public class HzCmd {
                         case HzCmdParser.INVOKE:
                             invoke(tokens);
                             break;
+                        case HzCmdParser.STOP:
+                            stop(tokens);
+                            break;
                         case HzCmdParser.INFO:
                             info(tokens);
                             break;
@@ -253,6 +256,19 @@ public class HzCmd {
         for (ClusterManager c : clusterSet) {
             c = selectSubCluster(c, tokens.get(5));
             c.invoke(threadCound, method, taksId);
+        }
+    }
+
+    private void stop(CommonTokenStream tokens ) throws Exception {
+
+        String taskId = tokens.get(1).getText();
+
+
+        Collection<ClusterManager> clusterSet = selectClusterSet(tokens.get(2));
+
+        for (ClusterManager c : clusterSet) {
+            c = selectSubCluster(c, tokens.get(3));
+            c.stop(taskId);
         }
     }
 

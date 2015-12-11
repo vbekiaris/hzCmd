@@ -75,7 +75,7 @@ public class Controler{
                             break;
 
                         case stop:
-                            tasks.stop();
+                            tasks.stop(words[1]);
                             break;
 
                         case clean:

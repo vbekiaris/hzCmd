@@ -138,6 +138,11 @@ public class ClusterManager {
         sendToAll(Args.invoke + " " + threadCount + " " + method + " " + taskId);
     }
 
+    public void stop(String taskId) throws IOException, InterruptedException {
+        sendToAll(Args.stop +" " + taskId);
+    }
+
+
 
     public void restart(String version, String options) throws IOException, InterruptedException {
         for(RemoteJvm jvm : jvms.values()){
