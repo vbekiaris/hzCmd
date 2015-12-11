@@ -117,6 +117,8 @@ public class Test {
         cmd("save \"scenario.hzType\"");
 
 
+        cmd("grep A Member* hi");
+
 
         //cmd("// not used line");
 
@@ -135,18 +137,12 @@ public class Test {
         // Specify our entry point
         HzCmdParser.StatementContext hzCmdStatment = parser.statement();
 
-        //System.out.println(hzCmdStatment.getText() );
+        System.out.println(hzCmdStatment.getText() );
 
-/*
+
 
         for (Token token : tokens.getTokens()) {
             System.out.println(token.getText());
-            if( token.getType() == HzCmdLexer.ASSIGN){
-
-                System.out.println(token.getText()+"  is a = ");
-
-
-            }
         }
 
 
@@ -155,38 +151,7 @@ public class Test {
         }
 
         System.out.println( hzCmdStatment.getRuleContext().getText() +" "+ hzCmdStatment.getRuleContext());
-
-*/
-        switch (hzCmdStatment.start.getType()) {
-            case HzCmdParser.INVOKE:
-                invoke(tokens);
-                break;
-        }
-
-        /*
-
-        switch (hzCmdStatment.start.getType()){
-            case HzCmdParser.CLUSTER:
-                System.out.println("NODE 0="+hzCmdStatment.getChild(0).getText());
-                System.out.println("START = " + hzCmdStatment.start.getTokenSource());
-                System.out.println("CLUSTER = " + hzCmdStatment.CLUSTER());
-                System.out.println("ID = " + hzCmdStatment.ID());
-                System.out.println("NUMBER = "+hzCmdStatment.NUMBER(0));
-                System.out.println("NUMBER = "+hzCmdStatment.NUMBER(1));
-                break;
-            case HzCmdParser.USER:
-                System.out.println("START = " + hzCmdStatment.start);
-                System.out.println("ID = " + hzCmdStatment.ID());
-        }
-        */
-
         System.out.println("");
-
-        /*try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
     }
 
 
