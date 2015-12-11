@@ -22,19 +22,15 @@ public class CQ extends Task {
     public void put() throws InterruptedException {
         while (isRunning()) {
             int k = random.nextInt(keyDomain);
-            long now = System.currentTimeMillis();
+            long now = System.nanoTime();
             map.put(k, now);
         }
     }
 
-    public void get() throws InterruptedException {
+    public void addListener() throws InterruptedException {
 
         map.addEntryListener(latency, new EvenKey(), true) ;
 
-        while (isRunning()) {
-            int k = random.nextInt(keyDomain);
-            Object obj = map.get(k);
-        }
     }
 
 

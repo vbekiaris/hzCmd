@@ -22,11 +22,12 @@ import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.DataSerializable;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class LatencyListener implements EntryListener<Integer, Long>, DataSerializable {
 
-    int i=0;
+    AtomicInteger i = new AtomicInteger();
     final int sampleSize=100000;
     long latencys[] = new long[sampleSize];
 
@@ -35,11 +36,11 @@ public class LatencyListener implements EntryListener<Integer, Long>, DataSerial
     public void entryAdded(EntryEvent<Integer, Long> e) {
 
         long then = e.getValue();
-        long now = System.currentTimeMillis();
+        long now = System.nanoTime();
         long latency = now - then;
 
-        latencys[i++]=latency;
-        i = i % sampleSize;
+        latencys[i.getAndIncrement()]=latency;
+        i.set( i.get() % sampleSize );
     }
 
     public void entryRemoved(EntryEvent e) {
