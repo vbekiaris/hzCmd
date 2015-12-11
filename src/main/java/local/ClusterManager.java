@@ -125,6 +125,7 @@ public class ClusterManager {
     }
 
     private void sendToAll(String cmd) throws IOException, InterruptedException {
+        checkEmpty();
         for(RemoteJvm jvm : jvms.values()){
             jvm.send(cmd);
         }
@@ -145,18 +146,21 @@ public class ClusterManager {
 
 
     public void restart(String version, String options) throws IOException, InterruptedException {
+        checkEmpty();
         for(RemoteJvm jvm : jvms.values()){
             jvm.initilize(version, options);
         }
     }
 
     public void clean() throws IOException, InterruptedException {
+        checkEmpty();
         for(RemoteJvm jvm : jvms.values()){
             jvm.clean();
         }
     }
 
     public void kill() throws IOException, InterruptedException {
+        checkEmpty();
         for(RemoteJvm jvm : jvms.values()){
             jvm.kill();
         }
@@ -167,6 +171,7 @@ public class ClusterManager {
     }
 
     public void cat() throws IOException, InterruptedException {
+        checkEmpty();
         for(RemoteJvm jvm : jvms.values()){
             System.out.println(jvm);
             System.out.println(jvm.cat());
@@ -174,6 +179,7 @@ public class ClusterManager {
     }
 
     public void grep(String args) throws IOException, InterruptedException {
+        checkEmpty();
         for(RemoteJvm jvm : jvms.values()){
             System.out.println(jvm);
             System.out.println(jvm.grep(args));
@@ -198,6 +204,12 @@ public class ClusterManager {
             }
         }
         return jvms;
+    }
+
+    private void checkEmpty(){
+        if(jvms.isEmpty()){
+            System.out.println(Bash.ANSI_RED+"operation on empty cluster"+Bash.ANSI_RESET;);
+        }
     }
 
     @Override
