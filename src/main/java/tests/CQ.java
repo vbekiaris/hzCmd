@@ -33,15 +33,17 @@ public class CQ extends Task {
 
     public void printLatency() throws Exception {
 
-        File fout = new File("latencys.txt");
-        FileOutputStream fos = new FileOutputStream(fout);
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+        PrintStream p = new PrintStream(new File ("latencys.txt"));
+
+        /*
+        latency.h.outputPercentileDistribution(p, 1.0);
 
         for (int i = 0; i < latency.latencys.length; i++) {
             bw.write(i+", "+latency.latencys[i]);
             bw.newLine();
         }
         bw.flush();
+        */
     }
 
 }

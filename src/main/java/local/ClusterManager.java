@@ -208,7 +208,7 @@ public class ClusterManager {
 
     private void checkEmpty(){
         if(jvms.isEmpty()){
-            System.out.println(Bash.ANSI_RED+"operation on empty cluster"+Bash.ANSI_RESET;);
+            System.out.println(Bash.ANSI_RED+"operation on empty cluster"+Bash.ANSI_RESET);
         }
     }
 

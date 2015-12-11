@@ -21,26 +21,34 @@ import com.hazelcast.core.MapEvent;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.DataSerializable;
+import org.HdrHistogram.ConcurrentHistogram;
+import org.HdrHistogram.Histogram;
+
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class LatencyListener implements EntryListener<Integer, Long>, DataSerializable {
 
-    AtomicInteger i = new AtomicInteger();
-    final int sampleSize=100000;
-    long latencys[] = new long[sampleSize];
+    Histogram h = new ConcurrentHistogram(TimeUnit.SECONDS.toNanos(30), 2);
+    //AtomicInteger i = new AtomicInteger();
+    //final int sampleSize=100000;
+    //long latencys[] = new long[sampleSize];
 
-    public LatencyListener() { }
+    public LatencyListener() {
+    }
 
     public void entryAdded(EntryEvent<Integer, Long> e) {
+
 
         long then = e.getValue();
         long now = System.nanoTime();
         long latency = now - then;
+        h.recordValue(latency);
 
-        latencys[i.getAndIncrement()]=latency;
-        i.set( i.get() % sampleSize );
+        //latencys[i.getAndIncrement()]=latency;
+        //i.set( i.get() % sampleSize );
     }
 
     public void entryRemoved(EntryEvent e) {
