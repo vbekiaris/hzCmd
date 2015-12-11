@@ -13,11 +13,11 @@ public class Task1 extends Task {
 
     public void setup(){
         map = hazelcastInstance.getMap(mapName);
-        send("map Name="+map.getName());
+        //send("map Name="+map.getName());
     }
 
     public void put() throws InterruptedException {
-        send("starting put");
+        //send("starting put");
         while (isRunning()) {
             int k = random.nextInt(keyDomain);
             map.put(k, k);
@@ -25,7 +25,7 @@ public class Task1 extends Task {
     }
 
     public void get() throws InterruptedException {
-        send("starting get");
+        //send("starting get");
         while (isRunning()) {
             int k = random.nextInt(keyDomain);
             Object obj = map.get(k);
@@ -33,7 +33,7 @@ public class Task1 extends Task {
     }
 
     public void size() throws InterruptedException {
-        send("starting size");
+        //send("starting size");
         while (isRunning()) {
             send("map="+map.getName()+" size="+map.size());
             sleepSeconds(15);
@@ -41,7 +41,7 @@ public class Task1 extends Task {
     }
 
     public void throwException() throws Exception {
-        send("starting throwException");
+        //send("starting throwException");
         sleepSeconds(10);
         throw new Exception("Test Exception");
     }
