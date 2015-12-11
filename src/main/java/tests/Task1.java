@@ -8,7 +8,7 @@ import static tests.Utils.sleepSeconds;
 public class Task1 extends Task {
 
     public String mapName="a";
-    public int keyDomain = 3;
+    public int keyDomain = 1000000;
     private IMap map;
 
     public void setup(){
