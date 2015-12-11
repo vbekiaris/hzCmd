@@ -56,7 +56,7 @@ public class TaskClazz implements Callable<Object> {
             }
         }catch (Exception e){
             onException(e);
-            throw new RuntimeException(e);
+            System.exit(1);
         }
         return null;
     }
