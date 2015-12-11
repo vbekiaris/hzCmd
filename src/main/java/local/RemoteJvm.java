@@ -39,7 +39,7 @@ public class RemoteJvm {
     public void initilize(String hzVersion, String options) throws IOException, InterruptedException {
         version = hzVersion;
         if(running()){
-            System.out.println(this + "is running !");
+            System.out.println("cannot restart "+this);
             return;
         }
 

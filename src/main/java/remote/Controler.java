@@ -92,7 +92,6 @@ public class Controler{
         }catch(Exception e){
             e.printStackTrace();
             sendBackError(idString()+" "+exceptionStacktraceToString(e));
-            throw new RuntimeException(e);
         }
     }
 

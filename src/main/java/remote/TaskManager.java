@@ -46,7 +46,6 @@ public class TaskManager {
 
 
     //TODO in invoke function on task ID or *  invoke asyns not wait for result,
-    //TODO stop task by task ID or *,  stopping stop all methods running on task ID
     //
     // invoke * * methodA 5
     // invoke * testId methodA 5

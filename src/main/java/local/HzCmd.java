@@ -14,7 +14,6 @@ import java.util.*;
 import static global.Utils.*;
 
 
-//TODO memberXml generation add members from cluster ips
 //TODO WAN REP xml SETUP
 //TODO man center integ
 //TODO tail -f grepping logs and pop up display
@@ -97,6 +96,9 @@ public class HzCmd {
                         case HzCmdParser.CAT:
                             cat(tokens);
                             break;
+                        case HzCmdParser.GREP:
+                            grep(tokens);
+                            break;
                         case HzCmdParser.SLEEP:
                             sleep(cmd);
                             break;
@@ -161,7 +163,6 @@ public class HzCmd {
     }
 
     private void install(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
-
 
         Collection<ClusterManager> selected = getClusterManagers(cmd);
 
@@ -273,9 +274,18 @@ public class HzCmd {
     private void restart(CommonTokenStream tokens) throws Exception {
         Collection<ClusterManager> clusterSet = selectClusterSet(tokens.get(1));
 
+        String version = tokens.get(3).getText();
+        version = vars.get(version);
+
+        String options = "";
+        for(int i=4; i<tokens.size(); i++){
+            String key = tokens.get(i).getText();
+            options += vars.get(key);
+        }
+
         for (ClusterManager c : clusterSet) {
             c = selectSubCluster(c, tokens.get(2));
-            //c.restart();
+            c.restart(version, options);
         }
     }
 
@@ -285,6 +295,18 @@ public class HzCmd {
         for (ClusterManager c : clusterSet) {
             c = selectSubCluster(c, tokens.get(2));
             c.cat();
+        }
+    }
+
+
+    private void grep(CommonTokenStream tokens) throws Exception {
+        Collection<ClusterManager> clusterSet = selectClusterSet(tokens.get(1));
+
+        String grepArgs = tokens.get(3).getText().replace("\"", "");
+
+        for (ClusterManager c : clusterSet) {
+            c = selectSubCluster(c, tokens.get(2));
+            c.grep(grepArgs);
         }
     }
 
