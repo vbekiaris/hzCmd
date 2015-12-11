@@ -4,6 +4,7 @@ import com.hazelcast.core.IMap;
 import com.hazelcast.query.Predicate;
 import global.Task;
 
+import java.io.*;
 import java.util.Map;
 
 import static tests.Utils.sleepSeconds;
@@ -34,10 +35,16 @@ public class CQ extends Task {
     }
 
 
-    public void printLatency() throws InterruptedException {
+    public void printLatency() throws Exception {
+
+        File fout = new File("latencys.txt");
+        FileOutputStream fos = new FileOutputStream(fout);
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+
 
         for (int i = 0; i < latency.latencys.length; i++) {
-            System.out.println(i+", "+latency.latencys[i]);
+            bw.write(i+", "+latency.latencys[i]);
+            bw.newLine();
         }
 
     }
