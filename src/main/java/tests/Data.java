@@ -1,9 +1,11 @@
 package tests;
 
+import java.io.Serializable;
+
 /**
  * Created by danny on 14/12/2015.
  */
-public class Data {
+public class Data implements Serializable{
 
     long now;
 
