@@ -4,11 +4,9 @@ import com.hazelcast.core.IMap;
 import global.Task;
 import java.io.*;
 
-import static global.Utils.sleepSeconds;
-
 public class CQ extends Task {
 
-    public LatencyListener latency = new LatencyListener(this);
+    public LatencyListener latency = new LatencyListener();
     public String mapName="a";
     public int keyDomain = Integer.MAX_VALUE;
     private IMap map;
@@ -18,10 +16,6 @@ public class CQ extends Task {
     public void addListener() throws InterruptedException {
         map = hazelcastInstance.getMap(mapName);
         map.addEntryListener(latency, new EvenKey(), true) ;
-        send("addlistener");
-        while (isRunning()) {
-            sleepSeconds(3);
-        }
     }
 
     public void put() throws InterruptedException {
@@ -30,14 +24,13 @@ public class CQ extends Task {
             int k = random.nextInt(keyDomain);
             long now = System.nanoTime();
             map.put(k, now);
-            send("put "+k);
         }
     }
 
     public void printLatency() throws Exception {
 
         PrintStream p = new PrintStream(new File ("latencys.txt"));
-        latency.h.outputPercentileDistribution(p, 1.0);
+        latency.h.outputPercentileDistribution(p, 1000000.0);
 
 
         FileWriter fw = new FileWriter(new File ("latencys2.txt"));
