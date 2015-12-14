@@ -4,6 +4,8 @@ import com.hazelcast.core.IMap;
 import global.Task;
 import java.io.*;
 
+import static global.Utils.sleepSeconds;
+
 public class CQ extends Task {
 
     public LatencyListener latency;
@@ -17,6 +19,9 @@ public class CQ extends Task {
         map = hazelcastInstance.getMap(mapName);
         latency = new LatencyListener();
         map.addEntryListener(latency, new EvenKey(), true) ;
+        while (isRunning()) {
+            sleepSeconds(5);
+        }
     }
 
     public void put() throws InterruptedException {
