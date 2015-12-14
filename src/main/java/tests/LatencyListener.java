@@ -31,17 +31,20 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class LatencyListener implements EntryListener<Integer, Long>, DataSerializable {
 
+    CQ c;
     Histogram h = new ConcurrentHistogram(TimeUnit.SECONDS.toNanos(30), 2);
 
     AtomicInteger i = new AtomicInteger();
     final int sampleSize=100000;
     long latencys[] = new long[sampleSize];
 
-    public LatencyListener() {
+    public LatencyListener(CQ c) {
+        this.c = c;
     }
 
     public void entryAdded(EntryEvent<Integer, Long> e) {
 
+        c.send("entry Added ="+ e.getKey());
         long then = e.getValue();
         long now = System.nanoTime();
         long latency = now - then;
