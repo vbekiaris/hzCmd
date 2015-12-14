@@ -49,6 +49,8 @@ public class LatencyListener implements EntryListener<Integer, Long>, DataSerial
         long latency = now - then;
         h.recordValue(latency);
 
+        c.send("latency = "+latency);
+
         latencys[i.getAndIncrement()]=latency;
         i.set( i.get() % sampleSize );
     }
