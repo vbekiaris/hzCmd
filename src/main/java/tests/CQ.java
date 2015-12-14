@@ -51,5 +51,4 @@ public class CQ extends Task {
         bw.flush();
 
     }
-
 }
