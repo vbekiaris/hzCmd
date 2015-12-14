@@ -42,7 +42,6 @@ public class LatencyListener implements EntryListener<Integer, Long>, DataSerial
 
     public void entryAdded(EntryEvent<Integer, Long> e) {
 
-
         long then = e.getValue();
         long now = System.nanoTime();
         long latency = now - then;

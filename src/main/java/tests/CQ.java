@@ -19,8 +19,9 @@ public class CQ extends Task {
         map = hazelcastInstance.getMap(mapName);
         latency = new LatencyListener();
         map.addEntryListener(latency, new EvenKey(), true) ;
+        send("addlistener");
         while (isRunning()) {
-        sleepSeconds(3);
+            sleepSeconds(3);
         }
     }
 
@@ -30,6 +31,7 @@ public class CQ extends Task {
             int k = random.nextInt(keyDomain);
             long now = System.nanoTime();
             map.put(k, now);
+            send("put "+k);
         }
     }
 
