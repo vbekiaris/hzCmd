@@ -45,7 +45,7 @@ public class LatencyListener implements EntryListener<Integer, Long>, DataSerial
         long now = System.nanoTime();
         long latency = now - then;
 
-        if(latency < 0 ) {
+        if(latency >= 0 ) {
             h.recordValue(latency);
         }
 
