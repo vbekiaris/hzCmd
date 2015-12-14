@@ -20,7 +20,7 @@ public class CQ extends Task {
         latency = new LatencyListener();
         map.addEntryListener(latency, new EvenKey(), true) ;
         while (isRunning()) {
-        sleepSeconds();
+        sleepSeconds(3);
         }
     }
 
