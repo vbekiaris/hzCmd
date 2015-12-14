@@ -45,28 +45,6 @@ public class TaskManager {
     }
 
 
-    //TODO in invoke function on task ID or *  invoke asyns not wait for result,
-    //
-    // invoke * * methodA 5
-    // invoke * testId methodA 5
-
-    //invoke member*  * methodA 1
-    //invoke member*A * methodA 1
-    //invoke member1A * methodA 2
-
-    //invoke member*  testid1 methodA 1
-    //invoke member*A testID1 methodA 1
-    //invoke member1A testId1 methodA 2
-
-    //invoke client*  * methodA 1
-    //invoke client*A * methodA 1
-    //invoke client1A * methodB 3
-
-    //invoke client*  testid2 methodA 1
-    //invoke client*A testid4 methodA 1
-    //invoke client1A testid3  methodB 3
-
-
     public void invokeNonBlocking(int threadCount, String function, String taskId) {
         if ("*".equals(taskId) ){
             for(TaskClazz t : tasks.values()){

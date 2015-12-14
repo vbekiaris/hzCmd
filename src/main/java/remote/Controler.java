@@ -10,10 +10,7 @@ import com.hazelcast.core.HazelcastInstance;
 import global.Args;
 import global.HzType;
 
-import java.io.BufferedReader;
-import java.io.FileWriter;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.lang.management.ManagementFactory;
 
 import static global.Utils.exceptionStacktraceToString;
@@ -47,15 +44,15 @@ public class Controler{
                 hazelcastInstance = HazelcastClient.newHazelcastClient(config);
             }
         }catch (Throwable e){
-            //sendBackError("starting "+idString()+" "+exceptionStacktraceToString(e));
+            sendBackError("starting "+idString()+" "+exceptionStacktraceToString(e));
             e.printStackTrace(exceptionWrite);
             throw e;
         }
         tasks = new TaskManager(hazelcastInstance);
     }
 
-    public void run(){
-        try{
+    public void run() throws IOException {
+        //try{
             while (true){
                 String line=in.readLine();
                 if (line!=null){
@@ -89,10 +86,10 @@ public class Controler{
                     sleepMilli(500);
                 }
             }
-        }catch(Exception e){
-            e.printStackTrace();
-            sendBackError(idString()+" "+exceptionStacktraceToString(e));
-        }
+        //}catch(Exception e){
+        //    e.printStackTrace();
+        //    sendBackError(idString()+" "+exceptionStacktraceToString(e));
+        //}
     }
 
     public String idString(){

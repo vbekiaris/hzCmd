@@ -54,15 +54,15 @@ public class TaskClazz implements Callable<Object> {
                 sendBack(infoStop());
                 System.out.println(infoStop());
             }
-        }catch (Exception e){
+        }catch (Throwable e){
             onException(e);
-            System.exit(1);
+            throw new RuntimeException( e );
         }
         return null;
     }
 
     //TODO write exception out to file
-    private void onException(Exception e){
+    private void onException(Throwable e){
         e.printStackTrace();
         sendBackError(infoString() + " " +  exceptionStacktraceToString(e) );
     }
