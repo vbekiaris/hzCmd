@@ -37,6 +37,8 @@ public class CQ extends Task {
 
         PrintStream p = new PrintStream(new File ("latencys.txt"));
 
+        latency.h.outputPercentileDistribution(p, 1.0);
+
         /*
         latency.h.outputPercentileDistribution(p, 1.0);
 
