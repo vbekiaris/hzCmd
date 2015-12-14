@@ -1,13 +1,8 @@
 package tests;
 
 import com.hazelcast.core.IMap;
-import com.hazelcast.query.Predicate;
 import global.Task;
-
 import java.io.*;
-import java.util.Map;
-
-import static tests.Utils.sleepSeconds;
 
 public class CQ extends Task {
 
@@ -36,18 +31,18 @@ public class CQ extends Task {
     public void printLatency() throws Exception {
 
         PrintStream p = new PrintStream(new File ("latencys.txt"));
-
         latency.h.outputPercentileDistribution(p, 1.0);
 
-        /*
-        latency.h.outputPercentileDistribution(p, 1.0);
+
+        FileWriter fw = new FileWriter(new File ("latencys2.txt"));
+        BufferedWriter bw = new BufferedWriter(fw);
 
         for (int i = 0; i < latency.latencys.length; i++) {
             bw.write(i+", "+latency.latencys[i]);
             bw.newLine();
         }
         bw.flush();
-        */
+
     }
 
 }

@@ -32,9 +32,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class LatencyListener implements EntryListener<Integer, Long>, DataSerializable {
 
     Histogram h = new ConcurrentHistogram(TimeUnit.SECONDS.toNanos(30), 2);
-    //AtomicInteger i = new AtomicInteger();
-    //final int sampleSize=100000;
-    //long latencys[] = new long[sampleSize];
+
+    AtomicInteger i = new AtomicInteger();
+    final int sampleSize=100000;
+    long latencys[] = new long[sampleSize];
 
     public LatencyListener() {
     }
@@ -47,8 +48,8 @@ public class LatencyListener implements EntryListener<Integer, Long>, DataSerial
         long latency = now - then;
         h.recordValue(latency);
 
-        //latencys[i.getAndIncrement()]=latency;
-        //i.set( i.get() % sampleSize );
+        latencys[i.getAndIncrement()]=latency;
+        i.set( i.get() % sampleSize );
     }
 
     public void entryRemoved(EntryEvent e) {
