@@ -33,10 +33,11 @@ public class LatencyListener implements EntryListener<Integer, Data>, DataSerial
 
     Histogram h = new ConcurrentHistogram(TimeUnit.SECONDS.toNanos(30), 2);
 
+    /*
     AtomicInteger i = new AtomicInteger();
     final int sampleSize=100000;
     long latencys[] = new long[sampleSize];
-
+    */
     public LatencyListener() { }
 
     public void entryAdded(EntryEvent<Integer, Data> e) {
@@ -49,14 +50,23 @@ public class LatencyListener implements EntryListener<Integer, Data>, DataSerial
             h.recordValue(latency);
         }
 
-        latencys[i.getAndIncrement()]=latency;
-        i.set( i.get() % sampleSize );
+        //latencys[i.getAndIncrement()]=latency;
+        //i.set( i.get() % sampleSize );
     }
 
     public void entryRemoved(EntryEvent e) {
     }
 
-    public void entryUpdated(EntryEvent e) {
+    public void entryUpdated(EntryEvent<Integer, Data> e) {
+
+        Data then = e.getValue();
+        long now = System.currentTimeMillis();
+        long latency = now - then.now;
+
+        if(latency >= 0 ) {
+            h.recordValue(latency);
+        }
+
     }
 
     public void entryEvicted(EntryEvent e) {
