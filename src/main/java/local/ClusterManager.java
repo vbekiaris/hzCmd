@@ -186,6 +186,14 @@ public class ClusterManager {
         }
     }
 
+    public void downlonad(String destDir) throws IOException, InterruptedException {
+        checkEmpty();
+        for(RemoteJvm jvm : jvms.values()){
+            jvm.downlonad(destDir);
+        }
+    }
+
+
     private String toString_memberJvms(){
         String jvms = new String();
         for(RemoteJvm jvm : this.jvms.values()){

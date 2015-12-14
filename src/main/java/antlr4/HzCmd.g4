@@ -30,6 +30,7 @@ statement
 
     | CLEAN    (ALL | VAR) (ALL | MEMBER_ALL | MEMBER_VAR | CLIENT_ALL | CLIENT_VAR)?
     | RESTART  (ALL | VAR) (ALL | MEMBER_ALL | MEMBER_VAR | CLIENT_ALL | CLIENT_VAR) VAR VAR+
+    | DOWNLOAD (ALL | VAR) (ALL | MEMBER_ALL | MEMBER_VAR | CLIENT_ALL | CLIENT_VAR) STRING
 
     | SLEEP NUMBER
     | MEMBERS_ONLY NUMBER
@@ -70,6 +71,7 @@ CLEAN : 'clean';
 SLEEP : 'sleep';
 SAVE : 'save';
 EXIT : 'exit';
+DOWNLOAD : 'download';
 SHOWSSH : 'showSSH';
 PROMPT : 'prompt';
 

@@ -51,7 +51,7 @@ public class RemoteJvm {
             box.upload(xmlConfig, dir+"/"+ HzXml.memberXml);
         }else{
             classToRun = Client.class.getName();
-            box.upload(xmlConfig, dir+"/"+ HzXml.clientXml);
+            box.upload(xmlConfig, dir + "/" + HzXml.clientXml);
         }
 
 
@@ -75,7 +75,7 @@ public class RemoteJvm {
     }
 
     public void clean() throws IOException, InterruptedException {
-        box.rm(dir+"/*");
+        box.rm(dir + "/*");
     }
 
     public void kill() throws IOException, InterruptedException {
@@ -108,7 +108,7 @@ public class RemoteJvm {
     }
 
     public String cat() throws IOException, InterruptedException {
-        return box.cat(dir+"/"+outFile);
+        return box.cat(dir + "/" + outFile);
     }
 
     public String tail() throws IOException, InterruptedException {
@@ -117,6 +117,10 @@ public class RemoteJvm {
 
     public String grep(String args) throws IOException, InterruptedException {
         return box.grep(args+" "+dir+"/"+outFile);
+    }
+
+    public void downlonad(String destDir) throws IOException, InterruptedException {
+        box.downlonad(dir, destDir);
     }
 
     public String getId(){ return id; }

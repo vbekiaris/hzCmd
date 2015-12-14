@@ -105,6 +105,9 @@ public class HzCmd {
                         case HzCmdParser.GREP:
                             grep(tokens);
                             break;
+                        case HzCmdParser.DOWNLOAD:
+                            downlonad(tokens);
+                            break;
                         case HzCmdParser.SLEEP:
                             sleep(cmd);
                             break;
@@ -336,6 +339,17 @@ public class HzCmd {
         for (ClusterManager c : clusterSet) {
             c = selectSubCluster(c, tokens.get(2));
             c.grep(grepArgs);
+        }
+    }
+
+    private void downlonad(CommonTokenStream tokens) throws Exception {
+        Collection<ClusterManager> clusterSet = selectClusterSet(tokens.get(1));
+
+        String dir = tokens.get(3).getText();
+
+        for (ClusterManager c : clusterSet) {
+            c = selectSubCluster(c, tokens.get(2));
+            c.downlonad(dir);
         }
     }
 
