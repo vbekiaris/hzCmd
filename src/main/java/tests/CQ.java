@@ -18,6 +18,11 @@ public class CQ extends Task {
         map.addEntryListener(latency, new EvenKey(), true) ;
     }
 
+    public void resetHisto() throws InterruptedException {
+        latency.h.reset();
+    }
+
+
     public void put() throws InterruptedException {
         IMap map = hazelcastInstance.getMap("a");
 
