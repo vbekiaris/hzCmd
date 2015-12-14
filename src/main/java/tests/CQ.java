@@ -6,7 +6,7 @@ import java.io.*;
 
 public class CQ extends Task {
 
-    public LatencyListener latency = new LatencyListener();
+    public LatencyListener latency;
     public String mapName="a";
     public int keyDomain = Integer.MAX_VALUE;
     private IMap map;
@@ -15,6 +15,7 @@ public class CQ extends Task {
 
     public void addListener() throws InterruptedException {
         map = hazelcastInstance.getMap(mapName);
+        latency = new LatencyListener();
         map.addEntryListener(latency, new EvenKey(), true) ;
     }
 
