@@ -8,17 +8,19 @@ import static global.Utils.sleepSeconds;
 
 public class CQ extends Task {
 
-    private IMap map = hazelcastInstance.getMap("a");
     public LatencyListener latency = new LatencyListener();;
     public int keyDomain = Integer.MAX_VALUE;
 
     public CQ(){}
 
     public void addListener() throws InterruptedException {
+        IMap map = hazelcastInstance.getMap("a");
         map.addEntryListener(latency, new EvenKey(), true) ;
     }
 
     public void put() throws InterruptedException {
+        IMap map = hazelcastInstance.getMap("a");
+
         while (isRunning()) {
             int k = random.nextInt(keyDomain);
             long now = System.nanoTime();
