@@ -3,6 +3,8 @@ package global;
 import com.google.common.escape.Escaper;
 import com.google.common.escape.Escapers;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.*;
 
 public abstract class Utils {
@@ -47,7 +49,13 @@ public abstract class Utils {
     }
 
     public static String exceptionStacktraceToString(Throwable e) {
-        return SHELL_ESCAPE.escape( e +" "+Arrays.toString(e.getStackTrace()) );
+
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+
+
+        return SHELL_ESCAPE.escape( sw.toString() );
     }
 
 
