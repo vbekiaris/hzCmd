@@ -35,7 +35,7 @@ public class CQ extends Task {
         PrintStream p = new PrintStream(new File ("latencys.txt"));
         latency.h.outputPercentileDistribution(p, 1.0);
 
-/*
+
         FileWriter fw = new FileWriter(new File ("latencys2.txt"));
         BufferedWriter bw = new BufferedWriter(fw);
 
@@ -44,6 +44,6 @@ public class CQ extends Task {
             bw.newLine();
         }
         bw.flush();
-        */
+
     }
 }
