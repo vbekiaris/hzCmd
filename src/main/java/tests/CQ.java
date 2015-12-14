@@ -8,7 +8,7 @@ import static global.Utils.sleepSeconds;
 
 public class CQ extends Task {
 
-    public LatencyListener latency = new LatencyListener();
+    public LatencyListener latency = new LatencyListener(this);
     public String mapName="a";
     public int keyDomain = Integer.MAX_VALUE;
     private IMap map;
