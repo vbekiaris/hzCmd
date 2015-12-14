@@ -120,7 +120,7 @@ public class RemoteJvm {
     }
 
     public void downlonad(String destDir) throws IOException, InterruptedException {
-        box.downlonad(dir+"/*", destDir);
+        box.downlonad(dir, destDir);
     }
 
     public String getId(){ return id; }
