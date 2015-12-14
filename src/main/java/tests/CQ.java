@@ -23,17 +23,19 @@ public class CQ extends Task {
 
         while (isRunning()) {
             int k = random.nextInt(keyDomain);
-            long now = System.nanoTime();
-            map.put(k, now);
+            long now = System.currentTimeMillis();
+            Data d = new Data();
+            d.now = now;
+            map.put(k, d);
         }
     }
 
     public void printLatency() throws Exception {
 
         PrintStream p = new PrintStream(new File ("latencys.txt"));
-        latency.h.outputPercentileDistribution(p, 1000000.0);
+        latency.h.outputPercentileDistribution(p, 1.0);
 
-
+/*
         FileWriter fw = new FileWriter(new File ("latencys2.txt"));
         BufferedWriter bw = new BufferedWriter(fw);
 
@@ -42,5 +44,6 @@ public class CQ extends Task {
             bw.newLine();
         }
         bw.flush();
+        */
     }
 }
