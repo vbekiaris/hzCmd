@@ -17,6 +17,9 @@ public class CQ extends Task {
         map = hazelcastInstance.getMap(mapName);
         latency = new LatencyListener();
         map.addEntryListener(latency, new EvenKey(), true) ;
+        while (isRunning()) {
+        sleepSeconds();
+        }
     }
 
     public void put() throws InterruptedException {
