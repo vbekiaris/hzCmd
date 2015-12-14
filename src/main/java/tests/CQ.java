@@ -16,6 +16,8 @@ public class CQ extends Task {
     public int keyDomain = Integer.MAX_VALUE;
     private IMap map;
 
+    public CQ(){}
+
     public void addListener() throws InterruptedException {
         map = hazelcastInstance.getMap(mapName);
         latency = new LatencyListener();
