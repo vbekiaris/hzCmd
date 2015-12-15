@@ -9,6 +9,6 @@ public class Data implements Serializable{
 
     long now;
 
-    byte[] load1 = new byte[200];
-    //char[] load2 = new char[10000];
+    byte[] load1 = new byte[10000];
+    char[] load2 = new char[10000];
 }
