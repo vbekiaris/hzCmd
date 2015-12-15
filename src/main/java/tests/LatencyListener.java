@@ -63,9 +63,9 @@ public class LatencyListener implements EntryListener<Integer, Data>, DataSerial
         long now = System.currentTimeMillis();
         long latency = now - then.now;
 
-        if(latency >= 0 ) {
+        //if(latency >= 0 ) {
             h.recordValue(latency);
-        }
+        //}
 
     }
 
