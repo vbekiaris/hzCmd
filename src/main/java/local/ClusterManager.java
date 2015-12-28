@@ -6,17 +6,14 @@ import global.HzType;
 import xml.HzXml;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static global.Utils.rangeMap;
 import static global.Utils.sleepSeconds;
 import static xml.HzXml.clientXml;
 import static xml.HzXml.memberXml;
 
-public class ClusterManager {
+public class ClusterManager implements Serializable {
 
     private final String clusterId;
     private BoxManager boxes;
@@ -25,19 +22,22 @@ public class ClusterManager {
     private int membersOnlyCount;
     private int memberCount=0;
     private int clientCount=0;
+    private String homeIp;
 
-    public ClusterManager(String clusterId, BoxManager boxes) throws Exception {
+    public ClusterManager(String clusterId, BoxManager boxes, String homeIp) throws Exception {
         this.clusterId =clusterId;
         this.boxes=boxes;
+        this.homeIp=homeIp;
         HzXml.makeMemberXml(this);
-        HzXml.makeClientXml(this);
+//        HzXml.makeClientXml(this);
     }
 
-    private ClusterManager(String clusterId, BoxManager boxes, int memberCount, int clientCount) throws Exception {
+    private ClusterManager(String clusterId, BoxManager boxes, int memberCount, int clientCount, String homeIp) throws Exception {
         this.clusterId =clusterId;
         this.boxes=boxes;
         this.memberCount=memberCount;
         this.clientCount=clientCount;
+        this.homeIp=homeIp;
     }
 
     public String getClusterId() {
@@ -49,7 +49,7 @@ public class ClusterManager {
     }
 
     public ClusterManager getMemberManager() throws Exception {
-        ClusterManager selected = new ClusterManager(clusterId, boxes, memberCount, clientCount);
+        ClusterManager selected = new ClusterManager(clusterId, boxes, memberCount, clientCount, homeIp);
         for(RemoteJvm jvm : this.jvms.values()){
             if(jvm.isMember()){
                 selected.jvms.put(jvm.getId(), jvm);
@@ -59,7 +59,7 @@ public class ClusterManager {
     }
 
     public ClusterManager getClientManager() throws Exception {
-        ClusterManager selected = new ClusterManager(clusterId, boxes, memberCount, clientCount);
+        ClusterManager selected = new ClusterManager(clusterId, boxes, memberCount, clientCount, homeIp);
         for(RemoteJvm jvm : this.jvms.values()){
             if(jvm.isClient()){
                 selected.jvms.put(jvm.getId(), jvm);
@@ -69,7 +69,7 @@ public class ClusterManager {
     }
 
     public ClusterManager getIDManager(String id) throws Exception {
-        ClusterManager selected = new ClusterManager(clusterId, boxes, memberCount, clientCount);
+        ClusterManager selected = new ClusterManager(clusterId, boxes, memberCount, clientCount, homeIp);
         selected.jvms.put(id, this.jvms.get(id));
         return selected;
     }
@@ -98,7 +98,7 @@ public class ClusterManager {
 
         String id = HzType.Member.name() + memberCount + clusterId;
 
-        RemoteJvm jvm = new RemoteJvm(boxes.get(memberIdx), HzType.Member, id, memberXml(this));
+        RemoteJvm jvm = new RemoteJvm(boxes.get(memberIdx), HzType.Member, id, memberXml(this), homeIp);
         jvms.put(jvm.getId(), jvm);
         jvm.initilize(hzVersion, options);
         return jvm;
@@ -118,7 +118,7 @@ public class ClusterManager {
     public RemoteJvm addClient(String hzVersion, String options) throws IOException, InterruptedException {
         int clientIdx = rangeMap(clientCount++, membersOnlyCount, boxes.size());
         String id = HzType.Client.name() + clientCount + clusterId;
-        RemoteJvm jvm = new RemoteJvm(boxes.get(clientIdx), HzType.Client, id, clientXml(this));
+        RemoteJvm jvm = new RemoteJvm(boxes.get(clientIdx), HzType.Client, id, clientXml(this), homeIp);
         jvms.put(jvm.getId(), jvm);
         jvm.initilize(hzVersion, options);
         return jvm;
@@ -212,6 +212,16 @@ public class ClusterManager {
             }
         }
         return jvms;
+    }
+
+    public void clearStoped(){
+        Iterator<Map.Entry<String,RemoteJvm>> i = jvms.entrySet().iterator();
+        while (i.hasNext()) {
+            Map.Entry<String, RemoteJvm> e = i.next();
+            if(! e.getValue().running()){
+                i.remove();
+            }
+        }
     }
 
     private void checkEmpty(){

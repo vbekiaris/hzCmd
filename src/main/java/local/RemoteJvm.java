@@ -8,11 +8,12 @@ import remote.Member;
 import xml.HzXml;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.InetAddress;
 
 import static xml.HzXml.memberXml;
 
-public class RemoteJvm {
+public class RemoteJvm implements Serializable {
 
     public static final String libPath ="$HOME/"+Installer.REMOTE_LIB+"/*";
     public static final String hzPath ="$HOME/"+Installer.REMOTE_HZ_LIB+"/";
@@ -20,6 +21,7 @@ public class RemoteJvm {
     public static final String inFile  =  "in.txt";
     public static final String outFile =  "out.txt";
 
+    private final String homeIp;
     private final Box box;
     private final HzType type;
     private final String id;
@@ -28,12 +30,13 @@ public class RemoteJvm {
     private int pid = 0;
     private String version;
 
-    public RemoteJvm(Box box, HzType type, String id, String xmlConfig) {
+    public RemoteJvm(Box box, HzType type, String id, String xmlConfig, String homeIp) {
         this.box = box;
         this.type = type;
         this.id = id;
         this.dir = Installer.REMOTE_ROOT+"/"+id;
         this.xmlConfig = xmlConfig;
+        this.homeIp = homeIp;
     }
 
     public void initilize(String hzVersion, String options) throws IOException, InterruptedException {
@@ -56,8 +59,8 @@ public class RemoteJvm {
 
 
         String ip = InetAddress.getLocalHost().getHostAddress();
-        if(HzCmd.homeIp!=null){
-            ip = HzCmd.homeIp;
+        if(homeIp!=null){
+            ip = homeIp;
         }
 
         String jvmArgs = new String();
@@ -70,7 +73,7 @@ public class RemoteJvm {
 
 
         String hzLib = hzPath+hzVersion+"/*";
-        String pidStr = box.ssh("cd " + dir + "; nohup java -cp \"" + libPath +":"+ hzLib + "\" " + jvmArgs +" "+ options +" "+ classToRun + " < " + inFile + " &>> " + outFile + " & echo $!");
+        String pidStr = box.ssh("cd " + dir + "; nohup java -cp \"" + libPath +":"+ hzLib + "\" " + jvmArgs +" "+ options +" "+ classToRun + " < " + inFile + " &> " + outFile + " & echo $!");
         pid = Integer.parseInt(pidStr.trim());
     }
 

@@ -3,11 +3,12 @@ package local;
 import global.Bash;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 import static global.Utils.escapeQuotes;
 import static global.Utils.exceptionStacktraceToString;
 
-public class Box {
+public class Box implements Serializable{
     public String user;
     public String pub;
     public String pri;
@@ -66,7 +67,7 @@ public class Box {
     public String toString() {
         return "Box{" +
                 "user="+user+
-                ",pub=" + pub +
+                ", pub=" + pub +
                 ", pri=" + pri +
                 '}';
     }

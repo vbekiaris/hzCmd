@@ -1,15 +1,10 @@
 package local;
 
-import global.Bash;
-
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoxManager {
+public class BoxManager implements Serializable {
 
     private List<Box> boxes = new ArrayList();
 
@@ -34,9 +29,7 @@ public class BoxManager {
         boxes.add(ip);
     }
 
-    public BoxManager getBoxes(int start, int end){
-        return new BoxManager( boxes.subList(start-1,  end) );
-    }
+    public BoxManager getBoxes(int start, int end){ return new BoxManager( new ArrayList( boxes.subList(start-1,  end) ) ); }
 
     public Box get(int i){
         return boxes.get(i);
@@ -74,7 +67,7 @@ public class BoxManager {
     @Override
     public String toString() {
 
-        String str="";
+        String str="\n";
         for(Box b : boxes){
             str+=b+"\n";
         }

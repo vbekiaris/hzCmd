@@ -11,138 +11,89 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import java.io.*;
 import java.util.*;
 
-import static global.Utils.*;
 
 
 //TODO WAN REP xml SETUP
 //TODO man center integ
 //TODO tail -f grepping logs and pop up display
 //TODO exampe 3 3node cluster wan replicate ring, with hotrestart,  members putting,  clients getting,  kill restart members,  man center running
-public class HzCmd {
+public class HzCmd implements Serializable {
 
-    public static String homeIp;
-    public static String commsFile = "commsIn.txt";
-    private ReadComms readComms = new ReadComms(commsFile);
-
-    private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-    private List<String> history = new ArrayList();
+    public String homeIp;
+    public static final String commsFile = "commsIn.txt";
 
     private BoxManager boxes = new BoxManager();
     private Map<String, ClusterManager> clusters = new HashMap();
-    private Map<String, String> vars = new HashMap();
 
-    private boolean repeatProppt = true;
+    public void exeCmd(String line) throws IOException {
+        if (line!=null && !line.equals("")) {
+            try{
+                HzCmdLexer lexer = new HzCmdLexer(new ANTLRInputStream(line));
+                CommonTokenStream tokens = new CommonTokenStream(lexer);
+                HzCmdParser parser = new HzCmdParser(tokens);
+                HzCmdParser.StatementContext cmd = parser.statement();
 
-    public HzCmd() throws IOException, InterruptedException {
-        readComms.start();
-    }
-
-    public void run() throws IOException {
-        while (true){
-            String line=in.readLine();
-            history.add(line);
-            if (line!=null && !line.equals("") && !line.startsWith("#") && !line.startsWith("//")) {
-                try{
-                    HzCmdLexer lexer = new HzCmdLexer(new ANTLRInputStream(line));
-                    CommonTokenStream tokens = new CommonTokenStream(lexer);
-                    HzCmdParser parser = new HzCmdParser(tokens);
-                    HzCmdParser.StatementContext cmd = parser.statement();
-
-                    org.antlr.v4.runtime.Token token;
-                    for (token = lexer.nextToken(); token.getType() != Token.EOF;  token = lexer.nextToken() ) {
-                        System.out.println(token.getText());
-                    }
-
-                    if(repeatProppt) { System.out.println("=>" + line); }
-
-                    switch (cmd.start.getType()) {
-                        case HzCmdParser.BOXES:
-                            boxesCmd(cmd);
-                            break;
-                        case HzCmdParser.VAR:
-                            assignment(cmd);
-                            break;
-                         case HzCmdParser.HOMEIP:
-                            setHomeIp(cmd);
-                            break;
-                        case HzCmdParser.CLUSTER:
-                            cluster(cmd);
-                            break;
-                        case HzCmdParser.INSTALL:
-                            install(cmd);
-                            break;
-                        case HzCmdParser.UNINSTALL:
-                            uninstall(cmd);
-                            break;
-
-                        case HzCmdParser.MEMBER_BOX:
-                            dedicatedMembers(cmd);
-                            break;
-                        case HzCmdParser.ADD:
-                            add(cmd);
-                            break;
-                        case HzCmdParser.LOAD:
-                            load(cmd);
-                            break;
-                        case HzCmdParser.INVOKE:
-                            invoke(tokens);
-                            break;
-                        case HzCmdParser.STOP:
-                            stop(tokens);
-                            break;
-                        case HzCmdParser.INFO:
-                            info(tokens);
-                            break;
-                        case HzCmdParser.KILL:
-                            kill(tokens);
-                            break;
-                        case HzCmdParser.RESTART:
-                            restart(tokens);
-                            break;
-                        case HzCmdParser.CAT:
-                            cat(tokens);
-                            break;
-                        case HzCmdParser.GREP:
-                            grep(tokens);
-                            break;
-                        case HzCmdParser.DOWNLOAD:
-                            downlonad(tokens);
-                            break;
-                        case HzCmdParser.SLEEP:
-                            sleep(cmd);
-                            break;
-                        case HzCmdParser.SHOWSSH:
-                            showSSH(cmd);
-                            break;
-                        case HzCmdParser.PROMPT:
-                            prompt(cmd);
-                            break;
-                        case HzCmdParser.EXIT:
-                            exit();
-                            break;
-                    }
-                }catch(Exception e){
-                    e.printStackTrace();
+                org.antlr.v4.runtime.Token token;
+                for (token = lexer.nextToken(); token.getType() != Token.EOF;  token = lexer.nextToken() ) {
+                    System.out.println(token.getText());
                 }
-            }else {
-                sleepMilli(500);
+
+                switch (cmd.start.getType()) {
+                    case HzCmdParser.BOXES:
+                        boxesCmd(cmd);
+                        break;
+                     case HzCmdParser.HOMEIP:
+                        setHomeIp(cmd);
+                        break;
+                    case HzCmdParser.CLUSTER:
+                        cluster(cmd);
+                        break;
+                    case HzCmdParser.INSTALL:
+                        install(cmd);
+                        break;
+                    case HzCmdParser.UNINSTALL:
+                        uninstall(cmd);
+                        break;
+
+                    case HzCmdParser.MEMBER_BOX:
+                        dedicatedMembers(cmd);
+                        break;
+                    case HzCmdParser.ADD:
+                        add(cmd);
+                        break;
+                    case HzCmdParser.LOAD:
+                        load(cmd);
+                        break;
+                    case HzCmdParser.INVOKE:
+                        invoke(tokens);
+                        break;
+
+                    case HzCmdParser.INFO:
+                        info(tokens);
+                        break;
+                    case HzCmdParser.KILL:
+                        kill(tokens);
+                        break;
+                    case HzCmdParser.RESTART:
+                        restart(tokens);
+                        break;
+                    case HzCmdParser.CAT:
+                        cat(tokens);
+                        break;
+                    case HzCmdParser.GREP:
+                        grep(tokens);
+                        break;
+                    case HzCmdParser.DOWNLOAD:
+                        downlonad(tokens);
+                        break;
+                    case HzCmdParser.SHOWSSH:
+                        showSSH(cmd);
+                        break;
+
+                }
+            }catch(Exception e){
+                e.printStackTrace();
             }
-        }
-    }
-
-    public void exit(){
-        readComms.running=false;
-        while (! readComms.dead() ){
-            sleepMilli(100);
-        }
-        System.exit(0);
-    }
-
-    private void assignment(HzCmdParser.StatementContext cmd){
-        if( cmd.ASSIGN() != null){
-            String var = cmd.start.getText();
-            String value = cmd.STRING(0).getText().replace("\"", "");
-            vars.put(var, value);
         }
     }
 
@@ -165,7 +116,7 @@ public class HzCmd {
         int end = Integer.parseInt( cmd.NUMBER(1).getText() );
 
         BoxManager clusterBoxes = boxes.getBoxes(start, end);
-        ClusterManager jvmManager = new ClusterManager(clusterID, clusterBoxes);
+        ClusterManager jvmManager = new ClusterManager(clusterID, clusterBoxes, homeIp);
         clusters.put(jvmManager.getClusterId(), jvmManager);
 
         System.out.println(jvmManager);
@@ -180,16 +131,10 @@ public class HzCmd {
             ee=true;
         }
 
-        List<TerminalNode> ids = cmd.VAR();
-        String[] versions = new String[ids.size()-1];
-
-        for (int i = 1; i < ids.size(); i++) {
-            String key = ids.get(i).getText();
-            versions[i-1]=(vars.get(key));
-        }
+        String version = cmd.STRING(0).getText().replace("\"", "");
 
         for (ClusterManager c : selected) {
-            Installer.install(c.getBoxManager(), ee, versions);
+            Installer.install(c.getBoxManager(), ee, version);
         }
     }
 
@@ -219,11 +164,9 @@ public class HzCmd {
 
         int threadQty = Integer.parseInt(cmd.NUMBER(0).getText());
 
-        String version = cmd.VAR(1).getText();
-        version = vars.get(version);
+        String version = cmd.STRING(0).getText().replace("\"", "");
 
-        String options = cmd.VAR(2).getText();
-        options = vars.get(options);
+        String options = cmd.STRING(1).getText().replace("\"", "");
 
         for (ClusterManager jvmManager : c) {
             if( cmd.MEMBER() != null) {
@@ -266,7 +209,6 @@ public class HzCmd {
 
         String taskId = tokens.get(1).getText();
 
-
         Collection<ClusterManager> clusterSet = selectClusterSet(tokens.get(2));
 
         for (ClusterManager c : clusterSet) {
@@ -307,13 +249,7 @@ public class HzCmd {
         Collection<ClusterManager> clusterSet = selectClusterSet(tokens.get(1));
 
         String version = tokens.get(3).getText();
-        version = vars.get(version);
-
         String options = "";
-        for(int i=4; i<tokens.size(); i++){
-            String key = tokens.get(i).getText();
-            options += vars.get(key);
-        }
 
         for (ClusterManager c : clusterSet) {
             c = selectSubCluster(c, tokens.get(2));
@@ -353,24 +289,10 @@ public class HzCmd {
         }
     }
 
-
-    private void sleep(HzCmdParser.StatementContext cmd){
-        int seconds = Integer.parseInt(cmd.NUMBER(0).getText());
-        sleepSeconds(seconds);
-    }
-
-
-
     private void showSSH(HzCmdParser.StatementContext cmd){
         boolean show = Boolean.parseBoolean( cmd.BOOL().getText() );
         Bash.showSSH = show;
     }
-
-    private void prompt(HzCmdParser.StatementContext cmd){
-        boolean show = Boolean.parseBoolean( cmd.BOOL().getText() );
-        repeatProppt = show;
-    }
-
 
     private Collection<ClusterManager> selectClusterSet(org.antlr.v4.runtime.Token criterionToken) {
         Collection<ClusterManager> selected = new ArrayList();
@@ -381,6 +303,15 @@ public class HzCmd {
         }
         return  selected;
     }
+
+
+    private void clearStoped() {
+        for (ClusterManager c : clusters.values()) {
+            c.clearStoped();
+        }
+    }
+
+
 
     private ClusterManager selectSubCluster(ClusterManager c, org.antlr.v4.runtime.Token criterionToken) throws Exception {
         switch (criterionToken.getType()) {
@@ -412,9 +343,58 @@ public class HzCmd {
         return c;
     }
 
+
+    @Override
+    public String toString() {
+        return "HzCmd{" +
+                "boxes=" + boxes +
+                "homeIp='" + homeIp + '\'' +
+                ", commsFile='" + commsFile + '\'' +
+                ", clusters=" + clusters +
+                '}';
+    }
+
+
+
     public static void main(String[] args) throws InterruptedException, IOException {
-        HzCmd c = new HzCmd();
-        c.run();
+
+
+        ReadComms readComms = new ReadComms(HzCmd.commsFile);
+        readComms.read();
+
+        HzCmd hzCmd = null;
+        try {
+            FileInputStream fileIn = new FileInputStream("/tmp/HzCmd.ser");
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            hzCmd = (HzCmd) in.readObject();
+            in.close();
+            fileIn.close();
+        }catch(Exception e) {
+            hzCmd = new HzCmd();
+        }
+
+        hzCmd.clearStoped();
+
+        System.out.println(hzCmd);
+
+//        hzCmd.exeCmd("homeIp \"127.0.0.1\"");
+//        hzCmd.exeCmd("boxes add \"danny\" \"agents.txt\" ");
+//        hzCmd.exeCmd("install * OS \"3.6-RC2-SNAPSHOT\"");
+//        hzCmd.exeCmd("cluster A 1 2");
+//        hzCmd.exeCmd("cluster B 2 3");
+
+        //hzCmd.exeCmd("add member A 1 \"3.6-RC2-SNAPSHOT\" \"-Xms400m\"  ");
+
+        try {
+            FileOutputStream fileOut = new FileOutputStream("/tmp/HzCmd.ser");
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(hzCmd);
+            out.close();
+            fileOut.close();
+        }catch(IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

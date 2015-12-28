@@ -17,48 +17,48 @@ public class HzCmdBaseListener implements HzCmdListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	 public void enterScript(HzCmdParser.ScriptContext ctx) { }
+	@Override public void enterScript(HzCmdParser.ScriptContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	 public void exitScript(HzCmdParser.ScriptContext ctx) { }
+	@Override public void exitScript(HzCmdParser.ScriptContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	 public void enterStatement(HzCmdParser.StatementContext ctx) { }
+	@Override public void enterStatement(HzCmdParser.StatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	 public void exitStatement(HzCmdParser.StatementContext ctx) { }
+	@Override public void exitStatement(HzCmdParser.StatementContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	 public void enterEveryRule(ParserRuleContext ctx) { }
+	@Override public void enterEveryRule(ParserRuleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	 public void exitEveryRule(ParserRuleContext ctx) { }
+	@Override public void exitEveryRule(ParserRuleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	 public void visitTerminal(TerminalNode node) { }
+	@Override public void visitTerminal(TerminalNode node) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	 public void visitErrorNode(ErrorNode node) { }
+	@Override public void visitErrorNode(ErrorNode node) { }
 }

@@ -4,15 +4,10 @@ import global.Bash;
 
 import java.io.*;
 
-public class ReadComms extends Thread {
-
+public class ReadComms {
 
     private String commsFile;
     private BufferedReader commsIn;
-
-    public volatile boolean running = true;
-
-    private volatile boolean dead = false;
 
     public ReadComms(String file) throws IOException {
         commsFile =  file;
@@ -24,32 +19,21 @@ public class ReadComms extends Thread {
     }
 
 
-    public void run() {
+    public void read() {
         String line;
-        while ( running ) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        try {
+            while ( (line = commsIn.readLine()) != null ){
 
-            try {
-                while ( (line = commsIn.readLine()) != null ){
-
-                    String color = Bash.ANSI_PURPLE;
-                    if(line.startsWith("ERROR")){
-                        color = Bash.ANSI_RED;
-                    }
-
-                    System.out.println(color+line+Bash.ANSI_RESET);
+                String color = Bash.ANSI_PURPLE;
+                if(line.startsWith("ERROR")){
+                    color = Bash.ANSI_RED;
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-                running=false;
+
+                System.out.println(color+line+Bash.ANSI_RESET);
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        clearFile();
-        dead = true;
     }
 
     private void clearFile(){
@@ -61,10 +45,6 @@ public class ReadComms extends Thread {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-    }
-
-    public boolean dead() {
-        return dead;
     }
 
 }
