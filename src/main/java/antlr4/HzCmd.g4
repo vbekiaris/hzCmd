@@ -7,8 +7,7 @@ script
     ;
 
 statement
-    : VAR ASSIGN STRING
-    | BOXES ADD STRING STRING
+    : BOXES ADD STRING STRING
     | CLUSTER VAR NUMBER NUMBER
 
     | INSTALL   (ALL | VAR) (OS | EE) STRING
@@ -32,15 +31,12 @@ statement
     | RESTART  (ALL | VAR) (ALL | MEMBER_ALL | MEMBER_VAR | CLIENT_ALL | CLIENT_VAR) VAR VAR+
     | DOWNLOAD (ALL | VAR) (ALL | MEMBER_ALL | MEMBER_VAR | CLIENT_ALL | CLIENT_VAR) STRING
 
-    | SLEEP NUMBER
     | MEMBERS_ONLY NUMBER
     | SAVE STRING
     | EXIT
     | SHOWSSH BOOL
     | PROMPT BOOL
     | HOMEIP STRING
-
-    | COMMENT
     ;
 
 HOMEIP : 'homeIp';
@@ -68,7 +64,6 @@ CAT : 'cat';
 GREP : 'grep';
 RESTART : 'restart';
 CLEAN : 'clean';
-SLEEP : 'sleep';
 SAVE : 'save';
 EXIT : 'exit';
 DOWNLOAD : 'download';
@@ -91,7 +86,6 @@ MEMBERS : 'members';
 CLIENTS : 'clients';
 
 
-ASSIGN : '=' ;
 BOOL : TRUE | FALSE;
 TRUE : 'true';
 FALSE : 'false';
@@ -103,7 +97,7 @@ NUMBER : [0-9]+ ;
 WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+ -> skip ;
 
 fragment CHAR   :( [a-z]|[A-Z]|[0-9]|'/'|'_'|'.'|'-'|' '|'='|'#'|':'|'\\'|'|'|'*'|'['|']' );
-STRING : '"'CHAR+'"';
+STRING : CHAR;
 
 
 IP_PAIR : IP_STR','IP_STR;
@@ -112,4 +106,3 @@ IP_STR : Octet '.' Octet '.' Octet '.' Octet ;
 fragment Octet :  Digit Digit Digit | Digit Digit | Digit ;
 fragment Digit : '0'..'9';
 
-COMMENT : '//' ~[\r\n]* -> skip ;

@@ -218,7 +218,13 @@ public class ClusterManager implements Serializable {
         Iterator<Map.Entry<String,RemoteJvm>> i = jvms.entrySet().iterator();
         while (i.hasNext()) {
             Map.Entry<String, RemoteJvm> e = i.next();
-            if(! e.getValue().running()){
+            RemoteJvm jvm = e.getValue();
+            if(! jvm.running()){
+                if(jvm.isMember()){
+                    this.memberCount--;
+                }else{
+                    this.clientCount--;
+                }
                 i.remove();
             }
         }

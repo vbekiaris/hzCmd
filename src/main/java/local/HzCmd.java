@@ -364,7 +364,7 @@ public class HzCmd implements Serializable {
 
         HzCmd hzCmd = null;
         try {
-            FileInputStream fileIn = new FileInputStream("/tmp/HzCmd.ser");
+            FileInputStream fileIn = new FileInputStream("HzCmd.ser");
             ObjectInputStream in = new ObjectInputStream(fileIn);
             hzCmd = (HzCmd) in.readObject();
             in.close();
@@ -373,9 +373,16 @@ public class HzCmd implements Serializable {
             hzCmd = new HzCmd();
         }
 
-        hzCmd.clearStoped();
+        StringBuilder builder = new StringBuilder();
+        for (int i = 1; i < args.length; i++) {
+            builder.append(args[i]);
+        }
 
-        System.out.println(hzCmd);
+        hzCmd.exeCmd( builder.toString() );
+
+//        hzCmd.clearStoped();
+
+//        System.out.println(hzCmd);
 
 //        hzCmd.exeCmd("homeIp \"127.0.0.1\"");
 //        hzCmd.exeCmd("boxes add \"danny\" \"agents.txt\" ");
@@ -386,7 +393,7 @@ public class HzCmd implements Serializable {
         //hzCmd.exeCmd("add member A 1 \"3.6-RC2-SNAPSHOT\" \"-Xms400m\"  ");
 
         try {
-            FileOutputStream fileOut = new FileOutputStream("/tmp/HzCmd.ser");
+            FileOutputStream fileOut = new FileOutputStream("HzCmd.ser");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(hzCmd);
             out.close();
