@@ -7,126 +7,15 @@ import com.github.rvesse.airline.help.Help;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
-public class Play2 {
-
-    public static void main(String[] args)
-    {
-        CliBuilder<Runnable> builder = new CliBuilder<Runnable>("hzCmd");
-
-        builder.withDescription("Hazelcast cluster cmd line control")
-                .withDefaultCommand(Help.class)
-                .withCommands(Help.class, Add.class, Cluster.class, Install.class, Kill.class);
-
-        builder.withGroup("add")
-                .withDescription("add")
-                .withDefaultCommand(Help.class)
-                .withCommands(AddBox.class, AddJvm.class);
-
-
-
-
-        com.github.rvesse.airline.Cli<Runnable> gitParser = builder.build();
-
-        /*
-        args = new String[1];
-        args[0]="help";
-        gitParser.parse(args).run();
-
-        args = new String[2];
-        args[0]="help";
-        args[1]="add";
-        gitParser.parse(args).run();
-
-        args = new String[3];
-        args[0]="help";
-        args[1]="add";
-        args[2]="boxes";
-        gitParser.parse(args).run();
-
-        args = new String[6];
-        args[0]="add";
-        args[1]="boxes";
-        args[2]="-u";
-        args[3]="danny";
-        args[4]="-f";
-        args[5]="agents.txt";
-        gitParser.parse(args).run();
-        */
-
-        args = new String[3];
-        args[0]="help";
-        args[1]="add";
-        args[2]="boxes";
-        gitParser.parse(args).run();
-
-
-        args = new String[3];
-        args[0]="help";
-        args[1]="add";
-        args[2]="jvm";
-        gitParser.parse(args).run();
-
-
-        args = new String[12];
-        args[0]="add";
-        args[1]="jvm";
-
-        args[2]="-m";
-        args[3]="2";
-
-        args[4]="-c";
-        args[5]="8";
-
-        args[6]="-cluster";
-        args[7]="A";
-
-        args[8]="-v";
-        args[9]="3.6-RC2-SNAPSHOT";
-
-        args[10]="-o";
-        args[11]="-Xms200m -Xmx1G";
-        gitParser.parse(args).run();
-
-
-        /*
-        args = new String[6];
-        args[0]="add";
-        args[1]="client";
-        args[2]="2";
-        args[3]="A";
-        args[4]="3.6-RC2-SNAPSHOT";
-        args[5]="-Xms200m -Xmx1G";
-        gitParser.parse(args).run();
-
-        args = new String[1];
-        args[0]="kill";
-        gitParser.parse(args).run();
-
-        args = new String[3];
-        args[0]="kill";
-        args[1]="cluster";
-        args[2]="A";
-        gitParser.parse(args).run();
-
-        args = new String[3];
-        args[0]="kill";
-        args[1]="A";
-        args[2]="Member1";
-        gitParser.parse(args).run();
-
-        args = new String[4];
-        args[0]="kill";
-        args[1]="cluster";
-        args[2]="A";
-        args[3]="Member*";
-        gitParser.parse(args).run();
-        */
-
-    }
+public class CmdLine {
 
     public static class Command implements Runnable {
         public void run() {
             System.out.println(getClass().getSimpleName());
+        }
+
+        public void exe(HzCmd hzCmd) {
+            System.out.println(hzCmd);
         }
     }
 
@@ -173,7 +62,12 @@ public class Play2 {
         public String file = "agents.txt";
 
         public void run() {
-            System.out.print(getClass().getSimpleName()+" "+user+" "+file);
+            System.out.println(getClass().getSimpleName() + " " + user + " " + file);
+        }
+
+        public void exe(HzCmd hzCmd) {
+            //hzCmd.
+            System.out.println(hzCmd);
         }
     }
 

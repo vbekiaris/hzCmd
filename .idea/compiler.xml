@@ -24,10 +24,11 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="hazellite" />
-        <module name="remoter" />
+        <module name="hzCmd" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="hzCmd" target="1.5" />
       <module name="remoter" target="1.5" />
     </bytecodeTargetLevel>
   </component>
