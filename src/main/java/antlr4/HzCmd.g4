@@ -18,7 +18,6 @@ statement
     | LOAD (ALL | VAR) VAR STRING
 
     | REPLICATE VAR VAR (VAR | STRING) (VAR | STRING)
-    | SET VAR.VAR ASSIGN STRING
     | INVOKE NUMBER VAR (ALL | VAR) (ALL | VAR) (ALL | MEMBER_ALL | MEMBER_VAR | CLIENT_ALL | CLIENT_VAR)
     | STOP VAR (ALL | VAR) (ALL | MEMBER_ALL | MEMBER_VAR | CLIENT_ALL | CLIENT_VAR)?
 
@@ -38,6 +37,9 @@ statement
     | PROMPT BOOL
     | HOMEIP STRING
     ;
+
+
+STRING : CHAR+;
 
 HOMEIP : 'homeIp';
 USER : 'user' ;
@@ -92,16 +94,12 @@ FALSE : 'false';
 
 
 VAR : ([a-z]|[A-Z])([a-z]|[A-Z]|[0-9]|'_')* ;
-NUMBER : [0-9]+ ;
-
-WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+ -> skip ;
-
-fragment CHAR   :( [a-z]|[A-Z]|[0-9]|'/'|'_'|'.'|'-'|' '|'='|'#'|':'|'\\'|'|'|'*'|'['|']' );
-STRING : CHAR;
+NUMBER : Digit+ ;
 
 
-IP_PAIR : IP_STR','IP_STR;
-IP_STR : Octet '.' Octet '.' Octet '.' Octet ;
+fragment CHAR : ( [a-z]|[A-Z]|[0-9]|'/'|'_'|'.'|'-'|' '|'='|'#'|':'|'\\'|'|'|'*'|'['|']' );
+
+
 
 fragment Octet :  Digit Digit Digit | Digit Digit | Digit ;
 fragment Digit : '0'..'9';
