@@ -13,19 +13,12 @@ public class CmdLine {
 
         builder.withDescription("Hazelcast cluster cmd line control")
                 .withDefaultCommand(Help.class)
-                .withCommands(Help.class, Info.class, Add.class, Set.class, MemberBox.class, Install.class, Kill.class);
+                .withCommands(Help.class, Info.class, Add.class, Set.class, MemberBox.class, Install.class, Kill.class, Restart.class, Cat.class, Grep.class);
 
         builder.withGroup("add")
                 .withDescription("add")
                 .withDefaultCommand(Help.class)
                 .withCommands(AddBox.class, Cluster.class, AddJvm.class);
-
-        /*
-        builder.withGroup("set")
-                .withDescription("set hzCmd properties")
-                .withDefaultCommand(Help.class)
-                .withCommands(MemberBox.class);
-        */
 
         return builder.build();
     }
