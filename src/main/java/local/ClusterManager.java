@@ -29,7 +29,7 @@ public class ClusterManager implements Serializable {
         this.boxes=boxes;
         this.homeIp=homeIp;
         HzXml.makeMemberXml(this);
-//        HzXml.makeClientXml(this);
+        HzXml.makeClientXml(this);
     }
 
     private ClusterManager(String clusterId, BoxManager boxes, int memberCount, int clientCount, String homeIp) throws Exception {

@@ -1,29 +1,31 @@
 package cmdline;
 
-import com.github.rvesse.airline.*;
-import com.github.rvesse.airline.annotations.*;
 import com.github.rvesse.airline.builder.CliBuilder;
 import com.github.rvesse.airline.help.Help;
-import local.HzCmd;
-
-import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class CmdLine {
 
     @SuppressWarnings("unchecked")
-    public static com.github.rvesse.airline.Cli<Command> getParser(){
+    public static com.github.rvesse.airline.Cli<Runnable> getParser(){
 
         CliBuilder builder = new CliBuilder("hzCmd");
 
         builder.withDescription("Hazelcast cluster cmd line control")
                 .withDefaultCommand(Help.class)
-                .withCommands(Help.class, Add.class, Cluster.class, Install.class, Kill.class);
+                .withCommands(Help.class, Info.class, Add.class, Set.class, MemberBox.class, Install.class, Kill.class);
 
         builder.withGroup("add")
                 .withDescription("add")
                 .withDefaultCommand(Help.class)
-                .withCommands(AddBox.class, AddJvm.class);
+                .withCommands(AddBox.class, Cluster.class, AddJvm.class);
+
+        /*
+        builder.withGroup("set")
+                .withDescription("set hzCmd properties")
+                .withDefaultCommand(Help.class)
+                .withCommands(MemberBox.class);
+        */
 
         return builder.build();
     }

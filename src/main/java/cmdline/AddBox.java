@@ -3,6 +3,8 @@ package cmdline;
 import com.github.rvesse.airline.annotations.Option;
 import local.HzCmd;
 
+import java.io.IOException;
+
 @com.github.rvesse.airline.annotations.Command(name = "boxes", description = "file of ip address and ssh login user name")
 public class AddBox extends Command {
 
@@ -17,7 +19,10 @@ public class AddBox extends Command {
     }
 
     public void exe(HzCmd hzCmd) {
-        hzCmd.addBoxes(user, file);
-        System.out.println(hzCmd);
+        try {
+            hzCmd.addBoxes(user, file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

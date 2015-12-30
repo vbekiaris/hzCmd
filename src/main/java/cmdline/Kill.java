@@ -14,7 +14,5 @@ public class Kill extends Command
     @Option(name = "-c", description = "client id to kill, * for ALL")
     public String client;
 
-    public void run() {
 
-    }
 }

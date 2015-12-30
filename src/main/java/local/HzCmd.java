@@ -2,6 +2,7 @@ package local;
 
 import cmdline.CmdLine;
 import cmdline.Command;
+import global.Bash;
 
 import java.io.*;
 import java.util.*;
@@ -20,14 +21,35 @@ public class HzCmd implements Serializable {
     private BoxManager boxes = new BoxManager();
     private Map<String, ClusterManager> clusters = new HashMap();
 
+    public void showSSH(boolean show){
+        Bash.showSSH = show;
+    }
 
-    public void addBoxes(String user, String file){
-        try {
-            boxes.addBoxes(user, file);
-        }catch (Exception e){
+    public void setHomeIp(String homeIp){
+        this.homeIp = homeIp;
+    }
 
+    public void addBoxes(String user, String file) throws IOException {
+        boxes.addBoxes(user, file);
+    }
+
+    public void cluster(String id, int start, int end) throws Exception{
+
+        BoxManager clusterBoxes = boxes.getBoxes(start, end);
+        ClusterManager jvmManager = new ClusterManager(id, clusterBoxes, homeIp);
+        clusters.put(jvmManager.getClusterId(), jvmManager);
+
+        System.out.println(jvmManager);
+    }
+
+    public void dedicatedMembers(String clusterId, int memberBox) {
+
+        Collection<ClusterManager> selected = selectClusterSet(clusterId);
+        for (ClusterManager c : selected) {
+            c.setMembersOnlyCount(memberBox);
         }
     }
+
 
     private Collection<ClusterManager> selectClusterSet(String cluster) {
         Collection<ClusterManager> selected = new ArrayList();
@@ -40,7 +62,11 @@ public class HzCmd implements Serializable {
     }
 
 
-/*
+
+    /*
+    *
+    *
+
     private ClusterManager selectSubCluster(ClusterManager c, String criterionToken) throws Exception {
 
         switch (criterionToken.getType()) {
@@ -60,49 +86,7 @@ public class HzCmd implements Serializable {
                 return c;
         }
     }
-*/
 
-
-/*
-    private Collection<ClusterManager> getClusterManagers(HzCmdParser.StatementContext cmd) {
-        Collection<ClusterManager> c = new ArrayList();
-        if( cmd.ALL(0) != null) {
-            c = clusters.values();
-        }else {
-            String clusterId = cmd.VAR(0).getText();
-            c.add( clusters.get(clusterId) );
-        }
-        return c;
-    }
-*/
-
-
-    /*
-    *
-    *
-    private void setHomeIp(HzCmdParser.StatementContext cmd){
-        homeIp = cmd.STRING(0).getText().replace("\"", "");
-    }
-
-
-    private void boxesCmd(HzCmdParser.StatementContext cmd) throws IOException {
-        String user = cmd.STRING(0).getText().replace("\"","");
-        String file = cmd.STRING(1).getText().replace("\"","");
-        boxes.addBoxes(user, file);
-    }
-
-
-    private void cluster(HzCmdParser.StatementContext cmd) throws Exception{
-        String clusterID = cmd.VAR(0).getText();
-        int start = Integer.parseInt( cmd.NUMBER(0).getText() );
-        int end = Integer.parseInt( cmd.NUMBER(1).getText() );
-
-        BoxManager clusterBoxes = boxes.getBoxes(start, end);
-        ClusterManager jvmManager = new ClusterManager(clusterID, clusterBoxes);
-        clusters.put(jvmManager.getClusterId(), jvmManager);
-
-        System.out.println(jvmManager);
-    }
 
     private void install(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
 
@@ -135,16 +119,7 @@ public class HzCmd implements Serializable {
         }
     }
 
-    private void dedicatedMembers(HzCmdParser.StatementContext cmd) {
 
-        Collection<ClusterManager> selected = getClusterManagers(cmd);
-
-        int memberBox = Integer.parseInt(cmd.NUMBER(0).getText());
-
-        for (ClusterManager c : selected) {
-            c.setMembersOnlyCount(memberBox);
-        }
-    }
 
     private void add(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
 
@@ -208,15 +183,6 @@ public class HzCmd implements Serializable {
         }
     }
 
-    private void info(CommonTokenStream tokens ) throws Exception {
-
-        Collection<ClusterManager> clusterSet = selectClusterSet(tokens.get(1));
-
-        for (ClusterManager c : clusterSet) {
-            c = selectSubCluster(c, tokens.get(2));
-            c.info();
-        }
-    }
 
     private void clean(CommonTokenStream tokens) throws Exception {
         Collection<ClusterManager> clusterSet = selectClusterSet(tokens.get(1));
@@ -287,17 +253,6 @@ public class HzCmd implements Serializable {
     }
 
 
-    private void sleep(HzCmdParser.StatementContext cmd){
-        int seconds = Integer.parseInt(cmd.NUMBER(0).getText());
-        sleepSeconds(seconds);
-    }
-
-
-
-    private void showSSH(HzCmdParser.StatementContext cmd){
-        boolean show = Boolean.parseBoolean( cmd.BOOL().getText() );
-        Bash.showSSH = show;
-    }
 
     *
     * */
@@ -348,8 +303,14 @@ public class HzCmd implements Serializable {
 
         HzCmd hzCmd = loadHzCmd();
 
-        com.github.rvesse.airline.Cli<Command> parser = CmdLine.getParser();
-        parser.parse(args).exe(hzCmd);
+        com.github.rvesse.airline.Cli<Runnable> parser = CmdLine.getParser();
+        Runnable r = parser.parse(args);
+        if (r instanceof Command){
+            Command c = (Command)r;
+            c.exe(hzCmd);
+        }else{
+            r.run();
+        }
 
         saveHzCmd(hzCmd);
     }
