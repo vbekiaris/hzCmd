@@ -41,6 +41,11 @@ public abstract class Bash {
         return executeCommand("ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "+user+"@"+ip+" "+cmd);
     }
 
+    public static void streamSsh(String user, String ip, String cmd) throws IOException, InterruptedException {
+        executeForEverCommand("ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "+user+"@"+ip+" "+cmd);
+    }
+
+
     public static int sshWithExitCode(String user, String ip, String cmd) throws IOException, InterruptedException {
         return executeCommandWithExitCode("ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "+user+"@"+ip+" "+cmd);
     }
@@ -91,4 +96,20 @@ public abstract class Bash {
         p.waitFor();
         return p.exitValue();
     }
+
+    private static void executeForEverCommand(String command) throws IOException, InterruptedException {
+        if (showSSH) {
+            System.out.println(command);
+        }
+
+        Process p = Runtime.getRuntime().exec(command);
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+        String line;
+        while ((line = reader.readLine())!= null) {
+            System.out.println(Bash.ANSI_PURPLE+line+Bash.ANSI_RESET);
+        }
+    }
+
 }

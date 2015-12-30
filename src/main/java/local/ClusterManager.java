@@ -178,6 +178,15 @@ public class ClusterManager implements Serializable {
         }
     }
 
+    public void tail() throws IOException, InterruptedException {
+        checkEmpty();
+        for(RemoteJvm jvm : jvms.values()){
+            System.out.println(jvm);
+            jvm.tail();
+        }
+    }
+
+
     public void grep(String args) throws IOException, InterruptedException {
         checkEmpty();
         for(RemoteJvm jvm : jvms.values()){

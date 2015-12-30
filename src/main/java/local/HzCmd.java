@@ -93,6 +93,14 @@ public class HzCmd implements Serializable {
         }
     }
 
+    public void tail(String clusterId, String jvmId) throws Exception {
+        Collection<ClusterManager> selected = selectClusterSet(clusterId);
+        for (ClusterManager c : selected) {
+            c = selectJvmSet(c, jvmId);
+            c.tail();
+        }
+    }
+
 
     public void grep(String clusterId, String jvmId, String grepArgs) throws Exception {
         Collection<ClusterManager> selected = selectClusterSet(clusterId);
@@ -103,10 +111,24 @@ public class HzCmd implements Serializable {
     }
 
 
+    public void clean(String clusterId, String jvmId) throws Exception {
+        Collection<ClusterManager> selected = selectClusterSet(clusterId);
+        for (ClusterManager c : selected) {
+            c = selectJvmSet(c, jvmId);
+            c.clean();
+        }
+    }
+
+    public void downlonad(String clusterId, String jvmId, String dir) throws Exception {
+        Collection<ClusterManager> selected = selectClusterSet(clusterId);
+        for (ClusterManager c : selected) {
+            c = selectJvmSet(c, jvmId);
+            c.downlonad(dir);
+        }
+    }
 
 
-
-      /*
+    /*
     *
     *
     private void uninstall(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
@@ -115,27 +137,6 @@ public class HzCmd implements Serializable {
 
         for (ClusterManager c : selected) {
             Installer.uninstall(c.getBoxManager());
-        }
-    }
-
-    private void clean(CommonTokenStream tokens) throws Exception {
-        Collection<ClusterManager> clusterSet = selectClusterSet(tokens.get(1));
-
-        for (ClusterManager c : clusterSet) {
-            c = selectSubCluster(c, tokens.get(2));
-            c.clean();
-        }
-    }
-
-
-    private void downlonad(CommonTokenStream tokens) throws Exception {
-        Collection<ClusterManager> clusterSet = selectClusterSet(tokens.get(1));
-
-        String dir = tokens.get(3).getText();
-
-        for (ClusterManager c : clusterSet) {
-            c = selectSubCluster(c, tokens.get(2));
-            c.downlonad(dir);
         }
     }
 
@@ -266,11 +267,18 @@ public class HzCmd implements Serializable {
         Runnable r = parser.parse(args);
         if (r instanceof Command){
             Command c = (Command)r;
-            c.exe(hzCmd);
+
+            try {
+                c.exe(hzCmd);
+                saveHzCmd(hzCmd);
+            }catch (Error e){
+
+            }
+
         }else{
             r.run();
         }
 
-        saveHzCmd(hzCmd);
+
     }
 }

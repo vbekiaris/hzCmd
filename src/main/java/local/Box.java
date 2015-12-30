@@ -31,6 +31,10 @@ public class Box implements Serializable{
         return Bash.sshWithExitCode(user, pub, cmd);
     }
 
+    public void streamSsh(String cmd) throws IOException, InterruptedException {
+         Bash.streamSsh(user, pub, cmd);
+    }
+
     public String ssh(String cmd) throws IOException, InterruptedException {
         return Bash.ssh(user, pub, cmd);
     }
@@ -51,8 +55,8 @@ public class Box implements Serializable{
         return  ssh("cat " +arg);
     }
 
-    public String tail(String arg) throws IOException, InterruptedException {
-        return ssh("tail "+arg);
+    public void tail(String arg) throws IOException, InterruptedException {
+         streamSsh("tail -f "+arg);
     }
 
     public String grep(String arg) throws IOException, InterruptedException {
