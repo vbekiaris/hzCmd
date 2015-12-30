@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1e2fbd24-4d2e-446e-8abd-7bc3e76658d9" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/local/CmdLine.java" afterPath="$PROJECT_DIR$/src/main/java/cmdline/CmdLine.java" />
+    <list default="true" id="1e2fbd24-4d2e-446e-8abd-7bc3e76658d9" name="Default" comment="line feed">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/local/HzCmd.java" afterPath="$PROJECT_DIR$/src/main/java/local/HzCmd.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/hzCmd.iml" afterPath="$PROJECT_DIR$/hzCmd.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <list id="34d36c18-209d-4053-977f-4cfc9ced1667" name="ignored change list " comment="ignored change list" />
@@ -71,9 +69,11 @@
       <file leaf-file-name="HzCmd.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/local/HzCmd.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.4551282">
-              <caret line="2" column="23" selection-start-line="2" selection-start-column="23" selection-end-line="2" selection-end-column="23" />
-              <folding />
+            <state vertical-scroll-proportion="0.67948717">
+              <caret line="46" column="25" selection-start-line="46" selection-start-column="25" selection-end-line="46" selection-end-column="25" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -976,12 +976,6 @@
       <option name="number" value="Default" />
       <updated>1440864939458</updated>
     </task>
-    <task id="LOCAL-00237" summary="hzCmd">
-      <created>1449818172433</created>
-      <option name="number" value="00237" />
-      <option name="project" value="LOCAL" />
-      <updated>1449818172433</updated>
-    </task>
     <task id="LOCAL-00238" summary="hzCmd">
       <created>1449834702073</created>
       <option name="number" value="00238" />
@@ -1270,7 +1264,13 @@
       <option name="project" value="LOCAL" />
       <updated>1451429126009</updated>
     </task>
-    <option name="localTasksCounter" value="286" />
+    <task id="LOCAL-00286" summary="line feed">
+      <created>1451434972376</created>
+      <option name="number" value="00286" />
+      <option name="project" value="LOCAL" />
+      <updated>1451434972377</updated>
+    </task>
+    <option name="localTasksCounter" value="287" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1718,9 +1718,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/local/HzCmd.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.4551282">
-          <caret line="2" column="23" selection-start-line="2" selection-start-column="23" selection-end-line="2" selection-end-column="23" />
-          <folding />
+        <state vertical-scroll-proportion="0.67948717">
+          <caret line="46" column="25" selection-start-line="46" selection-start-column="25" selection-end-line="46" selection-end-column="25" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

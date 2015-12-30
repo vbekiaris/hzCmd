@@ -120,6 +120,9 @@ public class HzCmd implements Serializable {
     }
 
 
+
+
+
     public static void main(String[] args) throws InterruptedException, IOException {
         ReadComms readComms = new ReadComms(HzCmd.commsFile);
         readComms.read();
