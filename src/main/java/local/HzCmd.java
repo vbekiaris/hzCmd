@@ -1,10 +1,10 @@
 package local;
 
 import cmdline.CmdLine;
+import cmdline.Command;
 
 import java.io.*;
 import java.util.*;
-
 
 
 //TODO WAN REP xml SETUP
@@ -14,7 +14,6 @@ import java.util.*;
 public class HzCmd implements Serializable {
 
     public static final String commsFile = "commsIn.txt";
-
 
     public String homeIp;
 
@@ -29,8 +28,6 @@ public class HzCmd implements Serializable {
 
         }
     }
-
-
 
     private Collection<ClusterManager> selectClusterSet(String cluster) {
         Collection<ClusterManager> selected = new ArrayList();
@@ -318,7 +315,7 @@ public class HzCmd implements Serializable {
     }
 
 
-    public static HzCmd loadHzCmd(){
+    private static HzCmd loadHzCmd(){
         HzCmd hzCmd = null;
         try {
             FileInputStream fileIn = new FileInputStream("HzCmd.ser");
@@ -332,7 +329,7 @@ public class HzCmd implements Serializable {
         return hzCmd;
     }
 
-    public static void saveHzCmd(HzCmd hzCmd){
+    private static void saveHzCmd(HzCmd hzCmd){
         try {
             FileOutputStream fileOut = new FileOutputStream("HzCmd.ser");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -345,20 +342,15 @@ public class HzCmd implements Serializable {
     }
 
 
-
-
-
     public static void main(String[] args) throws InterruptedException, IOException {
         ReadComms readComms = new ReadComms(HzCmd.commsFile);
         readComms.read();
 
         HzCmd hzCmd = loadHzCmd();
 
-        com.github.rvesse.airline.Cli<CmdLine.Command> parser = CmdLine.getParser();
-
+        com.github.rvesse.airline.Cli<Command> parser = CmdLine.getParser();
         parser.parse(args).exe(hzCmd);
 
         saveHzCmd(hzCmd);
     }
-
 }
