@@ -1,9 +1,7 @@
 package local;
 
-import com.github.rvesse.airline.Cli;
-import com.github.rvesse.airline.builder.CliBuilder;
-import com.github.rvesse.airline.help.Help;
-import global.Bash;
+import cmdline.CmdLine;
+
 import java.io.*;
 import java.util.*;
 
@@ -15,22 +13,23 @@ import java.util.*;
 //TODO exampe 3 3node cluster wan replicate ring, with rolling upgrade,  members putting,  clients getting,  kill restart members,  man center running,
 public class HzCmd implements Serializable {
 
-    public String homeIp;
     public static final String commsFile = "commsIn.txt";
+
+
+    public String homeIp;
 
     private BoxManager boxes = new BoxManager();
     private Map<String, ClusterManager> clusters = new HashMap();
 
-    public void exeCmd(String line) throws IOException {
-        if (line!=null && !line.equals("")) {
-            try{
 
+    public void addBoxes(String user, String file){
+        try {
+            boxes.addBoxes(user, file);
+        }catch (Exception e){
 
-            }catch(Exception e){
-                e.printStackTrace();
-            }
         }
     }
+
 
 
     private Collection<ClusterManager> selectClusterSet(String cluster) {
@@ -120,23 +119,6 @@ public class HzCmd implements Serializable {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public static Cli<CmdLine.Command> getCmdLineParser(){
-
-        CliBuilder builder = new CliBuilder("hzCmd");
-
-        builder.withDescription("Hazelcast cluster cmd line control")
-                .withDefaultCommand(Help.class)
-                .withCommands(Help.class, CmdLine.Add.class, CmdLine.Cluster.class, CmdLine.Install.class, CmdLine.Kill.class);
-
-        builder.withGroup("add")
-                .withDescription("add")
-                .withDefaultCommand(Help.class)
-                .withCommands(CmdLine.AddBox.class, CmdLine.AddJvm.class);
-
-        return builder.build();
-    }
-
 
     public static void main(String[] args) throws InterruptedException, IOException {
         ReadComms readComms = new ReadComms(HzCmd.commsFile);
@@ -144,7 +126,7 @@ public class HzCmd implements Serializable {
 
         HzCmd hzCmd = loadHzCmd();
 
-        com.github.rvesse.airline.Cli<CmdLine.Command> parser = getCmdLineParser();
+        com.github.rvesse.airline.Cli<CmdLine.Command> parser = CmdLine.getParser();
 
         parser.parse(args).exe(hzCmd);
 
