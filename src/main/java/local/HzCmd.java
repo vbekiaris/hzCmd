@@ -110,6 +110,13 @@ public class HzCmd implements Serializable {
         }
     }
 
+    public void downlonad(String clusterId, String jvmId, String dir) throws Exception {
+        Collection<ClusterManager> selected = selectClusterSet(clusterId);
+        for (ClusterManager c : selected) {
+            c = selectJvmSet(c, jvmId);
+            c.downlonad(dir);
+        }
+    }
 
     public void clean(String clusterId, String jvmId) throws Exception {
         Collection<ClusterManager> selected = selectClusterSet(clusterId);
@@ -119,13 +126,11 @@ public class HzCmd implements Serializable {
         }
     }
 
-    public void downlonad(String clusterId, String jvmId, String dir) throws Exception {
-        Collection<ClusterManager> selected = selectClusterSet(clusterId);
-        for (ClusterManager c : selected) {
-            c = selectJvmSet(c, jvmId);
-            c.downlonad(dir);
-        }
+    public void wipe( ) throws Exception {
+        boxes.killAllJava();
+        boxes.rm(Installer.REMOTE_HZCMD_ROOT);
     }
+
 
 
     /*

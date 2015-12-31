@@ -6,9 +6,9 @@ import java.io.IOException;
 
 public abstract class Installer {
 
-    public static String REMOTE_ROOT = "hzCmd";
-    public static String REMOTE_LIB = REMOTE_ROOT + "/lib";
-    public static String REMOTE_HZ_LIB = REMOTE_ROOT + "/hz-lib";
+    public static String REMOTE_HZCMD_ROOT = "hzCmd";
+    public static String REMOTE_LIB = REMOTE_HZCMD_ROOT + "/lib";
+    public static String REMOTE_HZ_LIB = REMOTE_HZCMD_ROOT + "/hz-lib";
 
     public static String HOME = "HOME";
     public static String M2_DIR = "/.m2/";
@@ -53,6 +53,6 @@ public abstract class Installer {
     }
 
     public static void uninstall(BoxManager boxes) throws IOException, InterruptedException {
-        boxes.rm(REMOTE_ROOT);
+        boxes.rm(REMOTE_HZCMD_ROOT);
     }
 }

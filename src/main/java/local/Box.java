@@ -51,6 +51,10 @@ public class Box implements Serializable{
         ssh("kill -9 "+pid);
     }
 
+    public void killAllJava() throws IOException, InterruptedException {
+        ssh("killall -9 java");
+    }
+
     public String cat(String arg) throws IOException, InterruptedException {
         return  ssh("cat " +arg);
     }

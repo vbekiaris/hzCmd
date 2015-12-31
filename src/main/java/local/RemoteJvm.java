@@ -34,7 +34,7 @@ public class RemoteJvm implements Serializable {
         this.box = box;
         this.type = type;
         this.id = id;
-        this.dir = Installer.REMOTE_ROOT+"/"+id;
+        this.dir = Installer.REMOTE_HZCMD_ROOT +"/"+id;
         this.xmlConfig = xmlConfig;
         this.homeIp = homeIp;
     }

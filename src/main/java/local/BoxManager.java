@@ -61,6 +61,12 @@ public class BoxManager implements Serializable {
         }
     }
 
+    public void killAllJava( ) throws IOException, InterruptedException {
+        for (Box box : boxes) {
+            box.killAllJava();
+        }
+    }
+
 
     public int size(){return boxes.size();}
 
