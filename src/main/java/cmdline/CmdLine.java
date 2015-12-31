@@ -13,7 +13,8 @@ public class CmdLine {
 
         builder.withDescription("Hazelcast cluster cmd line control")
                 .withDefaultCommand(Help.class)
-                .withCommands(Help.class, Info.class, Add.class, Set.class, MemberBox.class, Install.class, Kill.class, Restart.class, Cat.class, Tail.class, Grep.class);
+                .withCommands(Help.class, Info.class, Add.class, Set.class, MemberBox.class, Install.class,
+                              Kill.class, Restart.class, Cat.class, Tail.class, Grep.class, Download.class, Clean.class);
 
         builder.withGroup("add")
                 .withDescription("add")

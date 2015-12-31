@@ -24,7 +24,7 @@ public class Download extends Command
 
         if(client!=null){
             try {
-                hzCmd.downlonad(cluster, HzType.Member + member, dir);
+                hzCmd.downlonad(cluster, HzType.Client + member, dir);
             } catch (Exception e) {
                 e.printStackTrace();
             }
