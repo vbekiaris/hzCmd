@@ -123,7 +123,7 @@ public class RemoteJvm implements Serializable {
     }
 
     public void downlonad(String destDir) throws IOException, InterruptedException {
-        box.downlonad(dir, destDir+"/"+id+"-"+box.pri);
+        box.downlonad(dir+"/*", destDir+"/"+id+"-"+box.pri);
     }
 
     public String getId(){ return id; }
