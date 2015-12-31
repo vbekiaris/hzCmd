@@ -126,8 +126,11 @@ public class HzCmd implements Serializable {
         }
     }
 
-    public void wipe( ) throws Exception {
-        boxes.killAllJava();
+    public void wipe( ) throws IOException, InterruptedException {
+        for (ClusterManager c : clusters.values()) {
+            c.kill();
+            c.clearStoped();
+        }
         boxes.rm(Installer.REMOTE_HZCMD_ROOT);
     }
 
