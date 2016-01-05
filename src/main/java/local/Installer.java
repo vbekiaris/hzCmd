@@ -52,7 +52,4 @@ public abstract class Installer {
         }
     }
 
-    public static void uninstall(BoxManager boxes) throws IOException, InterruptedException {
-        boxes.rm(REMOTE_HZCMD_ROOT);
-    }
 }

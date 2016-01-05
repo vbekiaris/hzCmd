@@ -39,6 +39,11 @@ public class Box implements Serializable{
         return Bash.ssh(user, pub, cmd);
     }
 
+    public boolean testConnecton() throws IOException, InterruptedException {
+        return Bash.sshWithExitCode(user, pub, "pwd") == 0;
+    }
+
+
     public void mkdir(String arg) throws IOException, InterruptedException {
         ssh("mkdir -p " + arg);
     }

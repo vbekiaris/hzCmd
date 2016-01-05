@@ -1,5 +1,7 @@
 package local;
 
+import global.Bash;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +16,7 @@ public class BoxManager implements Serializable {
         this.boxes = boxes;
     }
 
-    public void addBoxes(String user, String file) throws IOException {
-
+    public void addBoxes(String user, String file) throws IOException, InterruptedException  {
         BufferedReader boxFile = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
         String line;
         while( (line=boxFile.readLine()) !=null ){
@@ -23,10 +24,16 @@ public class BoxManager implements Serializable {
         }
     }
 
-    public void addBox(String user, String ipString) {
+    public void addBox(String user, String ipString) throws IOException, InterruptedException  {
         String[] split = ipString.split(",");
-        Box ip = new Box(user, split[0], split[1]);
-        boxes.add(ip);
+        Box box = new Box(user, split[0], split[1]);
+
+        if(box.testConnecton()){
+            boxes.add(box);
+            System.out.println(Bash.ANSI_GREEN+box+Bash.ANSI_RESET);
+        }else {
+            System.out.println(Bash.ANSI_RED+box+Bash.ANSI_RESET);
+        }
     }
 
     public BoxManager getBoxes(int start, int end){ return new BoxManager( new ArrayList( boxes.subList(start-1,  end) ) ); }
@@ -74,10 +81,20 @@ public class BoxManager implements Serializable {
     public String toString() {
 
         String str="\n";
-        for(Box b : boxes){
-            str+=b+"\n";
+        for(Box box : boxes){
+            try {
+                if(box.testConnecton()){
+                    str+=Bash.ANSI_GREEN + box + Bash.ANSI_RESET + "\n";
+                }else {
+                    str+=Bash.ANSI_RED + box + Bash.ANSI_RESET + "\n";
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
-        return "BoxManager{ boxes="+boxes.size()+" "+ str ;
+        return str ;
     }
 }

@@ -21,7 +21,7 @@ public class AddBox extends Command {
     public void exe(HzCmd hzCmd) {
         try {
             hzCmd.addBoxes(user, file);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

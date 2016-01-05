@@ -11,7 +11,6 @@ import java.util.*;
 
 //TODO WAN REP xml SETUP
 //TODO man center integ
-//TODO tail -f grepping logs and pop up display
 //TODO exampe 3 3node cluster wan replicate ring, with rolling upgrade,  members putting,  clients getting,  kill restart members,  man center running,
 public class HzCmd implements Serializable {
 
@@ -30,7 +29,7 @@ public class HzCmd implements Serializable {
         this.homeIp = homeIp;
     }
 
-    public void addBoxes(String user, String file) throws IOException {
+    public void addBoxes(String user, String file) throws IOException, InterruptedException{
         boxes.addBoxes(user, file);
     }
 
@@ -65,7 +64,6 @@ public class HzCmd implements Serializable {
                 c.addClients(qty, version, options);
             }
         }
-
     }
 
     public void kill(String clusterId, String jvmId) throws Exception {
@@ -139,20 +137,6 @@ public class HzCmd implements Serializable {
     /*
     *
     *
-    private void uninstall(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
-
-        Collection<ClusterManager> selected = getClusterManagers(cmd);
-
-        for (ClusterManager c : selected) {
-            Installer.uninstall(c.getBoxManager());
-        }
-    }
-
-
-
-
-
-
     private void load(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
 
         Collection<ClusterManager> clusterManagers = getClusterManagers(cmd);
@@ -196,14 +180,6 @@ public class HzCmd implements Serializable {
     * */
 
 
-
-
-
-
-
-
-
-
     private Collection<ClusterManager> selectClusterSet(String cluster) {
         Collection<ClusterManager> selected = new ArrayList();
         if( cluster.equals("*") ){
@@ -229,12 +205,17 @@ public class HzCmd implements Serializable {
 
     @Override
     public String toString() {
-        return "HzCmd{" +
-                "boxes=" + boxes +
+
+        String clu="";
+        for (ClusterManager c : clusters.values()) {
+            clu += c.toString() + "\n";
+        }
+
+        return "HzCmd" +
+                boxes +
                 "homeIp='" + homeIp + '\'' +
                 ", commsFile='" + commsFile + '\'' +
-                ", clusters=" + clusters +
-                '}';
+                "\n" + clu ;
     }
 
 

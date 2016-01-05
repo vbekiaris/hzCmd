@@ -17,7 +17,7 @@ public abstract class Bash {
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String li_magenta = esc + "[1;35m";
 
-    public static boolean showSSH=true;
+    public static boolean showSSH=false;
 
     public static String killAllJava() throws IOException, InterruptedException {
         return executeCommand("killall -9 java");
