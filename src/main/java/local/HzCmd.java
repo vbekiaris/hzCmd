@@ -69,7 +69,7 @@ public class HzCmd implements Serializable {
     public void kill(String clusterId, String jvmId) throws Exception {
         Collection<ClusterManager> selected = selectClusterSet(clusterId);
         for (ClusterManager c : selected) {
-            c = selectJvmSet(c, jvmId);
+            c = c.selectJvmSet(jvmId);
             c.kill();
         }
     }
@@ -77,7 +77,7 @@ public class HzCmd implements Serializable {
     public void restart(String clusterId, String jvmId, String version,  String options) throws Exception {
         Collection<ClusterManager> selected = selectClusterSet(clusterId);
         for (ClusterManager c : selected) {
-            c = selectJvmSet(c, jvmId);
+            c = c.selectJvmSet(jvmId);
             c.restart(version, options);
         }
     }
@@ -86,7 +86,7 @@ public class HzCmd implements Serializable {
     public void cat(String clusterId, String jvmId) throws Exception {
         Collection<ClusterManager> selected = selectClusterSet(clusterId);
         for (ClusterManager c : selected) {
-            c = selectJvmSet(c, jvmId);
+            c = c.selectJvmSet(jvmId);
             c.cat();
         }
     }
@@ -94,7 +94,7 @@ public class HzCmd implements Serializable {
     public void tail(String clusterId, String jvmId) throws Exception {
         Collection<ClusterManager> selected = selectClusterSet(clusterId);
         for (ClusterManager c : selected) {
-            c = selectJvmSet(c, jvmId);
+            c = c.selectJvmSet(jvmId);
             c.tail();
         }
     }
@@ -103,7 +103,7 @@ public class HzCmd implements Serializable {
     public void grep(String clusterId, String jvmId, String grepArgs) throws Exception {
         Collection<ClusterManager> selected = selectClusterSet(clusterId);
         for (ClusterManager c : selected) {
-            c = selectJvmSet(c, jvmId);
+            c = c.selectJvmSet(jvmId);
             c.grep(grepArgs);
         }
     }
@@ -111,7 +111,7 @@ public class HzCmd implements Serializable {
     public void downlonad(String clusterId, String jvmId, String dir) throws Exception {
         Collection<ClusterManager> selected = selectClusterSet(clusterId);
         for (ClusterManager c : selected) {
-            c = selectJvmSet(c, jvmId);
+            c = c.selectJvmSet(jvmId);
             c.downlonad(dir);
         }
     }
@@ -119,7 +119,7 @@ public class HzCmd implements Serializable {
     public void clean(String clusterId, String jvmId) throws Exception {
         Collection<ClusterManager> selected = selectClusterSet(clusterId);
         for (ClusterManager c : selected) {
-            c = selectJvmSet(c, jvmId);
+            c = c.selectJvmSet(jvmId);
             c.clean();
         }
     }
@@ -133,52 +133,28 @@ public class HzCmd implements Serializable {
     }
 
 
-
-    /*
-    *
-    *
-    private void load(HzCmdParser.StatementContext cmd) throws IOException, InterruptedException {
-
-        Collection<ClusterManager> clusterManagers = getClusterManagers(cmd);
-
-        String taskId = cmd.VAR(0).getText();
-        String className = cmd.STRING(0).getText().replace("\"", "");
-
-        for (ClusterManager c : clusterManagers) {
+    private void load(String clusterId,  String taskId, String className) throws IOException, InterruptedException {
+        Collection<ClusterManager> selected = selectClusterSet(clusterId);
+        for (ClusterManager c : selected) {
             c.load(taskId, className);
         }
-
     }
 
-    private void invoke(CommonTokenStream tokens ) throws Exception {
-
-        String threadCound = tokens.get(1).getText();
-        String method = tokens.get(2).getText();
-        String taksId = tokens.get(3).getText();
-
-        Collection<ClusterManager> clusterSet = selectClusterSet(tokens.get(4));
-
-        for (ClusterManager c : clusterSet) {
-            c = selectSubCluster(c, tokens.get(5));
+    private void invoke(String clusterId, String jvmId, int threadCound, String method, String taksId) throws Exception {
+        Collection<ClusterManager> selected = selectClusterSet(clusterId);
+        for (ClusterManager c : selected) {
+            c = c.selectJvmSet(jvmId);
             c.invoke(threadCound, method, taksId);
         }
     }
 
-    private void stop(CommonTokenStream tokens ) throws Exception {
-
-        String taskId = tokens.get(1).getText();
-
-
-        Collection<ClusterManager> clusterSet = selectClusterSet(tokens.get(2));
-
-        for (ClusterManager c : clusterSet) {
-            c = selectSubCluster(c, tokens.get(3));
+    private void stop(String clusterId, String jvmId, String taskId) throws Exception {
+        Collection<ClusterManager> selected = selectClusterSet(clusterId);
+        for (ClusterManager c : selected) {
+            c = c.selectJvmSet(jvmId);
             c.stop(taskId);
         }
     }
-    *
-    * */
-
 
     private Collection<ClusterManager> selectClusterSet(String cluster) {
         Collection<ClusterManager> selected = new ArrayList();
@@ -190,22 +166,9 @@ public class HzCmd implements Serializable {
         return  selected;
     }
 
-    private ClusterManager selectJvmSet(ClusterManager c, String jvmId) throws Exception {
-        if( jvmId.equals( "Member*" ) )
-                return c.getMemberManager();
-
-        if( jvmId.equals( "Client*" ) )
-            return c.getClientManager();
-
-        return c.getIDManager( jvmId + c.getClusterId() );
-    }
-
-
-
 
     @Override
     public String toString() {
-
         String clu="";
         for (ClusterManager c : clusters.values()) {
             clu += c.toString() + "\n";
@@ -245,7 +208,6 @@ public class HzCmd implements Serializable {
         }
     }
 
-
     public static void main(String[] args) throws InterruptedException, IOException {
         ReadComms readComms = new ReadComms(HzCmd.commsFile);
         readComms.read();
@@ -261,13 +223,10 @@ public class HzCmd implements Serializable {
                 c.exe(hzCmd);
                 saveHzCmd(hzCmd);
             }catch (Error e){
-
+                e.printStackTrace();
             }
-
         }else{
             r.run();
         }
-
-
     }
 }

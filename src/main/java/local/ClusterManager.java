@@ -48,6 +48,16 @@ public class ClusterManager implements Serializable {
         return boxes;
     }
 
+    public ClusterManager selectJvmSet(String jvmId) throws Exception {
+        if( jvmId.equals( "Member*" ) )
+            return getMemberManager();
+
+        if( jvmId.equals( "Client*" ) )
+            return getClientManager();
+
+        return getIDManager( jvmId + getClusterId() );
+    }
+
     public ClusterManager getMemberManager() throws Exception {
         ClusterManager selected = new ClusterManager(clusterId, boxes, memberCount, clientCount, homeIp);
         for(RemoteJvm jvm : this.jvms.values()){
@@ -135,7 +145,7 @@ public class ClusterManager implements Serializable {
         sendToAll(Args.load + " " + taskId + " " + className);
     }
 
-    public void invoke(String threadCount, String method, String taskId) throws IOException, InterruptedException {
+    public void invoke(int threadCount, String method, String taskId) throws IOException, InterruptedException {
         sendToAll(Args.invoke + " " + threadCount + " " + method + " " + taskId);
     }
 
