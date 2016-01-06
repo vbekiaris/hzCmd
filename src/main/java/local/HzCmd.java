@@ -133,14 +133,14 @@ public class HzCmd implements Serializable {
     }
 
 
-    private void load(String clusterId,  String taskId, String className) throws IOException, InterruptedException {
+    public void load(String clusterId,  String taskId, String className) throws IOException, InterruptedException {
         Collection<ClusterManager> selected = selectClusterSet(clusterId);
         for (ClusterManager c : selected) {
             c.load(taskId, className);
         }
     }
 
-    private void invoke(String clusterId, String jvmId, int threadCound, String method, String taksId) throws Exception {
+    public void invoke(String clusterId, String jvmId, int threadCound, String method, String taksId) throws Exception {
         Collection<ClusterManager> selected = selectClusterSet(clusterId);
         for (ClusterManager c : selected) {
             c = c.selectJvmSet(jvmId);
@@ -148,7 +148,7 @@ public class HzCmd implements Serializable {
         }
     }
 
-    private void stop(String clusterId, String jvmId, String taskId) throws Exception {
+    public void stop(String clusterId, String jvmId, String taskId) throws Exception {
         Collection<ClusterManager> selected = selectClusterSet(clusterId);
         for (ClusterManager c : selected) {
             c = c.selectJvmSet(jvmId);

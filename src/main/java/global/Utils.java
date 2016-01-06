@@ -26,7 +26,7 @@ public abstract class Utils {
     static {
         final Escapers.Builder builder = Escapers.builder();
         builder.addEscape('"', "\"");
-        builder.addEscape('"', "\"");
+        builder.addEscape('\'', "\'");
         QUOTES = builder.build();
     }
 
