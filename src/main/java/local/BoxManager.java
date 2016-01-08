@@ -8,11 +8,15 @@ import java.util.List;
 
 public class BoxManager implements Serializable {
 
+    private String id;
     private List<Box> boxes = new ArrayList();
 
-    public BoxManager(){ }
+    public BoxManager(String id){
+        this.id=id;
+    }
 
-    public BoxManager(List<Box> boxes){
+    public BoxManager(String id, List<Box> boxes){
+        this.id = id;
         this.boxes = boxes;
     }
 
@@ -36,7 +40,7 @@ public class BoxManager implements Serializable {
         }
     }
 
-    public BoxManager getBoxes(int start, int end){ return new BoxManager( new ArrayList( boxes.subList(start-1,  end) ) ); }
+    public BoxManager getBoxes(int start, int end){ return new BoxManager(id,  new ArrayList( boxes.subList(start-1,  end) ) ); }
 
     public Box get(int i){
         return boxes.get(i);

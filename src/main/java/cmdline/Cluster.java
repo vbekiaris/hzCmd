@@ -17,7 +17,7 @@ public  class Cluster extends Command {
 
     public void exe(HzCmd hzCmd) {
         try {
-            hzCmd.cluster(id, start, end);
+            hzCmd.cluster(id, "box", start, end);
         } catch (Exception e) {
             e.printStackTrace();
         }

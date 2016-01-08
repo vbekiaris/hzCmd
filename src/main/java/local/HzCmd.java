@@ -18,7 +18,7 @@ public class HzCmd implements Serializable {
 
     public String homeIp;
 
-    private BoxManager boxes = new BoxManager();
+    private Map<String, BoxManager> boxes = new HashMap();
     private Map<String, ClusterManager> clusters = new HashMap();
 
     public void showSSH(boolean show){
@@ -29,15 +29,17 @@ public class HzCmd implements Serializable {
         this.homeIp = homeIp;
     }
 
-    public void addBoxes(String user, String file) throws IOException, InterruptedException{
-        boxes.addBoxes(user, file);
+    public void addBoxes(String boxGroupId, String user, String file) throws IOException, InterruptedException{
+        BoxManager b = new BoxManager(boxGroupId);
+        b.addBoxes(user, file);
+        boxes.put(boxGroupId, b);
     }
 
-    public void cluster(String id, int start, int end) throws Exception{
-        BoxManager clusterBoxes = boxes.getBoxes(start, end);
-        ClusterManager jvmManager = new ClusterManager(id, clusterBoxes, homeIp);
+    public void cluster(String clusterId, String boxGroupId, int start, int end) throws Exception{
+        BoxManager all = boxes.get(boxGroupId);
+        BoxManager clusterBoxes = all.getBoxes(start, end);
+        ClusterManager jvmManager = new ClusterManager(clusterId, clusterBoxes, homeIp);
         clusters.put(jvmManager.getClusterId(), jvmManager);
-
         System.out.println(jvmManager);
     }
 
@@ -129,9 +131,10 @@ public class HzCmd implements Serializable {
             c.kill();
             c.clearStoped();
         }
-        boxes.rm(Installer.REMOTE_HZCMD_ROOT);
+        for (BoxManager boxManager : boxes.values()) {
+            boxManager.rm(Installer.REMOTE_HZCMD_ROOT);
+        }
     }
-
 
     public void load(String clusterId,  String taskId, String className) throws IOException, InterruptedException {
         Collection<ClusterManager> selected = selectClusterSet(clusterId);

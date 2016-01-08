@@ -29,9 +29,8 @@ public class Controler{
     public static final String ID = System.getProperty(Args.ID.name());
     public static final String jvmPidId = ManagementFactory.getRuntimeMXBean().getName();
 
-    public final PrintWriter exceptionWrite = new PrintWriter ( new FileWriter("exception.txt", true) );
+    public final PrintStream exceptionWrite = new PrintStream(new FileOutputStream("exception.txt", true));
 
-    //TODO why arnt theses errors sent bck to the home, user box
     public Controler(HzType type) throws Throwable {
         try {
             if (type == HzType.Member) {
@@ -43,12 +42,13 @@ public class Controler{
                 ClientConfig config = configBuilder.build();
                 hazelcastInstance = HazelcastClient.newHazelcastClient(config);
             }
+            tasks = new TaskManager(hazelcastInstance);
+
         }catch (Throwable e){
             sendBackError("starting "+idString()+" "+exceptionStacktraceToString(e));
             e.printStackTrace(exceptionWrite);
             throw e;
         }
-        tasks = new TaskManager(hazelcastInstance);
     }
 
     public void run() throws IOException {

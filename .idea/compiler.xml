@@ -25,6 +25,10 @@
         <processorPath useClasspath="true" />
         <module name="hazellite" />
         <module name="hzCmd" />
+<<<<<<< Updated upstream
+=======
+        <module name="remoter" />
+>>>>>>> Stashed changes
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

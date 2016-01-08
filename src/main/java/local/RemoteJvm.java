@@ -73,7 +73,7 @@ public class RemoteJvm implements Serializable {
 
 
         String hzLib = hzPath+hzVersion+"/*";
-        String pidStr = box.ssh("cd " + dir + "; nohup java -cp \"" + libPath +":"+ hzLib + "\" " + jvmArgs +" "+ options +" "+ classToRun + " < " + inFile + " >> " + outFile + " 2>&1 & echo $!");
+        String pidStr = box.ssh("cd " + dir + "; nohup java -agentlib:TakipiAgent -cp \"" + libPath +":"+ hzLib + "\" " + jvmArgs +" "+"-Dtakipi.name="+id+" "+ options +" "+ classToRun + " < " + inFile + " >> " + outFile + " 2>&1 & echo $!");
         pid = Integer.parseInt(pidStr.trim());
     }
 
@@ -119,7 +119,7 @@ public class RemoteJvm implements Serializable {
     }
 
     public String grep(String args) throws IOException, InterruptedException {
-        return box.grep(args+" "+dir+"/"+outFile);
+        return box.grep("'"+args+"' "+dir+"/"+outFile);
     }
 
     public void downlonad(String destDir) throws IOException, InterruptedException {

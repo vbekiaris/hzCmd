@@ -20,7 +20,7 @@ public class AddBox extends Command {
 
     public void exe(HzCmd hzCmd) {
         try {
-            hzCmd.addBoxes(user, file);
+            hzCmd.addBoxes("box", user, file);
         } catch (Exception e) {
             e.printStackTrace();
         }
