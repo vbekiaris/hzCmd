@@ -18,15 +18,10 @@ public abstract class Utils {
         return ! isMember(instance);
     }
 
-    public static <T> T instantiate(final String className, final Class<T> type){
-        try {
-            Class<?> c = Class.forName(className);
-            Object o = c.getConstructor().newInstance();
-            return type.cast(o);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new IllegalStateException(e);
-        }
+    public static <T> T instantiate(final String className, final Class<T> type) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        Class<?> c = Class.forName(className);
+        Object o = c.getConstructor().newInstance();
+        return type.cast(o);
     }
 
     public static void sendBackError(String msg){

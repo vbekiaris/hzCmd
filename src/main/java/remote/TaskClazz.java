@@ -19,7 +19,7 @@ public class TaskClazz implements Callable<Object> {
     private String targetFunction;
     private Method method;
 
-    public TaskClazz(String id, String clasz, HazelcastInstance hazelcastInstance){
+    public TaskClazz(String id, String clasz, HazelcastInstance hazelcastInstance) throws Exception{
         this.id=id;
         task = instantiate(clasz, Task.class);
         task.setJvmID(Controler.ID);
