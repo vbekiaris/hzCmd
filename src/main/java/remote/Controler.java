@@ -96,15 +96,19 @@ public class Controler{
     class HelloThread extends Thread {
 
         public void run() {
-            try {
-                Message m = MQ.receive(ID);
-                System.out.println("recived MQ msg = "+m);
-                MQ.acknolage(m);
-                System.out.println("acked MQ msg = "+m);
 
+            while (true){
+                try {
+                    Message m = MQ.receive(ID);
+                    System.out.println("recived MQ msg = "+m);
+                    MQ.acknolage(m);
+                    System.out.println("acked MQ msg = "+m);
+                } catch (JMSException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-            } catch (JMSException e) {
-                e.printStackTrace();
             }
         }
     }
