@@ -3,10 +3,13 @@ package local;
 import global.Args;
 import global.Bash;
 import global.HzType;
+import jms.MQ;
 import remote.Client;
 import remote.Member;
 import xml.HzXml;
 
+import javax.jms.JMSException;
+import javax.jms.MessageProducer;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.InetAddress;
@@ -109,6 +112,16 @@ public class RemoteJvm implements Serializable {
     public void send(String cmd) throws IOException, InterruptedException {
         box.ssh("echo " + cmd + " >> " + dir + "/" + inFile);
     }
+
+
+    public void invoke(int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
+        MQ.send(box.pub+id, threadCount + " " + method + " " + taskId );
+    }
+
+    public String getResponse() throws IOException, InterruptedException, JMSException {
+        return MQ.receiveAnyResponse();
+    }
+
 
     public String cat() throws IOException, InterruptedException {
         return box.cat(dir + "/" + outFile);

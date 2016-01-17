@@ -5,6 +5,7 @@ import global.Bash;
 import global.HzType;
 import xml.HzXml;
 
+import javax.jms.JMSException;
 import java.io.*;
 import java.util.*;
 
@@ -134,23 +135,35 @@ public class ClusterManager implements Serializable {
         return jvm;
     }
 
+    /*
     private void sendToAll(String cmd) throws IOException, InterruptedException {
         checkEmpty();
         for(RemoteJvm jvm : jvms.values()){
             jvm.send(cmd);
         }
     }
+    */
 
     public void load(String taskId, String className) throws IOException, InterruptedException {
-        sendToAll(Args.load + " " + taskId + " " + className);
+
     }
 
-    public void invoke(int threadCount, String method, String taskId) throws IOException, InterruptedException {
-        sendToAll(Args.invoke + " " + threadCount + " " + method + " " + taskId);
+    public void invoke(int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
+        checkEmpty();
+        for(RemoteJvm jvm : jvms.values()){
+            jvm.invoke(threadCount, method, taskId);
+        }
+    }
+
+    public void getResponse() throws IOException, InterruptedException, JMSException {
+        checkEmpty();
+        for(RemoteJvm jvm : jvms.values()){
+            System.out.println(  jvm.getResponse() );
+        }
     }
 
     public void stop(String taskId) throws IOException, InterruptedException {
-        sendToAll(Args.stop +" " + taskId);
+
     }
 
 
