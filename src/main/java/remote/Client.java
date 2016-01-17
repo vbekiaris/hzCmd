@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class Client {
     public static void main(String[] args) throws Throwable {
-        Controler c = new Controler(HzType.Client);
+        Controler c = new HzControler(HzType.Client);
         c.run();
     }
 }

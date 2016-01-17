@@ -3,16 +3,13 @@ package remote;
 import com.hazelcast.core.HazelcastInstance;
 import global.Args;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static remote.Utils.sendBack;
-import static remote.Utils.sendBackError;
+import static remote.Utils.sendBAckException;
 
 public class TaskManager {
 
@@ -31,7 +28,7 @@ public class TaskManager {
     public void loadClass(String taskId, String className){
 
         if(tasks.containsKey(taskId)){
-            sendBackError(Args.ID +"="+Controler.ID +" duplicate task ID "+taskId);
+            sendBAckException(Args.ID + "=" + Controler.ID + " duplicate task ID " + taskId);
             return;
         }
 
@@ -40,7 +37,7 @@ public class TaskManager {
             tasks.put(taskManager.getId(), taskManager);
             sendBack(Args.ID +"="+Controler.ID+" "+taskId+" "+className+" loaded");
         } catch (Exception e){
-            sendBackError(Args.ID +"="+Controler.ID +" taskId=" + taskId + " className=" + className + " " + e.getMessage());
+            sendBAckException(Args.ID + "=" + Controler.ID + " taskId=" + taskId + " className=" + className + " " + e.getMessage());
         }
     }
 

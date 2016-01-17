@@ -4,6 +4,7 @@ import cmdline.CmdLine;
 import cmdline.Command;
 import global.Bash;
 import global.HzType;
+import jms.MQ;
 
 import java.io.*;
 import java.util.*;
@@ -149,11 +150,13 @@ public class HzCmd implements Serializable {
             c = c.selectJvmSet(jvmId);
             c.invoke(threadCound, method, taksId);
         }
+
         for (ClusterManager c : selected) {
             c = c.selectJvmSet(jvmId);
             c.getResponse();
         }
         System.out.println("ALL acked");
+        MQ.shutdown();
     }
 
     public void stop(String clusterId, String jvmId, String taskId) throws Exception {

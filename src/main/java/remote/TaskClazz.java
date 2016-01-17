@@ -9,7 +9,7 @@ import java.util.concurrent.Callable;
 import static global.Utils.exceptionStacktraceToString;
 import static remote.Utils.instantiate;
 import static remote.Utils.sendBack;
-import static remote.Utils.sendBackError;
+import static remote.Utils.sendBAckException;
 
 
 public class TaskClazz implements Callable<Object> {
@@ -64,7 +64,7 @@ public class TaskClazz implements Callable<Object> {
     //TODO write exception out to file
     private void onException(Throwable e){
         e.printStackTrace();
-        sendBackError(infoString() + " " +  exceptionStacktraceToString(e) );
+        sendBAckException(infoString() + " " + exceptionStacktraceToString(e));
     }
 
 

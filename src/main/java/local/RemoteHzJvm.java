@@ -16,12 +16,11 @@ import java.net.InetAddress;
 
 import static xml.HzXml.memberXml;
 
-public class RemoteJvm implements Serializable {
+public class RemoteHzJvm implements Serializable {
 
     public static final String libPath ="$HOME/"+Installer.REMOTE_LIB+"/*";
     public static final String hzPath ="$HOME/"+Installer.REMOTE_HZ_LIB+"/";
 
-    public static final String inFile  =  "in.txt";
     public static final String outFile =  "out.txt";
 
     private final String homeIp;
@@ -33,7 +32,7 @@ public class RemoteJvm implements Serializable {
     private int pid = 0;
     private String version;
 
-    public RemoteJvm(Box box, HzType type, String id, String xmlConfig, String homeIp) {
+    public RemoteHzJvm(Box box, HzType type, String id, String xmlConfig, String homeIp) {
         this.box = box;
         this.type = type;
         this.id = id;
@@ -76,7 +75,7 @@ public class RemoteJvm implements Serializable {
 
 
         String hzLib = hzPath+hzVersion+"/*";
-        String pidStr = box.ssh("cd " + dir + "; nohup java -agentlib:TakipiAgent -cp \"" + libPath +":"+ hzLib + "\" " + jvmArgs +" "+"-Dtakipi.name="+id+" "+ options +" "+ classToRun + " < " + inFile + " >> " + outFile + " 2>&1 & echo $!");
+        String pidStr = box.ssh("cd " + dir + "; nohup java -agentlib:TakipiAgent -cp \"" + libPath +":"+ hzLib + "\" " + jvmArgs +" "+"-Dtakipi.name="+id+" "+ options +" "+ classToRun + " >> " + outFile + " 2>&1 & echo $!");
         pid = Integer.parseInt(pidStr.trim());
     }
 
@@ -107,10 +106,6 @@ public class RemoteJvm implements Serializable {
             e.printStackTrace();
         }
         return false;
-    }
-
-    public void send(String cmd) throws IOException, InterruptedException {
-        box.ssh("echo " + cmd + " >> " + dir + "/" + inFile);
     }
 
 
@@ -144,7 +139,7 @@ public class RemoteJvm implements Serializable {
     public String toString() {
         boolean running = running();
         String color = running ? Bash.ANSI_GREEN : Bash.ANSI_RED;
-        return color + "RemoteJvm{" +
+        return color + "RemoteHzJvm{" +
                 " ID=" + id +
                 ", running=" + running +
                 ", pid=" + pid +

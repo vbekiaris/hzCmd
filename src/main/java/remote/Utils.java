@@ -3,7 +3,9 @@ package remote;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.instance.HazelcastInstanceProxy;
 import global.Bash;
+import jms.MQ;
 
+import javax.jms.JMSException;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -24,17 +26,7 @@ public abstract class Utils {
         return type.cast(o);
     }
 
-    public static void sendBackError(String msg){
-        sendBack("ERROR "+msg);
-    }
-
-    public static void sendBack(String msg) {
-        try {
-            Bash.ssh(Controler.home.user, Controler.home.ip, "echo " + msg + " >> " + Controler.home.cwd + "/" + Controler.home.inputFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    public static void sendBAckException(Exception e) throws JMSException {
+        MQ.sendObj("exception", e);
     }
 }

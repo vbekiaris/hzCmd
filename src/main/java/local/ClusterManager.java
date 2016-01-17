@@ -1,6 +1,5 @@
 package local;
 
-import global.Args;
 import global.Bash;
 import global.HzType;
 import xml.HzXml;
@@ -18,7 +17,7 @@ public class ClusterManager implements Serializable {
 
     private final String clusterId;
     private BoxManager boxes;
-    private Map<String, RemoteJvm> jvms = new HashMap();
+    private Map<String, RemoteHzJvm> jvms = new HashMap();
 
     private int membersOnlyCount;
     private int memberCount=0;
@@ -61,7 +60,7 @@ public class ClusterManager implements Serializable {
 
     public ClusterManager getMemberManager() throws Exception {
         ClusterManager selected = new ClusterManager(clusterId, boxes, memberCount, clientCount, homeIp);
-        for(RemoteJvm jvm : this.jvms.values()){
+        for(RemoteHzJvm jvm : this.jvms.values()){
             if(jvm.isMember()){
                 selected.jvms.put(jvm.getId(), jvm);
             }
@@ -71,7 +70,7 @@ public class ClusterManager implements Serializable {
 
     public ClusterManager getClientManager() throws Exception {
         ClusterManager selected = new ClusterManager(clusterId, boxes, memberCount, clientCount, homeIp);
-        for(RemoteJvm jvm : this.jvms.values()){
+        for(RemoteHzJvm jvm : this.jvms.values()){
             if(jvm.isClient()){
                 selected.jvms.put(jvm.getId(), jvm);
             }
@@ -94,42 +93,42 @@ public class ClusterManager implements Serializable {
     }
 
     public void addMembers(int qty, String hzVersion, String options) throws IOException, InterruptedException {
-        List<RemoteJvm> check = new ArrayList();
+        List<RemoteHzJvm> check = new ArrayList();
         for(int i=0; i<qty; i++) {
             check.add(addMember(hzVersion, options));
         }
         sleepSeconds(2);
-        for (RemoteJvm jvm : check) {
+        for (RemoteHzJvm jvm : check) {
             System.out.println(jvm);
         }
     }
 
-    public RemoteJvm addMember(String hzVersion, String options) throws IOException, InterruptedException {
+    public RemoteHzJvm addMember(String hzVersion, String options) throws IOException, InterruptedException {
         int memberIdx = rangeMap(memberCount++, 0, boxes.size()-membersOnlyCount);
 
         String id = HzType.Member.name() + memberCount + clusterId;
 
-        RemoteJvm jvm = new RemoteJvm(boxes.get(memberIdx), HzType.Member, id, memberXml(this), homeIp);
+        RemoteHzJvm jvm = new RemoteHzJvm(boxes.get(memberIdx), HzType.Member, id, memberXml(this), homeIp);
         jvms.put(jvm.getId(), jvm);
         jvm.initilize(hzVersion, options);
         return jvm;
     }
 
     public void addClients(int qty, String hzVersion, String options) throws IOException, InterruptedException {
-        List<RemoteJvm> check = new ArrayList();
+        List<RemoteHzJvm> check = new ArrayList();
         for(int i=0; i<qty; i++) {
             check.add(addClient(hzVersion, options));
         }
         sleepSeconds(2);
-        for (RemoteJvm jvm : check) {
+        for (RemoteHzJvm jvm : check) {
             System.out.println(jvm);
         }
     }
 
-    public RemoteJvm addClient(String hzVersion, String options) throws IOException, InterruptedException {
+    public RemoteHzJvm addClient(String hzVersion, String options) throws IOException, InterruptedException {
         int clientIdx = rangeMap(clientCount++, membersOnlyCount, boxes.size());
         String id = HzType.Client.name() + clientCount + clusterId;
-        RemoteJvm jvm = new RemoteJvm(boxes.get(clientIdx), HzType.Client, id, clientXml(this), homeIp);
+        RemoteHzJvm jvm = new RemoteHzJvm(boxes.get(clientIdx), HzType.Client, id, clientXml(this), homeIp);
         jvms.put(jvm.getId(), jvm);
         jvm.initilize(hzVersion, options);
         return jvm;
@@ -138,7 +137,7 @@ public class ClusterManager implements Serializable {
     /*
     private void sendToAll(String cmd) throws IOException, InterruptedException {
         checkEmpty();
-        for(RemoteJvm jvm : jvms.values()){
+        for(RemoteHzJvm jvm : jvms.values()){
             jvm.send(cmd);
         }
     }
@@ -150,15 +149,15 @@ public class ClusterManager implements Serializable {
 
     public void invoke(int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
         checkEmpty();
-        for(RemoteJvm jvm : jvms.values()){
+        for(RemoteHzJvm jvm : jvms.values()){
             jvm.invoke(threadCount, method, taskId);
         }
     }
 
     public void getResponse() throws IOException, InterruptedException, JMSException {
         checkEmpty();
-        for(RemoteJvm jvm : jvms.values()){
-            System.out.println(  jvm.getResponse() );
+        for(RemoteHzJvm jvm : jvms.values()){
+            System.out.println(jvm.getResponse());
         }
     }
 
@@ -170,21 +169,21 @@ public class ClusterManager implements Serializable {
 
     public void restart(String version, String options) throws IOException, InterruptedException {
         checkEmpty();
-        for(RemoteJvm jvm : jvms.values()){
+        for(RemoteHzJvm jvm : jvms.values()){
             jvm.initilize(version, options);
         }
     }
 
     public void clean() throws IOException, InterruptedException {
         checkEmpty();
-        for(RemoteJvm jvm : jvms.values()){
+        for(RemoteHzJvm jvm : jvms.values()){
             jvm.clean();
         }
     }
 
     public void kill() throws IOException, InterruptedException {
         checkEmpty();
-        for(RemoteJvm jvm : jvms.values()){
+        for(RemoteHzJvm jvm : jvms.values()){
             jvm.kill();
         }
     }
@@ -195,7 +194,7 @@ public class ClusterManager implements Serializable {
 
     public void cat() throws IOException, InterruptedException {
         checkEmpty();
-        for(RemoteJvm jvm : jvms.values()){
+        for(RemoteHzJvm jvm : jvms.values()){
             System.out.println(jvm);
             System.out.println(jvm.cat());
         }
@@ -203,7 +202,7 @@ public class ClusterManager implements Serializable {
 
     public void tail() throws IOException, InterruptedException {
         checkEmpty();
-        for(RemoteJvm jvm : jvms.values()){
+        for(RemoteHzJvm jvm : jvms.values()){
             System.out.println(jvm);
             jvm.tail();
         }
@@ -212,7 +211,7 @@ public class ClusterManager implements Serializable {
 
     public void grep(String args) throws IOException, InterruptedException {
         checkEmpty();
-        for(RemoteJvm jvm : jvms.values()){
+        for(RemoteHzJvm jvm : jvms.values()){
             System.out.println(jvm);
             System.out.println(jvm.grep(args));
         }
@@ -220,7 +219,7 @@ public class ClusterManager implements Serializable {
 
     public void downlonad(String destDir) throws IOException, InterruptedException {
         checkEmpty();
-        for(RemoteJvm jvm : jvms.values()){
+        for(RemoteHzJvm jvm : jvms.values()){
             jvm.downlonad(destDir);
         }
     }
@@ -228,7 +227,7 @@ public class ClusterManager implements Serializable {
 
     private String toString_memberJvms(){
         String jvms = new String();
-        for(RemoteJvm jvm : this.jvms.values()){
+        for(RemoteHzJvm jvm : this.jvms.values()){
             if(jvm.isMember()){
                 jvms+=jvm+"\n";
             }
@@ -238,7 +237,7 @@ public class ClusterManager implements Serializable {
 
     private String toString_clientJvms(){
         String jvms = new String();
-        for(RemoteJvm jvm : this.jvms.values()){
+        for(RemoteHzJvm jvm : this.jvms.values()){
             if(jvm.isClient()){
                 jvms+=jvm+"\n";
             }
@@ -247,10 +246,10 @@ public class ClusterManager implements Serializable {
     }
 
     public void clearStoped(){
-        Iterator<Map.Entry<String,RemoteJvm>> i = jvms.entrySet().iterator();
+        Iterator<Map.Entry<String, RemoteHzJvm>> i = jvms.entrySet().iterator();
         while (i.hasNext()) {
-            Map.Entry<String, RemoteJvm> e = i.next();
-            RemoteJvm jvm = e.getValue();
+            Map.Entry<String, RemoteHzJvm> e = i.next();
+            RemoteHzJvm jvm = e.getValue();
             if(! jvm.running()){
                 if(jvm.isMember()){
                     this.memberCount--;
