@@ -31,12 +31,14 @@ public abstract class Installer {
         String cacheJars = Bash.find(M2_Repo, "cache-api-1.0.0.jar");
         String guavaars = Bash.find(M2_Repo, "guava-15.0-rc1.jar");
         String hdr = Bash.find(M2_Repo, "HdrHistogram-2.1.8.jar");
+        String mq = Bash.find(M2_Repo, "activemq-all-5.13.0.jar");
 
         boxes.mkdir(REMOTE_LIB);
         boxes.upload(mainJars, REMOTE_LIB);
         boxes.upload(cacheJars, REMOTE_LIB);
         boxes.upload(guavaars, REMOTE_LIB);
         boxes.upload(hdr, REMOTE_LIB);
+        boxes.upload(mq, REMOTE_LIB);
 
         for (String version : versions) {
             if (ee) {

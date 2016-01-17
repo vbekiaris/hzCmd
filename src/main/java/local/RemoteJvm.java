@@ -115,7 +115,7 @@ public class RemoteJvm implements Serializable {
 
 
     public void invoke(int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
-        MQ.send(box.pub+id, threadCount + " " + method + " " + taskId );
+        MQ.send(id, threadCount + " " + method + " " + taskId );
     }
 
     public String getResponse() throws IOException, InterruptedException, JMSException {

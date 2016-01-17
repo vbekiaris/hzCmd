@@ -35,6 +35,8 @@ public class Controler{
     public final PrintStream exceptionWrite = new PrintStream(new FileOutputStream("exception.txt", true));
 
     public Controler(HzType type) throws Throwable {
+        HelloThread h = new HelloThread();
+        h.start();
         try {
             if (type == HzType.Member) {
                 XmlConfigBuilder configBuilder = new XmlConfigBuilder("hazelcast.xml");
@@ -55,6 +57,7 @@ public class Controler{
     }
 
     public void run() throws IOException {
+
         while (true){
             String line=in.readLine();
             if (line!=null){
@@ -96,6 +99,10 @@ public class Controler{
             try {
                 Message m = MQ.receive(ID);
                 System.out.println("recived MQ msg = "+m);
+                MQ.acknolage(m);
+                System.out.println("acked MQ msg = "+m);
+
+
             } catch (JMSException e) {
                 e.printStackTrace();
             }
