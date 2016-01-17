@@ -4,25 +4,25 @@ import com.github.rvesse.airline.annotations.Option;
 import global.HzType;
 import local.HzCmd;
 
-@com.github.rvesse.airline.annotations.Command(name = "cat", description = "cat cluster/members/clients")
+@com.github.rvesse.airline.annotations.Command(name = "invoke", description = "invoke a method with a given thread count on a class identified by taskId,  on a cluster/member/client")
 public class Invoke extends Command
 {
-    @Option(name = "-cluster", description = "cluster id to kill, * for ALL")
+    @Option(name = "-cluster", description = "cluster id")
     public String cluster;
 
-    @Option(name = "-m", description = "member id to kill, * for ALL")
+    @Option(name = "-m", description = "member id * for ALL")
     public String member;
 
-    @Option(name = "-c", description = "client id to kill, * for ALL")
+    @Option(name = "-c", description = "client id * for ALL")
     public String client;
 
     @Option(name = "-t", description = "thread count")
     public int threadCount;
 
-    @Option(name = "-f", description = "function ")
+    @Option(name = "-f", description = "function / method to invoke")
     public String function;
 
-    @Option(name = "-i", description = "taskId")
+    @Option(name = "-i", description = "taskId identifies the object to run the method on")
     public String taskId;
 
 
