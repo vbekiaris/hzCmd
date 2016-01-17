@@ -153,6 +153,7 @@ public class HzCmd implements Serializable {
             c = c.selectJvmSet(jvmId);
             c.getResponse();
         }
+        System.out.println("ALL acked");
     }
 
     public void stop(String clusterId, String jvmId, String taskId) throws Exception {
