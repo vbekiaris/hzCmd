@@ -9,7 +9,10 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import global.Args;
 import global.HzType;
+import jms.MQ;
 
+import javax.jms.JMSException;
+import javax.jms.Message;
 import java.io.*;
 import java.lang.management.ManagementFactory;
 
@@ -52,44 +55,51 @@ public class Controler{
     }
 
     public void run() throws IOException {
-        //try{
-            while (true){
-                String line=in.readLine();
-                if (line!=null){
-                    System.out.println(line);
-                    String[] words = line.split("\\s+");
-                    Args arg = Args.valueOf(words[0]);
-                    switch (arg) {
-                        case exit:
-                            System.exit(0);
+        while (true){
+            String line=in.readLine();
+            if (line!=null){
+                System.out.println(line);
+                String[] words = line.split("\\s+");
+                Args arg = Args.valueOf(words[0]);
+                switch (arg) {
+                    case exit:
+                        System.exit(0);
 
-                        case load:
-                            tasks.loadClass(words[1], words[2]);
-                            break;
+                    case load:
+                        tasks.loadClass(words[1], words[2]);
+                        break;
 
-                        case invoke:
-                            tasks.invokeNonBlocking(Integer.parseInt(words[1]), words[2], words[3]);
-                            break;
+                    case invoke:
+                        tasks.invokeNonBlocking(Integer.parseInt(words[1]), words[2], words[3]);
+                        break;
 
-                        case stop:
-                            tasks.stop(words[1]);
-                            break;
+                    case stop:
+                        tasks.stop(words[1]);
+                        break;
 
-                        case clean:
-                            home.inputFile = words[1];
-                            break;
-                        case info:
-                            sendBack(this.toString());
-                            break;
-                    }
-                }else {
-                    sleepMilli(500);
+                    case clean:
+                        home.inputFile = words[1];
+                        break;
+                    case info:
+                        sendBack(this.toString());
+                        break;
                 }
+            }else {
+                sleepMilli(500);
             }
-        //}catch(Exception e){
-        //    e.printStackTrace();
-        //    sendBackError(idString()+" "+exceptionStacktraceToString(e));
-        //}
+        }
+    }
+
+    class HelloThread extends Thread {
+
+        public void run() {
+            try {
+                Message m = MQ.receive(ID);
+                System.out.println("recived MQ msg = "+m);
+            } catch (JMSException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public String idString(){
