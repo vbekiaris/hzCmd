@@ -2,10 +2,8 @@ package cmdline;
 
 import com.github.rvesse.airline.annotations.Arguments;
 import com.github.rvesse.airline.annotations.Option;
-import global.HzType;
+import global.NodeType;
 import local.HzCmd;
-
-import java.util.List;
 
 @com.github.rvesse.airline.annotations.Command(name = "grep", description = "cat cluster/members/clients")
 public class Grep extends Command
@@ -26,7 +24,7 @@ public class Grep extends Command
 
         if(client!=null){
             try {
-                hzCmd.grep(cluster, HzType.Client + client, grepArgs);
+                hzCmd.grep(cluster, NodeType.Client + client, grepArgs);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -34,7 +32,7 @@ public class Grep extends Command
 
         if(member!=null){
             try {
-                hzCmd.grep(cluster, HzType.Member + member, grepArgs);
+                hzCmd.grep(cluster, NodeType.Member + member, grepArgs);
             } catch (Exception e) {
                 e.printStackTrace();
             }

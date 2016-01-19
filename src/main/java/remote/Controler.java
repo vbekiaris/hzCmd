@@ -1,7 +1,7 @@
 package remote;
 
 import global.Args;
-import global.HzType;
+import global.NodeType;
 import jms.MQ;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -21,7 +21,13 @@ public abstract class Controler{
 
     public final PrintStream exceptionWrite = new PrintStream(new FileOutputStream("exception.txt", true));
 
-    public Controler(HzType type) throws Exception {
+    public final NodeType type;
+
+    public Controler(NodeType type) throws Exception {
+        this.type=type;
+    }
+
+    private void initilize() throws Exception {
         try {
             init(type);
         }catch (Exception e){
@@ -31,12 +37,14 @@ public abstract class Controler{
         }
     }
 
-    public abstract void init(HzType type)  throws Exception ;
+
+    public abstract void init(NodeType type)  throws Exception ;
 
     public void run() throws IOException {
         while (true){
             try {
                 Message m = MQ.receive(ID);
+
 
                 System.out.println("recived MQ msg = "+m);
                 MQ.acknolage(m);

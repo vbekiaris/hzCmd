@@ -1,7 +1,7 @@
 package cmdline;
 
 import com.github.rvesse.airline.annotations.Option;
-import global.HzType;
+import global.NodeType;
 import local.HzCmd;
 
 @com.github.rvesse.airline.annotations.Command(name = "tail", description = "cat cluster/members/clients")
@@ -21,7 +21,7 @@ public class Tail extends Command
 
         if(client!=null){
             try {
-                hzCmd.tail(cluster, HzType.Client + client);
+                hzCmd.tail(cluster, NodeType.Client + client);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -29,7 +29,7 @@ public class Tail extends Command
 
         if(member!=null){
             try {
-                hzCmd.tail(cluster, HzType.Member + member);
+                hzCmd.tail(cluster, NodeType.Member + member);
             } catch (Exception e) {
                 e.printStackTrace();
             }

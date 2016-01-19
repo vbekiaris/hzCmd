@@ -3,12 +3,11 @@ package remote;
 import com.hazelcast.core.HazelcastInstance;
 import global.Task;
 
+import javax.jms.JMSException;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
-import static global.Utils.exceptionStacktraceToString;
 import static remote.Utils.instantiate;
-import static remote.Utils.sendBack;
 import static remote.Utils.sendBAckException;
 
 
@@ -48,13 +47,13 @@ public class TaskClazz implements Callable<Object> {
         try {
             if (method!=null) {
                 System.out.println(infoStart());
-                sendBack(infoStart());
+                //sendBack(infoStart());
                 task.setRunning(true);
                 method.invoke(task);
-                sendBack(infoStop());
+                //sendBack(infoStop());
                 System.out.println(infoStop());
             }
-        }catch (Throwable e){
+        }catch (Exception e){
             onException(e);
             throw new RuntimeException( e );
         }
@@ -62,9 +61,13 @@ public class TaskClazz implements Callable<Object> {
     }
 
     //TODO write exception out to file
-    private void onException(Throwable e){
+    private void onException(Exception e){
         e.printStackTrace();
-        sendBAckException(infoString() + " " + exceptionStacktraceToString(e));
+        try {
+            sendBAckException(e);
+        } catch (JMSException e1) {
+            e1.printStackTrace();
+        }
     }
 
 

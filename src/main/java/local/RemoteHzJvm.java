@@ -2,14 +2,13 @@ package local;
 
 import global.Args;
 import global.Bash;
-import global.HzType;
+import global.NodeType;
 import jms.MQ;
 import remote.Client;
 import remote.Member;
 import xml.HzXml;
 
 import javax.jms.JMSException;
-import javax.jms.MessageProducer;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.InetAddress;
@@ -25,14 +24,14 @@ public class RemoteHzJvm implements Serializable {
 
     private final String homeIp;
     private final Box box;
-    private final HzType type;
+    private final NodeType type;
     private final String id;
     private final String dir;
     private final String xmlConfig;
     private int pid = 0;
     private String version;
 
-    public RemoteHzJvm(Box box, HzType type, String id, String xmlConfig, String homeIp) {
+    public RemoteHzJvm(Box box, NodeType type, String id, String xmlConfig, String homeIp) {
         this.box = box;
         this.type = type;
         this.id = id;
@@ -41,7 +40,7 @@ public class RemoteHzJvm implements Serializable {
         this.homeIp = homeIp;
     }
 
-    public void initilize(String hzVersion, String options) throws IOException, InterruptedException {
+    public void startJvm(String hzVersion, String jvmOptions) throws IOException, InterruptedException {
         version = hzVersion;
         if(running()){
             System.out.println("cannot restart "+this);
@@ -75,7 +74,7 @@ public class RemoteHzJvm implements Serializable {
 
 
         String hzLib = hzPath+hzVersion+"/*";
-        String pidStr = box.ssh("cd " + dir + "; nohup java -agentlib:TakipiAgent -cp \"" + libPath +":"+ hzLib + "\" " + jvmArgs +" "+"-Dtakipi.name="+id+" "+ options +" "+ classToRun + " >> " + outFile + " 2>&1 & echo $!");
+        String pidStr = box.ssh("cd " + dir + "; nohup java -agentlib:TakipiAgent -cp \"" + libPath +":"+ hzLib + "\" " + jvmArgs +" "+"-Dtakipi.name="+id+" "+ jvmOptions +" "+ classToRun + " >> " + outFile + " 2>&1 & echo $!");
         pid = Integer.parseInt(pidStr.trim());
     }
 
@@ -151,10 +150,10 @@ public class RemoteHzJvm implements Serializable {
     }
 
     public boolean isMember(){
-        return type == HzType.Member;
+        return type == NodeType.Member;
     }
 
     public boolean isClient(){
-        return type == HzType.Client;
+        return type == NodeType.Client;
     }
 }

@@ -3,9 +3,11 @@ package local;
 import cmdline.CmdLine;
 import cmdline.Command;
 import global.Bash;
-import global.HzType;
+import global.NodeType;
 import jms.MQ;
 
+import javax.jms.JMSException;
+import javax.jms.ObjectMessage;
 import java.io.*;
 import java.util.*;
 
@@ -58,14 +60,21 @@ public class HzCmd implements Serializable {
         }
     }
 
-    public void addJvm(HzType type, int qty, String clusterId, String version,  String options) throws IOException, InterruptedException {
+    public void addJvm(NodeType type, int qty, String clusterId, String version,  String options) throws IOException, InterruptedException {
         Collection<ClusterManager> selected = selectClusterSet(clusterId);
         for (ClusterManager c : selected) {
-            if( type == HzType.Member ) {
+            if( type == NodeType.Member ) {
                 c.addMembers(qty, version, options);
             }else {
                 c.addClients(qty, version, options);
             }
+        }
+        try {
+            ObjectMessage m = (ObjectMessage)MQ.receive("exception");
+            System.out.println("ERROR QUEUE "+m.getObject());
+
+        } catch (JMSException e) {
+            e.printStackTrace();
         }
     }
 

@@ -21,7 +21,7 @@ public class Task {
     }
 
     public void send(String msg) {
-        remote.Utils.sendBack(this.toString()+" "+msg);
+        //remote.Utils.sendBack(this.toString()+" "+msg);
     }
 
     public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {

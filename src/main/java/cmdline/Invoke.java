@@ -1,7 +1,7 @@
 package cmdline;
 
 import com.github.rvesse.airline.annotations.Option;
-import global.HzType;
+import global.NodeType;
 import local.HzCmd;
 
 @com.github.rvesse.airline.annotations.Command(name = "invoke", description = "invoke a method with a given thread count on a class identified by taskId,  on a cluster/member/client")
@@ -29,7 +29,7 @@ public class Invoke extends Command
 
     public void exe(HzCmd hzCmd) {
         try {
-            hzCmd.invoke(cluster, HzType.Member + member, threadCount, function, taskId);
+            hzCmd.invoke(cluster, NodeType.Member + member, threadCount, function, taskId);
         } catch (Exception e) {
             e.printStackTrace();
         }

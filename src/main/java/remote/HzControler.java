@@ -7,7 +7,7 @@ import com.hazelcast.config.Config;
 import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import global.HzType;
+import global.NodeType;
 
 public class HzControler extends Controler {
 
@@ -16,12 +16,12 @@ public class HzControler extends Controler {
     public static final String memberXml = System.getProperty("memberXml", "hazelcast.xml");
     public static final String clientXml = System.getProperty("memberXml", "client-hazelcast.xml");
 
-    public HzControler(HzType type) throws Exception {
+    public HzControler(NodeType type) throws Exception {
         super(type);
     }
 
-    public void init(HzType type) throws Exception {
-        if (type == HzType.Member) {
+    public void init(NodeType type) throws Exception {
+        if (type == NodeType.Member) {
             XmlConfigBuilder configBuilder = new XmlConfigBuilder(memberXml);
             Config config = configBuilder.build();
             hazelcastInstance = Hazelcast.newHazelcastInstance(config);

@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static remote.Utils.sendBack;
 import static remote.Utils.sendBAckException;
 
 public class TaskManager {
@@ -28,16 +27,16 @@ public class TaskManager {
     public void loadClass(String taskId, String className){
 
         if(tasks.containsKey(taskId)){
-            sendBAckException(Args.ID + "=" + Controler.ID + " duplicate task ID " + taskId);
+            //sendBAckException(Args.ID + "=" + Controler.ID + " duplicate task ID " + taskId);
             return;
         }
 
         try{
             TaskClazz taskManager = new TaskClazz(taskId, className, hazelcastInstance);
             tasks.put(taskManager.getId(), taskManager);
-            sendBack(Args.ID +"="+Controler.ID+" "+taskId+" "+className+" loaded");
+            //sendBack(Args.ID +"="+Controler.ID+" "+taskId+" "+className+" loaded");
         } catch (Exception e){
-            sendBAckException(Args.ID + "=" + Controler.ID + " taskId=" + taskId + " className=" + className + " " + e.getMessage());
+           // sendBAckException(Args.ID + "=" + Controler.ID + " taskId=" + taskId + " className=" + className + " " + e.getMessage());
         }
     }
 

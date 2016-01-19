@@ -2,11 +2,10 @@ package cmdline;
 
 import com.github.rvesse.airline.annotations.Arguments;
 import com.github.rvesse.airline.annotations.Option;
-import global.HzType;
+import global.NodeType;
 import local.HzCmd;
 
 import java.io.IOException;
-import java.util.List;
 
 @com.github.rvesse.airline.annotations.Command(name = "jvm", description = "Add member/client jvm's to a cluster")
 public class AddJvm extends Command {
@@ -30,7 +29,7 @@ public class AddJvm extends Command {
 
         if (member != 0){
             try {
-                hzCmd.addJvm(HzType.Member, member, cluster, version, options);
+                hzCmd.addJvm(NodeType.Member, member, cluster, version, options);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
@@ -40,7 +39,7 @@ public class AddJvm extends Command {
 
         if (client != 0){
             try {
-                hzCmd.addJvm(HzType.Client, client, cluster, version, options);
+                hzCmd.addJvm(NodeType.Client, client, cluster, version, options);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {

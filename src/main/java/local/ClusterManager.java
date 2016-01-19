@@ -1,7 +1,7 @@
 package local;
 
 import global.Bash;
-import global.HzType;
+import global.NodeType;
 import xml.HzXml;
 
 import javax.jms.JMSException;
@@ -9,7 +9,6 @@ import java.io.*;
 import java.util.*;
 
 import static global.Utils.rangeMap;
-import static global.Utils.sleepSeconds;
 import static xml.HzXml.clientXml;
 import static xml.HzXml.memberXml;
 
@@ -93,55 +92,37 @@ public class ClusterManager implements Serializable {
     }
 
     public void addMembers(int qty, String hzVersion, String options) throws IOException, InterruptedException {
-        List<RemoteHzJvm> check = new ArrayList();
         for(int i=0; i<qty; i++) {
-            check.add(addMember(hzVersion, options));
+            addMember(hzVersion, options);
         }
-        sleepSeconds(2);
-        for (RemoteHzJvm jvm : check) {
-            System.out.println(jvm);
+    }
+
+    public void addClients(int qty, String hzVersion, String options) throws IOException, InterruptedException {
+        for(int i=0; i<qty; i++) {
+            addClient(hzVersion, options);
         }
     }
 
     public RemoteHzJvm addMember(String hzVersion, String options) throws IOException, InterruptedException {
         int memberIdx = rangeMap(memberCount++, 0, boxes.size()-membersOnlyCount);
-
-        String id = HzType.Member.name() + memberCount + clusterId;
-
-        RemoteHzJvm jvm = new RemoteHzJvm(boxes.get(memberIdx), HzType.Member, id, memberXml(this), homeIp);
-        jvms.put(jvm.getId(), jvm);
-        jvm.initilize(hzVersion, options);
-        return jvm;
-    }
-
-    public void addClients(int qty, String hzVersion, String options) throws IOException, InterruptedException {
-        List<RemoteHzJvm> check = new ArrayList();
-        for(int i=0; i<qty; i++) {
-            check.add(addClient(hzVersion, options));
-        }
-        sleepSeconds(2);
-        for (RemoteHzJvm jvm : check) {
-            System.out.println(jvm);
-        }
+        String id = NodeType.Member.name() + memberCount + clusterId;
+        RemoteHzJvm jvm = new RemoteHzJvm(boxes.get(memberIdx), NodeType.Member, id, memberXml(this), homeIp);
+        return addJvm(jvm, hzVersion, options);
     }
 
     public RemoteHzJvm addClient(String hzVersion, String options) throws IOException, InterruptedException {
         int clientIdx = rangeMap(clientCount++, membersOnlyCount, boxes.size());
-        String id = HzType.Client.name() + clientCount + clusterId;
-        RemoteHzJvm jvm = new RemoteHzJvm(boxes.get(clientIdx), HzType.Client, id, clientXml(this), homeIp);
+        String id = NodeType.Client.name() + clientCount + clusterId;
+        RemoteHzJvm jvm = new RemoteHzJvm(boxes.get(clientIdx), NodeType.Client, id, clientXml(this), homeIp);
+        return addJvm(jvm, hzVersion, options);
+    }
+
+    private RemoteHzJvm addJvm(RemoteHzJvm jvm, String hzVersion, String options) throws IOException, InterruptedException {
         jvms.put(jvm.getId(), jvm);
-        jvm.initilize(hzVersion, options);
+        jvm.startJvm(hzVersion, options);
         return jvm;
     }
 
-    /*
-    private void sendToAll(String cmd) throws IOException, InterruptedException {
-        checkEmpty();
-        for(RemoteHzJvm jvm : jvms.values()){
-            jvm.send(cmd);
-        }
-    }
-    */
 
     public void load(String taskId, String className) throws IOException, InterruptedException {
 
@@ -170,7 +151,7 @@ public class ClusterManager implements Serializable {
     public void restart(String version, String options) throws IOException, InterruptedException {
         checkEmpty();
         for(RemoteHzJvm jvm : jvms.values()){
-            jvm.initilize(version, options);
+            jvm.startJvm(version, options);
         }
     }
 
@@ -207,7 +188,6 @@ public class ClusterManager implements Serializable {
             jvm.tail();
         }
     }
-
 
     public void grep(String args) throws IOException, InterruptedException {
         checkEmpty();

@@ -1,7 +1,7 @@
 package cmdline;
 
 import com.github.rvesse.airline.annotations.Option;
-import global.HzType;
+import global.NodeType;
 import local.HzCmd;
 
 @com.github.rvesse.airline.annotations.Command(name = "kill", description = "kill -9 cluster/members/clients")
@@ -21,7 +21,7 @@ public class Kill extends Command
 
         if(client!=null){
             try {
-                hzCmd.kill(cluster, HzType.Client+client);
+                hzCmd.kill(cluster, NodeType.Client+client);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -29,7 +29,7 @@ public class Kill extends Command
 
         if(member!=null){
             try {
-                hzCmd.kill(cluster, HzType.Member+member);
+                hzCmd.kill(cluster, NodeType.Member+member);
             } catch (Exception e) {
                 e.printStackTrace();
             }

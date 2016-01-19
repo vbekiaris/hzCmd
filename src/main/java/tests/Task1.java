@@ -3,6 +3,9 @@ package tests;
 import com.hazelcast.core.IMap;
 import global.Task;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static tests.Utils.sleepSeconds;
 
 public class Task1 extends Task {
@@ -13,11 +16,9 @@ public class Task1 extends Task {
 
     public void setup(){
         map = hazelcastInstance.getMap(mapName);
-        //send("map Name="+map.getName());
     }
 
     public void put() throws InterruptedException {
-        //send("starting put");
         while (isRunning()) {
             int k = random.nextInt(keyDomain);
             map.put(k, k);
@@ -25,7 +26,6 @@ public class Task1 extends Task {
     }
 
     public void get() throws InterruptedException {
-        //send("starting get");
         while (isRunning()) {
             int k = random.nextInt(keyDomain);
             Object obj = map.get(k);
@@ -33,15 +33,25 @@ public class Task1 extends Task {
     }
 
     public void size() throws InterruptedException {
-        //send("starting size");
         while (isRunning()) {
             send("map="+map.getName()+" size="+map.size());
             sleepSeconds(15);
         }
     }
 
+    public void heapOOM() throws InterruptedException {
+        List<byte[]> load = new ArrayList<byte[]>(10000);
+        while (isRunning()) {
+            byte[] data = new byte[10000];
+            load.add(data);
+        }
+    }
+
+    public void spinn() throws InterruptedException {
+        while (isRunning()) { }
+    }
+
     public void throwException() throws Exception {
-        //send("starting throwException");
         sleepSeconds(10);
         throw new Exception("Test Exception");
     }

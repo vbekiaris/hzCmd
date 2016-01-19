@@ -1,7 +1,7 @@
 package cmdline;
 
 import com.github.rvesse.airline.annotations.Option;
-import global.HzType;
+import global.NodeType;
 import local.HzCmd;
 
 @com.github.rvesse.airline.annotations.Command(name = "clean", description = "clean cluster/members/clients")
@@ -21,7 +21,7 @@ public class Clean extends Command
 
         if(client!=null){
             try {
-                hzCmd.clean(cluster, HzType.Client + client);
+                hzCmd.clean(cluster, NodeType.Client + client);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -29,7 +29,7 @@ public class Clean extends Command
 
         if(member!=null){
             try {
-                hzCmd.clean(cluster, HzType.Member + member);
+                hzCmd.clean(cluster, NodeType.Member + member);
             } catch (Exception e) {
                 e.printStackTrace();
             }

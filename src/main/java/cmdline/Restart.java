@@ -2,7 +2,7 @@ package cmdline;
 
 import com.github.rvesse.airline.annotations.Arguments;
 import com.github.rvesse.airline.annotations.Option;
-import global.HzType;
+import global.NodeType;
 import local.HzCmd;
 
 @com.github.rvesse.airline.annotations.Command(name = "restart", description = "restart a jvm in a cluster using its id")
@@ -27,7 +27,7 @@ public class Restart extends Command
 
         if(client!=null){
             try {
-                hzCmd.restart(cluster, HzType.Client + client, version, options);
+                hzCmd.restart(cluster, NodeType.Client + client, version, options);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -35,7 +35,7 @@ public class Restart extends Command
 
         if(member!=null){
             try {
-                hzCmd.restart(cluster, HzType.Member + member, version, options);
+                hzCmd.restart(cluster, NodeType.Member + member, version, options);
             } catch (Exception e) {
                 e.printStackTrace();
             }

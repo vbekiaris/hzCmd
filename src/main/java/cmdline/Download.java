@@ -2,7 +2,7 @@ package cmdline;
 
 import com.github.rvesse.airline.annotations.Arguments;
 import com.github.rvesse.airline.annotations.Option;
-import global.HzType;
+import global.NodeType;
 import local.HzCmd;
 
 @com.github.rvesse.airline.annotations.Command(name = "download", description = "download all files from jvm working dir")
@@ -24,7 +24,7 @@ public class Download extends Command
 
         if(client!=null){
             try {
-                hzCmd.downlonad(cluster, HzType.Client + member, dir);
+                hzCmd.downlonad(cluster, NodeType.Client + member, dir);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -32,7 +32,7 @@ public class Download extends Command
 
         if(member!=null){
             try {
-                hzCmd.downlonad(cluster, HzType.Member + member, dir);
+                hzCmd.downlonad(cluster, NodeType.Member + member, dir);
             } catch (Exception e) {
                 e.printStackTrace();
             }
