@@ -4,77 +4,50 @@ import global.Args;
 import global.Bash;
 import global.NodeType;
 import jms.MQ;
-import remote.Client;
-import remote.Member;
-import xml.HzXml;
 
 import javax.jms.JMSException;
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.InetAddress;
 
-import static xml.HzXml.memberXml;
-
-public class RemoteJvm implements Serializable {
+public abstract class RemoteJvm implements Serializable {
 
     public static final String libPath ="$HOME/"+Installer.REMOTE_LIB+"/*";
-    public static final String hzPath ="$HOME/"+Installer.REMOTE_HZ_LIB+"/";
 
     public static final String outFile =  "out.txt";
 
-    private final String homeIp;
-    private final Box box;
-    private final NodeType type;
-    private final String id;
-    private final String dir;
-    private final String xmlConfig;
-    private int pid = 0;
-    private String version;
+    protected final Box box;
+    protected final NodeType type;
+    protected final String id;
+    protected final String dir;
+    protected int pid = 0;
 
-    public RemoteJvm(Box box, NodeType type, String id, String xmlConfig, String homeIp) {
+    public RemoteJvm(Box box, NodeType type, String id) {
         this.box = box;
         this.type = type;
         this.id = id;
         this.dir = Installer.REMOTE_HZCMD_ROOT +"/"+id;
-        this.xmlConfig = xmlConfig;
-        this.homeIp = homeIp;
     }
 
-    public void startJvm(String hzVersion, String jvmOptions) throws IOException, InterruptedException {
-        version = hzVersion;
-        if(running()){
+    public abstract String getClassToRun();
+    public abstract String getVendorLibDir();
+
+    public void startJvm(String jvmOptions) throws IOException, InterruptedException {
+
+        if(isRunning()){
             System.out.println("cannot restart "+this);
             return;
         }
 
-        box.ssh("mkdir -p " + dir + ";  cd " + dir + ";  touch in.txt; > in.txt");
+        box.ssh("mkdir -p " + dir);
 
-        String classToRun;
-        if (isMember()){
-            classToRun = Member.class.getName();
-            box.upload(xmlConfig, dir+"/"+ HzXml.memberXml);
-        }else{
-            classToRun = Client.class.getName();
-            box.upload(xmlConfig, dir + "/" + HzXml.clientXml);
-        }
-
-
-        String ip = InetAddress.getLocalHost().getHostAddress();
-        if(homeIp!=null){
-            ip = homeIp;
-        }
+        String classToRun = getClassToRun();
+        String vendorLibDir = getVendorLibDir()+"/*";
 
         String jvmArgs = new String();
-        jvmArgs += "-D"+Args.homeUser+"="+System.getProperty("user.name")+" ";
-        jvmArgs += "-D"+Args.homeIp+"="+ip+" ";
-        jvmArgs += "-D"+Args.homeCwd+"="+System.getProperty("user.dir")+" ";
-        jvmArgs += "-D"+Args.homeInfile+"="+ HzCmd.commsFile+" ";
         jvmArgs += "-D"+Args.ID +"="+id+" ";
         jvmArgs += "-XX:OnOutOfMemoryError=\"touch " +id+".oome"+"\" ";
 
-
-        String hzLib = hzPath+hzVersion+"/*";
-        String pidStr = box.ssh("cd " + dir + "; nohup java -agentlib:TakipiAgent -cp \"" + libPath +":"+ hzLib + "\" " + jvmArgs +" "+"-Dtakipi.name="+id+" "+ jvmOptions +" "+ classToRun + " >> " + outFile + " 2>&1 & echo $!");
+        String pidStr = box.ssh("cd " + dir + "; nohup java -agentlib:TakipiAgent -cp \"" + libPath +":"+ vendorLibDir + "\" " + jvmArgs +" "+"-Dtakipi.name="+id+" "+ jvmOptions +" "+ classToRun + " >> " + outFile + " 2>&1 & echo $!");
         pid = Integer.parseInt(pidStr.trim());
     }
 
@@ -89,7 +62,7 @@ public class RemoteJvm implements Serializable {
         }
     }
 
-    public boolean running() {
+    public boolean isRunning() {
         try {
             if(pid==0){
                return false;
@@ -116,7 +89,6 @@ public class RemoteJvm implements Serializable {
         return MQ.receiveAnyResponse();
     }
 
-
     public String cat() throws IOException, InterruptedException {
         return box.cat(dir + "/" + outFile);
     }
@@ -136,15 +108,14 @@ public class RemoteJvm implements Serializable {
     public String getId(){ return id; }
 
     public String toString() {
-        boolean running = running();
+        boolean running = isRunning();
         String color = running ? Bash.ANSI_GREEN : Bash.ANSI_RED;
         return color + "RemoteHzJvm{" +
                 " ID=" + id +
-                ", running=" + running +
+                ", isRunning=" + running +
                 ", pid=" + pid +
                 ", type=" + type +
                 ", dir=" + dir +
-                ", version=" + version +
                 " ip=" + box +
                 '}' + Bash.ANSI_RESET;
     }

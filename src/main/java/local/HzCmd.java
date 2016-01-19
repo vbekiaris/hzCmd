@@ -1,5 +1,6 @@
 package local;
 
+import cmdline.AddMember;
 import cmdline.CmdLine;
 import cmdline.Command;
 import global.Bash;
@@ -14,7 +15,7 @@ import java.util.*;
 // mvn clean install dependency:copy-dependencies
 //TODO WAN REP xml SETUP
 //TODO man center integ
-//TODO exampe 3 3node cluster wan replicate ring, with rolling upgrade,  members putting,  clients getting,  kill restart members,  man center running,
+//TODO exampe 3 3node cluster wan replicate ring, with rolling upgrade,  members putting,  clients getting,  kill restart members,  man center isRunning,
 public class HzCmd implements Serializable {
 
     public static final String commsFile = "commsIn.txt";
@@ -60,21 +61,12 @@ public class HzCmd implements Serializable {
         }
     }
 
-    public void addJvm(NodeType type, int qty, String clusterId, String version,  String options) throws IOException, InterruptedException {
-        Collection<ClusterManager> selected = selectClusterSet(clusterId);
+    public void addMembers(AddMember cmd) throws IOException, InterruptedException {
+        Collection<ClusterManager> selected = selectClusterSet(cmd.cluster);
         for (ClusterManager c : selected) {
-            if( type == NodeType.Member ) {
-                c.addMembers(qty, version, options);
-            }else {
-                c.addClients(qty, version, options);
+            for (int i = 0; i < cmd.qty ; i++) {
+                c.addMember(cmd.version, cmd.jvmOptions);
             }
-        }
-        try {
-            ObjectMessage m = (ObjectMessage)MQ.receive("exception");
-            System.out.println("ERROR QUEUE "+m.getObject());
-
-        } catch (JMSException e) {
-            e.printStackTrace();
         }
     }
 

@@ -20,7 +20,7 @@ public class CmdLine {
         builder.withGroup("add")
                 .withDescription("add")
                 .withDefaultCommand(Help.class)
-                .withCommands(AddBox.class, Cluster.class, AddJvm.class);
+                .withCommands(AddBox.class, Cluster.class, AddMember.class);
 
         return builder.build();
     }

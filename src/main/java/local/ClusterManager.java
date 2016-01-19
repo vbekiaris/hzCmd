@@ -48,10 +48,10 @@ public class ClusterManager implements Serializable {
     }
 
     public ClusterManager selectJvmSet(String jvmId) throws Exception {
-        if( jvmId.equals( "Member*" ) )
+        if( jvmId.equals( "HzMember*" ) )
             return getMemberManager();
 
-        if( jvmId.equals( "Client*" ) )
+        if( jvmId.equals( "HzClient*" ) )
             return getClientManager();
 
         return getIDManager( jvmId + getClusterId() );
@@ -91,17 +91,6 @@ public class ClusterManager implements Serializable {
         }
     }
 
-    public void addMembers(int qty, String hzVersion, String options) throws IOException, InterruptedException {
-        for(int i=0; i<qty; i++) {
-            addMember(hzVersion, options);
-        }
-    }
-
-    public void addClients(int qty, String hzVersion, String options) throws IOException, InterruptedException {
-        for(int i=0; i<qty; i++) {
-            addClient(hzVersion, options);
-        }
-    }
 
     public RemoteHzJvm addMember(String hzVersion, String options) throws IOException, InterruptedException {
         int memberIdx = rangeMap(memberCount++, 0, boxes.size()-membersOnlyCount);
@@ -230,7 +219,7 @@ public class ClusterManager implements Serializable {
         while (i.hasNext()) {
             Map.Entry<String, RemoteHzJvm> e = i.next();
             RemoteHzJvm jvm = e.getValue();
-            if(! jvm.running()){
+            if(! jvm.isRunning()){
                 if(jvm.isMember()){
                     this.memberCount--;
                 }else{
