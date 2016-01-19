@@ -1,6 +1,6 @@
 package global;
 
-public enum  HzType{
+public enum NodeType {
     Member, Client
 }
 
