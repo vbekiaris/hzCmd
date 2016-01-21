@@ -25,9 +25,7 @@ public class AddMember extends Command implements Serializable{
     public void exe(HzCmd hzCmd) {
         try {
             hzCmd.addMembers(this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

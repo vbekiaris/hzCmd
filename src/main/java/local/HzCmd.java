@@ -61,12 +61,10 @@ public class HzCmd implements Serializable {
         }
     }
 
-    public void addMembers(AddMember cmd) throws IOException, InterruptedException {
+    public void addMembers(AddMember cmd) throws Exception {
         Collection<ClusterManager> selected = selectClusterSet(cmd.cluster);
         for (ClusterManager c : selected) {
-            for (int i = 0; i < cmd.qty ; i++) {
-                c.addMember(cmd.version, cmd.jvmOptions);
-            }
+            c.addMembers(cmd.qty, cmd.version, cmd.jvmOptions);
         }
     }
 

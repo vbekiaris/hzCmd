@@ -91,7 +91,7 @@ public class ClusterManager implements Serializable {
     }
 
 
-    public void addMembers(int qty, String hzVersion, String options) throws IOException, InterruptedException {
+    public void addMembers(int qty, String hzVersion, String options) throws Exception {
         List<RemoteJvm> check = new ArrayList();
         for(int i=0; i<qty; i++) {
             check.add(addMember(hzVersion, options));
@@ -102,13 +102,14 @@ public class ClusterManager implements Serializable {
         }
     }
 
-    public RemoteJvm addMember(String jarVersion, String options) throws IOException, InterruptedException {
+    public RemoteJvm addMember(String jarVersion, String options) throws Exception {
         int memberIdx = rangeMap(memberCount++, 0, boxes.size()-membersOnlyCount);
 
         String id = NodeType.Member.name() + memberCount + clusterId;
 
         RemoteJvm jvm = jvmFactory.createJvm(boxes.get(memberIdx), NodeType.Member, id);
         jvms.put(jvm.getId(), jvm);
+        jvm.beforeJvmStart(this);
         jvm.startJvm(jarVersion, options);
         return jvm;
     }
