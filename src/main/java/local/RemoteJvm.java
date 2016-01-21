@@ -28,10 +28,12 @@ public abstract class RemoteJvm implements Serializable {
         this.dir = Installer.REMOTE_HZCMD_ROOT +"/"+id;
     }
 
+    public abstract RemoteJvm factory();
+
     public abstract String getClassToRun();
     public abstract String getVendorLibDir();
 
-    public void startJvm(String jvmOptions) throws IOException, InterruptedException {
+    public void startJvm(String version, String jvmOptions) throws IOException, InterruptedException {
 
         if(isRunning()){
             System.out.println("cannot restart "+this);

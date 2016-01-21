@@ -27,16 +27,16 @@ public class RemoteHzJvm extends RemoteJvm {
     }
 
     public String getVendorLibDir() {
-        return hzPath;
+        return hzPath+version;
     }
 
 
     public void startJvm(String hzVersion, String jvmOptions) throws IOException, InterruptedException {
-
+        version = hzVersion;
         box.upload(xmlConfig, dir+"/"+ HzXml.memberXml);
         box.upload(xmlConfig, dir + "/" + HzXml.clientXml);
 
-        String jvmArgs = new String();
+        super.startJvm(version, jvmOptions);
     }
 
 }
