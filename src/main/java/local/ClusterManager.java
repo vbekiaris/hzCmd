@@ -23,10 +23,13 @@ public class ClusterManager implements Serializable {
     private int clientCount=0;
     private String homeIp;
 
-    public ClusterManager(String clusterId, BoxManager boxes, String homeIp) throws Exception {
+    private JvmFactory jvmFactory;
+
+    public ClusterManager(String clusterId, BoxManager boxes, String homeIp, JvmFactory jvmFactory) throws Exception {
         this.clusterId =clusterId;
         this.boxes=boxes;
         this.homeIp=homeIp;
+        this.jvmFactory=jvmFactory;
         HzXml.makeMemberXml(this);
         HzXml.makeClientXml(this);
     }
@@ -95,6 +98,7 @@ public class ClusterManager implements Serializable {
     public void addMember(RemoteHzJvm jvm) throws IOException, InterruptedException {
         int memberIdx = rangeMap(memberCount++, 0, boxes.size()-membersOnlyCount);
         String id = NodeType.Member.name() + memberCount + clusterId;
+
         jvms.put(jvm.getId(), jvm);
     }
 
