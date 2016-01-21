@@ -31,10 +31,13 @@ public abstract class RemoteJvm implements Serializable {
     public abstract String getClassToRun();
     public abstract String getVendorLibDir();
 
-    public void startJvm(String version, String jvmOptions) throws IOException, InterruptedException {
+    public abstract void beforeJvmStart(ClusterManager myCluster) throws Exception;
+
+
+    public final void startJvm(String version, String jvmOptions) throws IOException, InterruptedException {
 
         if(isRunning()){
-            System.out.println("cannot restart "+this);
+            System.out.println("all ready started "+this);
             return;
         }
 

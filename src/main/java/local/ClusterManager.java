@@ -2,15 +2,13 @@ package local;
 
 import global.Bash;
 import global.NodeType;
-import xml.HzXml;
 
 import javax.jms.JMSException;
 import java.io.*;
 import java.util.*;
 
 import static global.Utils.rangeMap;
-import static xml.HzXml.clientXml;
-import static xml.HzXml.memberXml;
+import static global.Utils.sleepSeconds;
 
 public class ClusterManager implements Serializable {
 
@@ -30,8 +28,6 @@ public class ClusterManager implements Serializable {
         this.boxes=boxes;
         this.homeIp=homeIp;
         this.jvmFactory=jvmFactory;
-        HzXml.makeMemberXml(this);
-        HzXml.makeClientXml(this);
     }
 
     private ClusterManager(String clusterId, BoxManager boxes, int memberCount, int clientCount, String homeIp) throws Exception {
@@ -95,12 +91,30 @@ public class ClusterManager implements Serializable {
     }
 
 
-    public void addMember(RemoteHzJvm jvm) throws IOException, InterruptedException {
+    public void addMembers(int qty, String hzVersion, String options) throws IOException, InterruptedException {
+        List<RemoteJvm> check = new ArrayList();
+        for(int i=0; i<qty; i++) {
+            check.add(addMember(hzVersion, options));
+        }
+        sleepSeconds(2);
+        for (RemoteJvm jvm : check) {
+            System.out.println(jvm);
+        }
+    }
+
+    public RemoteJvm addMember(String jarVersion, String options) throws IOException, InterruptedException {
         int memberIdx = rangeMap(memberCount++, 0, boxes.size()-membersOnlyCount);
+
         String id = NodeType.Member.name() + memberCount + clusterId;
 
+        RemoteJvm jvm = jvmFactory.createJvm(boxes.get(memberIdx), NodeType.Member, id);
         jvms.put(jvm.getId(), jvm);
+        jvm.startJvm(jarVersion, options);
+        return jvm;
     }
+
+
+
 
     public void addClient(RemoteHzJvm jvm) throws IOException, InterruptedException {
         int clientIdx = rangeMap(clientCount++, membersOnlyCount, boxes.size());

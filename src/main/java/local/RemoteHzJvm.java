@@ -31,12 +31,13 @@ public class RemoteHzJvm extends RemoteJvm {
     }
 
 
-    public void startJvm(String hzVersion, String jvmOptions) throws IOException, InterruptedException {
-        version = hzVersion;
+    public void beforeJvmStart(ClusterManager myCluster) throws Exception {
+
+        HzXml.makeMemberXml(myCluster);
+        HzXml.makeClientXml(myCluster);
+
         box.upload(xmlConfig, dir+"/"+ HzXml.memberXml);
         box.upload(xmlConfig, dir + "/" + HzXml.clientXml);
-
-        super.startJvm(version, jvmOptions);
     }
 
 }

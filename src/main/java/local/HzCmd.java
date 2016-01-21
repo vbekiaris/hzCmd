@@ -42,7 +42,7 @@ public class HzCmd implements Serializable {
     public void cluster(String clusterId, String boxGroupId, int start, int end) throws Exception{
         BoxManager all = boxes.get(boxGroupId);
         BoxManager clusterBoxes = all.getBoxes(start, end);
-        ClusterManager jvmManager = new ClusterManager(clusterId, clusterBoxes, homeIp);
+        ClusterManager jvmManager = new ClusterManager(clusterId, clusterBoxes, homeIp, new HzJvmFactory());
         clusters.put(jvmManager.getClusterId(), jvmManager);
         System.out.println(jvmManager);
     }
@@ -221,8 +221,6 @@ public class HzCmd implements Serializable {
     }
 
     public static void main(String[] args) throws InterruptedException, IOException {
-        ReadComms readComms = new ReadComms(HzCmd.commsFile);
-        readComms.read();
 
         HzCmd hzCmd = loadHzCmd();
 
