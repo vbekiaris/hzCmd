@@ -21,11 +21,12 @@ public abstract class RemoteJvm implements Serializable {
     protected final String dir;
     protected int pid = 0;
 
-    public RemoteJvm(Box box, NodeType type, String id) {
+    public RemoteJvm(Box box, NodeType type, String id) throws IOException, InterruptedException {
         this.box = box;
         this.type = type;
         this.id = id;
         this.dir = Installer.REMOTE_HZCMD_ROOT +"/"+id;
+        box.ssh("mkdir -p " + dir);
     }
 
     public abstract String getClassToRun();
@@ -40,8 +41,6 @@ public abstract class RemoteJvm implements Serializable {
             System.out.println("all ready started "+this);
             return;
         }
-
-        box.ssh("mkdir -p " + dir);
 
         String classToRun = getClassToRun();
         String vendorLibDir = getVendorLibDir(version)+"/*";

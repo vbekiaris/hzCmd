@@ -25,6 +25,7 @@ public abstract class Controler{
 
     public Controler(NodeType type) throws Exception {
         this.type=type;
+        initilize();
     }
 
     private void initilize() throws Exception {
