@@ -29,7 +29,7 @@ public abstract class RemoteJvm implements Serializable {
     }
 
     public abstract String getClassToRun();
-    public abstract String getVendorLibDir();
+    public abstract String getVendorLibDir(String version);
 
     public abstract void beforeJvmStart(ClusterManager myCluster) throws Exception;
 
@@ -44,7 +44,7 @@ public abstract class RemoteJvm implements Serializable {
         box.ssh("mkdir -p " + dir);
 
         String classToRun = getClassToRun();
-        String vendorLibDir = getVendorLibDir()+"/*";
+        String vendorLibDir = getVendorLibDir(version)+"/*";
 
         String jvmArgs = new String();
         jvmArgs += "-D"+Args.ID +"="+id+" ";

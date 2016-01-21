@@ -14,7 +14,7 @@ public class HzControler extends Controler {
     private HazelcastInstance hazelcastInstance;
 
     public static final String memberXml = System.getProperty("memberXml", "hazelcast.xml");
-    public static final String clientXml = System.getProperty("memberXml", "client-hazelcast.xml");
+    public static final String clientXml = System.getProperty("clientXml", "client-hazelcast.xml");
 
     public HzControler(NodeType type) throws Exception {
         super(type);

@@ -44,7 +44,7 @@ public class HzXml {
             document.getElementsByTagName("tcp-ip").item(0).appendChild(member);
         }
 
-        writeXmlFile(document, memberXml(m));
+        writeXmlFile(document, memberXmlFileForCluster(m));
     }
 
 
@@ -64,7 +64,7 @@ public class HzXml {
 
     public static void wanReplication(ClusterManager a,  ClusterManager b, String name, String repImpl) throws Exception{
 
-        Document document = getDocument(memberXml(a));
+        Document document = getDocument(memberXmlFileForCluster(a));
 
         Element wan = document.createElement("wan-replication");
         wan.setAttribute("name", name);
@@ -89,7 +89,7 @@ public class HzXml {
 
         document.getFirstChild().appendChild(wan);
 
-        writeXmlFile(document, memberXml(a));
+        writeXmlFile(document, memberXmlFileForCluster(a));
     }
 
 
@@ -129,7 +129,7 @@ public class HzXml {
             document.getElementsByTagName("cluster-members").item(0).appendChild(member);
         }
 
-        writeXmlFile(document, clientXml(m));
+        writeXmlFile(document, clientXmlFileForCluster(m));
     }
 
 
@@ -157,11 +157,11 @@ public class HzXml {
         transformer.transform(domSource, streamResult);
     }
 
-    public static String memberXml(ClusterManager m ){
+    public static String memberXmlFileForCluster(ClusterManager m ){
         return xmlDir+"/"+m.getClusterId()+"-"+ memberXml;
     }
 
-    public static String clientXml(ClusterManager m ){
+    public static String clientXmlFileForCluster(ClusterManager m ){
         return xmlDir+"/"+m.getClusterId()+"-"+ clientXml;
     }
 }
