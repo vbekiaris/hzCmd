@@ -2,6 +2,7 @@ package local;
 
 import global.Bash;
 import global.NodeType;
+import hz.RemoteHzJvm;
 
 import javax.jms.JMSException;
 import java.io.*;

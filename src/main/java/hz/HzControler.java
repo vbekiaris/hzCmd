@@ -1,4 +1,4 @@
-package remote;
+package hz;
 
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
@@ -8,6 +8,8 @@ import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import global.NodeType;
+import remote.Controler;
+import remote.TaskManager;
 
 public class HzControler extends Controler {
 

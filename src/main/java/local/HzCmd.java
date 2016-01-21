@@ -4,11 +4,9 @@ import cmdline.AddMember;
 import cmdline.CmdLine;
 import cmdline.Command;
 import global.Bash;
-import global.NodeType;
+import hz.HzJvmFactory;
 import jms.MQ;
 
-import javax.jms.JMSException;
-import javax.jms.ObjectMessage;
 import java.io.*;
 import java.util.*;
 

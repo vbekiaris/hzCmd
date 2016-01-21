@@ -4,6 +4,7 @@ import global.Bash;
 
 import java.io.IOException;
 
+//TODO  split this to a intaller of HzCmd and the vendor jars of the cluster / IMDG
 public abstract class Installer {
 
     public static String REMOTE_HZCMD_ROOT = "hzCmd";

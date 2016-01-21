@@ -1,8 +1,10 @@
-package local;
+package hz;
 
 import global.NodeType;
-import remote.HzClient;
-import remote.HzMember;
+import local.Box;
+import local.ClusterManager;
+import local.Installer;
+import local.RemoteJvm;
 import xml.HzXml;
 
 import java.io.IOException;
@@ -10,7 +12,7 @@ import java.io.IOException;
 
 public class RemoteHzJvm extends RemoteJvm {
 
-    public static final String hzPath ="$HOME/"+Installer.REMOTE_HZ_LIB+"/";
+    public static final String hzPath ="$HOME/"+ Installer.REMOTE_HZ_LIB+"/";
 
     public RemoteHzJvm(Box box, NodeType type, String id) throws IOException, InterruptedException {
         super(box, type, id);
