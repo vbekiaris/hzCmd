@@ -7,6 +7,7 @@ import global.Bash;
 import hz.HzJvmFactory;
 import jms.MQ;
 
+import javax.jms.JMSException;
 import java.io.*;
 import java.util.*;
 
@@ -227,6 +228,11 @@ public class HzCmd implements Serializable {
 
             try {
                 c.exe(hzCmd);
+                try {
+                    MQ.shutdown();
+                } catch (JMSException e) {
+                    e.printStackTrace();
+                }
                 saveHzCmd(hzCmd);
             }catch (Error e){
                 e.printStackTrace();

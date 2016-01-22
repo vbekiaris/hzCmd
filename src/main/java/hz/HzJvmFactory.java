@@ -13,7 +13,16 @@ import java.io.Serializable;
  */
 public class HzJvmFactory implements JvmFactory, Serializable {
 
-    public RemoteJvm createJvm(Box box, NodeType type, String id) throws IOException, InterruptedException {
+    public RemoteJvm createJvm(Box box, NodeType type, int count, String clusterId) throws IOException, InterruptedException {
+
+        String id;
+        if ( type == NodeType.Member ){
+            id = HzMember.class.getSimpleName();
+        }else {
+            id = HzClient.class.getSimpleName();
+        }
+        id += count+""+clusterId;
+
 
         return new RemoteHzJvm(box, type, id);
 

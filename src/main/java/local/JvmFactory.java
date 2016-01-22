@@ -9,6 +9,6 @@ import java.io.IOException;
  */
 public interface JvmFactory {
 
-    RemoteJvm createJvm(Box box, NodeType type, String id) throws IOException, InterruptedException;
+    RemoteJvm createJvm(Box box, NodeType type, int count, String clusterId) throws IOException, InterruptedException;
 
 }
