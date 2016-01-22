@@ -23,8 +23,6 @@ public class HzJvmFactory implements JvmFactory, Serializable {
         }
         id += count+""+clusterId;
 
-
         return new RemoteHzJvm(box, type, id);
-
     }
 }

@@ -98,17 +98,22 @@ public class ClusterManager implements Serializable {
         }
         for (RemoteJvm jvm : check) {
             System.out.println(jvm);
-            System.out.println( jvm.jvmStartResponse() );
+
+            Object o = jvm.jvmStartResponse();
+
+            if( o instanceof Exception){
+                throw (Exception)o;
+            }
+            System.out.println(o);
         }
     }
 
-    public RemoteJvm addMember(String jarVersion, String options) throws Exception {
+    private RemoteJvm addMember(String jarVersion, String options) throws Exception {
         int memberIdx = rangeMap(memberCount++, 0, boxes.size()-membersOnlyCount);
 
         RemoteJvm jvm = jvmFactory.createJvm(boxes.get(memberIdx), NodeType.Member, memberCount, clusterId);
         jvms.put(jvm.getId(), jvm);
-        jvm.beforeJvmStart(this);
-        jvm.startJvm(jarVersion, options);
+        jvm.startJvm(jarVersion, options, this);
         return jvm;
     }
 
@@ -146,10 +151,10 @@ public class ClusterManager implements Serializable {
 
 
 
-    public void restart(String version, String options) throws IOException, InterruptedException {
+    public void restart(String version, String options) throws Exception {
         checkEmpty();
         for(RemoteJvm jvm : jvms.values()){
-            jvm.startJvm(version, options);
+            jvm.startJvm(version, options, this);
         }
     }
 

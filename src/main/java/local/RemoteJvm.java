@@ -36,7 +36,9 @@ public abstract class RemoteJvm implements Serializable {
     public abstract void beforeJvmStart(ClusterManager myCluster) throws Exception;
 
 
-    public final void startJvm(String version, String jvmOptions) throws IOException, InterruptedException {
+    public final void startJvm(String version, String jvmOptions, ClusterManager myCluster) throws Exception {
+
+        beforeJvmStart(myCluster);
 
         if (isRunning()) {
             System.out.println("all ready started " + this);
