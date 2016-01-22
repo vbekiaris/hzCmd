@@ -75,6 +75,14 @@ public class HzCmd implements Serializable {
         }
     }
 
+    public void exit(String clusterId, String jvmId) throws Exception {
+        Collection<ClusterManager> selected = selectClusterSet(clusterId);
+        for (ClusterManager c : selected) {
+            c = c.selectJvmSet(jvmId);
+            c.exit();
+        }
+    }
+
     public void kill(String clusterId, String jvmId) throws Exception {
         Collection<ClusterManager> selected = selectClusterSet(clusterId);
         for (ClusterManager c : selected) {

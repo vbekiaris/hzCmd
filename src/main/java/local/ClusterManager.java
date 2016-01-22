@@ -168,6 +168,13 @@ public class ClusterManager implements Serializable {
         }
     }
 
+    public void exit() throws JMSException {
+        checkEmpty();
+        for(RemoteJvm jvm : jvms.values()){
+            jvm.exit();
+        }
+    }
+
     public void kill() throws IOException, InterruptedException {
         checkEmpty();
         for(RemoteJvm jvm : jvms.values()){

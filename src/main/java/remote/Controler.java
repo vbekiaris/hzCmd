@@ -4,16 +4,12 @@ import global.Args;
 import global.NodeType;
 import jms.MQ;
 import javax.jms.JMSException;
-import javax.jms.Message;
 
 import java.io.*;
 import java.lang.management.ManagementFactory;
 
-import static remote.Utils.sendBAckException;
-
 public abstract class Controler{
 
-    public static HomeSettings home = new HomeSettings();
     protected static TaskManager tasks;
 
     public static final String ID = System.getProperty(Args.ID.name());
@@ -25,33 +21,29 @@ public abstract class Controler{
 
     public Controler(NodeType type) throws Exception {
         this.type=type;
-        initilize();
-    }
 
-    private void initilize() throws Exception {
         try {
             init(type);
             MQ.sendObj(ID, "OK");
         }catch (Exception e){
+            e.printStackTrace();
             e.printStackTrace(exceptionWrite);
             MQ.sendObj(ID, e);
-            //sendBAckException( new Exception("starting " + idString(), e) );
             throw e;
         }
     }
-
 
     public abstract void init(NodeType type)  throws Exception ;
 
     public void run() throws IOException {
         while (true){
             try {
-                Message m = MQ.receive(ID);
+                Object obj = MQ.receiveObj(ID);
+                System.out.println("recived MQ msg = "+obj);
 
-
-                System.out.println("recived MQ msg = "+m);
-                MQ.acknolage(m);
-                System.out.println("acked MQ msg = "+m);
+                if(obj instanceof Cmd){
+                    ((Cmd) obj).exicute();
+                }
             } catch (JMSException e) {
                 e.printStackTrace();
             }
@@ -59,8 +51,6 @@ public abstract class Controler{
 
             /*
             switch (arg) {
-                case exit:
-                    System.exit(0);
 
                 case load:
                     tasks.loadClass(words[1], words[2]);

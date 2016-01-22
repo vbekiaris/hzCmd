@@ -4,6 +4,7 @@ import global.Args;
 import global.Bash;
 import global.NodeType;
 import jms.MQ;
+import remote.ExitCmd;
 
 import javax.jms.JMSException;
 import java.io.IOException;
@@ -65,6 +66,10 @@ public abstract class RemoteJvm implements Serializable {
             box.killHard(pid);
             pid = 0;
         }
+    }
+
+    public void exit() throws JMSException {
+        MQ.sendObj(id, new ExitCmd());
     }
 
     public boolean isRunning() {

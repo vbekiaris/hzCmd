@@ -15,7 +15,7 @@ public class CmdLine {
                 .withDefaultCommand(Help.class)
                 .withCommands(Help.class, Info.class, Add.class, Set.class, MemberBox.class, Install.class,
                               Kill.class, Restart.class, Cat.class, Tail.class, Grep.class, Download.class,
-                              Clean.class, Wipe.class, Load.class, Invoke.class);
+                              Clean.class, Wipe.class, Load.class, Invoke.class, Exit.class);
 
         builder.withGroup("add")
                 .withDescription("add boxes, clusters, members clients")
