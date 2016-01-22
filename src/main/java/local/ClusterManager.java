@@ -91,10 +91,18 @@ public class ClusterManager implements Serializable {
     }
 
 
-    public void addMembers(int qty, String hzVersion, String options) throws Exception {
+    public void addMembers(int qty, String version, String options) throws Exception {
+        addJvms(qty, version, options, NodeType.Member);
+    }
+
+    public void addClients(int qty, String version, String options) throws Exception {
+        addJvms(qty, version, options, NodeType.Client);
+    }
+
+    private void addJvms(int qty, String hzVersion, String options, NodeType type) throws Exception {
         List<RemoteJvm> check = new ArrayList();
         for(int i=0; i<qty; i++) {
-            check.add(addMember(hzVersion, options));
+            check.add(addJvm(hzVersion, options, type));
         }
         for (RemoteJvm jvm : check) {
             System.out.println(jvm);
@@ -108,10 +116,10 @@ public class ClusterManager implements Serializable {
         }
     }
 
-    private RemoteJvm addMember(String jarVersion, String options) throws Exception {
+    private RemoteJvm addJvm(String jarVersion, String options, NodeType type) throws Exception {
         int memberIdx = rangeMap(memberCount++, 0, boxes.size()-membersOnlyCount);
 
-        RemoteJvm jvm = jvmFactory.createJvm(boxes.get(memberIdx), NodeType.Member, memberCount, clusterId);
+        RemoteJvm jvm = jvmFactory.createJvm(boxes.get(memberIdx), type, memberCount, clusterId);
         jvms.put(jvm.getId(), jvm);
         jvm.startJvm(jarVersion, options, this);
         return jvm;
@@ -120,11 +128,6 @@ public class ClusterManager implements Serializable {
 
 
 
-    public void addClient(RemoteHzJvm jvm) throws IOException, InterruptedException {
-        int clientIdx = rangeMap(clientCount++, membersOnlyCount, boxes.size());
-        String id = NodeType.Client.name() + clientCount + clusterId;
-        jvms.put(jvm.getId(), jvm);
-    }
 
 
     public void load(String taskId, String className) throws IOException, InterruptedException {
