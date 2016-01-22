@@ -11,9 +11,9 @@ import java.io.Serializable;
 
 public abstract class RemoteJvm implements Serializable {
 
-    public static final String libPath ="$HOME/"+Installer.REMOTE_LIB+"/*";
+    public static final String libPath = "$HOME/" + Installer.REMOTE_LIB + "/*";
 
-    public static final String outFile =  "out.txt";
+    public static final String outFile = "out.txt";
 
     protected final Box box;
     protected final NodeType type;
@@ -25,11 +25,12 @@ public abstract class RemoteJvm implements Serializable {
         this.box = box;
         this.type = type;
         this.id = id;
-        this.dir = Installer.REMOTE_HZCMD_ROOT +"/"+id;
+        this.dir = Installer.REMOTE_HZCMD_ROOT + "/" + id;
         box.ssh("mkdir -p " + dir);
     }
 
     public abstract String getClassToRun();
+
     public abstract String getVendorLibDir(String version);
 
     public abstract void beforeJvmStart(ClusterManager myCluster) throws Exception;
@@ -37,19 +38,19 @@ public abstract class RemoteJvm implements Serializable {
 
     public final void startJvm(String version, String jvmOptions) throws IOException, InterruptedException {
 
-        if(isRunning()){
-            System.out.println("all ready started "+this);
+        if (isRunning()) {
+            System.out.println("all ready started " + this);
             return;
         }
 
         String classToRun = getClassToRun();
-        String vendorLibDir = getVendorLibDir(version)+"/*";
+        String vendorLibDir = getVendorLibDir(version) + "/*";
 
         String jvmArgs = new String();
-        jvmArgs += "-D"+Args.ID +"="+id+" ";
-        jvmArgs += "-XX:OnOutOfMemoryError=\"touch " +id+".oome"+"\" ";
+        jvmArgs += "-D" + Args.ID + "=" + id + " ";
+        jvmArgs += "-XX:OnOutOfMemoryError=\"touch " + id + ".oome" + "\" ";
 
-        String pidStr = box.ssh("cd " + dir + "; nohup java -agentlib:TakipiAgent -cp \"" + libPath +":"+ vendorLibDir + "\" " + jvmArgs +" "+"-Dtakipi.name="+id+" "+ jvmOptions +" "+ classToRun + " >> " + outFile + " 2>&1 & echo $!");
+        String pidStr = box.ssh("cd " + dir + "; nohup java -agentlib:TakipiAgent -cp \"" + libPath + ":" + vendorLibDir + "\" " + jvmArgs + " " + "-Dtakipi.name=" + id + " " + jvmOptions + " " + classToRun + " >> " + outFile + " 2>&1 & echo $!");
         pid = Integer.parseInt(pidStr.trim());
     }
 
@@ -58,22 +59,22 @@ public abstract class RemoteJvm implements Serializable {
     }
 
     public void kill() throws IOException, InterruptedException {
-        if(pid!=0){
+        if (pid != 0) {
             box.killHard(pid);
-            pid=0;
+            pid = 0;
         }
     }
 
     public boolean isRunning() {
         try {
-            if(pid==0){
-               return false;
+            if (pid == 0) {
+                return false;
             }
 
-            boolean running =  box.sshWithExitCode("ps -p "+pid) == 0;
+            boolean running = box.sshWithExitCode("ps -p " + pid) == 0;
 
-            if(!running){
-                pid=0;
+            if (!running) {
+                pid = 0;
             }
             return running;
         } catch (Exception e) {
@@ -82,6 +83,9 @@ public abstract class RemoteJvm implements Serializable {
         return false;
     }
 
+    public Object jvmStartResponse() throws JMSException {
+        return MQ.receiveObj(id);
+    }
 
     public void invoke(int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
         MQ.send(id, threadCount + " " + method + " " + taskId );

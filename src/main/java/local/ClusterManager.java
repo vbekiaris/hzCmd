@@ -9,7 +9,6 @@ import java.io.*;
 import java.util.*;
 
 import static global.Utils.rangeMap;
-import static global.Utils.sleepSeconds;
 
 public class ClusterManager implements Serializable {
 
@@ -97,9 +96,9 @@ public class ClusterManager implements Serializable {
         for(int i=0; i<qty; i++) {
             check.add(addMember(hzVersion, options));
         }
-        sleepSeconds(2);
         for (RemoteJvm jvm : check) {
             System.out.println(jvm);
+            System.out.println( jvm.jvmStartResponse() );
         }
     }
 

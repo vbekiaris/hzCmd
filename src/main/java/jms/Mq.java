@@ -73,6 +73,11 @@ public abstract class MQ {
         return consumer.receive();
     }
 
+    public static Object receiveObj(String queueName) throws JMSException {
+        MessageConsumer consumer = getMessageConsumer(queueName);
+        return  ((ObjectMessage) consumer.receive()).getObject();
+    }
+
     public static void acknolage(Message msg) throws JMSException {
         TextMessage ack = session.createTextMessage();
         ack.setText("acked");

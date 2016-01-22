@@ -31,9 +31,11 @@ public abstract class Controler{
     private void initilize() throws Exception {
         try {
             init(type);
+            MQ.sendObj(ID, "OK");
         }catch (Exception e){
             e.printStackTrace(exceptionWrite);
-            sendBAckException( new Exception("starting " + idString(), e) );
+            MQ.sendObj(ID, e);
+            //sendBAckException( new Exception("starting " + idString(), e) );
             throw e;
         }
     }
