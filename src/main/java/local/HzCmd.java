@@ -1,5 +1,6 @@
 package local;
 
+import cmdline.AddClient;
 import cmdline.AddMember;
 import cmdline.CmdLine;
 import cmdline.Command;
@@ -67,6 +68,13 @@ public class HzCmd implements Serializable {
         }
     }
 
+    public void addClients(AddClient cmd) throws Exception {
+        Collection<ClusterManager> selected = selectClusterSet(cmd.cluster);
+        for (ClusterManager c : selected) {
+            c.addClients(cmd.qty, cmd.version, cmd.jvmOptions);
+        }
+    }
+
     public void kill(String clusterId, String jvmId) throws Exception {
         Collection<ClusterManager> selected = selectClusterSet(clusterId);
         for (ClusterManager c : selected) {
@@ -99,7 +107,6 @@ public class HzCmd implements Serializable {
             c.tail();
         }
     }
-
 
     public void grep(String clusterId, String jvmId, String grepArgs) throws Exception {
         Collection<ClusterManager> selected = selectClusterSet(clusterId);
@@ -179,7 +186,7 @@ public class HzCmd implements Serializable {
     @Override
     public String toString() {
         String clu="";
-        for (ClusterManager c : clusters.values()) {
+        for(ClusterManager c : clusters.values()) {
             clu += c.toString() + "\n";
         }
 
