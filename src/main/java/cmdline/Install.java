@@ -3,7 +3,7 @@ package cmdline;
 
 import com.github.rvesse.airline.annotations.Arguments;
 import com.github.rvesse.airline.annotations.Option;
-import local.HzCmd;
+import main.HzCmd;
 
 import java.io.IOException;
 import java.util.List;

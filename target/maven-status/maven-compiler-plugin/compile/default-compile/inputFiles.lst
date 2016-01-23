@@ -2,6 +2,8 @@
 /Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Kill.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/local/BoxManager.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/tests/CQ.java
+/Users/danny/IdeaProjects/hz-script/src/main/java/remote/Cmd.java
+/Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/AddClient.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/remote/TaskManager.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Add.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Cat.java
@@ -17,6 +19,7 @@
 /Users/danny/IdeaProjects/hz-script/src/main/java/tests/Task1.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Info.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/global/Utils.java
+/Users/danny/IdeaProjects/hz-script/src/main/java/remote/ExitCmd.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Grep.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/local/HzCmd.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/local/Installer.java
@@ -34,6 +37,7 @@
 /Users/danny/IdeaProjects/hz-script/src/main/java/hz/HzJvmFactory.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Download.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/hz/HzControler.java
+/Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Exit.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Ping.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Restart.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/remote/Utils.java

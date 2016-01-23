@@ -1,7 +1,7 @@
 package cmdline;
 
 import com.github.rvesse.airline.annotations.Option;
-import local.HzCmd;
+import main.HzCmd;
 
 @com.github.rvesse.airline.annotations.Command(name="set", description = "group of commands,  you can set homip / show detailed info for ssh cmds /dedicated member Boxes")
 public class Set extends Command {

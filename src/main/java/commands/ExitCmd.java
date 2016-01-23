@@ -1,4 +1,6 @@
-package remote;
+package commands;
+
+import commands.Cmd;
 
 import java.io.Serializable;
 

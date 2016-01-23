@@ -1,6 +1,6 @@
 package cmdline;
 
-import local.HzCmd;
+import main.HzCmd;
 
 @com.github.rvesse.airline.annotations.Command(name="info", description = "print info on managed boxes/clusters/jvm's")
 public class Info extends Command {

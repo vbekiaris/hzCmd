@@ -7,4 +7,4 @@ fi
 ops="-Xms32m -Xmx128m"
 
 
-java -cp "${HZ_CMD_BIN}/*:${HZ_CMD_BIN}/dependency/*" ${ops} local.HzCmd $@
+java -cp "${HZ_CMD_BIN}/*:${HZ_CMD_BIN}/dependency/*" ${ops} main.HzCmd $@

@@ -1,8 +1,7 @@
 package cmdline;
 
 import com.github.rvesse.airline.annotations.Option;
-import global.NodeType;
-import local.HzCmd;
+import main.HzCmd;
 
 @com.github.rvesse.airline.annotations.Command(name = "exit", description = "system.exit on jvm's in cluster/members/clients")
 public class Exit extends Command
@@ -19,6 +18,8 @@ public class Exit extends Command
 
     public void exe(HzCmd hzCmd) {
 
+        System.out.println(this);
+
         if(client!=null){
             try {
                 hzCmd.exit(cluster, client);
@@ -34,5 +35,14 @@ public class Exit extends Command
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Exit{" +
+                "client='" + client + '\'' +
+                ", cluster='" + cluster + '\'' +
+                ", member='" + member + '\'' +
+                '}';
     }
 }

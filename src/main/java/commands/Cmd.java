@@ -1,4 +1,4 @@
-package remote;
+package commands;
 
 /**
  * Created by danny on 22/01/2016.

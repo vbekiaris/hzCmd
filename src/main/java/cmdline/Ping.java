@@ -1,7 +1,7 @@
 package cmdline;
 
 import com.github.rvesse.airline.annotations.Option;
-import local.HzCmd;
+import main.HzCmd;
 
 @com.github.rvesse.airline.annotations.Command(name = "ping", description = "ping a cluster's/member's/client's")
 public class Ping extends Command

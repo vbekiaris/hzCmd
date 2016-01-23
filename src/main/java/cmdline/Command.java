@@ -1,6 +1,6 @@
 package cmdline;
 
-import local.HzCmd;
+import main.HzCmd;
 
 @com.github.rvesse.airline.annotations.Command(name = "cmd")
 public class Command implements Runnable {

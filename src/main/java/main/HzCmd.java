@@ -1,4 +1,4 @@
-package local;
+package main;
 
 import cmdline.AddClient;
 import cmdline.AddMember;
@@ -7,6 +7,9 @@ import cmdline.Command;
 import global.Bash;
 import hz.HzJvmFactory;
 import jms.MQ;
+import local.BoxManager;
+import local.ClusterManager;
+import local.Installer;
 
 import javax.jms.JMSException;
 import java.io.*;

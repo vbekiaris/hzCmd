@@ -1,9 +1,7 @@
 package cmdline;
 
 import com.github.rvesse.airline.annotations.Option;
-import local.HzCmd;
-
-import java.io.IOException;
+import main.HzCmd;
 
 @com.github.rvesse.airline.annotations.Command(name = "boxes", description = "file of ip address and ssh login user name")
 public class AddBox extends Command {

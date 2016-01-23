@@ -3,7 +3,7 @@ package cmdline;
 import com.github.rvesse.airline.annotations.Arguments;
 import com.github.rvesse.airline.annotations.Option;
 import global.NodeType;
-import local.HzCmd;
+import main.HzCmd;
 
 @com.github.rvesse.airline.annotations.Command(name = "restart", description = "restart a jvm in a cluster using its id")
 public class Restart extends Command

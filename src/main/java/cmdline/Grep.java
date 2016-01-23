@@ -3,7 +3,7 @@ package cmdline;
 import com.github.rvesse.airline.annotations.Arguments;
 import com.github.rvesse.airline.annotations.Option;
 import global.NodeType;
-import local.HzCmd;
+import main.HzCmd;
 
 @com.github.rvesse.airline.annotations.Command(name = "grep", description = "cat cluster/members/clients")
 public class Grep extends Command

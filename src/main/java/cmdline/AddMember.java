@@ -2,9 +2,8 @@ package cmdline;
 
 import com.github.rvesse.airline.annotations.Arguments;
 import com.github.rvesse.airline.annotations.Option;
-import local.HzCmd;
+import main.HzCmd;
 
-import java.io.IOException;
 import java.io.Serializable;
 
 @com.github.rvesse.airline.annotations.Command(name = "member", description = "Add member jvm's to a cluster")

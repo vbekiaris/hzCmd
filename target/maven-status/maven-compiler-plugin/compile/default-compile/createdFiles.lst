@@ -1,11 +1,13 @@
 cmdline/MemberBox.class
 cmdline/Download.class
 tests/Utils.class
+cmdline/AddClient.class
 cmdline/Restart.class
 cmdline/Cat.class
 cmdline/Load.class
 cmdline/Install.class
 cmdline/Wipe.class
+cmdline/Exit.class
 local/BoxManager.class
 remote/TaskClazz.class
 cmdline/Invoke.class
@@ -26,6 +28,7 @@ local/Installer.class
 remote/HomeSettings.class
 cmdline/AddMember.class
 cmdline/Cluster.class
+remote/Cmd.class
 tests/Data.class
 cmdline/Command.class
 hz/HzMember.class
@@ -38,6 +41,7 @@ remote/Controler.class
 local/ClusterManager.class
 hz/HzJvmFactory.class
 tests/EvenKey.class
+remote/ExitCmd.class
 cmdline/Add.class
 cmdline/Set.class
 cmdline/Kill.class

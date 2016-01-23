@@ -1,5 +1,6 @@
 package remote;
 
+import commands.Cmd;
 import global.Args;
 import global.NodeType;
 import jms.MQ;
