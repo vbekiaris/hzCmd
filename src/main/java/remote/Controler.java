@@ -63,22 +63,15 @@ public abstract class Controler{
         while (true){
             try {
                 Object obj = MQ.receiveObj(ID);
-                System.out.println("recived MQ msg = "+obj);
+                System.out.println("MQ msg in = "+obj);
 
                 if(obj instanceof Cmd){
                     ((Cmd) obj).exicute(this);
                 }
             } catch (JMSException e) {
                 e.printStackTrace();
+                e.printStackTrace(exceptionWrite);
             }
-
-
-          /*
-
-                case info:
-                    sendBack(this.toString());
-                    break;
-            */
         }
     }
 
