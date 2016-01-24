@@ -1,5 +1,7 @@
 package remote.command;
 
+import remote.Controler;
+
 import java.io.Serializable;
 
 /**
@@ -8,8 +10,9 @@ import java.io.Serializable;
 public class LoadCmd implements Cmd, Serializable{
 
     private String taskId;
+    private String className;
 
-    public void exicute(){
-
+    public void exicute(Controler c){
+        c.load(taskId, className);
     }
 }

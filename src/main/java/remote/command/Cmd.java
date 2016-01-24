@@ -1,5 +1,7 @@
 package remote.command;
 
+import remote.Controler;
+
 public interface Cmd {
-    void exicute();
+    void exicute(Controler c);
 }

@@ -1,5 +1,7 @@
 package remote.command;
 
+import remote.Controler;
+
 import java.io.Serializable;
 
 /**
@@ -9,7 +11,7 @@ public class StopCmd implements Cmd, Serializable{
 
     private String taskId;
 
-    public void exicute(){
+    public void exicute(Controler c){
 
     }
 }

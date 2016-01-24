@@ -1,7 +1,5 @@
 package remote;
 
-import com.hazelcast.core.HazelcastInstance;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -22,20 +20,12 @@ public class TaskManager {
     }
 
 
-    public void loadClass(String taskId, String className){
-
+    public void loadClass(String taskId, String className) throws Exception{
         if(tasks.containsKey(taskId)){
-            //sendBAckException(Args.ID + "=" + Controler.ID + " duplicate task ID " + taskId);
-            return;
+           throw new IllegalStateException("taskId "+taskId+" all ready loaded");
         }
-
-        try{
-            TaskClazz taskManager = new TaskClazz(taskId, className, vendorObject);
-            tasks.put(taskManager.getId(), taskManager);
-            //sendBack(Args.ID +"="+Controler.ID+" "+taskId+" "+className+" loaded");
-        } catch (Exception e){
-           // sendBAckException(Args.ID + "=" + Controler.ID + " taskId=" + taskId + " className=" + className + " " + e.getMessage());
-        }
+        TaskClazz taskManager = new TaskClazz(taskId, className, vendorObject);
+        tasks.put(taskManager.getId(), taskManager);
     }
 
 

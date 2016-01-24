@@ -40,6 +40,21 @@ public abstract class Controler{
 
     public abstract Object getVendorObject();
 
+    public void load(String taskId, String clazz){
+        try {
+            tasks.loadClass(taskId, clazz);
+        } catch (Exception e) {
+            e.printStackTrace();
+            e.printStackTrace(exceptionWrite);
+            try {
+                MQ.sendObj(ID, e);
+            } catch (JMSException jmsError) {
+                jmsError.printStackTrace();
+                jmsError.printStackTrace(exceptionWrite);
+            }
+        }
+    }
+
     public void run() throws IOException {
         while (true){
             try {
@@ -47,31 +62,20 @@ public abstract class Controler{
                 System.out.println("recived MQ msg = "+obj);
 
                 if(obj instanceof Cmd){
-                    ((Cmd) obj).exicute();
+                    ((Cmd) obj).exicute(this);
                 }
             } catch (JMSException e) {
                 e.printStackTrace();
             }
 
 
-            /*
-            switch (arg) {
-
-                case load:
-                    tasks.loadClass(words[1], words[2]);
-                    break;
-
+          /*
                 case invoke:
                     tasks.invokeNonBlocking(Integer.parseInt(words[1]), words[2], words[3]);
-                    break;
-
-                case clean:
-                    home.inputFile = words[1];
                     break;
                 case info:
                     sendBack(this.toString());
                     break;
-            }
             */
         }
     }
