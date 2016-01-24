@@ -55,6 +55,10 @@ public abstract class Controler{
         }
     }
 
+    public void invokeNonBlocking(int threadCount, String function, String taskId){
+        tasks.invokeNonBlocking(threadCount, function, taskId);
+    }
+
     public void run() throws IOException {
         while (true){
             try {
@@ -70,9 +74,7 @@ public abstract class Controler{
 
 
           /*
-                case invoke:
-                    tasks.invokeNonBlocking(Integer.parseInt(words[1]), words[2], words[3]);
-                    break;
+
                 case info:
                     sendBack(this.toString());
                     break;

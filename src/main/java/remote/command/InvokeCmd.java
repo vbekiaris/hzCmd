@@ -9,9 +9,11 @@ import java.io.Serializable;
  */
 public class InvokeCmd implements Cmd, Serializable{
 
+    private int threadCount;
+    private String function;
     private String taskId;
 
     public void exicute(Controler c){
-
+        c.invokeNonBlocking(threadCount, function, taskId);
     }
 }

@@ -1,7 +1,6 @@
 package remote;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -28,14 +27,8 @@ public class TaskManager {
         tasks.put(taskManager.getId(), taskManager);
     }
 
-
     public void invokeNonBlocking(int threadCount, String function, String taskId) {
-        if ("*".equals(taskId) ){
-            for(TaskClazz t : tasks.values()){
-                submitNonBlocking(t, function, threadCount);
-            }
-        }else{
-            TaskClazz t = tasks.get(taskId);
+        for(TaskClazz t : selectTasks(taskId)) {
             submitNonBlocking(t, function, threadCount);
         }
     }
@@ -49,14 +42,16 @@ public class TaskManager {
 
 
     public void stop(String taskId){
-        if ("*".equals(taskId) ){
-            for(TaskClazz t : tasks.values()) {
-                t.stop();
-            }
-        }else{
-            TaskClazz t = tasks.get(taskId);
+        for(TaskClazz t : selectTasks(taskId)) {
             t.stop();
         }
+    }
+
+    private Collection<TaskClazz> selectTasks(String taskId){
+        if ("*".equals(taskId) ){
+            return tasks.values();
+        }
+        return Arrays.asList( tasks.get(taskId) );
     }
 
     @Override
