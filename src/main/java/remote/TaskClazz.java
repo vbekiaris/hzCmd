@@ -1,8 +1,5 @@
 package remote;
 
-import com.hazelcast.core.HazelcastInstance;
-import global.Task;
-
 import javax.jms.JMSException;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
@@ -18,12 +15,12 @@ public class TaskClazz implements Callable<Object> {
     private String targetFunction;
     private Method method;
 
-    public TaskClazz(String id, String clasz, HazelcastInstance hazelcastInstance) throws Exception{
+    public TaskClazz(String id, String clasz,  Object vendorObject) throws Exception{
         this.id=id;
         task = instantiate(clasz, Task.class);
         task.setJvmID(Controler.ID);
         task.setTaskID(id);
-        task.setHazelcastInstance(hazelcastInstance);
+        task.setVendorObject(vendorObject);
     }
 
     public void setMethod(String function){
@@ -38,6 +35,7 @@ public class TaskClazz implements Callable<Object> {
 
     public void stop(){
         task.setRunning(false);
+
     }
 
 

@@ -1,10 +1,8 @@
 package tests;
 
 import com.hazelcast.core.IMap;
-import global.Task;
+import remote.Task;
 import java.io.*;
-
-import static global.Utils.sleepSeconds;
 
 public class CQ extends Task {
 

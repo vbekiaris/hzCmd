@@ -61,10 +61,6 @@ public abstract class Controler{
                     tasks.invokeNonBlocking(Integer.parseInt(words[1]), words[2], words[3]);
                     break;
 
-                case stop:
-                    tasks.stop(words[1]);
-                    break;
-
                 case clean:
                     home.inputFile = words[1];
                     break;

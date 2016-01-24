@@ -1,15 +1,12 @@
-package global;
-
-import com.hazelcast.core.HazelcastInstance;
+package remote;
 
 import java.util.Random;
 
-public class Task {
+public abstract class Task {
 
     protected String jvmID;
     protected String taskID;
     protected Random random = new Random();
-    protected HazelcastInstance hazelcastInstance;
     protected volatile boolean running=false;
 
     public void setRunning(boolean running){
@@ -24,13 +21,7 @@ public class Task {
         //remote.Utils.sendBack(this.toString()+" "+msg);
     }
 
-    public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
-        this.hazelcastInstance = hazelcastInstance;
-    }
-
-    public HazelcastInstance getHazelcastInstance(){
-        return hazelcastInstance;
-    }
+    public abstract void setVendorObject(Object vendorObject);
 
 
     public String getTaskID() {

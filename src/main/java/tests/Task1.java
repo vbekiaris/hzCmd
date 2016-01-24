@@ -1,21 +1,22 @@
 package tests;
 
 import com.hazelcast.core.IMap;
-import global.Task;
+import hz.HzTask;
+import remote.Task;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static tests.Utils.sleepSeconds;
 
-public class Task1 extends Task {
+public class Task1 extends HzTask {
 
     public String mapName="a";
     public int keyDomain = 1000000;
     private IMap map;
 
     public void setup(){
-        map = hazelcastInstance.getMap(mapName);
+        map = hzInstance.getMap(mapName);
     }
 
     public void put() throws InterruptedException {

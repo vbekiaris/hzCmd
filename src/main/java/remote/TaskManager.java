@@ -14,11 +14,11 @@ public class TaskManager {
     private Map<String, TaskClazz> tasks = new HashMap();
     private ExecutorService executorService =  Executors.newCachedThreadPool();
 
-    private HazelcastInstance hazelcastInstance;
+    private Object vendorObject;
 
 
-    public TaskManager(HazelcastInstance hazelcastInstance) {
-        this.hazelcastInstance = hazelcastInstance;
+    public TaskManager(Object vendorObject) {
+        this.vendorObject = vendorObject;
     }
 
 
@@ -30,7 +30,7 @@ public class TaskManager {
         }
 
         try{
-            TaskClazz taskManager = new TaskClazz(taskId, className, hazelcastInstance);
+            TaskClazz taskManager = new TaskClazz(taskId, className, vendorObject);
             tasks.put(taskManager.getId(), taskManager);
             //sendBack(Args.ID +"="+Controler.ID+" "+taskId+" "+className+" loaded");
         } catch (Exception e){
