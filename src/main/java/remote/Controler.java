@@ -8,6 +8,8 @@ import javax.jms.JMSException;
 import java.io.*;
 import java.lang.management.ManagementFactory;
 
+import remote.command.Cmd;
+
 public abstract class Controler{
 
     protected static TaskManager tasks;
@@ -44,8 +46,8 @@ public abstract class Controler{
                 Object obj = MQ.receiveObj(ID);
                 System.out.println("recived MQ msg = "+obj);
 
-                if(obj instanceof remote.commands.Cmd){
-                    ((remote.commands.Cmd) obj).exicute();
+                if(obj instanceof remote.command.Cmd){
+                    ((remote.command.Cmd) obj).exicute();
                 }
             } catch (JMSException e) {
                 e.printStackTrace();

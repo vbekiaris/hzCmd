@@ -1,4 +1,4 @@
-package remote.commands;
+package remote.command;
 
 public interface Cmd {
     void exicute();
