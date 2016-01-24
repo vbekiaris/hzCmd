@@ -5,6 +5,8 @@ import global.Bash;
 import global.NodeType;
 import jms.MQ;
 import remote.command.ExitCmd;
+import remote.command.InvokeCmd;
+import remote.command.LoadCmd;
 
 import javax.jms.JMSException;
 import java.io.IOException;
@@ -94,8 +96,14 @@ public abstract class RemoteJvm implements Serializable {
         return MQ.receiveObj(id);
     }
 
+    public void load(String taskId, String className) throws IOException, InterruptedException, JMSException {
+        LoadCmd cmd = new LoadCmd(taskId, className);
+        MQ.sendObj(id, cmd);
+    }
+
     public void invoke(int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
-        MQ.send(id, threadCount + " " + method + " " + taskId );
+        InvokeCmd cmd = new InvokeCmd(threadCount, method, taskId);
+        MQ.sendObj(id, cmd);
     }
 
     public String getResponse() throws IOException, InterruptedException, JMSException {

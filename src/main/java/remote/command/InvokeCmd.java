@@ -13,6 +13,12 @@ public class InvokeCmd implements Cmd, Serializable{
     private String function;
     private String taskId;
 
+    public InvokeCmd(int threadCount, String function, String taskId){
+        this.threadCount = threadCount;
+        this.function = function;
+        this.taskId = taskId;
+    }
+
     public void exicute(Controler c){
         c.invokeNonBlocking(threadCount, function, taskId);
     }

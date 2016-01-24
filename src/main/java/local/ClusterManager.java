@@ -126,8 +126,10 @@ public class ClusterManager implements Serializable {
 
 
 
-    public void load(String taskId, String className) throws IOException, InterruptedException {
-
+    public void load(String taskId, String className) throws IOException, InterruptedException, JMSException{
+        for(RemoteJvm jvm : jvms.values()){
+            jvm.load(taskId, className);
+        }
     }
 
     public void invoke(int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
