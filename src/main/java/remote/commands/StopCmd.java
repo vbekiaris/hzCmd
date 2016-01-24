@@ -10,5 +10,6 @@ public class StopCmd implements Cmd, Serializable{
     private String taskId;
 
     public void exicute(){
+
     }
 }
