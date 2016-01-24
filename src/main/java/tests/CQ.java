@@ -1,10 +1,11 @@
 package tests;
 
 import com.hazelcast.core.IMap;
+import hz.HzTask;
 import remote.Task;
 import java.io.*;
 
-public class CQ extends Task {
+public class CQ extends HzTask {
 
     public LatencyListener latency = new LatencyListener();
     public int keyDomain = 1000;
@@ -12,7 +13,7 @@ public class CQ extends Task {
     public CQ(){}
 
     public void addListener() throws InterruptedException {
-        IMap map = hazelcastInstance.getMap("a");
+        IMap map = hzInstance.getMap("a");
         map.addEntryListener(latency, new EvenKey(), true) ;
     }
 
@@ -22,7 +23,7 @@ public class CQ extends Task {
 
 
     public void put() throws InterruptedException {
-        IMap map = hazelcastInstance.getMap("a");
+        IMap map = hzInstance.getMap("a");
 
         while (isRunning()) {
             int k = random.nextInt(keyDomain);

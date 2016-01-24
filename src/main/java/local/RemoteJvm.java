@@ -4,7 +4,7 @@ import global.Args;
 import global.Bash;
 import global.NodeType;
 import jms.MQ;
-import commands.ExitCmd;
+import remote.commands.ExitCmd;
 
 import javax.jms.JMSException;
 import java.io.IOException;

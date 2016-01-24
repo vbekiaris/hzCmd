@@ -1,4 +1,4 @@
-package commands;
+package remote.commands;
 
 import java.io.Serializable;
 
@@ -10,8 +10,5 @@ public class StopCmd implements Cmd, Serializable{
     private String taskId;
 
     public void exicute(){
-
-        tasks.stop(words[1]);
-
     }
 }
