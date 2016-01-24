@@ -13,7 +13,7 @@ import remote.TaskManager;
 
 public class HzControler extends Controler {
 
-    private HazelcastInstance hazelcastInstance;
+    private HazelcastInstance hzInstance;
 
     public static final String memberXml = System.getProperty("memberXml", "hazelcast.xml");
     public static final String clientXml = System.getProperty("clientXml", "client-hazelcast.xml");
@@ -26,13 +26,15 @@ public class HzControler extends Controler {
         if (type == NodeType.Member) {
             XmlConfigBuilder configBuilder = new XmlConfigBuilder(memberXml);
             Config config = configBuilder.build();
-            hazelcastInstance = Hazelcast.newHazelcastInstance(config);
+            hzInstance = Hazelcast.newHazelcastInstance(config);
         } else {
             XmlClientConfigBuilder configBuilder = new XmlClientConfigBuilder(clientXml);
             ClientConfig config = configBuilder.build();
-            hazelcastInstance = HazelcastClient.newHazelcastClient(config);
+            hzInstance = HazelcastClient.newHazelcastClient(config);
         }
-        tasks = new TaskManager(hazelcastInstance);
     }
 
+    public Object getVendorObject(){
+        return hzInstance;
+    }
 }

@@ -25,6 +25,7 @@ public abstract class Controler{
 
         try {
             init(type);
+            tasks = new TaskManager(getVendorObject());
             MQ.sendObj(ID, "OK");
         }catch (Exception e){
             e.printStackTrace();
@@ -35,6 +36,8 @@ public abstract class Controler{
     }
 
     public abstract void init(NodeType type)  throws Exception ;
+
+    public abstract Object getVendorObject();
 
     public void run() throws IOException {
         while (true){
