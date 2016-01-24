@@ -56,7 +56,18 @@ public abstract class Controler{
     }
 
     public void invokeNonBlocking(int threadCount, String function, String taskId){
-        tasks.invokeNonBlocking(threadCount, function, taskId);
+        try {
+            tasks.invokeNonBlocking(threadCount, function, taskId);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+            e.printStackTrace(exceptionWrite);
+            try {
+                MQ.sendObj(ID, e);
+            } catch (JMSException jmsError) {
+                jmsError.printStackTrace();
+                jmsError.printStackTrace(exceptionWrite);
+            }
+        }
     }
 
     public void run() throws IOException {

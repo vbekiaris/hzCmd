@@ -23,19 +23,13 @@ public class TaskClazz implements Callable<Object> {
         task.setVendorObject(vendorObject);
     }
 
-    public void setMethod(String function){
+    public void setMethod(String function) throws NoSuchMethodException {
         targetFunction = function;
-        try {
-            method = task.getClass().getMethod(function);
-        } catch (NoSuchMethodException e) {
-            method = null;
-            onException(e);
-        }
+        method = task.getClass().getMethod(function);
     }
 
     public void stop(){
         task.setRunning(false);
-
     }
 
 

@@ -27,18 +27,24 @@ public class TaskManager {
         tasks.put(taskManager.getId(), taskManager);
     }
 
-    public void invokeNonBlocking(int threadCount, String function, String taskId) {
-        for(TaskClazz t : selectTasks(taskId)) {
-            submitNonBlocking(t, function, threadCount);
+    public void invokeNonBlocking(int threadCount, String function, String taskId) throws NoSuchMethodException {
+        Collection<TaskClazz> tasks = selectTasks(taskId);
+
+        for(TaskClazz t : tasks) {
+            try {
+                t.setMethod(function);
+            }catch (NoSuchMethodException e){
+                throw new NoSuchMethodException("No methods invoked. task "+t.getId() + " No Such Method " + function);
+            }
+        }
+
+        for(TaskClazz t : tasks) {
+            for (int i = 0; i <threadCount; i++) {
+                executorService.submit(t);
+            }
         }
     }
 
-    private void submitNonBlocking(TaskClazz t, String function, int threadCount){
-        t.setMethod(function);
-        for (int i = 0; i <threadCount; i++) {
-            executorService.submit(t);
-        }
-    }
 
 
     public void stop(String taskId){
