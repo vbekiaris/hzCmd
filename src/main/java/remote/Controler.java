@@ -44,8 +44,8 @@ public abstract class Controler{
                 Object obj = MQ.receiveObj(ID);
                 System.out.println("recived MQ msg = "+obj);
 
-                if(obj instanceof Cmd){
-                    ((Cmd) obj).exicute();
+                if(obj instanceof remote.commands.Cmd){
+                    ((remote.commands.Cmd) obj).exicute();
                 }
             } catch (JMSException e) {
                 e.printStackTrace();
