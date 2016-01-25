@@ -42,6 +42,8 @@
 /Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/CmdLine.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/hz/HzJvmFactory.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Download.java
+/Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Async.java
+/Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Sync.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/hz/HzControler.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Exit.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Ping.java
@@ -59,7 +61,6 @@
 /Users/danny/IdeaProjects/hz-script/src/main/java/tests/HzMapPutBench.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/local/ClusterManager.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/local/JvmFactory.java
-/Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Invoke.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Wipe.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/tests/EvenKey.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/remote/Task.java

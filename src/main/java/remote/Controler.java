@@ -64,9 +64,9 @@ public abstract class Controler{
         }
     }
 
-    public void invokeNonBlocking(int threadCount, String function, String taskId){
+    public void invokeAsync(int threadCount, String function, String taskId){
         try {
-            tasks.invokeNonBlocking(threadCount, function, taskId);
+            tasks.invokeAsync(threadCount, function, taskId);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
             e.printStackTrace(exceptionWrite);
@@ -79,9 +79,9 @@ public abstract class Controler{
         }
     }
 
-    public void invokeBlocking(int threadCount, String function, String taskId){
+    public void invokeSync(int threadCount, String function, String taskId){
         try {
-            tasks.invokeBlocking(threadCount, function, taskId);
+            tasks.invokeSync(threadCount, function, taskId);
             MQ.sendObj(ID+"reply", "finished");
         } catch (JMSException jmsError) {
             jmsError.printStackTrace();

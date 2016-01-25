@@ -20,7 +20,7 @@ public class InvokeSyncCmd implements Cmd, Serializable{
     }
 
     public void exicute(Controler c){
-        c.invokeBlocking(threadCount, function, taskId);
+        c.invokeSync(threadCount, function, taskId);
     }
 
     @Override

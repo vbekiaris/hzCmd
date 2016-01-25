@@ -22,10 +22,6 @@ import java.util.*;
 //TODO exampe 3 3node cluster wan replicate ring, with rolling upgrade,  members putting,  clients getting,  kill restart members,  man center isRunning,
 public class HzCmd implements Serializable {
 
-    public static final String commsFile = "commsIn.txt";
-
-    public String homeIp;
-
     private Map<String, BoxManager> boxes = new HashMap();
     private Map<String, ClusterManager> clusters = new HashMap();
 
@@ -33,8 +29,9 @@ public class HzCmd implements Serializable {
         Bash.showSSH = show;
     }
 
+    private String homeIp;
     public void setHomeIp(String homeIp){
-        this.homeIp = homeIp;
+        this.homeIp=homeIp;
     }
 
 
@@ -229,12 +226,7 @@ public class HzCmd implements Serializable {
         for(ClusterManager c : clusters.values()) {
             clu += c.toString() + "\n";
         }
-
-        return "HzCmd" +
-                boxes +
-                "homeIp='" + homeIp + '\'' +
-                ", commsFile='" + commsFile + '\'' +
-                "\n" + clu ;
+        return clu ;
     }
 
 

@@ -25,7 +25,7 @@ public class Sync extends Command
 
     public void exe(HzCmd hzCmd) {
         try {
-            hzCmd.invokeAsync(cluster, selection, threadCount, function, taskId);
+            hzCmd.invokeSync(cluster, selection, threadCount, function, taskId);
         } catch (Exception e) {
             e.printStackTrace();
         }

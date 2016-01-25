@@ -145,7 +145,7 @@ public class ClusterManager implements Serializable {
     public void invokeSync(int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
         checkEmpty();
         for(RemoteJvm jvm : jvms.values()){
-            jvm.invokeAsync(threadCount, method, taskId);
+            jvm.invokeSync(threadCount, method, taskId);
         }
     }
 

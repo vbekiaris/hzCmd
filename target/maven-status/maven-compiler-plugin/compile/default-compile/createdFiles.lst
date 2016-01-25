@@ -18,13 +18,13 @@ hz/HzTask.class
 local/BoxManager.class
 remote/command/InfoCmd.class
 remote/TaskClazz.class
-cmdline/Invoke.class
 remote/Task.class
 local/JvmFactory.class
 cmdline/Clean.class
 cmdline/Grep.class
 cmdline/Ping.class
 global/Utils.class
+cmdline/Sync.class
 cmdline/Tail.class
 remote/TaskManager.class
 tests/Task1.class
@@ -40,6 +40,7 @@ cmdline/AddMember.class
 cmdline/Cluster.class
 hz/HzBench.class
 tests/Data.class
+cmdline/Async.class
 cmdline/Command.class
 hz/HzMember.class
 local/Box.class

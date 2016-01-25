@@ -28,7 +28,7 @@ public class TaskManager {
         tasks.put(taskManager.getId(), taskManager);
     }
 
-    public void invokeNonBlocking(int threadCount, String function, String taskId) throws NoSuchMethodException {
+    public void invokeAsync(int threadCount, String function, String taskId) throws NoSuchMethodException {
         Collection<TaskClazz> tasks = selectTasks(taskId);
 
         for(TaskClazz t : tasks) {
@@ -46,7 +46,7 @@ public class TaskManager {
         }
     }
 
-    public void invokeBlocking(int threadCount, String function, String taskId) throws NoSuchMethodException, InterruptedException {
+    public void invokeSync(int threadCount, String function, String taskId) throws NoSuchMethodException, InterruptedException {
         Collection<TaskClazz> tasks = selectTasks(taskId);
 
         for(TaskClazz t : tasks) {
@@ -57,12 +57,15 @@ public class TaskManager {
             }
         }
 
+        ExecutorService executor = Executors.newFixedThreadPool(tasks.size()*threadCount);
+
         for(TaskClazz t : tasks) {
             for (int i = 0; i <threadCount; i++) {
-                executorService.submit(t);
+                executor.submit(t);
             }
         }
-        executorService.awaitTermination(1, TimeUnit.DAYS);
+        executor.shutdown();
+        executor.awaitTermination(1, TimeUnit.DAYS);
     }
 
 
