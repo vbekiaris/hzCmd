@@ -10,12 +10,13 @@ public abstract class Bench extends Task{
 
     public int durationSec = 60;
     public int reportSecondsInterval=5;
+    private CsvReporter csvReporter;
     private MetricRegistry metrics = new MetricRegistry();
 
     public void init(){
-        CsvReporter csvReporter = CsvReporter.forRegistry(metrics).build(new File(System.getProperty("user.dir")) );
-        csvReporter.start(reportSecondsInterval, TimeUnit.SECONDS);
         setup();
+        csvReporter = CsvReporter.forRegistry(metrics).build(new File(System.getProperty("user.dir")) );
+        csvReporter.start(reportSecondsInterval, TimeUnit.SECONDS);
     }
 
     public abstract void setup();
@@ -33,6 +34,7 @@ public abstract class Bench extends Task{
             timeStep();
             context.stop();
         }
+        csvReporter.stop();
     }
     public abstract void timeStep( );
 }
