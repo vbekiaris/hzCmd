@@ -6,6 +6,7 @@ import com.hazelcast.core.IMap;
 import com.hazelcast.core.OperationTimeoutException;
 import hz.HzTask;
 
+import javax.jms.JMSException;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
@@ -46,10 +47,7 @@ public class Task1 extends HzTask {
         }
     }
 
-    public void size() throws InterruptedException {
-        while (isRunning()) {
-            send("map="+map.getName()+" size="+map.size());
-            sleepSeconds(15);
-        }
+    public void info() throws InterruptedException, JMSException {
+        send("map="+map.getName()+" size="+map.size());
     }
 }
