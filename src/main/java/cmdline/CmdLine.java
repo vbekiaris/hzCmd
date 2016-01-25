@@ -15,12 +15,12 @@ public class CmdLine {
                 .withDefaultCommand(Help.class)
                 .withCommands(Help.class, Info.class, Add.class, Set.class, MemberBox.class, Install.class,
                               Kill.class, Restart.class, Cat.class, Tail.class, Grep.class, Download.class,
-                              Clean.class, Wipe.class, Load.class, Invoke.class, Exit.class);
+                              Clean.class, Wipe.class, Load.class, Invoke.class, Exit.class, Listen.class);
 
         builder.withGroup("add")
                 .withDescription("add boxes, clusters, members clients")
                 .withDefaultCommand(Help.class)
-                .withCommands(AddBox.class, Cluster.class, AddMember.class, AddClient.class, Listen.class);
+                .withCommands(AddBox.class, Cluster.class, AddMember.class, AddClient.class);
 
         return builder.build();
     }
