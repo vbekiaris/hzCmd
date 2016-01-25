@@ -79,6 +79,25 @@ public abstract class Controler{
         }
     }
 
+    public void invokeBlocking(int threadCount, String function, String taskId){
+        try {
+            tasks.invokeBlocking(threadCount, function, taskId);
+            MQ.sendObj(ID+"reply", "finished");
+        } catch (JMSException jmsError) {
+            jmsError.printStackTrace();
+            jmsError.printStackTrace(exceptionWrite);
+        } catch (Exception e) {
+            e.printStackTrace();
+            e.printStackTrace(exceptionWrite);
+            try {
+                MQ.sendObj(ID+"reply", e);
+            } catch (JMSException jmsError) {
+                jmsError.printStackTrace();
+                jmsError.printStackTrace(exceptionWrite);
+            }
+        }
+    }
+
     public void run() throws IOException {
         while (true){
             try {

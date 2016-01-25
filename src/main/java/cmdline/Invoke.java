@@ -1,10 +1,9 @@
 package cmdline;
 
 import com.github.rvesse.airline.annotations.Option;
-import global.NodeType;
 import main.HzCmd;
 
-@com.github.rvesse.airline.annotations.Command(name = "invoke", description = "invoke a method with a given thread count on a class identified by taskId,  on a cluster/member/client")
+@com.github.rvesse.airline.annotations.Command(name = "invokeAsync", description = "invokeAsync Async a method with a given thread count on a class identified by taskId,  on a cluster/member/client")
 public class Invoke extends Command
 {
     @Option(name = "-cluster", description = "cluster id")
@@ -16,7 +15,7 @@ public class Invoke extends Command
     @Option(name = "-t", description = "thread count")
     public int threadCount;
 
-    @Option(name = "-f", description = "function / method to invoke")
+    @Option(name = "-f", description = "function / method to invokeAsync")
     public String function;
 
     @Option(name = "-i", description = "taskId identifies the object to run the method on")
@@ -26,7 +25,7 @@ public class Invoke extends Command
 
     public void exe(HzCmd hzCmd) {
         try {
-            hzCmd.invoke(cluster, selection, threadCount, function, taskId);
+            hzCmd.invokeAsync(cluster, selection, threadCount, function, taskId);
         } catch (Exception e) {
             e.printStackTrace();
         }

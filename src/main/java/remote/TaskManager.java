@@ -3,6 +3,7 @@ package remote;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 
 public class TaskManager {
@@ -44,6 +45,26 @@ public class TaskManager {
             }
         }
     }
+
+    public void invokeBlocking(int threadCount, String function, String taskId) throws NoSuchMethodException, InterruptedException {
+        Collection<TaskClazz> tasks = selectTasks(taskId);
+
+        for(TaskClazz t : tasks) {
+            try {
+                t.setMethod(function);
+            }catch (NoSuchMethodException e){
+                throw new NoSuchMethodException(Controler.ID+" No methods invoked. task "+t.getId() + " No Such Method " + function);
+            }
+        }
+
+        for(TaskClazz t : tasks) {
+            for (int i = 0; i <threadCount; i++) {
+                executorService.submit(t);
+            }
+        }
+        executorService.awaitTermination(1, TimeUnit.DAYS);
+    }
+
 
     public void stop(String taskId){
         for(TaskClazz t : selectTasks(taskId)) {

@@ -181,13 +181,28 @@ public class HzCmd implements Serializable {
         }
     }
 
-    public void invoke(String clusterId, String jvmId, int threadCound, String method, String taksId) throws Exception {
+    public void invokeAsync(String clusterId, String jvmId, int threadCound, String method, String taksId) throws Exception {
         Collection<ClusterManager> selected = selectClusterSet(clusterId);
         for (ClusterManager c : selected) {
             c = c.selectJvmSet(jvmId);
-            c.invoke(threadCound, method, taksId);
+            c.invokeAsync(threadCound, method, taksId);
         }
     }
+
+    public void invokeSync(String clusterId, String jvmId, int threadCound, String method, String taksId) throws Exception {
+        Collection<ClusterManager> selected = selectClusterSet(clusterId);
+        for (ClusterManager c : selected) {
+            c = c.selectJvmSet(jvmId);
+            c.invokeSync(threadCound, method, taksId);
+        }
+
+        for (ClusterManager c : selected) {
+            c = c.selectJvmSet(jvmId);
+            c.getResponse();
+        }
+
+    }
+
 
     public void stop(String clusterId, String jvmId, String taskId) throws Exception {
         Collection<ClusterManager> selected = selectClusterSet(clusterId);

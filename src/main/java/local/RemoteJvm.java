@@ -5,7 +5,8 @@ import global.Bash;
 import global.NodeType;
 import jms.MQ;
 import remote.command.ExitCmd;
-import remote.command.InvokeCmd;
+import remote.command.InvokeAsyncCmd;
+import remote.command.InvokeSyncCmd;
 import remote.command.LoadCmd;
 
 import javax.jms.JMSException;
@@ -102,13 +103,19 @@ public abstract class RemoteJvm implements Serializable {
         MQ.sendObj(id, cmd);
     }
 
-    public void invoke(int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
-        InvokeCmd cmd = new InvokeCmd(threadCount, method, taskId);
+    public void invokeAsync(int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
+        InvokeAsyncCmd cmd = new InvokeAsyncCmd(threadCount, method, taskId);
         MQ.sendObj(id, cmd);
     }
 
-    public String getResponse() throws IOException, InterruptedException, JMSException {
-        return MQ.receiveAnyResponse();
+    public void invokeSync(int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
+        InvokeSyncCmd cmd = new InvokeSyncCmd(threadCount, method, taskId);
+        MQ.sendObj(id, cmd);
+    }
+
+
+    public Object getResponse() throws IOException, InterruptedException, JMSException {
+        return MQ.receiveObj(id+"reply");
     }
 
     public String cat() throws IOException, InterruptedException {
