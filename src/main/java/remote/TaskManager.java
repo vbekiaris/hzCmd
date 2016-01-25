@@ -21,7 +21,7 @@ public class TaskManager {
 
     public void loadClass(String taskId, String className) throws Exception{
         if(tasks.containsKey(taskId)){
-           throw new IllegalStateException("taskId "+taskId+" all ready loaded");
+           throw new IllegalStateException(Controler.ID+" taskId "+taskId+" all ready loaded");
         }
         TaskClazz taskManager = new TaskClazz(taskId, className, vendorObject);
         tasks.put(taskManager.getId(), taskManager);
@@ -34,7 +34,7 @@ public class TaskManager {
             try {
                 t.setMethod(function);
             }catch (NoSuchMethodException e){
-                throw new NoSuchMethodException("No methods invoked. task "+t.getId() + " No Such Method " + function);
+                throw new NoSuchMethodException(Controler.ID+" No methods invoked. task "+t.getId() + " No Such Method " + function);
             }
         }
 
@@ -44,8 +44,6 @@ public class TaskManager {
             }
         }
     }
-
-
 
     public void stop(String taskId){
         for(TaskClazz t : selectTasks(taskId)) {

@@ -40,12 +40,14 @@ public class TaskClazz implements Callable<Object> {
     public Object call() {
         try {
             if (method!=null) {
-                System.out.println(infoStart());
-                MQ.sendObj(Controler.EVENTQ, infoStart());
+                String start = infoStart();
+                System.out.println(start);
+                MQ.sendObj(Controler.EVENTQ, start);
                 task.setRunning(true);
                 method.invoke(task);
-                MQ.sendObj(Controler.EVENTQ, infoStart());
-                System.out.println(infoStop());
+                String stop = infoStop();
+                MQ.sendObj(Controler.EVENTQ, stop);
+                System.out.println(stop);
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -58,18 +60,6 @@ public class TaskClazz implements Callable<Object> {
         }
         return null;
     }
-
-    /*
-    //TODO write exception out to file
-    private void onException(Exception e){
-        e.printStackTrace();
-        try {
-            sendBAckException(e);
-        } catch (JMSException e1) {
-            e1.printStackTrace();
-        }
-    }
-    */
 
 
     protected String getId(){

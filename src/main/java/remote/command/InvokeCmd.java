@@ -22,4 +22,13 @@ public class InvokeCmd implements Cmd, Serializable{
     public void exicute(Controler c){
         c.invokeNonBlocking(threadCount, function, taskId);
     }
+
+    @Override
+    public String toString() {
+        return "InvokeCmd{" +
+                "function='" + function + '\'' +
+                ", threadCount=" + threadCount +
+                ", taskId='" + taskId + '\'' +
+                '}';
+    }
 }
