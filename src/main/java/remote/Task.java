@@ -25,17 +25,12 @@ public abstract class Task {
 
     public abstract void setVendorObject(Object vendorObject);
 
-
     public String getTaskID() {
         return taskID;
     }
 
     public void setTaskID(String taskID) {
         this.taskID = taskID;
-    }
-
-    public String getJvmID() {
-        return jvmID;
     }
 
     public void setJvmID(String jvmID) {
