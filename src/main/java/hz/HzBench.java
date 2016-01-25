@@ -17,11 +17,11 @@ public abstract class HzBench extends Bench{
         hzInstance = (HazelcastInstance) vendorObject;
     }
 
-    public static boolean isMember(HazelcastInstance instance) {
-        return instance instanceof HazelcastInstanceProxy;
+    public  boolean isMember() {
+        return hzInstance instanceof HazelcastInstanceProxy;
     }
 
-    public static boolean isClient(HazelcastInstance instance) {
-        return ! isMember(instance);
+    public boolean isClient() {
+        return ! isMember();
     }
 }
