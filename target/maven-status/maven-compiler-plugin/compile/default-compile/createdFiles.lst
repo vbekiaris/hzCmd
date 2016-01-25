@@ -10,6 +10,7 @@ cmdline/Cat.class
 cmdline/Load.class
 main/HzCmd.class
 cmdline/Install.class
+cmdline/Listen.class
 cmdline/Wipe.class
 cmdline/Exit.class
 hz/HzTask.class

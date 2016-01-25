@@ -4,6 +4,7 @@ import cmdline.AddClient;
 import cmdline.AddMember;
 import cmdline.CmdLine;
 import cmdline.Command;
+import global.Args;
 import global.Bash;
 import hz.HzJvmFactory;
 import jms.MQ;
@@ -35,6 +36,20 @@ public class HzCmd implements Serializable {
     public void setHomeIp(String homeIp){
         this.homeIp = homeIp;
     }
+
+
+    public void listen() throws IOException, InterruptedException{
+        String eventQ = System.getProperty("user.dir")+"/"+Args.EVENTQ.name();
+        while (true){
+            try {
+                Object o = MQ.receiveObj(eventQ);
+                System.out.println(o);
+            } catch (JMSException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     public void addBoxes(String boxGroupId, String user, String file) throws IOException, InterruptedException{
         BoxManager b = new BoxManager(boxGroupId);

@@ -20,4 +20,12 @@ public class LoadCmd implements Cmd, Serializable{
     public void exicute(Controler c){
         c.load(taskId, className);
     }
+
+    @Override
+    public String toString() {
+        return "LoadCmd{" +
+                "className='" + className + '\'' +
+                ", taskId='" + taskId + '\'' +
+                '}';
+    }
 }
