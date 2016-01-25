@@ -16,6 +16,7 @@ public abstract class Bench extends Task{
     public void init(){
         setup();
         csvReporter = CsvReporter.forRegistry(metrics).build(new File(System.getProperty("user.dir")) );
+        csvReporter.start(reportSecondsInterval, TimeUnit.SECONDS);
     }
 
     public abstract void setup();
@@ -26,7 +27,6 @@ public abstract class Bench extends Task{
 
         com.codahale.metrics.Timer timer = metrics.timer(setTitle());
         com.codahale.metrics.Timer.Context context;
-        csvReporter.start(reportSecondsInterval, TimeUnit.SECONDS);
 
         long startTime = System.currentTimeMillis();
         long endTime = startTime + (durationSec * 1000);
