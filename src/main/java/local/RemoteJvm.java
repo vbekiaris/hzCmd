@@ -52,7 +52,8 @@ public abstract class RemoteJvm implements Serializable {
         String vendorLibDir = getVendorLibDir(version) + "/*";
 
         String jvmArgs = new String();
-        jvmArgs += "-D" + Args.ID + "=" + id + " ";
+        jvmArgs += "-D"+Args.EVENTQ+"="+System.getProperty("user.dir")+"/events" + " ";
+        jvmArgs += "-D"+Args.ID+"=" + id + " ";
         jvmArgs += "-XX:OnOutOfMemoryError=\"touch " + id + ".oome" + "\" ";
 
         String pidStr = box.ssh("cd " + dir + "; nohup java -agentlib:TakipiAgent -cp \"" + libPath + ":" + vendorLibDir + "\" " + jvmArgs + " " + "-Dtakipi.name=" + id + " " + jvmOptions + " " + classToRun + " >> " + outFile + " 2>&1 & echo $!");

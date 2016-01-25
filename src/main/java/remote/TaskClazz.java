@@ -1,5 +1,7 @@
 package remote;
 
+import jms.MQ;
+
 import javax.jms.JMSException;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
@@ -39,19 +41,25 @@ public class TaskClazz implements Callable<Object> {
         try {
             if (method!=null) {
                 System.out.println(infoStart());
-                //sendBack(infoStart());
+                MQ.sendObj(Controler.EVENTQ, infoStart());
                 task.setRunning(true);
                 method.invoke(task);
-                //sendBack(infoStop());
+                MQ.sendObj(Controler.EVENTQ, infoStart());
                 System.out.println(infoStop());
             }
         }catch (Exception e){
-            onException(e);
-            throw new RuntimeException( e );
+            e.printStackTrace();
+            e.printStackTrace(Controler.exceptionWrite);
+            try {
+                MQ.sendObj(Controler.EVENTQ, e);
+            } catch (JMSException jmsE) {
+                jmsE.printStackTrace();
+            }
         }
         return null;
     }
 
+    /*
     //TODO write exception out to file
     private void onException(Exception e){
         e.printStackTrace();
@@ -61,6 +69,7 @@ public class TaskClazz implements Callable<Object> {
             e1.printStackTrace();
         }
     }
+    */
 
 
     protected String getId(){

@@ -15,9 +15,18 @@ public abstract class Controler{
     protected static TaskManager tasks;
 
     public static final String ID = System.getProperty(Args.ID.name());
+    public static final String EVENTQ = System.getProperty(Args.EVENTQ.name());
     public static final String jvmPidId = ManagementFactory.getRuntimeMXBean().getName();
 
-    public final PrintStream exceptionWrite = new PrintStream(new FileOutputStream("exception.txt", true));
+    public static PrintStream exceptionWrite;
+
+    static {
+        try {
+            exceptionWrite = new PrintStream(new FileOutputStream("exception.txt", true));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     public final NodeType type;
 
@@ -47,7 +56,7 @@ public abstract class Controler{
             e.printStackTrace();
             e.printStackTrace(exceptionWrite);
             try {
-                MQ.sendObj(ID, e);
+                MQ.sendObj(EVENTQ, e);
             } catch (JMSException jmsError) {
                 jmsError.printStackTrace();
                 jmsError.printStackTrace(exceptionWrite);
@@ -62,7 +71,7 @@ public abstract class Controler{
             e.printStackTrace();
             e.printStackTrace(exceptionWrite);
             try {
-                MQ.sendObj(ID, e);
+                MQ.sendObj(EVENTQ, e);
             } catch (JMSException jmsError) {
                 jmsError.printStackTrace();
                 jmsError.printStackTrace(exceptionWrite);

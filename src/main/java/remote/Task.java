@@ -1,5 +1,8 @@
 package remote;
 
+import jms.MQ;
+
+import javax.jms.JMSException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -19,8 +22,8 @@ public abstract class Task {
         return running;
     }
 
-    public void send(String msg) {
-        //remote.Utils.sendBack(this.toString()+" "+msg);
+    public void send(String msg) throws JMSException {
+        MQ.sendObj(Controler.EVENTQ, msg);
     }
 
     public abstract void setVendorObject(Object vendorObject);
