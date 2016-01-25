@@ -153,7 +153,7 @@ public class HzCmd implements Serializable {
         }
     }
 
-    public void load(String clusterId,  String taskId, String className) throws IOException, InterruptedException {
+    public void load(String clusterId,  String taskId, String className) throws Exception {
         Collection<ClusterManager> selected = selectClusterSet(clusterId);
         for (ClusterManager c : selected) {
             c.load(taskId, className);

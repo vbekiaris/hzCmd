@@ -10,11 +10,8 @@ public class Invoke extends Command
     @Option(name = "-cluster", description = "cluster id")
     public String cluster;
 
-    @Option(name = "-m", description = "member id * for ALL")
-    public String member;
-
-    @Option(name = "-c", description = "client id * for ALL")
-    public String client;
+    @Option(name = "-s", description = "selection")
+    public String selection;
 
     @Option(name = "-t", description = "thread count")
     public int threadCount;
@@ -29,7 +26,7 @@ public class Invoke extends Command
 
     public void exe(HzCmd hzCmd) {
         try {
-            hzCmd.invoke(cluster, NodeType.Member + member, threadCount, function, taskId);
+            hzCmd.invoke(cluster, selection, threadCount, function, taskId);
         } catch (Exception e) {
             e.printStackTrace();
         }

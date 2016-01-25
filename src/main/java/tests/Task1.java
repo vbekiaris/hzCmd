@@ -39,21 +39,4 @@ public class Task1 extends HzTask {
             sleepSeconds(15);
         }
     }
-
-    public void heapOOM() throws InterruptedException {
-        List<byte[]> load = new ArrayList<byte[]>(10000);
-        while (isRunning()) {
-            byte[] data = new byte[10000];
-            load.add(data);
-        }
-    }
-
-    public void spinn() throws InterruptedException {
-        while (isRunning()) { }
-    }
-
-    public void throwException() throws Exception {
-        sleepSeconds(10);
-        throw new Exception("Test Exception");
-    }
 }

@@ -46,6 +46,9 @@ public class ClusterManager implements Serializable {
     }
 
     public ClusterManager selectJvmSet(String jvmId) throws Exception {
+        if( jvmId.equals( "*" ) )
+            return this;
+
         if( jvmId.equals( "HzMember*" ) )
             return getMemberManager();
 
