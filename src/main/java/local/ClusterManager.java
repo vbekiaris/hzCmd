@@ -108,20 +108,21 @@ public class ClusterManager implements Serializable {
         }
         for (RemoteJvm jvm : check) {
             System.out.println(jvm);
-
+        }
+        for (RemoteJvm jvm : check) {
             Object o = jvm.jvmStartResponse();
-
-            if( o instanceof Exception){
-                throw (Exception)o;
-            }
             System.out.println(o);
         }
     }
 
     private RemoteJvm addJvm(String jarVersion, String options, NodeType type) throws Exception {
-        int memberIdx = rangeMap(memberCount++, 0, boxes.size()-membersOnlyCount);
-
-        RemoteJvm jvm = jvmFactory.createJvm(boxes.get(memberIdx), type, memberCount, clusterId);
+        int idx;
+        if(type == NodeType.Member) {
+            idx = rangeMap(memberCount++, 0, boxes.size() - membersOnlyCount);
+        }else {
+            idx = rangeMap(memberCount++, membersOnlyCount, boxes.size());
+        }
+        RemoteJvm jvm = jvmFactory.createJvm(boxes.get(idx), type, memberCount, clusterId);
         jvms.put(jvm.getId(), jvm);
         jvm.startJvm(jarVersion, options, this);
         return jvm;
