@@ -53,10 +53,11 @@ public class TaskClazz implements Callable<Object> {
             e.printStackTrace();
             e.printStackTrace(Controler.exceptionWrite);
             try {
-                MQ.sendObj(Controler.EVENTQ, new Exception(infoString()+" hit ", e) );
+                MQ.sendObj(Controler.EVENTQ, new Exception(infoString(), e.getCause()) );
             } catch (JMSException jmsE) {
                 jmsE.printStackTrace();
             }
+            throw new RuntimeException(e);
         }
         return null;
     }

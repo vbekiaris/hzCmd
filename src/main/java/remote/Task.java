@@ -40,7 +40,6 @@ public abstract class Task {
         this.jvmID = jvmID;
     }
 
-
     public void heapOOM() throws InterruptedException {
         List<byte[]> load = new ArrayList<byte[]>(10000);
         while (isRunning()) {
