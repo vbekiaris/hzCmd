@@ -43,7 +43,12 @@ public class HzCmd implements Serializable {
         while (true){
             try {
                 Object o = MQ.receiveObj(eventQ);
-                System.out.println(o);
+                if (o instanceof Exception){
+                    Exception e = (Exception) o;
+                    System.out.println(Bash.ANSI_RED+" "+e+" "+Bash.ANSI_RESET);
+                }else{
+
+                }
             } catch (JMSException e) {
                 e.printStackTrace();
             }
