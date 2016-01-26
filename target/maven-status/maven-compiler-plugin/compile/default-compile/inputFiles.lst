@@ -3,6 +3,7 @@
 /Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Kill.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/remote/Bench.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/remote/command/Cmd.java
+/Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/AddCluster.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/local/BoxManager.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/tests/CQ.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/AddClient.java
@@ -54,7 +55,6 @@
 /Users/danny/IdeaProjects/hz-script/src/main/java/jms/MQ.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/remote/command/ExitCmd.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/tests/HzMapGetBench.java
-/Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Cluster.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Install.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/global/NodeType.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/AddBox.java

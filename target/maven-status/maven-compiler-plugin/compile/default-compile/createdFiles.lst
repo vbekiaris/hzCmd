@@ -26,6 +26,7 @@ cmdline/Ping.class
 global/Utils.class
 cmdline/Sync.class
 cmdline/Tail.class
+cmdline/AddCluster.class
 remote/TaskManager.class
 tests/Task1.class
 hz/RemoteHzJvm.class
@@ -37,7 +38,6 @@ local/Installer.class
 remote/command/InvokeSyncCmd.class
 tests/HzMapPutBench.class
 cmdline/AddMember.class
-cmdline/Cluster.class
 hz/HzBench.class
 tests/Data.class
 cmdline/Async.class

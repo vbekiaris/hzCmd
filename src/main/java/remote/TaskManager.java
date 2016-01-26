@@ -29,7 +29,7 @@ public class TaskManager {
     }
 
     public void invokeAsync(int threadCount, String function, String taskId) throws NoSuchMethodException {
-        Collection<TaskClazz> tasks = selectTasks(taskId);
+        Collection<TaskClazz> tasks = getMatchingTasks(taskId);
 
         for(TaskClazz t : tasks) {
             try {
@@ -47,7 +47,7 @@ public class TaskManager {
     }
 
     public void invokeSync(int threadCount, String function, String taskId) throws NoSuchMethodException, InterruptedException {
-        Collection<TaskClazz> tasks = selectTasks(taskId);
+        Collection<TaskClazz> tasks = getMatchingTasks(taskId);
 
         for(TaskClazz t : tasks) {
             try {
@@ -70,16 +70,19 @@ public class TaskManager {
 
 
     public void stop(String taskId){
-        for(TaskClazz t : selectTasks(taskId)) {
+        for(TaskClazz t : getMatchingTasks(taskId)) {
             t.stop();
         }
     }
 
-    private Collection<TaskClazz> selectTasks(String taskId){
-        if ("*".equals(taskId) ){
-            return tasks.values();
+    private List<TaskClazz> getMatchingTasks(String taskId) {
+        List<TaskClazz> matching = new ArrayList();
+        for( TaskClazz t : tasks.values()){
+            if ( t.getId().matches(taskId) ){
+                matching.add(t);
+            }
         }
-        return Arrays.asList( tasks.get(taskId) );
+        return matching;
     }
 
     @Override
