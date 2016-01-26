@@ -9,7 +9,7 @@ import main.HzCmd;
 public class Grep extends Command
 {
     @Option(name = "-id", description = "jvm id / name")
-    public String jvmId;
+    public String jvmId=".*";
 
     @Arguments( description = "grep args" )
     public String grepArgs;

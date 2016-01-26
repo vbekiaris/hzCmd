@@ -7,7 +7,7 @@ import main.HzCmd;
 public class Load extends Command
 {
     @Option(name = "-id", description = "jvm id / name")
-    public String jvmId;
+    public String jvmId=".*";
 
     @Option(name = "-task", description = "task Id")
     public String task;

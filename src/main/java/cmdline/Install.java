@@ -12,7 +12,7 @@ import java.util.List;
 public class Install extends Command {
 
     @Option(name = "-cluster", description = "default * (install to all defined clusters)")
-    public String cluster = "*";
+    public String cluster = ".*";
 
     @Option(name = "-ee", description = "default false Hazelcast enterprise")
     public boolean ee = false;

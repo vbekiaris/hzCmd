@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class AddClient extends Command implements Serializable{
 
     @Option(name = "-cluster", description = "which cluster to add jvm's to. default *")
-    public String cluster = "*";
+    public String cluster = ".*";
 
     @Option(name = "-n", description = "default number of members to add 0")
     public int qty = 0;

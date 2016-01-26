@@ -8,7 +8,7 @@ import main.HzCmd;
 public class Download extends Command
 {
     @Option(name = "-id", description = "regex to match")
-    public String id;
+    public String id=".*";
 
     @Arguments( description = "dest dir default ./output/" )
     public String dir = "output";
