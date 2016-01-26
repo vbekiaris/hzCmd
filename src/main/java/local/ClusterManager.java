@@ -176,7 +176,7 @@ public class ClusterManager implements Serializable {
 
     public void ssh(String jvmId, String cmd) throws IOException, InterruptedException {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
-            jvm.ssh(cmd);
+            System.out.println(jvm.ssh(cmd));
         }
     }
 
@@ -185,7 +185,6 @@ public class ClusterManager implements Serializable {
             jvm.downlonad(destDir);
         }
     }
-
 
     private String toString_memberJvms(){
         String jvms = new String();

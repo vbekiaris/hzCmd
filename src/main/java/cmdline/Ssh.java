@@ -10,7 +10,7 @@ public class Ssh extends Command
     public String jvmId = ".*";
 
     @Option(name = "-cmd", description = "jvm id / name")
-    public String cmd = "pwd";
+    public String cmd = "ls";
 
 
     public void exe(HzCmd hzCmd) {
