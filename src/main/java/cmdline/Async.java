@@ -6,11 +6,8 @@ import main.HzCmd;
 @com.github.rvesse.airline.annotations.Command(name = "async", description = "invokeAsync Async a method with a given thread count on a class identified by taskId,  on a cluster/member/client")
 public class Async extends Command
 {
-    @Option(name = "-cluster", description = "cluster id")
-    public String cluster;
-
-    @Option(name = "-s", description = "selection")
-    public String selection;
+    @Option(name = "-id", description = "jvm id")
+    public String jvmId;
 
     @Option(name = "-t", description = "thread count")
     public int threadCount;
@@ -25,7 +22,7 @@ public class Async extends Command
 
     public void exe(HzCmd hzCmd) {
         try {
-            hzCmd.invokeAsync(cluster, selection, threadCount, function, taskId);
+            hzCmd.invokeAsync(jvmId, threadCount, function, taskId);
         } catch (Exception e) {
             e.printStackTrace();
         }

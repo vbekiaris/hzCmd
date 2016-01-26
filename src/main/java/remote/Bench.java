@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class Bench extends Task{
 
+    public int warmupSec=30;
     public int durationSec = 60;
     public int reportSecondsInterval=5;
     private CsvReporter csvReporter;
@@ -15,17 +16,25 @@ public abstract class Bench extends Task{
 
     public void init(){
         setup();
-        csvReporter = CsvReporter.forRegistry(metrics).build(new File(System.getProperty("user.dir")) );
-        csvReporter.start(reportSecondsInterval, TimeUnit.SECONDS);
     }
 
     public abstract void setup();
 
     public abstract String setTitle();
 
-    public void run() throws InterruptedException {
+    public void warmup(){
+        exicute(setTitle()+"Warmup");
+    }
 
-        com.codahale.metrics.Timer timer = metrics.timer(setTitle());
+    public void run() throws InterruptedException {
+        exicute(setTitle());
+    }
+
+
+    private void exicute(String title){
+        csvReporter = CsvReporter.forRegistry(metrics).build(new File(System.getProperty("user.dir")) );
+        csvReporter.start(reportSecondsInterval, TimeUnit.SECONDS);
+        com.codahale.metrics.Timer timer = metrics.timer(title);
         com.codahale.metrics.Timer.Context context;
 
         long startTime = System.currentTimeMillis();
@@ -37,5 +46,7 @@ public abstract class Bench extends Task{
         }
         csvReporter.stop();
     }
+
+
     public abstract void timeStep( );
 }

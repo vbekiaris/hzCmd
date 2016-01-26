@@ -34,7 +34,6 @@ public class HzCmd implements Serializable {
         this.homeIp=homeIp;
     }
 
-
     public void listen() throws IOException, InterruptedException{
         String eventQ = System.getProperty("user.dir")+"/"+Args.EVENTQ.name();
         while (true){
@@ -53,172 +52,136 @@ public class HzCmd implements Serializable {
         }
     }
 
-
-    public void addBoxes(String boxGroupId, String user, String file) throws IOException, InterruptedException{
-        BoxManager b = new BoxManager(boxGroupId);
+    public void addBoxes(String user, String file) throws IOException, InterruptedException{
+        BoxManager b = new BoxManager(file);
         b.addBoxes(user, file);
-        boxes.put(boxGroupId, b);
+        boxes.put(file, b);
     }
 
-    public void cluster(String clusterId, String boxGroupId, int start, int end) throws Exception{
-        BoxManager all = boxes.get(boxGroupId);
-        BoxManager clusterBoxes = all.getBoxes(start, end);
-        ClusterManager jvmManager = new ClusterManager(clusterId, clusterBoxes, homeIp, new HzJvmFactory());
+    public void addCluster(String clusterId, String boxGroupId) throws Exception{
+        BoxManager boxi = boxes.get(boxGroupId);
+        ClusterManager jvmManager = new ClusterManager(clusterId, boxi, homeIp, new HzJvmFactory());
         clusters.put(jvmManager.getClusterId(), jvmManager);
         System.out.println(jvmManager);
     }
 
     public void install(String clusterId, boolean ee, String... versions) throws IOException, InterruptedException {
-        Collection<ClusterManager> selected = selectClusterSet(clusterId);
-        for (ClusterManager c : selected) {
-            Installer.install(c.getBoxManager(), ee, versions);
+        for (ClusterManager c : clusters.values()) {
+            if(c.matchClusterId(clusterId)){
+                Installer.install(c.getBoxManager(), ee, versions);
+            }
         }
     }
 
     public void dedicatedMembers(String clusterId, int memberBox) {
-        Collection<ClusterManager> selected = selectClusterSet(clusterId);
-        for (ClusterManager c : selected) {
-            c.setMembersOnlyCount(memberBox);
+        for (ClusterManager c : clusters.values()) {
+            if(c.matchClusterId(clusterId)){
+                c.setMembersOnlyCount(memberBox);
+            }
         }
     }
 
     public void addMembers(AddMember cmd) throws Exception {
-        Collection<ClusterManager> selected = selectClusterSet(cmd.cluster);
-        for (ClusterManager c : selected) {
-            c.addMembers(cmd.qty, cmd.version, cmd.jvmOptions);
+        for (ClusterManager c : clusters.values()) {
+            if(c.matchClusterId(cmd.cluster)){
+                c.addMembers(cmd.qty, cmd.version, cmd.jvmOptions);
+            }
         }
     }
 
     public void addClients(AddClient cmd) throws Exception {
-        Collection<ClusterManager> selected = selectClusterSet(cmd.cluster);
-        for (ClusterManager c : selected) {
-            c.addClients(cmd.qty, cmd.version, cmd.jvmOptions);
+        for (ClusterManager c : clusters.values()) {
+            if(c.matchClusterId(cmd.cluster)){
+                c.addClients(cmd.qty, cmd.version, cmd.jvmOptions);
+            }
         }
     }
 
-    public void exit(String clusterId, String jvmId) throws Exception {
-        Collection<ClusterManager> selected = selectClusterSet(clusterId);
-        for (ClusterManager c : selected) {
-            c = c.selectJvmSet(jvmId);
-            c.exit();
+    public void exit(String jvmId) throws Exception {
+        for (ClusterManager c : clusters.values()) {
+            c.exit(jvmId);
         }
     }
 
-    public void kill(String clusterId, String jvmId) throws Exception {
-        Collection<ClusterManager> selected = selectClusterSet(clusterId);
-        for (ClusterManager c : selected) {
-            c = c.selectJvmSet(jvmId);
-            c.kill();
+    public void kill(String jvmId) throws Exception {
+        for (ClusterManager c : clusters.values()) {
+            c.kill(jvmId);
         }
     }
 
-    public void restart(String clusterId, String jvmId, String version,  String options) throws Exception {
-        Collection<ClusterManager> selected = selectClusterSet(clusterId);
-        for (ClusterManager c : selected) {
-            c = c.selectJvmSet(jvmId);
-            c.restart(version, options);
+    public void restart(String jvmId, String version,  String options) throws Exception {
+        for (ClusterManager c : clusters.values()) {
+            c.restart(jvmId, version, options);
         }
     }
 
-
-    public void cat(String clusterId, String jvmId) throws Exception {
-        Collection<ClusterManager> selected = selectClusterSet(clusterId);
-        for (ClusterManager c : selected) {
-            c = c.selectJvmSet(jvmId);
-            c.cat();
+    public void cat(String jvmId) throws Exception {
+        for (ClusterManager c : clusters.values()) {
+            c.cat(jvmId);
         }
     }
 
-    public void tail(String clusterId, String jvmId) throws Exception {
-        Collection<ClusterManager> selected = selectClusterSet(clusterId);
-        for (ClusterManager c : selected) {
-            c = c.selectJvmSet(jvmId);
-            c.tail();
+    public void tail(String jvmId) throws Exception {
+        for (ClusterManager c : clusters.values()) {
+            c.tail(jvmId);
         }
     }
 
-    public void grep(String clusterId, String jvmId, String grepArgs) throws Exception {
-        Collection<ClusterManager> selected = selectClusterSet(clusterId);
-        for (ClusterManager c : selected) {
-            c = c.selectJvmSet(jvmId);
-            c.grep(grepArgs);
+    public void grep(String jvmId, String grepArgs) throws Exception {
+        for (ClusterManager c : clusters.values()) {
+            c.grep(jvmId, grepArgs);
         }
     }
 
-    public void downlonad(String clusterId, String jvmId, String dir) throws Exception {
-        Collection<ClusterManager> selected = selectClusterSet(clusterId);
-        for (ClusterManager c : selected) {
-            c = c.selectJvmSet(jvmId);
-            c.downlonad(dir);
+    public void download(String jvmId, String dir) throws Exception {
+        for (ClusterManager c : clusters.values()) {
+            c.downlonad(jvmId, dir);
         }
     }
 
-    public void clean(String clusterId, String jvmId) throws Exception {
-        Collection<ClusterManager> selected = selectClusterSet(clusterId);
-        for (ClusterManager c : selected) {
-            c = c.selectJvmSet(jvmId);
-            c.clean();
+    public void clean(String jvmId) throws Exception {
+        for (ClusterManager c : clusters.values()) {
+            c.clean(jvmId);
         }
     }
 
     public void wipe( ) throws IOException, InterruptedException {
         for (ClusterManager c : clusters.values()) {
-            c.kill();
+            c.kill(".*");
             c.clearStoped();
         }
         for (BoxManager boxManager : boxes.values()) {
             boxManager.rm(Installer.REMOTE_HZCMD_ROOT);
         }
+        boxes.clear();
     }
 
-    public void load(String clusterId,  String taskId, String className) throws Exception {
-        Collection<ClusterManager> selected = selectClusterSet(clusterId);
-        for (ClusterManager c : selected) {
-            c.load(taskId, className);
+    public void load(String jvmId,  String taskId, String className) throws Exception {
+        for (ClusterManager c : clusters.values()) {
+            c.load(jvmId, taskId, className);
         }
     }
 
-    public void invokeAsync(String clusterId, String jvmId, int threadCound, String method, String taksId) throws Exception {
-        Collection<ClusterManager> selected = selectClusterSet(clusterId);
-        for (ClusterManager c : selected) {
-            c = c.selectJvmSet(jvmId);
-            c.invokeAsync(threadCound, method, taksId);
+    public void invokeAsync(String jvmId, int threadCound, String method, String taksId) throws Exception {
+        for (ClusterManager c : clusters.values()) {
+            c.invokeAsync(jvmId, threadCound, method, taksId);
         }
     }
 
-    public void invokeSync(String clusterId, String jvmId, int threadCound, String method, String taksId) throws Exception {
-        Collection<ClusterManager> selected = selectClusterSet(clusterId);
-        for (ClusterManager c : selected) {
-            c = c.selectJvmSet(jvmId);
-            c.invokeSync(threadCound, method, taksId);
+    public void invokeSync(String jvmId, int threadCound, String method, String taksId) throws Exception {
+        for (ClusterManager c : clusters.values()) {
+            c.invokeSync(jvmId, threadCound, method, taksId);
         }
-
-        for (ClusterManager c : selected) {
-            c = c.selectJvmSet(jvmId);
-            c.getResponse();
-        }
-
-    }
-
-
-    public void stop(String clusterId, String jvmId, String taskId) throws Exception {
-        Collection<ClusterManager> selected = selectClusterSet(clusterId);
-        for (ClusterManager c : selected) {
-            c = c.selectJvmSet(jvmId);
-            c.stop(taskId);
+        for (ClusterManager c : clusters.values()) {
+            c.getResponse(jvmId);
         }
     }
 
-    private Collection<ClusterManager> selectClusterSet(String cluster) {
-        Collection<ClusterManager> selected = new ArrayList();
-        if( cluster.equals("*") ){
-            selected = clusters.values();
-        }else{
-            selected.add(clusters.get(cluster));
+    public void stop(String jvmId, String taskId) throws Exception {
+        for (ClusterManager c : clusters.values()) {
+            c.stop(jvmId, taskId);
         }
-        return  selected;
     }
-
 
     @Override
     public String toString() {
@@ -228,7 +191,6 @@ public class HzCmd implements Serializable {
         }
         return clu ;
     }
-
 
     private static HzCmd loadHzCmd(){
         HzCmd hzCmd = null;

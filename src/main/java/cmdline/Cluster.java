@@ -9,15 +9,9 @@ public  class Cluster extends Command {
     @Option(name = "-id", description = "variable name of cluster used as handle to a cluster")
     public String id;
 
-    @Option(name = "-start", description = "start idx into boxes file")
-    public int start = 0;
-
-    @Option(name = "-end", description = "end idx into boxes files")
-    public int end = 0;
-
     public void exe(HzCmd hzCmd) {
         try {
-            hzCmd.cluster(id, "box", start, end);
+            hzCmd.addCluster(id, "box");
         } catch (Exception e) {
             e.printStackTrace();
         }

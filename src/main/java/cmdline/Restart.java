@@ -8,14 +8,8 @@ import main.HzCmd;
 @com.github.rvesse.airline.annotations.Command(name = "restart", description = "restart a jvm in a cluster using its id")
 public class Restart extends Command
 {
-    @Option(name = "-cluster", description = "cluster id, * for ALL")
-    public String cluster;
-
-    @Option(name = "-m", description = "member id, * for ALL")
-    public String member;
-
-    @Option(name = "-c", description = "client id, * for ALL")
-    public String client;
+    @Option(name = "-id", description = "jvm id / name")
+    public String jvmId;
 
     @Option(name = "-v", description = "hazelcast version e.g. 9.7")
     public String version;
@@ -24,21 +18,10 @@ public class Restart extends Command
     public String options;
 
     public void exe(HzCmd hzCmd) {
-
-        if(client!=null){
-            try {
-                hzCmd.restart(cluster, NodeType.Client + client, version, options);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        if(member!=null){
-            try {
-                hzCmd.restart(cluster, NodeType.Member + member, version, options);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            hzCmd.restart(jvmId, version, options);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

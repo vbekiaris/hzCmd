@@ -29,12 +29,8 @@ public class ClusterManager implements Serializable {
         this.jvmFactory=jvmFactory;
     }
 
-    private ClusterManager(String clusterId, BoxManager boxes, int memberCount, int clientCount, String homeIp) throws Exception {
-        this.clusterId =clusterId;
-        this.boxes=boxes;
-        this.memberCount=memberCount;
-        this.clientCount=clientCount;
-        this.homeIp=homeIp;
+    public boolean matchClusterId(String clusterId){
+        return this.clusterId.matches(clusterId);
     }
 
     public String getClusterId() {
@@ -45,44 +41,6 @@ public class ClusterManager implements Serializable {
         return boxes;
     }
 
-    public ClusterManager selectJvmSet(String jvmId) throws Exception {
-        if( jvmId.equals( "*" ) )
-            return this;
-
-        if( jvmId.equals( "HzMember*" ) )
-            return getMemberManager();
-
-        if( jvmId.equals( "HzClient*" ) )
-            return getClientManager();
-
-        return getManagerbyId(jvmId + getClusterId());
-    }
-
-    public ClusterManager getMemberManager() throws Exception {
-        ClusterManager selected = new ClusterManager(clusterId, boxes, memberCount, clientCount, homeIp);
-        for(RemoteJvm jvm : this.jvms.values()){
-            if(jvm.isMember()){
-                selected.jvms.put(jvm.getId(), jvm);
-            }
-        }
-        return selected;
-    }
-
-    public ClusterManager getClientManager() throws Exception {
-        ClusterManager selected = new ClusterManager(clusterId, boxes, memberCount, clientCount, homeIp);
-        for(RemoteJvm jvm : this.jvms.values()){
-            if(jvm.isClient()){
-                selected.jvms.put(jvm.getId(), jvm);
-            }
-        }
-        return selected;
-    }
-
-    public ClusterManager getManagerbyId(String id) throws Exception {
-        ClusterManager selected = new ClusterManager(clusterId, boxes, memberCount, clientCount, homeIp);
-        selected.jvms.put(id, this.jvms.get(id));
-        return selected;
-    }
 
     public void setMembersOnlyCount(int count) {
         if(count < 0 || count > boxes.size()){
@@ -117,112 +75,107 @@ public class ClusterManager implements Serializable {
 
     private RemoteJvm addJvm(String jarVersion, String options, NodeType type) throws Exception {
         int idx;
+        int count;
         if(type == NodeType.Member) {
             idx = rangeMap(memberCount++, 0, boxes.size() - membersOnlyCount);
+            count=memberCount;
         }else {
-            idx = rangeMap(memberCount++, membersOnlyCount, boxes.size());
+            idx = rangeMap(clientCount++, membersOnlyCount, boxes.size());
+            count=clientCount;
         }
-        RemoteJvm jvm = jvmFactory.createJvm(boxes.get(idx), type, memberCount, clusterId);
+        RemoteJvm jvm = jvmFactory.createJvm(boxes.get(idx), type, count, clusterId);
         jvms.put(jvm.getId(), jvm);
         jvm.startJvm(jarVersion, options, this);
         return jvm;
     }
 
-
-
-    public void load(String taskId, String className) throws IOException, InterruptedException, JMSException{
+    public List<RemoteJvm> getMatchingJms(String jvmId) {
+        List<RemoteJvm> matching = new ArrayList<RemoteJvm>();
         for(RemoteJvm jvm : jvms.values()){
+            if ( jvm.getId().matches(jvmId) ){
+                matching.add(jvm);
+            }
+        }
+        return matching;
+    }
+
+    public void load(String jvmId, String taskId, String className) throws IOException, InterruptedException, JMSException{
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.load(taskId, className);
         }
     }
 
-    public void invokeAsync(int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
-        checkEmpty();
-        for(RemoteJvm jvm : jvms.values()){
+    public void invokeAsync(String jvmId, int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.invokeAsync(threadCount, method, taskId);
         }
     }
 
-    public void invokeSync(int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
-        checkEmpty();
-        for(RemoteJvm jvm : jvms.values()){
+    public void invokeSync(String jvmId, int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.invokeSync(threadCount, method, taskId);
         }
     }
 
-
-    public void getResponse() throws IOException, InterruptedException, JMSException {
-        checkEmpty();
-        for(RemoteJvm jvm : jvms.values()){
+    public void getResponse(String jvmId) throws IOException, InterruptedException, JMSException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
             System.out.println(jvm.getResponse());
         }
     }
 
-    public void stop(String taskId) throws IOException, InterruptedException {
-
+    public void stop(String jvmId, String taskId) throws IOException, InterruptedException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+            //jvm.stop();
+        }
     }
 
-
-
-    public void restart(String version, String options) throws Exception {
-        checkEmpty();
-        for(RemoteJvm jvm : jvms.values()){
+    public void restart(String jvmId, String version, String options) throws Exception {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.startJvm(version, options, this);
         }
     }
 
-    public void clean() throws IOException, InterruptedException {
-        checkEmpty();
-        for(RemoteJvm jvm : jvms.values()){
+    public void clean(String jvmId) throws IOException, InterruptedException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.clean();
         }
     }
 
-    public void exit() throws JMSException {
-        checkEmpty();
-        for(RemoteJvm jvm : jvms.values()){
+    public void exit(String jvmId) throws JMSException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.exit();
         }
     }
 
-    public void kill() throws IOException, InterruptedException {
-        checkEmpty();
-        for(RemoteJvm jvm : jvms.values()){
+    public void kill(String jvmId) throws IOException, InterruptedException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.kill();
         }
     }
 
-    public void info() throws IOException, InterruptedException {
-        System.out.println(this);
-    }
-
-    public void cat() throws IOException, InterruptedException {
-        checkEmpty();
-        for(RemoteJvm jvm : jvms.values()){
+    public void cat(String jvmId) throws IOException, InterruptedException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
             System.out.println(jvm);
             System.out.println(jvm.cat());
         }
     }
 
-    public void tail() throws IOException, InterruptedException {
-        checkEmpty();
-        for(RemoteJvm jvm : jvms.values()){
+    public void tail(String jvmId) throws IOException, InterruptedException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
             System.out.println(jvm);
             jvm.tail();
         }
     }
 
-    public void grep(String args) throws IOException, InterruptedException {
-        checkEmpty();
-        for(RemoteJvm jvm : jvms.values()){
+    public void grep(String jvmId, String args) throws IOException, InterruptedException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
             System.out.println(jvm);
             System.out.println(jvm.grep(args));
         }
     }
 
-    public void downlonad(String destDir) throws IOException, InterruptedException {
-        checkEmpty();
-        for(RemoteJvm jvm : jvms.values()){
+    public void downlonad(String jvmId, String destDir) throws IOException, InterruptedException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.downlonad(destDir);
         }
     }
@@ -264,11 +217,6 @@ public class ClusterManager implements Serializable {
         }
     }
 
-    private void checkEmpty(){
-        if(jvms.isEmpty()){
-            System.out.println(Bash.ANSI_RED+"operation on empty cluster"+Bash.ANSI_RESET);
-        }
-    }
 
     @Override
     public String toString() {

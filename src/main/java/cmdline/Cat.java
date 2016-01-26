@@ -4,35 +4,17 @@ import com.github.rvesse.airline.annotations.Option;
 import global.NodeType;
 import main.HzCmd;
 
-@com.github.rvesse.airline.annotations.Command(name = "cat", description = "cat cluster/members/clients")
+@com.github.rvesse.airline.annotations.Command(name = "cat", description = "cat cluster/members/clients std out")
 public class Cat extends Command
 {
-    @Option(name = "-cluster", description = "cluster id to kill, * for ALL")
-    public String cluster;
-
-    @Option(name = "-m", description = "member id to kill, * for ALL")
-    public String member;
-
-    @Option(name = "-c", description = "client id to kill, * for ALL")
-    public String client;
-
+    @Option(name = "-id", description = "jvm id / name")
+    public String jvmId;
 
     public void exe(HzCmd hzCmd) {
-
-        if(client!=null){
-            try {
-                hzCmd.cat(cluster, NodeType.Client+client);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        if(member!=null){
-            try {
-                hzCmd.cat(cluster, NodeType.Member+member);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            hzCmd.cat(jvmId);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

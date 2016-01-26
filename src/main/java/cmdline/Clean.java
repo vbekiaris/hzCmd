@@ -7,32 +7,14 @@ import main.HzCmd;
 @com.github.rvesse.airline.annotations.Command(name = "clean", description = "clean cluster/members/clients")
 public class Clean extends Command
 {
-    @Option(name = "-cluster", description = "cluster id to kill, * for ALL")
-    public String cluster;
-
-    @Option(name = "-m", description = "member id to kill, * for ALL")
-    public String member;
-
-    @Option(name = "-c", description = "client id to kill, * for ALL")
-    public String client;
-
+    @Option(name = "-id", description = "jvm id / name")
+    public String jvmId;
 
     public void exe(HzCmd hzCmd) {
-
-        if(client!=null){
-            try {
-                hzCmd.clean(cluster, NodeType.Client + client);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        if(member!=null){
-            try {
-                hzCmd.clean(cluster, NodeType.Member + member);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            hzCmd.clean(jvmId);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
