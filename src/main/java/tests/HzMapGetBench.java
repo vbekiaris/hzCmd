@@ -5,6 +5,7 @@ import hz.HzBench;
 
 public class HzMapGetBench extends HzBench {
 
+    public String title;
     public String name = "a";
     private IMap map;
     public int keyDomain = 10000;
@@ -22,9 +23,7 @@ public class HzMapGetBench extends HzBench {
     }
 
     @Override
-    public String setTitle() {
-        return "hzMapGetByteValue"+value.length;
-    }
+    public String setTitle() { return title; }
 
     @Override
     public void timeStep() {
