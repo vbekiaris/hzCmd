@@ -16,11 +16,11 @@ public class Set extends Command {
     public String var;
 
     @Option(name = "-val", description = "value to be set")
-    public String value;
+    public String val;
 
     public void exe(HzCmd hzCmd) {
         try {
-            hzCmd.setField(jvmId, taskId, var, var);
+            hzCmd.setField(jvmId, taskId, var, val);
         } catch (Exception e) {
             e.printStackTrace();
         }
