@@ -145,6 +145,13 @@ public class HzCmd implements Serializable {
         }
     }
 
+    public void ssh(String jvmId, String cmd) throws Exception {
+        for (ClusterManager c : clusters.values()) {
+            c.ssh(jvmId, cmd);
+        }
+    }
+
+
     public void wipe( ) throws IOException, InterruptedException {
         for (ClusterManager c : clusters.values()) {
             c.kill(".*");

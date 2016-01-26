@@ -122,6 +122,10 @@ public abstract class RemoteJvm implements Serializable {
         return box.cat(dir + "/" + outFile);
     }
 
+    public String ssh(String cmd) throws IOException, InterruptedException {
+        return box.ssh("cd "+dir+"; "+cmd);
+    }
+
     public void tail() throws IOException, InterruptedException {
          box.tail(dir+"/"+outFile);
     }

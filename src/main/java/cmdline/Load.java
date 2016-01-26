@@ -6,7 +6,7 @@ import main.HzCmd;
 @com.github.rvesse.airline.annotations.Command(name = "load", description = "load a class")
 public class Load extends Command
 {
-    @Option(name = "-id", description = "jvm id / name")
+    @Option(name = "-id", description = "jvm id / name default to All jvm")
     public String jvmId=".*";
 
     @Option(name = "-task", description = "task Id")

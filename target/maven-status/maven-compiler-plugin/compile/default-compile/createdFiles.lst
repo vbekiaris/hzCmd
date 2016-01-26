@@ -5,6 +5,7 @@ cmdline/MemberBox.class
 cmdline/Download.class
 tests/Utils.class
 cmdline/AddClient.class
+cmdline/Ssh.class
 cmdline/Restart.class
 cmdline/Cat.class
 cmdline/Load.class
