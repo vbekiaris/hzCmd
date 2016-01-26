@@ -39,8 +39,10 @@ public class TaskClazz implements Callable<Object> {
 
         System.out.println("value == " + value);
         System.out.println("field retrived == " + field);
+        System.out.println("task obj to set == " + task);
+        System.out.println("int of value =" + value);
 
-        field.setInt(task, Integer.getInteger(value));
+        field.setInt(task, Integer.valueOf(value));
 
 //        field.set(task, value);
     }

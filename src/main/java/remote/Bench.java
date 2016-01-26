@@ -31,10 +31,10 @@ public abstract class Bench extends Task{
     }
 
 
-    private void exicute(int seconds, String title){
+    private void exicute(int seconds, String metricsCsvtitle){
         csvReporter = CsvReporter.forRegistry(metrics).build(new File(System.getProperty("user.dir")) );
         csvReporter.start(reportSecondsInterval, TimeUnit.SECONDS);
-        com.codahale.metrics.Timer timer = metrics.timer(title);
+        com.codahale.metrics.Timer timer = metrics.timer(metricsCsvtitle);
         com.codahale.metrics.Timer.Context context;
 
         long startTime = System.currentTimeMillis();
@@ -45,7 +45,7 @@ public abstract class Bench extends Task{
             context.stop();
         }
         csvReporter.stop();
-        metrics.remove(title);
+        metrics.remove(metricsCsvtitle);
     }
 
 
