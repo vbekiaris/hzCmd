@@ -37,7 +37,12 @@ public class TaskClazz implements Callable<Object> {
         Object fieldType = field.getType();
         //if (fieldType instanceof Integer){};
 
-        field.set(task, value);
+        System.out.println("value == " + value);
+        System.out.println("field retrived == " + field);
+
+        field.setInt(task, Integer.getInteger(value));
+
+//        field.set(task, value);
     }
 
 

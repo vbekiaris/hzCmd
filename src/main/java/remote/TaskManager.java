@@ -21,8 +21,8 @@ public class TaskManager {
         if(tasks.containsKey(taskId)){
            throw new IllegalStateException(Controler.ID+" taskId "+taskId+" all ready loaded");
         }
-        TaskClazz taskManager = new TaskClazz(taskId, className, vendorObject);
-        tasks.put(taskManager.getId(), taskManager);
+        TaskClazz task = new TaskClazz(taskId, className, vendorObject);
+        tasks.put(task.getId(), task);
     }
 
     public void setField(String taskId, String field, String value) throws Exception{

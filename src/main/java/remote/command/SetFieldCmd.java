@@ -22,4 +22,13 @@ public class SetFieldCmd implements Cmd, Serializable{
     public void exicute(Controler c){
         c.setField(taskId, field, value);
     }
+
+    @Override
+    public String toString() {
+        return "SetFieldCmd{" +
+                "field='" + field + '\'' +
+                ", taskId='" + taskId + '\'' +
+                ", value='" + value + '\'' +
+                '}';
+    }
 }
