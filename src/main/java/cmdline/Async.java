@@ -9,16 +9,14 @@ public class Async extends Command
     @Option(name = "-id", description = "jvm id")
     public String jvmId;
 
-    @Option(name = "-t", description = "thread count")
-    public int threadCount;
+    @Option(name = "-task", description = "taskId identifies the object to run the method on")
+    public String taskId;
 
     @Option(name = "-f", description = "function / method to invokeAsync")
     public String function;
 
-    @Option(name = "-i", description = "taskId identifies the object to run the method on")
-    public String taskId;
-
-
+    @Option(name = "-threads", description = "thread count")
+    public int threadCount=1;
 
     public void exe(HzCmd hzCmd) {
         try {

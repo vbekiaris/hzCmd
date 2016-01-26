@@ -16,7 +16,7 @@ public class Sync extends Command
     public String function;
 
     @Option(name = "-threads", description = "thread count")
-    public int threadCount;
+    public int threadCount=1;
 
     public void exe(HzCmd hzCmd) {
         try {

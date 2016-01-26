@@ -13,7 +13,7 @@ public class Bench extends Command
     public String taskId;
 
     @Option(name = "-threads", description = "thread count to b used running the benchmark")
-    public int threadCount;
+    public int threadCount=1;
 
     public void exe(HzCmd hzCmd) {
         try {
