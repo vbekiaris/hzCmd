@@ -4,6 +4,7 @@ import jms.MQ;
 
 import javax.jms.JMSException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
@@ -31,20 +32,16 @@ public class TaskClazz implements Callable<Object> {
         method = task.getClass().getMethod(function);
     }
 
-    public void setField(String fieldName, String value) throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException {
+    public void setField(String fieldName, String value) throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException {
         Class clazz = task.getClass();
         Field field = clazz.getField(fieldName);
-        Object fieldType = field.getType();
-        //if (fieldType instanceof Integer){};
 
-        System.out.println("value == " + value);
-        System.out.println("field retrived == " + field);
-        System.out.println("task obj to set == " + task);
-        System.out.println("int of value =" + value);
-
-        field.setInt(task, Integer.valueOf(value));
-
-//        field.set(task, value);
+        if(field.get(task) instanceof String){
+            field.set(task, value);
+        }else{
+            Method parseMethod = field.get(task).getClass().getMethod("valueOf", new Class[]{String.class});
+            field.set(task, parseMethod.invoke(field, value));
+        }
     }
 
 
