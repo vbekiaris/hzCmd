@@ -3,6 +3,7 @@ package remote;
 import jms.MQ;
 
 import javax.jms.JMSException;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
@@ -29,6 +30,16 @@ public class TaskClazz implements Callable<Object> {
         targetFunction = function;
         method = task.getClass().getMethod(function);
     }
+
+    public void setField(String fieldName, String value) throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException {
+        Class clazz = task.getClass();
+        Field field = clazz.getField(fieldName);
+        Object fieldType = field.getType();
+        //if (fieldType instanceof Integer){};
+
+        field.set(task, value);
+    }
+
 
     public void stop(){
         task.setRunning(false);

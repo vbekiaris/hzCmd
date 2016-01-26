@@ -105,6 +105,12 @@ public class ClusterManager implements Serializable {
         }
     }
 
+    public void setField(String jvmId, String taskId, String field, String value) throws Exception {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+            jvm.setField(taskId, field, value);
+        }
+    }
+
     public void invokeAsync(String jvmId, int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.invokeAsync(threadCount, method, taskId);

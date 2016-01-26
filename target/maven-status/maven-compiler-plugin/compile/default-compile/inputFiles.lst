@@ -11,6 +11,7 @@
 /Users/danny/IdeaProjects/hz-script/src/main/java/remote/TaskManager.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Add.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/main/HzCmd.java
+/Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Junked.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Cat.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/tests/LatencyListener.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Command.java
@@ -50,6 +51,7 @@
 /Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Ping.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Restart.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/remote/command/LoadCmd.java
+/Users/danny/IdeaProjects/hz-script/src/main/java/remote/command/SetFieldCmd.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/remote/Utils.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/global/Args.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/jms/MQ.java

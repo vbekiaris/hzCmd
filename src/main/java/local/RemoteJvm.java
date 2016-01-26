@@ -4,10 +4,7 @@ import global.Args;
 import global.Bash;
 import global.NodeType;
 import jms.MQ;
-import remote.command.ExitCmd;
-import remote.command.InvokeAsyncCmd;
-import remote.command.InvokeSyncCmd;
-import remote.command.LoadCmd;
+import remote.command.*;
 
 import javax.jms.JMSException;
 import java.io.IOException;
@@ -103,6 +100,11 @@ public abstract class RemoteJvm implements Serializable {
         MQ.sendObj(id, cmd);
     }
 
+    public void setField(String taskId, String field, String value) throws Exception {
+        SetFieldCmd cmd = new SetFieldCmd(taskId, field, value);
+        MQ.sendObj(id, cmd);
+    }
+
     public void invokeAsync(int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
         InvokeAsyncCmd cmd = new InvokeAsyncCmd(threadCount, method, taskId);
         MQ.sendObj(id, cmd);
@@ -123,7 +125,7 @@ public abstract class RemoteJvm implements Serializable {
     }
 
     public String ssh(String cmd) throws IOException, InterruptedException {
-        return box.ssh("cd "+dir+"; "+cmd);
+        return box.ssh("cd " + dir + "; " + cmd);
     }
 
     public void tail() throws IOException, InterruptedException {

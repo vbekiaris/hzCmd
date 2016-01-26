@@ -8,17 +8,14 @@ import java.util.concurrent.TimeUnit;
 
 public class TaskManager {
 
-    //TODO map of thread and method name count
     private Map<String, TaskClazz> tasks = new HashMap();
     private ExecutorService executorService =  Executors.newCachedThreadPool();
 
     private Object vendorObject;
 
-
     public TaskManager(Object vendorObject) {
         this.vendorObject = vendorObject;
     }
-
 
     public void loadClass(String taskId, String className) throws Exception{
         if(tasks.containsKey(taskId)){
@@ -26,6 +23,12 @@ public class TaskManager {
         }
         TaskClazz taskManager = new TaskClazz(taskId, className, vendorObject);
         tasks.put(taskManager.getId(), taskManager);
+    }
+
+    public void setField(String taskId, String field, String value) throws Exception{
+        for(TaskClazz t : getMatchingTasks(taskId) ) {
+            t.setField(field, value);
+        }
     }
 
     public void invokeAsync(int threadCount, String function, String taskId) throws NoSuchMethodException {

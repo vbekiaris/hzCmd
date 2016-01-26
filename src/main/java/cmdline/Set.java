@@ -3,24 +3,27 @@ package cmdline;
 import com.github.rvesse.airline.annotations.Option;
 import main.HzCmd;
 
-@com.github.rvesse.airline.annotations.Command(name="set", description = "group of commands,  you can set homip / show detailed info for ssh cmds /dedicated member Boxes")
+@com.github.rvesse.airline.annotations.Command(name="set", description = "set public member variables of a taskId in some jvms")
 public class Set extends Command {
 
-    @Option(name = "-homeip", description = "set the ip address of the home box (this)")
-    public String homeip;
+    @Option(name = "-id", description = "jvm id / name")
+    public String jvmId=".*";
 
-    @Option( name = "-showSSH",  description = "show ssh details on the cmd prompt")
-    public boolean showSSH = false;
+    @Option(name = "-task", description = "task id")
+    public String taskId;
 
+    @Option(name = "-var", description = "public member field to set")
+    public String var;
+
+    @Option(name = "-val", description = "value to be set")
+    public String value;
 
     public void exe(HzCmd hzCmd) {
-
-        hzCmd.showSSH(showSSH);
-
-        if (homeip != null){
-            hzCmd.setHomeIp(homeip);
+        try {
+            hzCmd.setField(jvmId, taskId, var, var);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
     }
 
 }

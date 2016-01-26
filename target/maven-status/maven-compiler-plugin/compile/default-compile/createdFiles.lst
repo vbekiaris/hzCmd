@@ -17,6 +17,7 @@ cmdline/Wipe.class
 cmdline/Exit.class
 hz/HzTask.class
 local/BoxManager.class
+remote/command/SetFieldCmd.class
 remote/command/InfoCmd.class
 remote/TaskClazz.class
 remote/Task.class
@@ -62,6 +63,7 @@ hz/HzControler.class
 remote/Utils.class
 cmdline/Info.class
 hz/HzClient.class
+cmdline/Junked.class
 jms/MQ.class
 global/Args.class
 tests/LatencyListener.class

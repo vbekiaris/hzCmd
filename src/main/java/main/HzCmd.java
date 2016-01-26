@@ -169,6 +169,13 @@ public class HzCmd implements Serializable {
         }
     }
 
+    public void setField(String jvmId, String taskId, String field, String value) throws Exception {
+        for (ClusterManager c : clusters.values()) {
+            c.setField(jvmId, taskId, field, value);
+        }
+    }
+
+
     public void invokeAsync(String jvmId, int threadCound, String method, String taksId) throws Exception {
         for (ClusterManager c : clusters.values()) {
             c.invokeAsync(jvmId, threadCound, method, taksId);

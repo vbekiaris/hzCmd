@@ -64,6 +64,21 @@ public abstract class Controler{
         }
     }
 
+    public void setField(String taskId, String field, String value){
+        try {
+            tasks.setField(taskId, field, value);
+        } catch (Exception e) {
+            e.printStackTrace();
+            e.printStackTrace(exceptionWrite);
+            try {
+                MQ.sendObj(EVENTQ, e);
+            } catch (JMSException jmsError) {
+                jmsError.printStackTrace();
+                jmsError.printStackTrace(exceptionWrite);
+            }
+        }
+    }
+
     public void invokeAsync(int threadCount, String function, String taskId){
         try {
             tasks.invokeAsync(threadCount, function, taskId);
