@@ -177,6 +177,12 @@ public class HzCmd implements Serializable {
         }
     }
 
+    public void invokeBenchMark(String jvmId, int threadCound, String taksId) throws Exception {
+        invokeSync(jvmId, threadCound, "init", taksId);
+        invokeSync(jvmId, threadCound, "warmup", taksId);
+        invokeSync(jvmId, threadCound, "run", taksId);
+    }
+
     public void stop(String jvmId, String taskId) throws Exception {
         for (ClusterManager c : clusters.values()) {
             c.stop(jvmId, taskId);

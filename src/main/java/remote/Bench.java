@@ -23,28 +23,29 @@ public abstract class Bench extends Task{
     public abstract String setTitle();
 
     public void warmup(){
-        exicute(setTitle()+"Warmup");
+        exicute(warmupSec, setTitle()+"Warmup");
     }
 
     public void run() throws InterruptedException {
-        exicute(setTitle());
+        exicute(durationSec, setTitle());
     }
 
 
-    private void exicute(String title){
+    private void exicute(int seconds, String title){
         csvReporter = CsvReporter.forRegistry(metrics).build(new File(System.getProperty("user.dir")) );
         csvReporter.start(reportSecondsInterval, TimeUnit.SECONDS);
         com.codahale.metrics.Timer timer = metrics.timer(title);
         com.codahale.metrics.Timer.Context context;
 
         long startTime = System.currentTimeMillis();
-        long endTime = startTime + (durationSec * 1000);
+        long endTime = startTime + (seconds * 1000);
         while(System.currentTimeMillis() < endTime){
             context = timer.time();
             timeStep();
             context.stop();
         }
         csvReporter.stop();
+        metrics.remove(title);
     }
 
 

@@ -21,6 +21,7 @@ remote/TaskClazz.class
 remote/Task.class
 local/JvmFactory.class
 cmdline/Clean.class
+cmdline/Bench.class
 cmdline/Grep.class
 cmdline/Ping.class
 global/Utils.class
