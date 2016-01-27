@@ -42,6 +42,7 @@ local/Installer.class
 remote/command/InvokeSyncCmd.class
 tests/HzMapPutBench.class
 cmdline/AddMember.class
+remote/command/PingCmd.class
 hz/HzBench.class
 tests/Data.class
 cmdline/Async.class

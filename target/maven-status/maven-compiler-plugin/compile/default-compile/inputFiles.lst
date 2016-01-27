@@ -56,6 +56,7 @@
 /Users/danny/IdeaProjects/hz-script/src/main/java/global/Args.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/jms/MQ.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/remote/command/ExitCmd.java
+/Users/danny/IdeaProjects/hz-script/src/main/java/remote/command/PingCmd.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/tests/HzMapGetBench.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Ssh.java
 /Users/danny/IdeaProjects/hz-script/src/main/java/cmdline/Install.java

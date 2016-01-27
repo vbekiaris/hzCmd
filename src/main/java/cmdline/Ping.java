@@ -13,10 +13,6 @@ public class Ping extends Command
     public long timeout=1000;
 
     public void exe(HzCmd hzCmd) {
-        try {
-            hzCmd.ping(jvmId, timeout);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        hzCmd.ping(jvmId, timeout);
     }
 }

@@ -217,12 +217,22 @@ public class HzCmd implements Serializable {
         }
     }
 
-    public void ping(String jvmId, long timeout) throws Exception {
+    public void ping(String jvmId, long timeout) {
         for (ClusterManager c : clusters.values()) {
-            c.ping(jvmId);
-        }
-        for (ClusterManager c : clusters.values()) {
-            c.getResponse(jvmId, timeout);
+            for (RemoteJvm jvm : c.getMatchingJms(jvmId) ) {
+
+                try {
+                    jvm.ping();
+                } catch (Exception e) {
+                    System.out.println(Bash.ANSI_RED+"failed to send ping to "+jvm.getId());
+                }
+
+                try {
+                    jvm.getResponse(timeout);
+                } catch (Exception e) {
+                    System.out.println(Bash.ANSI_RED+"failed to recive ping from "+jvm.getId());
+                }
+            }
         }
     }
 
