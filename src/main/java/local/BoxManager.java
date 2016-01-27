@@ -34,7 +34,7 @@ public class BoxManager implements Serializable {
 
         if(box.testConnecton()){
             boxes.add(box);
-            System.out.println(Bash.ANSI_GREEN+box+Bash.ANSI_RESET);
+            //System.out.println(Bash.ANSI_GREEN+box+Bash.ANSI_RESET);
         }else {
             System.out.println(Bash.ANSI_RED+box+Bash.ANSI_RESET);
         }
