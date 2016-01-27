@@ -259,36 +259,37 @@ public class HzCmd implements Serializable {
 
     public static void main(String[] args) throws InterruptedException, IOException {
 
+        final HzCmd hzCmd = loadHzCmd();
+
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
+
+                saveHzCmd(hzCmd);
                 try {
                     MQ.shutdown();
-                    System.out.println("hooked");
+                    System.out.println("shutdown");
                 } catch (JMSException e) {
                     e.printStackTrace();
                 }
             }
         });
 
-        HzCmd hzCmd = loadHzCmd();
 
         com.github.rvesse.airline.Cli<Runnable> parser = CmdLine.getParser();
         Runnable r = parser.parse(args);
         if (r instanceof Command){
             Command c = (Command)r;
 
+            c.exe(hzCmd);
+
+            /*
             try {
-                c.exe(hzCmd);
-                try {
-                    MQ.shutdown();
-                } catch (JMSException e) {
-                    e.printStackTrace();
-                }
-                saveHzCmd(hzCmd);
-            }catch (Error e){
+                MQ.shutdown();
+            } catch (JMSException e) {
                 e.printStackTrace();
             }
+            */
         }else{
             r.run();
         }
