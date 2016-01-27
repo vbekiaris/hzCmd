@@ -37,11 +37,14 @@ public class TaskClazz implements Callable<Object> {
         Field field = clazz.getField(fieldName);
         Object fieldType = field.getType();
 
+        System.out.println("fieldType == "+fieldType);
+
+
         if(fieldType instanceof String){
             field.set(task, value);
         }else{
-            //Method parseMethod = field.get(task).getClass().getMethod("valueOf", new Class[]{String.class});
-            Method parseMethod = fieldType.getClass().getMethod("valueOf", new Class[]{String.class});
+            Method parseMethod = field.get(task).getClass().getMethod("valueOf", new Class[]{String.class});
+            //Method parseMethod = fieldType.getClass().getMethod("valueOf", new Class[]{String.class});
 
             field.set(task, parseMethod.invoke(field, value));
         }

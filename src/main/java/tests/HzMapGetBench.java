@@ -5,7 +5,7 @@ import hz.HzBench;
 
 public class HzMapGetBench extends HzBench {
 
-    public String title;
+    public String title="default";
     public String name = "a";
     private IMap map;
     public int keyDomain = 10000;
