@@ -84,29 +84,34 @@ public class HzCmd implements Serializable {
 
     public void addMembers(AddMember cmd) throws Exception {
         List<RemoteJvm> added = new ArrayList();
-
         for (ClusterManager c : clusters.values()) {
             if(c.matchClusterId(cmd.cluster)){
-                added.addAll(c.addMembers(cmd.qty, cmd.version, cmd.jvmOptions));
+                added.addAll( c.addMembers(cmd.qty, cmd.version, cmd.jvmOptions) );
             }
         }
+        checkAddJvms(added);
+    }
+
+    public void addClients(AddClient cmd) throws Exception {
+        List<RemoteJvm> added = new ArrayList();
+        for (ClusterManager c : clusters.values()) {
+            if(c.matchClusterId(cmd.cluster)){
+                added.addAll(c.addClients(cmd.qty, cmd.version, cmd.jvmOptions));
+            }
+        }
+        checkAddJvms(added);
+    }
+
+    private void checkAddJvms(List<RemoteJvm> added) throws JMSException {
         for (RemoteJvm jvm : added) {
             System.out.println(jvm);
         }
         for (RemoteJvm jvm : added) {
             Object o = jvm.jvmStartResponse();
             if(o instanceof Exception){
-
+                System.out.println(Bash.ANSI_RED+o+Bash.ANSI_RESET);
             }else{
                 System.out.println(Bash.ANSI_GREEN+o+Bash.ANSI_RESET);
-            }
-        }
-    }
-
-    public void addClients(AddClient cmd) throws Exception {
-        for (ClusterManager c : clusters.values()) {
-            if(c.matchClusterId(cmd.cluster)){
-                c.addClients(cmd.qty, cmd.version, cmd.jvmOptions);
             }
         }
     }
@@ -253,6 +258,18 @@ public class HzCmd implements Serializable {
     }
 
     public static void main(String[] args) throws InterruptedException, IOException {
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                try {
+                    MQ.shutdown();
+                    System.out.println("hooked");
+                } catch (JMSException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         HzCmd hzCmd = loadHzCmd();
 

@@ -21,6 +21,7 @@ remote/command/SetFieldCmd.class
 remote/command/InfoCmd.class
 remote/TaskClazz.class
 remote/Task.class
+main/HzCmd$1.class
 local/JvmFactory.class
 cmdline/Clean.class
 cmdline/Bench.class

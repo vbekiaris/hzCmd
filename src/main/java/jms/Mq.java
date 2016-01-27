@@ -45,8 +45,11 @@ public abstract class MQ {
 
     public static void shutdown() throws JMSException {
         if(connection!=null){
+            session.close();
             connection.close();
+            connection=null;
         }
+
     }
 
     public static String receiveAnyResponse() throws JMSException {

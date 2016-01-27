@@ -97,7 +97,7 @@ public abstract class Controler{
     public void invokeSync(int threadCount, String function, String taskId){
         try {
             tasks.invokeSync(threadCount, function, taskId);
-            MQ.sendObj(ID+"reply", "finished");
+            MQ.sendObj(ID+"reply", ID+" finished "+function+" on "+taskId);
         } catch (JMSException jmsError) {
             jmsError.printStackTrace();
             jmsError.printStackTrace(exceptionWrite);
