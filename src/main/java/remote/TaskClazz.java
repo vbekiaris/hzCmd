@@ -9,8 +9,6 @@ import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
 import static remote.Utils.instantiate;
-import static remote.Utils.sendBAckException;
-
 
 public class TaskClazz implements Callable<Object> {
 
@@ -37,12 +35,10 @@ public class TaskClazz implements Callable<Object> {
         Field field = clazz.getField(fieldName);
         Class<?> type = field.getType();
 
-        //if (type.isPrimitive()) {}
         if(type.isAssignableFrom(String.class) ){
             field.set(task, value);
         }else{
             Method parseMethod = field.get(task).getClass().getMethod("valueOf", new Class[]{String.class});
-            //Method parseMethod = type.getMethod("valueOf", new Class[]{String.class});
             field.set(task, parseMethod.invoke(field, value));
         }
     }
