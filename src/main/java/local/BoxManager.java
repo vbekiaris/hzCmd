@@ -99,6 +99,6 @@ public class BoxManager implements Serializable {
             }
         }
 
-        return str ;
+        return str;
     }
 }

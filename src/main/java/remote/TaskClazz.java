@@ -35,17 +35,14 @@ public class TaskClazz implements Callable<Object> {
     public void setField(String fieldName, String value) throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException {
         Class clazz = task.getClass();
         Field field = clazz.getField(fieldName);
-        Object fieldType = field.getType();
+        Class<?> type = field.getType();
 
-        System.out.println("fieldType == "+fieldType);
-
-
-        if(fieldType instanceof String){
+        //if (type.isPrimitive()) {}
+        if(type.isAssignableFrom(String.class) ){
             field.set(task, value);
         }else{
             Method parseMethod = field.get(task).getClass().getMethod("valueOf", new Class[]{String.class});
-            //Method parseMethod = fieldType.getClass().getMethod("valueOf", new Class[]{String.class});
-
+            //Method parseMethod = type.getMethod("valueOf", new Class[]{String.class});
             field.set(task, parseMethod.invoke(field, value));
         }
     }
