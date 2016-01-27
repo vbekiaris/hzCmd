@@ -51,26 +51,20 @@ public class ClusterManager implements Serializable {
     }
 
 
-    public void addMembers(int qty, String version, String options) throws Exception {
-        addJvms(qty, version, options, NodeType.Member);
+    public List<RemoteJvm> addMembers(int qty, String version, String options) throws Exception {
+        return addJvms(qty, version, options, NodeType.Member);
     }
 
-    public void addClients(int qty, String version, String options) throws Exception {
-        addJvms(qty, version, options, NodeType.Client);
+    public List<RemoteJvm> addClients(int qty, String version, String options) throws Exception {
+        return addJvms(qty, version, options, NodeType.Client);
     }
 
-    private void addJvms(int qty, String hzVersion, String options, NodeType type) throws Exception {
-        List<RemoteJvm> check = new ArrayList();
+    private List<RemoteJvm> addJvms(int qty, String hzVersion, String options, NodeType type) throws Exception {
+        List<RemoteJvm> added = new ArrayList();
         for(int i=0; i<qty; i++) {
-            check.add(addJvm(hzVersion, options, type));
+            added.add(addJvm(hzVersion, options, type));
         }
-        for (RemoteJvm jvm : check) {
-            System.out.println(jvm);
-        }
-        for (RemoteJvm jvm : check) {
-            Object o = jvm.jvmStartResponse();
-            System.out.println(o);
-        }
+        return added;
     }
 
     private RemoteJvm addJvm(String jarVersion, String options, NodeType type) throws Exception {

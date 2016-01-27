@@ -11,6 +11,7 @@ import jms.MQ;
 import local.BoxManager;
 import local.ClusterManager;
 import local.Installer;
+import local.RemoteJvm;
 
 import javax.jms.JMSException;
 import java.io.*;
@@ -82,9 +83,22 @@ public class HzCmd implements Serializable {
     }
 
     public void addMembers(AddMember cmd) throws Exception {
+        List<RemoteJvm> added = new ArrayList();
+
         for (ClusterManager c : clusters.values()) {
             if(c.matchClusterId(cmd.cluster)){
-                c.addMembers(cmd.qty, cmd.version, cmd.jvmOptions);
+                added.addAll(c.addMembers(cmd.qty, cmd.version, cmd.jvmOptions));
+            }
+        }
+        for (RemoteJvm jvm : added) {
+            System.out.println(jvm);
+        }
+        for (RemoteJvm jvm : added) {
+            Object o = jvm.jvmStartResponse();
+            if(o instanceof Exception){
+
+            }else{
+                System.out.println(Bash.ANSI_GREEN+o+Bash.ANSI_RESET);
             }
         }
     }

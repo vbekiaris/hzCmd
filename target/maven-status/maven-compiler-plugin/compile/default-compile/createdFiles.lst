@@ -47,6 +47,7 @@ cmdline/Async.class
 cmdline/Command.class
 hz/HzMember.class
 local/Box.class
+remote/BenchType.class
 global/NodeType.class
 global/Bash.class
 remote/command/LoadCmd.class
@@ -64,6 +65,7 @@ remote/Utils.class
 cmdline/Info.class
 hz/HzClient.class
 cmdline/Junked.class
+remote/Bench$1.class
 jms/MQ.class
 global/Args.class
 tests/LatencyListener.class

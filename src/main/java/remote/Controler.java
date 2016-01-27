@@ -36,7 +36,7 @@ public abstract class Controler{
         try {
             init(type);
             tasks = new TaskManager(getVendorObject());
-            MQ.sendObj(ID, "OK");
+            MQ.sendObj(ID, ID+" Started");
         }catch (Exception e){
             e.printStackTrace();
             e.printStackTrace(exceptionWrite);

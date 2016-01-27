@@ -28,6 +28,8 @@ public abstract class MQ {
         System.setProperty("org.apache.activemq.SERIALIZABLE_PACKAGES","*");
 
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(ActiveMQConnection.DEFAULT_BROKER_URL);
+        connectionFactory.setMaxThreadPoolSize(5);
+
         try {
             connection = connectionFactory.createConnection();
             connection.start();

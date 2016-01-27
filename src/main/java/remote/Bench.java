@@ -40,10 +40,10 @@ public abstract class Bench extends Task{
     private void runBench(BenchType type, int seconds, String title){
         switch (type){
             case Metrics:
-                benchMetric(durationSec, setTitle());
+                benchMetric(durationSec, title);
                 break;
             case Hdr:
-                benchHdr(durationSec, setTitle());
+                benchHdr(durationSec, title);
                 break;
         }
     }
@@ -91,7 +91,7 @@ public abstract class Bench extends Task{
 
             ps = new PrintStream(new FileOutputStream(title+"-CO", true));
             histogram = histogram.copyCorrectedForCoordinatedOmission(0);
-            histogram.outputPercentileDistribution(System.out, 1000.0);
+            histogram.outputPercentileDistribution(ps, 1000.0);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
