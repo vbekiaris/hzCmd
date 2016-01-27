@@ -117,9 +117,22 @@ public class ClusterManager implements Serializable {
         }
     }
 
+    public void ping(String jvmId) throws IOException, InterruptedException, JMSException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+            jvm.ping();
+        }
+    }
+
+
     public void getResponse(String jvmId) throws IOException, InterruptedException, JMSException {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             System.out.println(jvm.getResponse());
+        }
+    }
+
+    public void getResponse(String jvmId, long timeout) throws IOException, InterruptedException, JMSException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+            System.out.println(jvm.getResponse(timeout));
         }
     }
 
@@ -206,21 +219,6 @@ public class ClusterManager implements Serializable {
         return jvms;
     }
 
-    public void clearStoped(){
-        Iterator<Map.Entry<String, RemoteJvm>> i = jvms.entrySet().iterator();
-        while (i.hasNext()) {
-            Map.Entry<String, RemoteJvm> e = i.next();
-            RemoteJvm jvm = e.getValue();
-            if(! jvm.isRunning()){
-                if(jvm.isMember()){
-                    this.memberCount--;
-                }else{
-                    this.clientCount--;
-                }
-                i.remove();
-            }
-        }
-    }
 
 
     @Override

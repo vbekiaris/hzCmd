@@ -113,6 +113,15 @@ public abstract class Controler{
         }
     }
 
+    public void ping(){
+        try {
+            MQ.sendObj(ID+"reply", ID+" ping");
+        } catch (JMSException jmsError) {
+            jmsError.printStackTrace();
+            jmsError.printStackTrace(exceptionWrite);
+        }
+    }
+
     public void run() throws IOException {
         while (true){
             try {

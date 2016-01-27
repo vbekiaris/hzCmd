@@ -54,16 +54,31 @@ public class HzCmd implements Serializable {
     }
 
     public void addBoxes(String user, String file) throws IOException, InterruptedException{
+        if (boxes.containsKey(file)){
+            System.out.println(Bash.ANSI_RED+"file "+file + " all ready imported"+Bash.ANSI_RESET);
+            return;
+        }
+
         BoxManager b = new BoxManager(file);
         b.addBoxes(user, file);
         boxes.put(file, b);
     }
 
     public void addCluster(String clusterId, String boxGroupId) throws Exception{
+        if (clusters.containsKey(clusterId)){
+            System.out.println(Bash.ANSI_RED+"cluster "+clusterId + " all ready created"+Bash.ANSI_RESET);
+            return;
+        }
+
         BoxManager boxi = boxes.get(boxGroupId);
-        ClusterManager jvmManager = new ClusterManager(clusterId, boxi, homeIp, new HzJvmFactory());
-        clusters.put(jvmManager.getClusterId(), jvmManager);
-        System.out.println(jvmManager);
+        if(boxi == null){
+            System.out.println(Bash.ANSI_RED+"box group "+boxGroupId + " not found"+Bash.ANSI_RESET);
+            return;
+        }
+
+        ClusterManager cluster = new ClusterManager(clusterId, boxi, homeIp, new HzJvmFactory());
+        clusters.put(cluster.getClusterId(), cluster);
+        System.out.println(cluster);
     }
 
     public void install(String clusterId, boolean ee, String... versions) throws IOException, InterruptedException {
@@ -96,7 +111,7 @@ public class HzCmd implements Serializable {
         List<RemoteJvm> added = new ArrayList();
         for (ClusterManager c : clusters.values()) {
             if(c.matchClusterId(cmd.cluster)){
-                added.addAll(c.addClients(cmd.qty, cmd.version, cmd.jvmOptions));
+                added.addAll( c.addClients(cmd.qty, cmd.version, cmd.jvmOptions) );
             }
         }
         checkAddJvms(added);
@@ -174,8 +189,9 @@ public class HzCmd implements Serializable {
     public void wipe( ) throws IOException, InterruptedException {
         for (ClusterManager c : clusters.values()) {
             c.kill(".*");
-            c.clearStoped();
         }
+        clusters.clear();
+
         for (BoxManager boxManager : boxes.values()) {
             boxManager.rm(Installer.REMOTE_HZCMD_ROOT);
         }
@@ -200,6 +216,16 @@ public class HzCmd implements Serializable {
             c.invokeAsync(jvmId, threadCound, method, taksId);
         }
     }
+
+    public void ping(String jvmId, long timeout) throws Exception {
+        for (ClusterManager c : clusters.values()) {
+            c.ping(jvmId);
+        }
+        for (ClusterManager c : clusters.values()) {
+            c.getResponse(jvmId, timeout);
+        }
+    }
+
 
     public void invokeSync(String jvmId, int threadCound, String method, String taksId) throws Exception {
         for (ClusterManager c : clusters.values()) {
@@ -268,7 +294,6 @@ public class HzCmd implements Serializable {
                 saveHzCmd(hzCmd);
                 try {
                     MQ.shutdown();
-                    System.out.println("shutdown");
                 } catch (JMSException e) {
                     e.printStackTrace();
                 }
@@ -283,13 +308,11 @@ public class HzCmd implements Serializable {
 
             c.exe(hzCmd);
 
-            /*
             try {
                 MQ.shutdown();
             } catch (JMSException e) {
                 e.printStackTrace();
             }
-            */
         }else{
             r.run();
         }

@@ -45,7 +45,7 @@ public abstract class MQ {
 
     public static void shutdown() throws JMSException {
         if(connection!=null){
-            session.close();
+            //session.close();
             connection.close();
             connection=null;
         }
@@ -81,6 +81,11 @@ public abstract class MQ {
     public static Object receiveObj(String queueName) throws JMSException {
         MessageConsumer consumer = getMessageConsumer(queueName);
         return  ((ObjectMessage) consumer.receive()).getObject();
+    }
+
+    public static Object receiveObj(String queueName, long time) throws JMSException {
+        MessageConsumer consumer = getMessageConsumer(queueName);
+        return  ((ObjectMessage) consumer.receive(time)).getObject();
     }
 
     public static void acknolage(Message msg) throws JMSException {

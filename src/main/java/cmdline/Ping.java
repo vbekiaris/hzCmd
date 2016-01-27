@@ -9,7 +9,14 @@ public class Ping extends Command
     @Option(name = "-id", description = "jvm id / name default all")
     public String jvmId=".*";
 
-    public void exe(HzCmd hzCmd) {
+    @Option(name = "-timeout", description = "ping timeout")
+    public long timeout=1000;
 
+    public void exe(HzCmd hzCmd) {
+        try {
+            hzCmd.ping(jvmId, timeout);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

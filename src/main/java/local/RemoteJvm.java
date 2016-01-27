@@ -115,9 +115,17 @@ public abstract class RemoteJvm implements Serializable {
         MQ.sendObj(id, cmd);
     }
 
+    public void ping() throws IOException, InterruptedException, JMSException {
+        PingCmd cmd = new PingCmd();
+        MQ.sendObj(id, cmd);
+    }
 
     public Object getResponse() throws IOException, InterruptedException, JMSException {
         return MQ.receiveObj(id+"reply");
+    }
+
+    public Object getResponse(long timeout) throws IOException, InterruptedException, JMSException {
+        return MQ.receiveObj(id+"reply", timeout);
     }
 
     public String cat() throws IOException, InterruptedException {
