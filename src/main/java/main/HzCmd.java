@@ -210,32 +210,11 @@ public class HzCmd implements Serializable {
         }
     }
 
-
     public void invokeAsync(String jvmId, int threadCound, String method, String taksId) throws Exception {
         for (ClusterManager c : clusters.values()) {
             c.invokeAsync(jvmId, threadCound, method, taksId);
         }
     }
-
-    public void ping(String jvmId, long timeout) {
-        for (ClusterManager c : clusters.values()) {
-            for (RemoteJvm jvm : c.getMatchingJms(jvmId) ) {
-
-                try {
-                    jvm.ping();
-                } catch (Exception e) {
-                    System.out.println(Bash.ANSI_RED+"failed to send ping to "+jvm.getId());
-                }
-
-                try {
-                    jvm.getResponse(timeout);
-                } catch (Exception e) {
-                    System.out.println(Bash.ANSI_RED+"failed to recive ping from "+jvm.getId());
-                }
-            }
-        }
-    }
-
 
     public void invokeSync(String jvmId, int threadCound, String method, String taksId) throws Exception {
         for (ClusterManager c : clusters.values()) {
@@ -243,6 +222,25 @@ public class HzCmd implements Serializable {
         }
         for (ClusterManager c : clusters.values()) {
             c.getResponse(jvmId);
+        }
+    }
+
+    public void ping(String jvmId, long timeout) {
+        for (ClusterManager c : clusters.values()) {
+            for (RemoteJvm jvm : c.getMatchingJms(jvmId) ) {
+                try {
+                    jvm.ping();
+                } catch (Exception e) {
+                    System.out.println(Bash.ANSI_RED+"failed to send ping to "+jvm.getId()+Bash.ANSI_RESET);
+                }
+
+                try {
+                    jvm.getResponse(timeout);
+                    System.out.println(Bash.ANSI_GREEN+jvm.getId()+" ping"+Bash.ANSI_RESET);
+                } catch (Exception e) {
+                    System.out.println(Bash.ANSI_RED+"failed to recive ping from "+jvm.getId()+Bash.ANSI_RESET);
+                }
+            }
         }
     }
 
