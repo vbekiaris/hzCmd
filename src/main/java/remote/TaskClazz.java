@@ -13,7 +13,7 @@ import static remote.Utils.instantiate;
 public class TaskClazz implements Callable<Object> {
 
     private final String id;
-    Task task;
+    private Task task;
     private String targetFunction;
     private Method method;
 
