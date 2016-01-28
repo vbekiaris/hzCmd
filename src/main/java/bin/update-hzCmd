@@ -2,4 +2,4 @@
 
 git -C "${HZ_CMD-SRC}" pull
 
-mvn -f "${HZ_CMD-SRC}"/pom.xml" clean install dependency:copy-dependencies -DskipTests
+mvn -f "${HZ_CMD-SRC}"/pom.xml clean install dependency:copy-dependencies -DskipTest
