@@ -4,6 +4,8 @@ if [ -z "${HZ_CMD_BIN}" ] ; then
     export HZ_CMD_BIN=~/hzCmd/target
 fi
 
+./apache-activemq-5.13.0/bin/activemq start
+
 ops="-Xms32m -Xmx128m"
 
 
