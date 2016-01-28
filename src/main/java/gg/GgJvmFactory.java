@@ -26,6 +26,6 @@ public class GgJvmFactory implements JvmFactory, Serializable {
         }
         id += count+""+clusterId;
 
-        return new RemoteGGJvm(box, type, id);
+        return new RemoteGgJvm(box, type, id);
     }
 }
