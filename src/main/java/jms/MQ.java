@@ -1,5 +1,6 @@
 package jms;
 
+import global.Args;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
@@ -24,10 +25,16 @@ public abstract class MQ {
     private static Destination replyDestination;
     private static MessageConsumer replyConsumer;
 
+
+    public static final String brokerIp = System.getProperty("MQ_BROKER_IP", "localhost");
+
+    private static final String brokerUri = "nio://"+brokerIp+":61616";
+
     static {
         System.setProperty("org.apache.activemq.SERIALIZABLE_PACKAGES","*");
 
-        ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(ActiveMQConnection.DEFAULT_BROKER_URL);
+        //ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(ActiveMQConnection.DEFAULT_BROKER_URL);
+        ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(brokerUri);
         connectionFactory.setMaxThreadPoolSize(5);
 
         try {

@@ -10,11 +10,23 @@ import javax.jms.JMSException;
 import java.io.IOException;
 import java.io.Serializable;
 
+import static global.Utils.myIp;
+
 public abstract class RemoteJvm implements Serializable {
 
     public static final String libPath = "$HOME/" + Installer.REMOTE_LIB + "/*";
 
     public static final String outFile = "out.txt";
+
+    public static String homeIP;
+
+    static {
+        try {
+            homeIP = myIp();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     protected final Box box;
     protected final NodeType type;
@@ -22,7 +34,7 @@ public abstract class RemoteJvm implements Serializable {
     protected final String dir;
     protected int pid = 0;
 
-    public RemoteJvm(Box box, NodeType type, String id) throws IOException, InterruptedException {
+    public RemoteJvm(Box box, NodeType type, String id) throws IOException, InterruptedException, Exception {
         this.box = box;
         this.type = type;
         this.id = id;
@@ -50,6 +62,8 @@ public abstract class RemoteJvm implements Serializable {
         String vendorLibDir = getVendorLibDir(version) + "/*";
 
         String jvmArgs = new String();
+
+        jvmArgs += "-DMQ_BROKER_IP="+homeIP;
         jvmArgs += "-D"+Args.EVENTQ+"="+System.getProperty("user.dir")+"/"+Args.EVENTQ.name() + " ";
         jvmArgs += "-D"+Args.ID+"=" + id + " ";
         jvmArgs += "-XX:OnOutOfMemoryError=\"touch " + id + ".oome" + "\" ";

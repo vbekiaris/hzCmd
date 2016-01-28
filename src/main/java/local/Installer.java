@@ -7,7 +7,7 @@ import java.io.IOException;
 //TODO  split this to a intaller of HzCmd and the vendor jars of the cluster / IMDG
 public abstract class Installer {
 
-    public static String REMOTE_HZCMD_ROOT = "hzCmd";
+    public static String REMOTE_HZCMD_ROOT = "hzCmd-root";
     public static String REMOTE_LIB = REMOTE_HZCMD_ROOT + "/lib";
     public static String REMOTE_HZ_LIB = REMOTE_HZCMD_ROOT + "/hz-lib";
 

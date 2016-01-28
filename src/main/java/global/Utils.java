@@ -5,10 +5,21 @@ import com.google.common.escape.Escapers;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.*;
+
+import java.net.*;
+import java.io.*;
+
 
 public abstract class Utils {
 
+    public static String myIp() throws Exception{
+        URL whatismyip = null;
+        whatismyip = new URL("http://checkip.amazonaws.com");
+
+        BufferedReader in = new BufferedReader(new InputStreamReader( whatismyip.openStream() ));
+
+        return in.readLine();
+    }
 
     public static final Escaper SHELL_ESCAPE;
     static {
