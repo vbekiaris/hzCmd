@@ -13,7 +13,7 @@ echo 'PATH=${PATH}:${ACTIVE_MQ_BIN}' >> ~/.bashrc
 git clone https://github.com/Danny-Hazelcast/hzCmd.git
 
 cd hzCmd
-echo "export HZ_CMD-SRC=$(pwd)" >> ~/.bashrc
+echo "export HZ_CMD_SRC=$(pwd)" >> ~/.bashrc
 
 mvn clean install dependency:copy-dependencies
 
