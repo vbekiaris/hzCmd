@@ -10,6 +10,9 @@ public abstract class Installer {
     public static String REMOTE_HZCMD_ROOT = "hzCmd-root";
     public static String REMOTE_LIB = REMOTE_HZCMD_ROOT + "/lib";
     public static String REMOTE_HZ_LIB = REMOTE_HZCMD_ROOT + "/hz-lib";
+    public static String REMOTE_GG_LIB = REMOTE_HZCMD_ROOT + "/gg-lib";
+
+
 
     public static String HOME = "HOME";
     public static String M2_DIR = "/.m2/";
@@ -46,7 +49,15 @@ public abstract class Installer {
         boxes.upload(slf4j, REMOTE_LIB);
 
 
+
         for (String version : versions) {
+
+            String ggJar = Bash.find(M2_Repo, "ignite-core-" + version + jar);
+            boxes.mkdir(REMOTE_GG_LIB+"/"+version);
+            boxes.upload(ggJar,  REMOTE_GG_LIB+"/"+version);
+
+
+            /*
             if (ee) {
                 memberJar = Bash.find(M2_Repo, hazelcastEE + version + jar);
                 clientJar = Bash.find(M2_Repo, hazelcastClientEE + version + jar);
@@ -57,6 +68,7 @@ public abstract class Installer {
             boxes.mkdir(REMOTE_HZ_LIB+"/"+version);
             boxes.upload(memberJar,  REMOTE_HZ_LIB+"/"+version);
             boxes.upload(clientJar,  REMOTE_HZ_LIB+"/"+version);
+            */
         }
     }
 

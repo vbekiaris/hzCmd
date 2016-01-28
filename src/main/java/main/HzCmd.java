@@ -4,6 +4,7 @@ import cmdline.AddClient;
 import cmdline.AddMember;
 import cmdline.CmdLine;
 import cmdline.Command;
+import gg.GgJvmFactory;
 import global.Args;
 import global.Bash;
 import hz.HzJvmFactory;
@@ -76,7 +77,11 @@ public class HzCmd implements Serializable {
             return;
         }
 
-        ClusterManager cluster = new ClusterManager(clusterId, boxi, homeIp, new HzJvmFactory());
+//        ClusterManager cluster = new ClusterManager(clusterId, boxi, homeIp, new HzJvmFactory());
+
+        ClusterManager cluster = new ClusterManager(clusterId, boxi, homeIp, new GgJvmFactory());
+
+
         clusters.put(cluster.getClusterId(), cluster);
         System.out.println(cluster);
     }
