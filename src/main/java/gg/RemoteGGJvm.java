@@ -12,11 +12,11 @@ import xml.HzXml;
 import java.io.IOException;
 
 
-public class RemoteGGJvm extends RemoteJvm {
+public class RemoteGgJvm extends RemoteJvm {
 
     public static final String ggPath ="$HOME/"+ Installer.REMOTE_GG_LIB+"/";
 
-    public RemoteGGJvm(Box box, NodeType type, String id) throws IOException, InterruptedException {
+    public RemoteGgJvm(Box box, NodeType type, String id) throws IOException, InterruptedException {
         super(box, type, id);
     }
 
