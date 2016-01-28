@@ -6,7 +6,7 @@
 
     <groupId>hzCmd</groupId>
     <artifactId>hzCmd</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
 
     <dependencies>
         <dependency>
