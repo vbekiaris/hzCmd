@@ -34,7 +34,7 @@ public abstract class RemoteJvm implements Serializable {
     protected final String dir;
     protected int pid = 0;
 
-    public RemoteJvm(Box box, NodeType type, String id) throws IOException, InterruptedException, Exception {
+    public RemoteJvm(Box box, NodeType type, String id) throws IOException, InterruptedException {
         this.box = box;
         this.type = type;
         this.id = id;
