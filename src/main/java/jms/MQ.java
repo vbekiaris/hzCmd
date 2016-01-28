@@ -26,7 +26,7 @@ public abstract class MQ {
 
     private static final String brokerIp = System.getProperty("MQ_BROKER_IP", "localhost");
 
-    private static final String brokerUri = "nio://"+brokerIp+":61616";
+    private static final String brokerUri = "tcp://"+brokerIp+":61616";
 
     static {
         System.setProperty("org.apache.activemq.SERIALIZABLE_PACKAGES","*");
