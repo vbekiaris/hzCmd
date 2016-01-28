@@ -28,7 +28,7 @@ public abstract class Installer {
         String memberJar;
         String clientJar;
 
-        String mainJars = Bash.find(M2_Repo, "hazellite-1.0-SNAPSHOT.jar");
+        String mainJars = Bash.find(M2_Repo, "hzCmd-1.0.1.jar");
         String cacheJars = Bash.find(M2_Repo, "cache-api-1.0.0.jar");
         String guavaars = Bash.find(M2_Repo, "guava-15.0-rc1.jar");
         String hdr = Bash.find(M2_Repo, "HdrHistogram-2.1.8.jar");
