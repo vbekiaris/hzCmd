@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+git -C $HZ_CMD-SRC pull
+
+mvn -f "$HZ_CMD-SRC/pom.xml" clean install dependency:copy-dependencies -DskipTests
