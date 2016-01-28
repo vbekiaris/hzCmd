@@ -4,9 +4,7 @@ if [ -z "${HZ_CMD_BIN}" ] ; then
     export HZ_CMD_BIN=~/hzCmd/target
 fi
 
-./apache-activemq-5.13.0/bin/activemq start
+activemq start > /dev/null
 
 ops="-Xms32m -Xmx128m"
-
-
 java -cp "${HZ_CMD_BIN}/*:${HZ_CMD_BIN}/dependency/*" ${ops} main.HzCmd $@
