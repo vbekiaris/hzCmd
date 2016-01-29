@@ -3,8 +3,8 @@ package cmdline;
 import com.github.rvesse.airline.annotations.Option;
 import main.HzCmd;
 
-@com.github.rvesse.airline.annotations.Command(name = "uploadlib", description = "upload to lib dir")
-public class UploadLib extends Command {
+@com.github.rvesse.airline.annotations.Command(name = "uploadCwd", description = "upload to cwd")
+public class UploadCwd extends Command {
 
     @Option(name = "-id", description = "jvm id / name")
     public String jvmId=".*";
@@ -14,7 +14,7 @@ public class UploadLib extends Command {
 
     public void exe(HzCmd hzCmd) {
         try {
-            hzCmd.uploadLib(jvmId, src);
+            hzCmd.uploadCwd(jvmId, src);
         } catch (Exception e) {
             e.printStackTrace();
         }
