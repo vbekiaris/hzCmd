@@ -53,7 +53,7 @@ public abstract class RemoteJvm implements Serializable {
         String classToRun = getClassToRun();
 
         String jvmArgs = new String();
-        //jvmArgs += "-D"+"MQ_BROKER_IP="+homeIP+" ";
+        jvmArgs += "-D"+"MQ_BROKER_IP="+homeIP+" ";
         jvmArgs += "-D"+Args.EVENTQ+"="+System.getProperty("user.dir")+"/"+Args.EVENTQ.name() + " ";
         jvmArgs += "-D"+Args.ID+"=" + id + " ";
         jvmArgs += "-XX:OnOutOfMemoryError=\"touch " + id + ".oome" + "\" ";
