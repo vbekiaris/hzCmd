@@ -15,10 +15,10 @@ public class GgControler extends Controler {
 
     public void init(NodeType type) throws Exception {
         if(type == NodeType.Member){
-            ignite = Ignition.start();
+            ignite = Ignition.start("gg-config.xml");
         }else{
             Ignition.setClientMode(true);
-            ignite = Ignition.start();
+            ignite = Ignition.start("gg-config.xml");
         }
     }
 

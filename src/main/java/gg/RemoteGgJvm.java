@@ -25,6 +25,8 @@ public class RemoteGgJvm extends RemoteJvm {
 
     public void beforeJvmStart(ClusterManager myCluster) throws Exception {
 
+        box.upload("gg-config.xml", dir+"/");
+
     }
 
 }
