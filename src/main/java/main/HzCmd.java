@@ -7,6 +7,7 @@ import cmdline.Command;
 import gg.GgJvmFactory;
 import global.Args;
 import global.Bash;
+import global.ClusterType;
 import hz.HzJvmFactory;
 import jms.MQ;
 import local.BoxManager;
@@ -65,7 +66,7 @@ public class HzCmd implements Serializable {
         boxes.put(file, b);
     }
 
-    public void addCluster(String clusterId, String boxGroupId) throws Exception{
+    public void addCluster(String clusterId, String boxGroupId, ClusterType type) throws Exception{
         if (clusters.containsKey(clusterId)){
             System.out.println(Bash.ANSI_RED+"cluster "+clusterId + " all ready created"+Bash.ANSI_RESET);
             return;
@@ -77,10 +78,18 @@ public class HzCmd implements Serializable {
             return;
         }
 
-//        ClusterManager cluster = new ClusterManager(clusterId, boxi, homeIp, new HzJvmFactory());
-
-        ClusterManager cluster = new ClusterManager(clusterId, boxi, homeIp, new GgJvmFactory());
-
+        ClusterManager cluster;
+        switch (type){
+            case HZ:
+                cluster = new ClusterManager(clusterId, boxi, homeIp, new HzJvmFactory());
+                break;
+            case GG:
+                cluster = new ClusterManager(clusterId, boxi, homeIp, new GgJvmFactory());
+                break;
+            default:
+                System.out.println(Bash.ANSI_RED+"box group "+boxGroupId + " not found"+Bash.ANSI_RESET);
+                return;
+        }
 
         clusters.put(cluster.getClusterId(), cluster);
         System.out.println(cluster);
