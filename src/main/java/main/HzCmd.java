@@ -98,7 +98,7 @@ public class HzCmd implements Serializable {
     public void install(String clusterId, boolean ee, String... versions) throws IOException, InterruptedException {
         for (ClusterManager c : clusters.values()) {
             if(c.matchClusterId(clusterId)){
-                Installer.install(c.getBoxManager(), ee, versions);
+                Installer.install(c.getBoxManager(), c.getJvmFactory(), versions);
             }
         }
     }
@@ -111,11 +111,11 @@ public class HzCmd implements Serializable {
         }
     }
 
-    public void addMembers(AddMember cmd) throws Exception {
+    public void addMembers(String clusterId, int qty, String version, String jvmOptions) throws Exception {
         List<RemoteJvm> added = new ArrayList();
         for (ClusterManager c : clusters.values()) {
-            if(c.matchClusterId(cmd.cluster)){
-                added.addAll( c.addMembers(cmd.qty, cmd.version, cmd.jvmOptions) );
+            if(c.matchClusterId(clusterId)){
+                added.addAll( c.addMembers(qty, version, jvmOptions) );
             }
         }
         checkAddJvms(added);

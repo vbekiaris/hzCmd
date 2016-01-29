@@ -79,7 +79,7 @@ public class ClusterManager implements Serializable {
         }
         RemoteJvm jvm = jvmFactory.createJvm(boxes.get(idx), type, count, clusterId);
         jvms.put(jvm.getId(), jvm);
-        jvm.startJvm(jarVersion, options, this);
+        jvm.startJvm(options, jvmFactory.getVendorLibDir(jarVersion), this);
         return jvm;
     }
 
@@ -236,5 +236,9 @@ public class ClusterManager implements Serializable {
                 ", " + boxes +
                 "" + jvms +
                 Bash.ANSI_RESET;
+    }
+
+    public JvmFactory getJvmFactory() {
+        return jvmFactory;
     }
 }

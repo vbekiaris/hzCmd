@@ -3,33 +3,26 @@ package local;
 import global.Bash;
 
 import java.io.IOException;
+import java.util.List;
 
-//TODO  split this to a intaller of HzCmd and the vendor jars of the cluster / IMDG
 public abstract class Installer {
 
-    public static String REMOTE_HZCMD_ROOT = "hzCmd-root";
-    public static String REMOTE_LIB = REMOTE_HZCMD_ROOT + "/lib";
+    public static final String REMOTE_HZCMD_ROOT = "hzCmd-root";
+    private static final String LIB = REMOTE_HZCMD_ROOT+"/" + "lib";
+
+    public static final String REMOTE_HZCMD_ROOT_FULL_PATH ="$HOME/"+REMOTE_HZCMD_ROOT;
+    public static final String REMOTE_HZCMD_LIB_FULL_PATH = "$HOME/"+ LIB;
+
+    private static final String HOME = "HOME";
+    private static final String M2_DIR = "/.m2/";
+    private static final String M2_Repo = System.getenv(HOME)+M2_DIR;
+
+    /*
     public static String REMOTE_HZ_LIB = REMOTE_HZCMD_ROOT + "/hz-lib";
     public static String REMOTE_GG_LIB = REMOTE_HZCMD_ROOT + "/gg-lib";
+    */
 
-
-
-    public static String HOME = "HOME";
-    public static String M2_DIR = "/.m2/";
-    public static String M2_Repo = System.getenv(HOME)+M2_DIR;
-
-    public static String hazelcast = "hazelcast-";
-    public static String hazelcastEE = hazelcast+"enterprise-";
-
-    public static String hazelcastClient = hazelcast+"client-";
-    public static String hazelcastClientEE = hazelcastEE+"client-";
-
-    public static String jar = ".jar";
-
-
-    public static void install(BoxManager boxes, boolean ee,  String... versions) throws IOException, InterruptedException {
-        String memberJar;
-        String clientJar;
+    public static void install(BoxManager boxes, JvmFactory jvmFactory,  String... versions) throws IOException, InterruptedException {
 
         String mainJars = Bash.find(M2_Repo, "hzCmd-1.0.1.jar");
         String cacheJars = Bash.find(M2_Repo, "cache-api-1.0.0.jar");
@@ -39,36 +32,25 @@ public abstract class Installer {
         String metrics = Bash.find(M2_Repo, "metrics-core-3.1.1.jar");
         String slf4j = Bash.find(M2_Repo, "slf4j-api-1.7.7.jar");
 
-        boxes.mkdir(REMOTE_LIB);
-        boxes.upload(mainJars, REMOTE_LIB);
-        boxes.upload(cacheJars, REMOTE_LIB);
-        boxes.upload(guavaars, REMOTE_LIB);
-        boxes.upload(hdr, REMOTE_LIB);
-        boxes.upload(mq, REMOTE_LIB);
-        boxes.upload(metrics, REMOTE_LIB);
-        boxes.upload(slf4j, REMOTE_LIB);
-
-
+        boxes.mkdir(LIB);
+        boxes.upload(mainJars, LIB);
+        boxes.upload(cacheJars, LIB);
+        boxes.upload(guavaars, LIB);
+        boxes.upload(hdr, LIB);
+        boxes.upload(mq, LIB);
+        boxes.upload(metrics, LIB);
+        boxes.upload(slf4j, LIB);
 
         for (String version : versions) {
 
-            String ggJar = Bash.find(M2_Repo, "ignite-core-" + version + jar);
-            boxes.mkdir(REMOTE_GG_LIB+"/"+version);
-            boxes.upload(ggJar,  REMOTE_GG_LIB+"/"+version);
+            String uploadDir = jvmFactory.getVendorLibDir(version);
+            boxes.mkdir(uploadDir);
 
-
-            /*
-            if (ee) {
-                memberJar = Bash.find(M2_Repo, hazelcastEE + version + jar);
-                clientJar = Bash.find(M2_Repo, hazelcastClientEE + version + jar);
-            } else {
-                memberJar = Bash.find(M2_Repo, hazelcast + version + jar);
-                clientJar = Bash.find(M2_Repo, hazelcastClient + version + jar);
+            List<String> names = jvmFactory.getVendorLibNames(version);
+            for (String name : names) {
+                String jar = Bash.find(M2_Repo, name);
+                boxes.upload(jar,  uploadDir);
             }
-            boxes.mkdir(REMOTE_HZ_LIB+"/"+version);
-            boxes.upload(memberJar,  REMOTE_HZ_LIB+"/"+version);
-            boxes.upload(clientJar,  REMOTE_HZ_LIB+"/"+version);
-            */
         }
     }
 

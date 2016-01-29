@@ -14,19 +14,9 @@ import static global.Utils.myIp;
 
 public abstract class RemoteJvm implements Serializable {
 
-    public static final String libPath = "$HOME/" + Installer.REMOTE_LIB;
-
     public static final String outFile = "out.txt";
 
-    public static String homeIP;
-
-    static {
-        try {
-            homeIP = myIp();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    private static String homeIP;
 
     protected final Box box;
     protected final NodeType type;
@@ -44,12 +34,14 @@ public abstract class RemoteJvm implements Serializable {
 
     public abstract String getClassToRun();
 
-    public abstract String getVendorLibDir(String version);
-
     public abstract void beforeJvmStart(ClusterManager myCluster) throws Exception;
 
 
-    public final void startJvm(String version, String jvmOptions, ClusterManager myCluster) throws Exception {
+    public final void startJvm(String jvmOptions, String vendorLibDir, ClusterManager myCluster) throws Exception {
+
+        if(homeIP==null){
+            homeIP = myIp();
+        }
 
         beforeJvmStart(myCluster);
 
@@ -59,23 +51,20 @@ public abstract class RemoteJvm implements Serializable {
         }
 
         String classToRun = getClassToRun();
-        String vendorLibDir = getVendorLibDir(version) + "/*";
 
         String jvmArgs = new String();
-
         //jvmArgs += "-D"+"MQ_BROKER_IP="+homeIP+" ";
         jvmArgs += "-D"+Args.EVENTQ+"="+System.getProperty("user.dir")+"/"+Args.EVENTQ.name() + " ";
         jvmArgs += "-D"+Args.ID+"=" + id + " ";
         jvmArgs += "-XX:OnOutOfMemoryError=\"touch " + id + ".oome" + "\" ";
 
         /*
-        String takipiJavaAgent = "-agentlib:TakipiAgent";
-        String takipiProp = "\"-Dtakipi.name=\"" + id;
-        String goString = "cd " + dir + "; nohup java -cp \"" + libPath + ":" + vendorLibDir + "\" " + jvmArgs + " " + jvmOptions + " " + classToRun + " >> " + outFile + " 2>&1 & echo $!";
-        System.out.println(goString);
+        String takipiJavaAgent = "-agentlib:TakipiAgent";    String takipiProp = "\"-Dtakipi.name=\"" + id;
         */
 
-        String pidStr = box.ssh("cd " + dir + "; nohup java -cp \"" + libPath+"/*" + ":" + vendorLibDir + "\" " + jvmArgs + " " + jvmOptions + " " + classToRun + " >> " + outFile + " 2>&1 & echo $!");
+        String launchCmd = "cd " + dir + "; nohup java -cp \"" + Installer.REMOTE_HZCMD_LIB_FULL_PATH+"/*" + ":" +  vendorLibDir+"/*"  + "\" " + jvmArgs + " " + jvmOptions + " " + classToRun + " >> " + outFile + " 2>&1 & echo $!";
+
+        String pidStr = box.ssh(launchCmd);
         pid = Integer.parseInt(pidStr.trim());
     }
 
@@ -178,7 +167,7 @@ public abstract class RemoteJvm implements Serializable {
     }
 
     public void uploadLib(String src) throws IOException, InterruptedException {
-        box.upload(src, libPath+"/");
+        box.upload(src, Installer.REMOTE_HZCMD_LIB_FULL_PATH+"/");
     }
 
     public String getId(){ return id; }

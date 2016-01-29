@@ -5,6 +5,7 @@ import com.github.rvesse.airline.annotations.Option;
 import main.HzCmd;
 
 import java.io.Serializable;
+import java.util.List;
 
 @com.github.rvesse.airline.annotations.Command(name = "member", description = "Add member jvm's to a cluster")
 public class AddMember extends Command implements Serializable{
@@ -19,12 +20,17 @@ public class AddMember extends Command implements Serializable{
     public String version;
 
     @Arguments(description = "jvm options")
-    public String jvmOptions;
+    public List<String> jvmOptions;
+
 
     public void exe(HzCmd hzCmd) {
         System.out.println(this);
         try {
-            hzCmd.addMembers(this);
+            StringBuilder cmd = new StringBuilder();
+            for (String s : jvmOptions)
+                cmd.append(s+" ");
+
+            hzCmd.addMembers(cluster, qty, version, cmd.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
