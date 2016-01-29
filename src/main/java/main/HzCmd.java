@@ -261,6 +261,31 @@ public class HzCmd implements Serializable {
         }
     }
 
+    public void scpUp(String jvmId, String src, String dst) throws IOException, InterruptedException {
+        for (ClusterManager c : clusters.values()) {
+            for (RemoteJvm jvm : c.getMatchingJms(jvmId) ) {
+                jvm.upload(src, dst);
+            }
+        }
+    }
+
+    public void uploadCwd(String jvmId, String src) throws IOException, InterruptedException {
+        for (ClusterManager c : clusters.values()) {
+            for (RemoteJvm jvm : c.getMatchingJms(jvmId) ) {
+                jvm.uploadcwd(src);
+            }
+        }
+    }
+
+    public void uploadLib(String jvmId, String src) throws IOException, InterruptedException {
+        for (ClusterManager c : clusters.values()) {
+            for (RemoteJvm jvm : c.getMatchingJms(jvmId) ) {
+                jvm.uploadLib(src);
+            }
+        }
+    }
+
+
     @Override
     public String toString() {
         String clu="";
@@ -330,4 +355,6 @@ public class HzCmd implements Serializable {
             r.run();
         }
     }
+
+
 }

@@ -14,7 +14,7 @@ import static global.Utils.myIp;
 
 public abstract class RemoteJvm implements Serializable {
 
-    public static final String libPath = "$HOME/" + Installer.REMOTE_LIB + "/*";
+    public static final String libPath = "$HOME/" + Installer.REMOTE_LIB;
 
     public static final String outFile = "out.txt";
 
@@ -75,7 +75,7 @@ public abstract class RemoteJvm implements Serializable {
         System.out.println(goString);
         */
 
-        String pidStr = box.ssh("cd " + dir + "; nohup java -cp \"" + libPath + ":" + vendorLibDir + "\" " + jvmArgs + " " + jvmOptions + " " + classToRun + " >> " + outFile + " 2>&1 & echo $!");
+        String pidStr = box.ssh("cd " + dir + "; nohup java -cp \"" + libPath+"/*" + ":" + vendorLibDir + "\" " + jvmArgs + " " + jvmOptions + " " + classToRun + " >> " + outFile + " 2>&1 & echo $!");
         pid = Integer.parseInt(pidStr.trim());
     }
 
@@ -167,6 +167,18 @@ public abstract class RemoteJvm implements Serializable {
 
     public void downlonad(String destDir) throws IOException, InterruptedException {
         box.downlonad(dir+"/*", destDir+"/"+id+"-"+box.pri);
+    }
+
+    public void upload(String src, String dst) throws IOException, InterruptedException {
+        box.upload(src, dst);
+    }
+
+    public void uploadcwd(String src) throws IOException, InterruptedException {
+        box.upload(src, dir + "/");
+    }
+
+    public void uploadLib(String src) throws IOException, InterruptedException {
+        box.upload(src, libPath+"/");
     }
 
     public String getId(){ return id; }

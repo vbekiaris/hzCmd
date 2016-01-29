@@ -22,10 +22,21 @@ public class AddMember extends Command implements Serializable{
     public String jvmOptions;
 
     public void exe(HzCmd hzCmd) {
+        System.out.println(this);
         try {
             hzCmd.addMembers(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String toString() {
+        return "AddMember{" +
+                "cluster='" + cluster + '\'' +
+                ", qty=" + qty +
+                ", version='" + version + '\'' +
+                ", jvmOptions='" + jvmOptions + '\'' +
+                '}';
     }
 }
