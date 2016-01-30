@@ -16,7 +16,7 @@ public class AddMember extends Command implements Serializable{
     @Option(name = "-n", description = "default number of members to add 0")
     public int qty = 0;
 
-    @Option(name = "-v", description = "hazelcast version e.g. 9.7")
+    @Option(name = "-v", description = "hazelcast version e.g. 3.6")
     public String version;
 
     @Arguments(description = "jvm options")
