@@ -32,6 +32,9 @@ public class GgJvmFactory implements JvmFactory, Serializable {
         jars.add("ignite-spring-"+version+".jar");
         jars.add("ignite-indexing-"+version+".jar");
 
+        jars.add("spring-aop-4.1.0.RELEASE.jar");
+
+
         return jars;
     }
 
