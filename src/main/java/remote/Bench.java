@@ -30,11 +30,11 @@ public abstract class Bench extends Task{
     public abstract String setTitle();
 
     public void warmup(){
-        runBench(benchType, warmupSec, setTitle() + "-Warmup");
+        runBench(benchType, warmupSec, setTitle() + "-Warmup-"+warmupSec+"Sec");
     }
 
     public void run() throws InterruptedException {
-        runBench(benchType, durationSec, setTitle());
+        runBench(benchType, durationSec, setTitle() + "-Bench-"+durationSec+"Sec");
     }
 
     private void runBench(BenchType type, int seconds, String title){
@@ -50,18 +50,20 @@ public abstract class Bench extends Task{
 
     private void benchMetric(int seconds, String metricsCsvtitle){
         csvReporter = CsvReporter.forRegistry(metrics).build(new File(System.getProperty("user.dir")) );
-        csvReporter.start(reportSecondsInterval, TimeUnit.SECONDS);
         com.codahale.metrics.Timer timer = metrics.timer(metricsCsvtitle);
         com.codahale.metrics.Timer.Context context;
 
         long startTime = System.currentTimeMillis();
         long endTime = startTime + (seconds * 1000);
+
+        csvReporter.start(reportSecondsInterval, TimeUnit.SECONDS);
         while(System.currentTimeMillis() < endTime){
             context = timer.time();
             timeStep();
             context.stop();
         }
         csvReporter.stop();
+
         metrics.remove(metricsCsvtitle);
     }
 
