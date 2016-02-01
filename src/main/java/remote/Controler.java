@@ -43,6 +43,7 @@ public abstract class Controler{
             MQ.sendObj(ID, e);
             throw e;
         }
+        Thread.sleep(5000);
     }
 
     public abstract void init(NodeType type)  throws Exception ;

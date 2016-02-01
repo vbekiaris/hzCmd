@@ -6,7 +6,6 @@ import org.apache.ignite.IgniteCache;
 public class GgMapPutBench extends GgBench {
 
     protected IgniteCache<Object, Object> cache;
-    public String title;
     public String name = "a";
     public int keyDomain = 10000;
     public int valueSize = 10;
@@ -17,9 +16,6 @@ public class GgMapPutBench extends GgBench {
         value = new byte[valueSize];
         cache = ignite.getOrCreateCache(name);
     }
-
-    @Override
-    public String setTitle() { return title; }
 
     @Override
     public void timeStep() {

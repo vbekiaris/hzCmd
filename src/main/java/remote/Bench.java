@@ -15,6 +15,8 @@ public abstract class Bench extends Task{
 
     public BenchType benchType = BenchType.Metrics;
 
+    public String title;
+
     public int warmupSec=30;
     public int durationSec = 60;
     public int reportSecondsInterval=5;
@@ -27,14 +29,12 @@ public abstract class Bench extends Task{
 
     public abstract void setup();
 
-    public abstract String setTitle();
-
     public void warmup(){
-        runBench(benchType, warmupSec, setTitle() + "-Warmup-"+warmupSec+"Sec");
+        runBench(benchType, warmupSec, title + "-Warmup-"+warmupSec+"Sec");
     }
 
     public void run() throws InterruptedException {
-        runBench(benchType, durationSec, setTitle() + "-Bench-"+durationSec+"Sec");
+        runBench(benchType, durationSec, title + "-Bench-"+durationSec+"Sec");
     }
 
     private void runBench(BenchType type, int seconds, String title){
