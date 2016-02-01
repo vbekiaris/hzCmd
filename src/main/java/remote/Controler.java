@@ -18,16 +18,6 @@ public abstract class Controler{
     public static final String EVENTQ = System.getProperty(Args.EVENTQ.name());
     public static final String jvmPidId = ManagementFactory.getRuntimeMXBean().getName();
 
-    public static PrintStream exceptionWrite;
-
-    static {
-        try {
-            exceptionWrite = new PrintStream(new FileOutputStream("exception.txt", true));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
     public final NodeType type;
 
     public Controler(NodeType type) throws Exception {
@@ -38,12 +28,20 @@ public abstract class Controler{
             tasks = new TaskManager(getVendorObject());
             MQ.sendObj(ID, ID+" Started");
         }catch (Exception e){
-            e.printStackTrace();
-            e.printStackTrace(exceptionWrite);
+            recordeException(e);
             MQ.sendObj(ID, e);
             throw e;
         }
         Thread.sleep(5000);
+    }
+
+    private void recordeException(Exception e) {
+        e.printStackTrace();
+        try {
+            e.printStackTrace( new PrintStream(new FileOutputStream("exception.txt", true)) );
+        } catch (FileNotFoundException e1) {
+            e1.printStackTrace();
+        }
     }
 
     public abstract void init(NodeType type)  throws Exception ;
@@ -54,13 +52,11 @@ public abstract class Controler{
         try {
             tasks.loadClass(taskId, clazz);
         } catch (Exception e) {
-            e.printStackTrace();
-            e.printStackTrace(exceptionWrite);
+            recordeException(e);
             try {
                 MQ.sendObj(EVENTQ, e);
             } catch (JMSException jmsError) {
-                jmsError.printStackTrace();
-                jmsError.printStackTrace(exceptionWrite);
+                recordeException(jmsError);
             }
         }
     }
@@ -69,13 +65,11 @@ public abstract class Controler{
         try {
             tasks.setField(taskId, field, value);
         } catch (Exception e) {
-            e.printStackTrace();
-            e.printStackTrace(exceptionWrite);
+            recordeException(e);
             try {
                 MQ.sendObj(EVENTQ, e);
             } catch (JMSException jmsError) {
-                jmsError.printStackTrace();
-                jmsError.printStackTrace(exceptionWrite);
+                recordeException(jmsError);
             }
         }
     }
@@ -84,13 +78,11 @@ public abstract class Controler{
         try {
             tasks.invokeAsync(threadCount, function, taskId);
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-            e.printStackTrace(exceptionWrite);
+            recordeException(e);
             try {
                 MQ.sendObj(EVENTQ, e);
             } catch (JMSException jmsError) {
-                jmsError.printStackTrace();
-                jmsError.printStackTrace(exceptionWrite);
+                recordeException(jmsError);
             }
         }
     }
@@ -100,16 +92,13 @@ public abstract class Controler{
             tasks.invokeSync(threadCount, function, taskId);
             MQ.sendObj(ID+"reply", ID+" finished "+function+" on "+taskId);
         } catch (JMSException jmsError) {
-            jmsError.printStackTrace();
-            jmsError.printStackTrace(exceptionWrite);
+            recordeException(jmsError);
         } catch (Exception e) {
-            e.printStackTrace();
-            e.printStackTrace(exceptionWrite);
+            recordeException(e);
             try {
                 MQ.sendObj(ID+"reply", e);
             } catch (JMSException jmsError) {
-                jmsError.printStackTrace();
-                jmsError.printStackTrace(exceptionWrite);
+                recordeException(jmsError);
             }
         }
     }
@@ -118,8 +107,7 @@ public abstract class Controler{
         try {
             MQ.sendObj(ID+"reply", ID+" ping");
         } catch (JMSException jmsError) {
-            jmsError.printStackTrace();
-            jmsError.printStackTrace(exceptionWrite);
+            recordeException(jmsError);
         }
     }
 
@@ -133,8 +121,7 @@ public abstract class Controler{
                     ((Cmd) obj).exicute(this);
                 }
             } catch (JMSException e) {
-                e.printStackTrace();
-                e.printStackTrace(exceptionWrite);
+                recordeException(e);
             }
         }
     }
