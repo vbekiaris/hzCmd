@@ -286,11 +286,10 @@ public class HzCmd implements Serializable {
         }
     }
 
-    public void uploadLib(String jvmId, String src) throws IOException, InterruptedException {
-        for (ClusterManager c : clusters.values()) {
-            for (RemoteJvm jvm : c.getMatchingJms(jvmId) ) {
-                jvm.uploadLib(src);
-            }
+    public void uploadLib(String clusterId, String src) throws IOException, InterruptedException {
+        ClusterManager c = clusters.get(clusterId);
+        if(c != null){
+            c.uploadLib(src);
         }
     }
 

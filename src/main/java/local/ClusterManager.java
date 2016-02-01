@@ -193,6 +193,10 @@ public class ClusterManager implements Serializable {
         }
     }
 
+    public void uploadLib(String src) throws IOException, InterruptedException {
+        boxes.upload(src, Installer.REMOTE_HZCMD_ROOT_LIB);
+    }
+
     public void downlonad(String jvmId, String destDir) throws IOException, InterruptedException {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.downlonad(destDir);
@@ -241,4 +245,6 @@ public class ClusterManager implements Serializable {
     public JvmFactory getJvmFactory() {
         return jvmFactory;
     }
+
+
 }

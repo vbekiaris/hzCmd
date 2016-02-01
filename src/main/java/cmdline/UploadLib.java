@@ -3,18 +3,18 @@ package cmdline;
 import com.github.rvesse.airline.annotations.Option;
 import main.HzCmd;
 
-@com.github.rvesse.airline.annotations.Command(name = "uploadlib", description = "upload to lib dir")
+@com.github.rvesse.airline.annotations.Command(name = "uploadlib", description = "upload to lib dir of a cluster")
 public class UploadLib extends Command {
 
-    @Option(name = "-id", description = "jvm id / name")
-    public String jvmId=".*";
+    @Option(name = "-cluster", description = "cluster id")
+    public String cluster;
 
-    @Option(name = "-src", description = "default ec2-user")
-    public String src = "admin";
+    @Option(name = "-src", description = "src path")
+    public String src;
 
     public void exe(HzCmd hzCmd) {
         try {
-            hzCmd.uploadLib(jvmId, src);
+            hzCmd.uploadLib(cluster, src);
         } catch (Exception e) {
             e.printStackTrace();
         }

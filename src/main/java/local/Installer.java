@@ -8,10 +8,10 @@ import java.util.List;
 public abstract class Installer {
 
     public static final String REMOTE_HZCMD_ROOT = "hzCmd-root";
-    private static final String LIB = REMOTE_HZCMD_ROOT+"/" + "lib";
+    public static final String REMOTE_HZCMD_ROOT_LIB = REMOTE_HZCMD_ROOT+"/" + "lib";
 
     public static final String REMOTE_HZCMD_ROOT_FULL_PATH ="$HOME/"+REMOTE_HZCMD_ROOT;
-    public static final String REMOTE_HZCMD_LIB_FULL_PATH = "$HOME/"+ LIB;
+    public static final String REMOTE_HZCMD_LIB_FULL_PATH = "$HOME/"+ REMOTE_HZCMD_ROOT_LIB;
 
     private static final String HOME = "HOME";
     private static final String M2_DIR = "/.m2/";
@@ -27,14 +27,14 @@ public abstract class Installer {
         String metrics = Bash.find(M2_Repo, "metrics-core-3.1.1.jar");
         String slf4j = Bash.find(M2_Repo, "slf4j-api-1.7.7.jar");
 
-        boxes.mkdir(LIB);
-        boxes.upload(mainJars, LIB);
-        boxes.upload(cacheJars, LIB);
-        boxes.upload(guavaars, LIB);
-        boxes.upload(hdr, LIB);
-        boxes.upload(mq, LIB);
-        boxes.upload(metrics, LIB);
-        boxes.upload(slf4j, LIB);
+        boxes.mkdir(REMOTE_HZCMD_ROOT_LIB);
+        boxes.upload(mainJars, REMOTE_HZCMD_ROOT_LIB);
+        boxes.upload(cacheJars, REMOTE_HZCMD_ROOT_LIB);
+        boxes.upload(guavaars, REMOTE_HZCMD_ROOT_LIB);
+        boxes.upload(hdr, REMOTE_HZCMD_ROOT_LIB);
+        boxes.upload(mq, REMOTE_HZCMD_ROOT_LIB);
+        boxes.upload(metrics, REMOTE_HZCMD_ROOT_LIB);
+        boxes.upload(slf4j, REMOTE_HZCMD_ROOT_LIB);
 
         for (String version : versions) {
 
