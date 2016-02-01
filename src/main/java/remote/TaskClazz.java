@@ -3,12 +3,15 @@ package remote;
 import jms.MQ;
 
 import javax.jms.JMSException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
 import static remote.Utils.instantiate;
+import static remote.Utils.recordeException;
 
 public class TaskClazz implements Callable<Object> {
 
@@ -64,8 +67,7 @@ public class TaskClazz implements Callable<Object> {
                 System.out.println(stop);
             }
         }catch (Exception e){
-            e.printStackTrace();
-            e.printStackTrace(Controler.exceptionWrite);
+            recordeException(e);
             try {
                 MQ.sendObj(Controler.EVENTQ, new Exception(infoString(), e.getCause()) );
             } catch (JMSException jmsE) {

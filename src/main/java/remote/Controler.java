@@ -10,6 +10,8 @@ import java.lang.management.ManagementFactory;
 
 import remote.command.Cmd;
 
+import static remote.Utils.recordeException;
+
 public abstract class Controler{
 
     protected static TaskManager tasks;
@@ -35,14 +37,6 @@ public abstract class Controler{
         Thread.sleep(5000);
     }
 
-    private void recordeException(Exception e) {
-        e.printStackTrace();
-        try {
-            e.printStackTrace( new PrintStream(new FileOutputStream("exception.txt", true)) );
-        } catch (FileNotFoundException e1) {
-            e1.printStackTrace();
-        }
-    }
 
     public abstract void init(NodeType type)  throws Exception ;
 
