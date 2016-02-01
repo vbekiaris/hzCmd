@@ -27,8 +27,11 @@ public class RemoteHzJvm extends RemoteJvm {
         HzXml.makeMemberXml(myCluster);
         HzXml.makeClientXml(myCluster);
 
-        box.upload(HzXml.memberXmlFileForCluster(myCluster), dir+"/"+ HzXml.memberXml);
-        box.upload(HzXml.clientXmlFileForCluster(myCluster), dir + "/" + HzXml.clientXml);
+        if ( isMember() ) {
+            box.upload(HzXml.memberXmlFileForCluster(myCluster), dir + "/" + HzXml.memberXml);
+        }else {
+            box.upload(HzXml.clientXmlFileForCluster(myCluster), dir + "/" + HzXml.clientXml);
+        }
     }
 
 }
