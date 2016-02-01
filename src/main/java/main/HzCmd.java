@@ -98,7 +98,7 @@ public class HzCmd implements Serializable {
     public void install(String clusterId, boolean ee, String... versions) throws IOException, InterruptedException {
         for (ClusterManager c : clusters.values()) {
             if(c.matchClusterId(clusterId)){
-                Installer.install(c.getBoxManager(), c.getJvmFactory(), versions);
+                Installer.install(c.getBoxManager(), c.getJvmFactory(), ee, versions);
             }
         }
     }

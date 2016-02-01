@@ -13,7 +13,7 @@ public interface JvmFactory {
 
     RemoteJvm createJvm(Box box, NodeType type, int count, String clusterId) throws IOException, InterruptedException;
 
-    String getVendorLibDir(String version);
+    String getVendorLibDir(String version, boolean ee);
 
-    List<String> getVendorLibNames(String version);
+    List<String> getVendorLibNames(String version, boolean ee);
 }

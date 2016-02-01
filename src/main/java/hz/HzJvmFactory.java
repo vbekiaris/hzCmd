@@ -26,16 +26,20 @@ public class HzJvmFactory implements JvmFactory, Serializable {
 
 
 
-    public String getVendorLibDir(String version) {
+    public String getVendorLibDir(String version, boolean ee) {
         return HZ_LIB_PATH_BASE+"/"+version;
     }
 
-    public List<String> getVendorLibNames(String version) {
+    public List<String> getVendorLibNames(String version, boolean ee) {
         List<String> jars = new ArrayList();
 
-        jars.add(hazelcast+version+".jar");
-        jars.add(hazelcastClient+version+".jar");
-
+        if(ee){
+            jars.add(hazelcastEE + version + ".jar");
+            jars.add(hazelcastClientEE + version + ".jar");
+        }else {
+            jars.add(hazelcast + version + ".jar");
+            jars.add(hazelcastClient + version + ".jar");
+        }
         return jars;
     }
 
