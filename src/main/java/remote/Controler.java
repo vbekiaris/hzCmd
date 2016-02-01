@@ -34,6 +34,7 @@ public abstract class Controler{
             MQ.sendObj(ID, e);
             throw e;
         }
+        //temp hack sleep stops reading own message
         Thread.sleep(9000);
     }
 
