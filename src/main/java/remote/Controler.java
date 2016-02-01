@@ -34,7 +34,7 @@ public abstract class Controler{
             MQ.sendObj(ID, e);
             throw e;
         }
-        Thread.sleep(5000);
+        Thread.sleep(9000);
     }
 
 
