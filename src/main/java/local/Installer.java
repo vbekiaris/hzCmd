@@ -17,11 +17,6 @@ public abstract class Installer {
     private static final String M2_DIR = "/.m2/";
     private static final String M2_Repo = System.getenv(HOME)+M2_DIR;
 
-    /*
-    public static String REMOTE_HZ_LIB = REMOTE_HZCMD_ROOT + "/hz-lib";
-    public static String REMOTE_GG_LIB = REMOTE_HZCMD_ROOT + "/gg-lib";
-    */
-
     public static void install(BoxManager boxes, JvmFactory jvmFactory, boolean ee,  String... versions) throws IOException, InterruptedException {
 
         String mainJars = Bash.find(M2_Repo, "hzCmd-1.0.1.jar");
@@ -43,7 +38,7 @@ public abstract class Installer {
 
         for (String version : versions) {
 
-            String uploadDir = jvmFactory.getVendorLibDir(version, ee);
+            String uploadDir = jvmFactory.getVendorLibDir(version);
             boxes.mkdir(uploadDir);
 
             List<String> names = jvmFactory.getVendorLibNames(version, ee);

@@ -21,7 +21,9 @@ public class GgJvmFactory implements JvmFactory, Serializable {
 
     private static final String ggPath = Installer.REMOTE_HZCMD_ROOT_FULL_PATH+"/"+"gg-lib";
 
-    public String getVendorLibDir(String version, boolean ee) { return ggPath+"/"+version; }
+    public String getVendorLibDir(String version) {
+        return ggPath+"/"+version;
+    }
 
     public List<String> getVendorLibNames(String version, boolean ee) {
         List<String> jars = new ArrayList();

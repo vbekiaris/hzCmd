@@ -26,7 +26,7 @@ public class HzJvmFactory implements JvmFactory, Serializable {
 
 
 
-    public String getVendorLibDir(String version, boolean ee) {
+    public String getVendorLibDir(String version) {
         return HZ_LIB_PATH_BASE+"/"+version;
     }
 
