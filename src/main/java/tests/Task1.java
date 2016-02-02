@@ -3,14 +3,11 @@ package tests;
 import com.codahale.metrics.CsvReporter;
 import com.codahale.metrics.MetricRegistry;
 import com.hazelcast.core.IMap;
-import com.hazelcast.core.OperationTimeoutException;
 import hz.HzTask;
 
 import javax.jms.JMSException;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
-
-import static tests.Utils.sleepSeconds;
 
 public class Task1 extends HzTask {
 
