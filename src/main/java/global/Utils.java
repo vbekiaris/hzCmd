@@ -42,33 +42,10 @@ public abstract class Utils {
         QUOTES = builder.build();
     }
 
-
-    public static void sleepMilli(int mills){
-        try {
-            Thread.sleep(mills);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void sleepSeconds(int sec){
-        sleepMilli(sec * 1000);
-    }
-
-
     public static String escapeQuotes(String s) {
         return QUOTES.escape( s );
     }
 
-    public static String exceptionStacktraceToString(Throwable e) {
-
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        e.printStackTrace(pw);
-
-
-        return SHELL_ESCAPE.escape( sw.toString() );
-    }
 
 
     public static int rangeMap(int val, int min_inclusive, int max_exclusive) {

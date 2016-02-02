@@ -25,7 +25,13 @@ public abstract class Utils {
         }
     }
 
-    public static void sendBAckException(Exception e) throws JMSException {
-        MQ.sendObj("exception", e);
+    public static void recordSendException(Exception e, String queueName) {
+        recordeException(e);
+        try {
+            MQ.sendObj(queueName, e);
+        } catch (JMSException jmsError) {
+            recordeException(jmsError);
+        }
     }
+
 }

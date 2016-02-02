@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import static global.Utils.escapeQuotes;
-import static global.Utils.exceptionStacktraceToString;
 
 public class Box implements Serializable{
     public String user;

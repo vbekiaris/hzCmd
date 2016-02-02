@@ -10,6 +10,7 @@ import java.lang.management.ManagementFactory;
 
 import remote.command.Cmd;
 
+import static remote.Utils.recordSendException;
 import static remote.Utils.recordeException;
 
 public abstract class Controler{
@@ -47,12 +48,7 @@ public abstract class Controler{
         try {
             tasks.loadClass(taskId, clazz);
         } catch (Exception e) {
-            recordeException(e);
-            try {
-                MQ.sendObj(EVENTQ, e);
-            } catch (JMSException jmsError) {
-                recordeException(jmsError);
-            }
+            recordSendException(e, EVENTQ);
         }
     }
 
@@ -60,12 +56,7 @@ public abstract class Controler{
         try {
             tasks.setField(taskId, field, value);
         } catch (Exception e) {
-            recordeException(e);
-            try {
-                MQ.sendObj(EVENTQ, e);
-            } catch (JMSException jmsError) {
-                recordeException(jmsError);
-            }
+            recordSendException(e, EVENTQ);
         }
     }
 
@@ -73,12 +64,7 @@ public abstract class Controler{
         try {
             tasks.invokeAsync(threadCount, function, taskId);
         } catch (NoSuchMethodException e) {
-            recordeException(e);
-            try {
-                MQ.sendObj(EVENTQ, e);
-            } catch (JMSException jmsError) {
-                recordeException(jmsError);
-            }
+            recordSendException(e, EVENTQ);
         }
     }
 
@@ -86,15 +72,8 @@ public abstract class Controler{
         try {
             tasks.invokeSync(threadCount, function, taskId);
             MQ.sendObj(ID+"reply", ID+" finished "+function+" on "+taskId);
-        } catch (JMSException jmsError) {
-            recordeException(jmsError);
         } catch (Exception e) {
-            recordeException(e);
-            try {
-                MQ.sendObj(ID+"reply", e);
-            } catch (JMSException jmsError) {
-                recordeException(jmsError);
-            }
+            recordSendException(e, ID+"reply");
         }
     }
 
@@ -119,10 +98,6 @@ public abstract class Controler{
                 recordeException(e);
             }
         }
-    }
-
-    public String idString(){
-        return "HzCmd{" + "ID=" + ID +", "+ "jvmPidId=" + jvmPidId + '}';
     }
 
     @Override
