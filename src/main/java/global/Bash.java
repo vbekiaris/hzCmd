@@ -51,7 +51,6 @@ public abstract class Bash {
     }
 
     public static void scpUp(String user, String ip, String from, String to) throws IOException, InterruptedException {
-        mkdir(to);
         executeCommand("scp -r " + from + " " + user + "@" + ip + ":" + to);
     }
 
