@@ -290,6 +290,7 @@ public class HzCmd implements Serializable {
     public void uploadLib(String clusterId, String src) throws IOException, InterruptedException {
         ClusterManager c = clusters.get(clusterId);
         if(c != null){
+            System.out.println(Bash.ANSI_YELLOW+"Installing "+src+" for cluster "+c.getClusterId()+Bash.ANSI_RESET);
             c.uploadLib(src);
         }
     }
