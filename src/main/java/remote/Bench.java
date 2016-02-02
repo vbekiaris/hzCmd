@@ -33,17 +33,17 @@ public abstract class Bench extends Task{
         runBench(benchType, warmupSec, title + "-Warmup-"+warmupSec+"Sec");
     }
 
-    public void run() throws InterruptedException {
+    public void run() {
         runBench(benchType, durationSec, title + "-Bench-"+durationSec+"Sec");
     }
 
     private void runBench(BenchType type, int seconds, String title){
         switch (type){
             case Metrics:
-                benchMetric(durationSec, title);
+                benchMetric(seconds, title);
                 break;
             case Hdr:
-                benchHdr(durationSec, title);
+                benchHdr(seconds, title);
                 break;
         }
     }
