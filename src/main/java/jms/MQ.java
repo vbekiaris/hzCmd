@@ -18,55 +18,48 @@ public abstract class MQ {
     private static Map<String, MessageProducer> producerMap = new HashMap();
     private static Map<String, MessageConsumer> consumerMap = new HashMap();
 
-    private static MessageProducer replyProducer;
-
     private static Destination replyDestination;
-    private static MessageConsumer replyConsumer;
 
 
     private static final String brokerIp = System.getProperty("MQ_BROKER_IP", "localhost");
 
     private static final String brokerUri = "tcp://"+brokerIp+":61616";
 
-    static {
+
+    private static void makeMqConnection(){
+
         System.setProperty("org.apache.activemq.SERIALIZABLE_PACKAGES","*");
-
-        //ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(ActiveMQConnection.DEFAULT_BROKER_URL);
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(brokerUri);
-        connectionFactory.setMaxThreadPoolSize(5);
+        connectionFactory.setMaxThreadPoolSize(4);
 
-        try {
-            connection = connectionFactory.createConnection();
-            connection.start();
-            session = connection.createSession(transacted, ackMode);
-
-            replyDestination = session.createTemporaryQueue();
-            replyConsumer = session.createConsumer(replyDestination);
-
-        } catch (JMSException e) {
-            e.printStackTrace() ;
+        int count = 0;
+        int maxTries = 3;
+        while(true) {
+            try {
+                if ( connection == null) {
+                    connection = connectionFactory.createConnection();
+                }
+                connection.start();
+                session = connection.createSession(transacted, ackMode);
+                replyDestination = session.createTemporaryQueue();
+                break;
+            } catch (JMSException e) {
+                if (++count == maxTries){
+                    throw new RuntimeException(e);
+                }
+                System.out.println("retry Mq connection");
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException x) {}
+            }
         }
     }
 
     public static void shutdown() throws JMSException {
         if(connection!=null){
-            //session.close();
             connection.close();
             connection=null;
         }
-
-    }
-
-    public static String receiveAnyResponse() throws JMSException {
-        Message receive = replyConsumer.receive();
-        return receive.toString();
-    }
-
-    public static void send(String queueName, String msg) throws JMSException {
-        MessageProducer producer = getMessageProducer(queueName);
-        TextMessage textMessage = session.createTextMessage(msg);
-        textMessage.setJMSReplyTo(replyDestination);
-        producer.send(textMessage);
     }
 
     public static void sendObj(String queueName, Serializable obj) throws JMSException {
@@ -78,10 +71,6 @@ public abstract class MQ {
         producer.send(msg);
     }
 
-    public static Message receive(String queueName) throws JMSException {
-        MessageConsumer consumer = getMessageConsumer(queueName);
-        return consumer.receive();
-    }
 
     public static Object receiveObj(String queueName) throws JMSException {
         MessageConsumer consumer = getMessageConsumer(queueName);
@@ -93,26 +82,14 @@ public abstract class MQ {
         return  ((ObjectMessage) consumer.receive(time)).getObject();
     }
 
-    public static void acknolage(Message msg) throws JMSException {
-        TextMessage ack = session.createTextMessage();
-        ack.setText("acked");
-        ack.setJMSCorrelationID(msg.getJMSCorrelationID());
-        replyProducer = getReplyProducer();
-        replyProducer.send(msg.getJMSReplyTo(), ack);
-    }
-
-
-
-    public static MessageProducer getReplyProducer() throws JMSException {
-        if(replyProducer==null){
-            replyProducer = session.createProducer(null);
-            replyProducer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-        }
-        return replyProducer;
-    }
 
     private static MessageProducer getMessageProducer(String queueName) throws JMSException {
         if ( ! producerMap.containsKey(queueName) ){
+
+            if (session==null){
+                makeMqConnection();
+            }
+
             Destination q = session.createQueue(queueName);
             MessageProducer mp = session.createProducer(q);
             mp.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
@@ -124,6 +101,11 @@ public abstract class MQ {
 
     private static MessageConsumer getMessageConsumer(String queueName) throws JMSException {
         if ( ! consumerMap.containsKey(queueName) ){
+
+            if (session==null){
+                makeMqConnection();
+            }
+
             Destination q = session.createQueue(queueName);
             MessageConsumer consumer = session.createConsumer(q);
             consumerMap.put(queueName, consumer);
