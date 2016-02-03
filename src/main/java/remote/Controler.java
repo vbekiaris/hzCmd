@@ -32,11 +32,9 @@ public abstract class Controler{
             MQ.sendObj(ID, ID+" Started");
         }catch (Exception e){
             recordeException(e);
-            MQ.sendObj(ID, e);
+            MQ.sendObj(ID+"reply", e);
             throw e;
         }
-        //temp hack sleep stops reading own message
-        Thread.sleep(9000);
     }
 
 

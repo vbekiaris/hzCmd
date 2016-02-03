@@ -95,10 +95,6 @@ public abstract class RemoteJvm implements Serializable {
         return false;
     }
 
-    public Object jvmStartResponse() throws JMSException {
-        return MQ.receiveObj(id);
-    }
-
     public void load(String taskId, String className) throws IOException, InterruptedException, JMSException {
         LoadCmd cmd = new LoadCmd(taskId, className);
         MQ.sendObj(id, cmd);

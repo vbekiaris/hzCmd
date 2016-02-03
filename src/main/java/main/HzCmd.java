@@ -135,12 +135,12 @@ public class HzCmd implements Serializable {
         checkAddJvms(added);
     }
 
-    private void checkAddJvms(List<RemoteJvm> added) throws JMSException {
+    private void checkAddJvms(List<RemoteJvm> added) throws JMSException, IOException, InterruptedException {
         for (RemoteJvm jvm : added) {
             System.out.println(jvm);
         }
         for (RemoteJvm jvm : added) {
-            Object o = jvm.jvmStartResponse();
+            Object o = jvm.getResponse();
             if(o instanceof Exception){
                 System.out.println(Bash.ANSI_RED+o+Bash.ANSI_RESET);
             }else{

@@ -60,6 +60,7 @@ public class TaskManager {
             }
         }
 
+        //TODO shoule re use the dy excutor service
         ExecutorService executor = Executors.newFixedThreadPool(tasks.size()*threadCount);
 
         for(TaskClazz t : tasks) {
