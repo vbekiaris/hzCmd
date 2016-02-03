@@ -19,6 +19,8 @@ import javax.jms.JMSException;
 import java.io.*;
 import java.util.*;
 
+import static global.Utils.myIp;
+
 // mvn clean install dependency:copy-dependencies
 //TODO WAN REP xml SETUP
 //TODO man center integ
@@ -28,13 +30,10 @@ public class HzCmd implements Serializable {
     private Map<String, BoxManager> boxes = new HashMap();
     private Map<String, ClusterManager> clusters = new HashMap();
 
+    private String brokerIP=null;
+
     public void showSSH(boolean show){
         Bash.showSSH = show;
-    }
-
-    private String homeIp;
-    public void setHomeIp(String homeIp){
-        this.homeIp=homeIp;
     }
 
     public void listen() throws IOException, InterruptedException{
@@ -78,13 +77,17 @@ public class HzCmd implements Serializable {
             return;
         }
 
+        if(brokerIP==null){
+            brokerIP = myIp();
+        }
+
         ClusterManager cluster;
         switch (type){
             case HZ:
-                cluster = new ClusterManager(clusterId, boxi, homeIp, new HzJvmFactory());
+                cluster = new ClusterManager(clusterId, boxi, brokerIP, new HzJvmFactory());
                 break;
             case GG:
-                cluster = new ClusterManager(clusterId, boxi, homeIp, new GgJvmFactory());
+                cluster = new ClusterManager(clusterId, boxi, brokerIP, new GgJvmFactory());
                 break;
             default:
                 System.out.println(Bash.ANSI_RED+"box group "+boxGroupId + " not found"+Bash.ANSI_RESET);
@@ -295,6 +298,9 @@ public class HzCmd implements Serializable {
         }
     }
 
+    public void setBrokerIP(String brokerIP) {
+        this.brokerIP = brokerIP;
+    }
 
     @Override
     public String toString() {

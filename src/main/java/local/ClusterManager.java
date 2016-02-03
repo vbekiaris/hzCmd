@@ -18,14 +18,14 @@ public class ClusterManager implements Serializable {
     private int membersOnlyCount;
     private int memberCount=0;
     private int clientCount=0;
-    private String homeIp;
+    private String brokerIP;
 
     private JvmFactory jvmFactory;
 
-    public ClusterManager(String clusterId, BoxManager boxes, String homeIp, JvmFactory jvmFactory) throws Exception {
+    public ClusterManager(String clusterId, BoxManager boxes, String brokerIP, JvmFactory jvmFactory) throws Exception {
         this.clusterId =clusterId;
         this.boxes=boxes;
-        this.homeIp=homeIp;
+        this.brokerIP =brokerIP;
         this.jvmFactory=jvmFactory;
     }
 
@@ -79,7 +79,7 @@ public class ClusterManager implements Serializable {
         }
         RemoteJvm jvm = jvmFactory.createJvm(boxes.get(idx), type, count, clusterId);
         jvms.put(jvm.getId(), jvm);
-        jvm.startJvm(options, jvmFactory.getVendorLibDir(jarVersion), this);
+        jvm.startJvm(options, jvmFactory.getVendorLibDir(jarVersion), this, brokerIP);
         return jvm;
     }
 
@@ -117,13 +117,6 @@ public class ClusterManager implements Serializable {
         }
     }
 
-    public void ping(String jvmId) throws IOException, InterruptedException, JMSException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
-            jvm.ping();
-        }
-    }
-
-
     public void getResponse(String jvmId) throws IOException, InterruptedException, JMSException {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             System.out.println(jvm.getResponse());
@@ -144,7 +137,7 @@ public class ClusterManager implements Serializable {
 
     public void restart(String jvmId, String version, String options) throws Exception {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
-            jvm.startJvm(version, options, this);
+            jvm.startJvm(version, options, this, brokerIP);
         }
     }
 

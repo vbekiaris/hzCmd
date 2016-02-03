@@ -16,8 +16,6 @@ public abstract class RemoteJvm implements Serializable {
 
     public static final String outFile = "out.txt";
 
-    private static String homeIP;
-
     protected final Box box;
     protected final NodeType type;
     protected final String id;
@@ -37,11 +35,7 @@ public abstract class RemoteJvm implements Serializable {
     public abstract void beforeJvmStart(ClusterManager myCluster) throws Exception;
 
 
-    public final void startJvm(String jvmOptions, String vendorLibDir, ClusterManager myCluster) throws Exception {
-
-        if(homeIP==null){
-            homeIP = myIp();
-        }
+    public final void startJvm(String jvmOptions, String vendorLibDir, ClusterManager myCluster, String brokerIP) throws Exception {
 
         beforeJvmStart(myCluster);
 
@@ -53,7 +47,7 @@ public abstract class RemoteJvm implements Serializable {
         String classToRun = getClassToRun();
 
         String jvmArgs = new String();
-        jvmArgs += "-D"+"MQ_BROKER_IP="+homeIP+" ";
+        jvmArgs += "-D"+"MQ_BROKER_IP="+brokerIP+" ";
         jvmArgs += "-D"+Args.EVENTQ+"="+System.getProperty("user.dir")+"/"+Args.EVENTQ.name() + " ";
         jvmArgs += "-D"+Args.ID+"=" + id + " ";
         jvmArgs += "-XX:OnOutOfMemoryError=\"touch " + id + ".oome" + "\" ";
@@ -164,10 +158,6 @@ public abstract class RemoteJvm implements Serializable {
 
     public void uploadcwd(String src) throws IOException, InterruptedException {
         box.upload(src, dir + "/");
-    }
-
-    public void uploadLib(String src) throws IOException, InterruptedException {
-        box.upload(src, Installer.REMOTE_HZCMD_LIB_FULL_PATH+"/");
     }
 
     public String getId(){ return id; }
