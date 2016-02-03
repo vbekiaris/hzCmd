@@ -17,7 +17,7 @@ public abstract class Bash {
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String li_magenta = esc + "[1;35m";
 
-    public static boolean showSSH=true;
+    public static boolean showSSH=false;
 
     public static String killAllJava() throws IOException, InterruptedException {
         return executeCommand("killall -9 java");
@@ -41,6 +41,11 @@ public abstract class Bash {
         return executeCommand("ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "+user+"@"+ip+" "+cmd);
     }
 
+    public static void streamSsh(String user, String ip, String cmd) throws IOException, InterruptedException {
+        executeForEverCommand("ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "+user+"@"+ip+" "+cmd);
+    }
+
+
     public static int sshWithExitCode(String user, String ip, String cmd) throws IOException, InterruptedException {
         return executeCommandWithExitCode("ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "+user+"@"+ip+" "+cmd);
     }
@@ -51,7 +56,7 @@ public abstract class Bash {
 
     public static void scpDown(String user, String ip, String from, String to) throws IOException, InterruptedException {
         mkdir(to);
-        executeCommand("scp -r " + user + "@" + ip + ":" + from + " " + to + "/" + ip + "/");
+        executeCommand("scp -r " + user + "@" + ip + ":" + from + " " + to + "/");
     }
 
 
@@ -91,4 +96,20 @@ public abstract class Bash {
         p.waitFor();
         return p.exitValue();
     }
+
+    private static void executeForEverCommand(String command) throws IOException, InterruptedException {
+        if (showSSH) {
+            System.out.println(command);
+        }
+
+        Process p = Runtime.getRuntime().exec(command);
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+        String line;
+        while ((line = reader.readLine())!= null) {
+            System.out.println(Bash.ANSI_PURPLE+line+Bash.ANSI_RESET);
+        }
+    }
+
 }

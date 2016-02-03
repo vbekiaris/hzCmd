@@ -5,10 +5,21 @@ import com.google.common.escape.Escapers;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.*;
+
+import java.net.*;
+import java.io.*;
+
 
 public abstract class Utils {
 
+    public static String myIp() throws Exception{
+        URL whatismyip = null;
+        whatismyip = new URL("http://checkip.amazonaws.com");
+
+        BufferedReader in = new BufferedReader(new InputStreamReader( whatismyip.openStream() ));
+
+        return in.readLine();
+    }
 
     public static final Escaper SHELL_ESCAPE;
     static {
@@ -19,6 +30,7 @@ public abstract class Utils {
         builder.addEscape('>', " ");
         builder.addEscape('"', "\"");
         builder.addEscape('"', "\"");
+        builder.addEscape(';', "\\;");
         SHELL_ESCAPE = builder.build();
     }
 
@@ -26,37 +38,14 @@ public abstract class Utils {
     static {
         final Escapers.Builder builder = Escapers.builder();
         builder.addEscape('"', "\"");
-        builder.addEscape('"', "\"");
+        builder.addEscape('\'', "\'");
         QUOTES = builder.build();
     }
-
-
-    public static void sleepMilli(int mills){
-        try {
-            Thread.sleep(mills);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void sleepSeconds(int sec){
-        sleepMilli(sec * 1000);
-    }
-
 
     public static String escapeQuotes(String s) {
         return QUOTES.escape( s );
     }
 
-    public static String exceptionStacktraceToString(Throwable e) {
-
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        e.printStackTrace(pw);
-
-
-        return SHELL_ESCAPE.escape( sw.toString() );
-    }
 
 
     public static int rangeMap(int val, int min_inclusive, int max_exclusive) {

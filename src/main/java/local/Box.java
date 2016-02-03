@@ -3,11 +3,11 @@ package local;
 import global.Bash;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 import static global.Utils.escapeQuotes;
-import static global.Utils.exceptionStacktraceToString;
 
-public class Box {
+public class Box implements Serializable{
     public String user;
     public String pub;
     public String pri;
@@ -30,9 +30,18 @@ public class Box {
         return Bash.sshWithExitCode(user, pub, cmd);
     }
 
+    public void streamSsh(String cmd) throws IOException, InterruptedException {
+         Bash.streamSsh(user, pub, cmd);
+    }
+
     public String ssh(String cmd) throws IOException, InterruptedException {
         return Bash.ssh(user, pub, cmd);
     }
+
+    public boolean testConnecton() throws IOException, InterruptedException {
+        return Bash.sshWithExitCode(user, pub, "pwd") == 0;
+    }
+
 
     public void mkdir(String arg) throws IOException, InterruptedException {
         ssh("mkdir -p " + arg);
@@ -46,12 +55,16 @@ public class Box {
         ssh("kill -9 "+pid);
     }
 
+    public void killAllJava() throws IOException, InterruptedException {
+        ssh("killall -9 java");
+    }
+
     public String cat(String arg) throws IOException, InterruptedException {
         return  ssh("cat " +arg);
     }
 
-    public String tail(String arg) throws IOException, InterruptedException {
-        return ssh("tail "+arg);
+    public void tail(String arg) throws IOException, InterruptedException {
+         streamSsh("tail -f "+arg);
     }
 
     public String grep(String arg) throws IOException, InterruptedException {
@@ -66,7 +79,7 @@ public class Box {
     public String toString() {
         return "Box{" +
                 "user="+user+
-                ",pub=" + pub +
+                ", pub=" + pub +
                 ", pri=" + pri +
                 '}';
     }

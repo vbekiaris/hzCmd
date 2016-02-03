@@ -1,78 +1,91 @@
 package remote;
 
-import com.hazelcast.core.HazelcastInstance;
-import global.Args;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
-import static remote.Utils.sendBack;
-import static remote.Utils.sendBackError;
 
 public class TaskManager {
 
-    //TODO map of thread and method name count
     private Map<String, TaskClazz> tasks = new HashMap();
     private ExecutorService executorService =  Executors.newCachedThreadPool();
 
-    private HazelcastInstance hazelcastInstance;
+    private Object vendorObject;
 
-
-    public TaskManager(HazelcastInstance hazelcastInstance) {
-        this.hazelcastInstance = hazelcastInstance;
+    public TaskManager(Object vendorObject) {
+        this.vendorObject = vendorObject;
     }
 
-
-    public void loadClass(String taskId, String className){
-
+    public void loadClass(String taskId, String className) throws Exception{
         if(tasks.containsKey(taskId)){
-            sendBackError(Args.ID +"="+Controler.ID +" duplicate task ID "+taskId);
-            return;
+           throw new IllegalStateException(Controler.ID+" taskId "+taskId+" all ready loaded");
         }
+        TaskClazz task = new TaskClazz(taskId, className, vendorObject);
+        tasks.put(task.getId(), task);
+    }
 
-        try{
-            TaskClazz taskManager = new TaskClazz(taskId, className, hazelcastInstance);
-            tasks.put(taskManager.getId(), taskManager);
-            sendBack(Args.ID +"="+Controler.ID+" "+taskId+" "+className+" loaded");
-        } catch (Exception e){
-            sendBackError(Args.ID +"="+Controler.ID +" taskId=" + taskId + " className=" + className + " " + e.getMessage());
+    public void setField(String taskId, String field, String value) throws Exception{
+        for(TaskClazz t : getMatchingTasks(taskId) ) {
+            t.setField(field, value);
         }
     }
 
+    public void invokeAsync(int threadCount, String function, String taskId) throws NoSuchMethodException {
+        Collection<TaskClazz> tasks = getMatchingTasks(taskId);
 
-    public void invokeNonBlocking(int threadCount, String function, String taskId) {
-        if ("*".equals(taskId) ){
-            for(TaskClazz t : tasks.values()){
-                submitNonBlocking(t, function, threadCount);
+        for(TaskClazz t : tasks) {
+            try {
+                t.setMethod(function);
+            }catch (NoSuchMethodException e){
+                throw new NoSuchMethodException(Controler.ID+" No methods invoked. task "+t.getId() + " No Such Method " + function);
             }
-        }else{
-            TaskClazz t = tasks.get(taskId);
-            submitNonBlocking(t, function, threadCount);
+        }
+
+        for(TaskClazz t : tasks) {
+            for (int i = 0; i <threadCount; i++) {
+                executorService.submit(t);
+            }
         }
     }
 
-    private void submitNonBlocking(TaskClazz t, String function, int threadCount){
-        t.setMethod(function);
-        for (int i = 0; i <threadCount; i++) {
-            executorService.submit(t);
+    public void invokeSync(int threadCount, String function, String taskId) throws NoSuchMethodException, InterruptedException {
+        Collection<TaskClazz> tasks = getMatchingTasks(taskId);
+
+        for(TaskClazz t : tasks) {
+            try {
+                t.setMethod(function);
+            }catch (NoSuchMethodException e){
+                throw new NoSuchMethodException(Controler.ID+" No methods invoked. task "+t.getId() + " No Such Method " + function);
+            }
         }
+
+        ExecutorService executor = Executors.newFixedThreadPool(tasks.size()*threadCount);
+
+        for(TaskClazz t : tasks) {
+            for (int i = 0; i <threadCount; i++) {
+                executor.submit(t);
+            }
+        }
+        executor.shutdown();
+        executor.awaitTermination(1, TimeUnit.DAYS);
     }
 
 
     public void stop(String taskId){
-        if ("*".equals(taskId) ){
-            for(TaskClazz t : tasks.values()) {
-                t.stop();
-            }
-        }else{
-            TaskClazz t = tasks.get(taskId);
+        for(TaskClazz t : getMatchingTasks(taskId)) {
             t.stop();
         }
+    }
+
+    private List<TaskClazz> getMatchingTasks(String taskId) {
+        List<TaskClazz> matching = new ArrayList();
+        for( TaskClazz t : tasks.values()){
+            if ( t.getId().matches(taskId) ){
+                matching.add(t);
+            }
+        }
+        return matching;
     }
 
     @Override

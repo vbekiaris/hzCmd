@@ -1,41 +1,51 @@
 package remote;
 
-import com.hazelcast.core.HazelcastInstance;
-import global.Task;
+import jms.MQ;
 
+import javax.jms.JMSException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
-import static global.Utils.exceptionStacktraceToString;
 import static remote.Utils.instantiate;
-import static remote.Utils.sendBack;
-import static remote.Utils.sendBackError;
-
+import static remote.Utils.recordeException;
 
 public class TaskClazz implements Callable<Object> {
 
     private final String id;
-    Task task;
+    private Task task;
     private String targetFunction;
     private Method method;
 
-    public TaskClazz(String id, String clasz, HazelcastInstance hazelcastInstance){
+    public TaskClazz(String id, String clasz,  Object vendorObject) throws Exception{
         this.id=id;
         task = instantiate(clasz, Task.class);
         task.setJvmID(Controler.ID);
         task.setTaskID(id);
-        task.setHazelcastInstance(hazelcastInstance);
+        task.setVendorObject(vendorObject);
     }
 
-    public void setMethod(String function){
+    public void setMethod(String function) throws NoSuchMethodException {
         targetFunction = function;
-        try {
-            method = task.getClass().getMethod(function);
-        } catch (NoSuchMethodException e) {
-            method = null;
-            onException(e);
+        method = task.getClass().getMethod(function);
+    }
+
+    public void setField(String fieldName, String value) throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException {
+        Class clazz = task.getClass();
+        Field field = clazz.getField(fieldName);
+        Class<?> type = field.getType();
+
+        if(type.isAssignableFrom(String.class) ){
+            field.set(task, value);
+        }else{
+            Method parseMethod = field.get(task).getClass().getMethod("valueOf", new Class[]{String.class});
+            field.set(task, parseMethod.invoke(field, value));
         }
     }
+
 
     public void stop(){
         task.setRunning(false);
@@ -47,24 +57,25 @@ public class TaskClazz implements Callable<Object> {
     public Object call() {
         try {
             if (method!=null) {
-                System.out.println(infoStart());
-                sendBack(infoStart());
+                String start = infoStart();
+                System.out.println(start);
+                MQ.sendObj(Controler.EVENTQ, start);
                 task.setRunning(true);
                 method.invoke(task);
-                sendBack(infoStop());
-                System.out.println(infoStop());
+                String stop = infoStop();
+                MQ.sendObj(Controler.EVENTQ, stop);
+                System.out.println(stop);
             }
-        }catch (Throwable e){
-            onException(e);
-            throw new RuntimeException( e );
+        }catch (Exception e){
+            recordeException(e);
+            try {
+                MQ.sendObj(Controler.EVENTQ, new Exception(infoString(), e.getCause()) );
+            } catch (JMSException jmsE) {
+                jmsE.printStackTrace();
+            }
+            throw new RuntimeException(e);
         }
         return null;
-    }
-
-    //TODO write exception out to file
-    private void onException(Throwable e){
-        e.printStackTrace();
-        sendBackError(infoString() + " " +  exceptionStacktraceToString(e) );
     }
 
 

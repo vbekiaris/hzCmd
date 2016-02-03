@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>hazellite</groupId>
-    <artifactId>hazellite</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>hzCmd</groupId>
+    <artifactId>hzCmd</artifactId>
+    <version>1.0.1</version>
 
     <dependencies>
         <dependency>
@@ -38,12 +38,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.antlr</groupId>
-            <artifactId>antlr4-maven-plugin</artifactId>
-            <version>4.5.1-1</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.jdom</groupId>
             <artifactId>jdom2</artifactId>
             <version>2.0.5</version>
@@ -59,6 +53,36 @@
             <groupId>jdom</groupId>
             <artifactId>jdom</artifactId>
             <version>1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.rvesse</groupId>
+            <artifactId>airline</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-all</artifactId>
+            <version>5.13.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.ignite</groupId>
+            <artifactId>ignite-core</artifactId>
+            <version>1.5.0.final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.ignite</groupId>
+            <artifactId>ignite-spring</artifactId>
+            <version>1.5.0.final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.ignite</groupId>
+            <artifactId>ignite-indexing</artifactId>
+            <version>1.5.0.final</version>
         </dependency>
 
     </dependencies>

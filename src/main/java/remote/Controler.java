@@ -1,99 +1,103 @@
 package remote;
 
-import com.hazelcast.client.HazelcastClient;
-import com.hazelcast.client.config.ClientConfig;
-import com.hazelcast.client.config.XmlClientConfigBuilder;
-import com.hazelcast.config.Config;
-import com.hazelcast.config.XmlConfigBuilder;
-import com.hazelcast.core.Hazelcast;
-import com.hazelcast.core.HazelcastInstance;
 import global.Args;
-import global.HzType;
+import global.NodeType;
+import jms.MQ;
+import javax.jms.JMSException;
 
 import java.io.*;
 import java.lang.management.ManagementFactory;
 
-import static global.Utils.exceptionStacktraceToString;
-import static global.Utils.sleepMilli;
-import static remote.Utils.sendBack;
-import static remote.Utils.sendBackError;
+import remote.command.Cmd;
 
-public class Controler{
+import static remote.Utils.recordSendException;
+import static remote.Utils.recordeException;
 
-    private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-    private HazelcastInstance hazelcastInstance;
+public abstract class Controler{
 
-    public static HomeSettings home = new HomeSettings();
-    private static TaskManager tasks;
+    protected static TaskManager tasks;
 
     public static final String ID = System.getProperty(Args.ID.name());
+    public static final String EVENTQ = System.getProperty(Args.EVENTQ.name());
     public static final String jvmPidId = ManagementFactory.getRuntimeMXBean().getName();
 
-    public final PrintWriter exceptionWrite = new PrintWriter ( new FileWriter("exception.txt", true) );
+    public final NodeType type;
 
-    //TODO why arnt theses errors sent bck to the home, user box
-    public Controler(HzType type) throws Throwable {
+    public Controler(NodeType type) throws Exception {
+        this.type=type;
+
         try {
-            if (type == HzType.Member) {
-                XmlConfigBuilder configBuilder = new XmlConfigBuilder("hazelcast.xml");
-                Config config = configBuilder.build();
-                hazelcastInstance = Hazelcast.newHazelcastInstance(config);
-            } else {
-                XmlClientConfigBuilder configBuilder = new XmlClientConfigBuilder("client-hazelcast.xml");
-                ClientConfig config = configBuilder.build();
-                hazelcastInstance = HazelcastClient.newHazelcastClient(config);
-            }
-        }catch (Throwable e){
-            sendBackError("starting "+idString()+" "+exceptionStacktraceToString(e));
-            e.printStackTrace(exceptionWrite);
+            init(type);
+            tasks = new TaskManager(getVendorObject());
+            MQ.sendObj(ID, ID+" Started");
+        }catch (Exception e){
+            recordeException(e);
+            MQ.sendObj(ID, e);
             throw e;
         }
-        tasks = new TaskManager(hazelcastInstance);
+        //temp hack sleep stops reading own message
+        Thread.sleep(9000);
+    }
+
+
+    public abstract void init(NodeType type)  throws Exception ;
+
+    public abstract Object getVendorObject();
+
+    public void load(String taskId, String clazz){
+        try {
+            tasks.loadClass(taskId, clazz);
+        } catch (Exception e) {
+            recordSendException(e, EVENTQ);
+        }
+    }
+
+    public void setField(String taskId, String field, String value){
+        try {
+            tasks.setField(taskId, field, value);
+        } catch (Exception e) {
+            recordSendException(e, EVENTQ);
+        }
+    }
+
+    public void invokeAsync(int threadCount, String function, String taskId){
+        try {
+            tasks.invokeAsync(threadCount, function, taskId);
+        } catch (NoSuchMethodException e) {
+            recordSendException(e, EVENTQ);
+        }
+    }
+
+    public void invokeSync(int threadCount, String function, String taskId){
+        try {
+            tasks.invokeSync(threadCount, function, taskId);
+            MQ.sendObj(ID+"reply", ID+" finished "+function+" on "+taskId);
+        } catch (Exception e) {
+            recordSendException(e, ID+"reply");
+        }
+    }
+
+    public void ping(){
+        try {
+            MQ.sendObj(ID+"reply", ID+" ping");
+        } catch (JMSException jmsError) {
+            recordeException(jmsError);
+        }
     }
 
     public void run() throws IOException {
-        //try{
-            while (true){
-                String line=in.readLine();
-                if (line!=null){
-                    System.out.println(line);
-                    String[] words = line.split("\\s+");
-                    Args arg = Args.valueOf(words[0]);
-                    switch (arg) {
-                        case exit:
-                            System.exit(0);
+        while (true){
+            try {
+                Object obj = MQ.receiveObj(ID);
+                System.out.println("MQ msg in = "+obj);
 
-                        case load:
-                            tasks.loadClass(words[1], words[2]);
-                            break;
-
-                        case invoke:
-                            tasks.invokeNonBlocking(Integer.parseInt(words[1]), words[2], words[3]);
-                            break;
-
-                        case stop:
-                            tasks.stop(words[1]);
-                            break;
-
-                        case clean:
-                            home.inputFile = words[1];
-                            break;
-                        case info:
-                            sendBack(this.toString());
-                            break;
-                    }
-                }else {
-                    sleepMilli(500);
+                if(obj instanceof Cmd){
+                    ((Cmd) obj).exicute(this);
                 }
+            } catch (JMSException e) {
+                recordeException(e);
             }
-        //}catch(Exception e){
-        //    e.printStackTrace();
-        //    sendBackError(idString()+" "+exceptionStacktraceToString(e));
-        //}
-    }
-
-    public String idString(){
-        return "HzCmd{" + "ID=" + ID +", "+ "jvmPidId=" + jvmPidId + '}';
+        }
     }
 
     @Override

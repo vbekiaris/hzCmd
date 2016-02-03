@@ -1,45 +1,37 @@
 package remote;
 
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.instance.HazelcastInstanceProxy;
-import global.Bash;
+import jms.MQ;
 
-import java.io.IOException;
-import java.lang.reflect.Constructor;
+import javax.jms.JMSException;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 
 public abstract class Utils {
 
-    public static boolean isMember(HazelcastInstance instance) {
-        return instance instanceof HazelcastInstanceProxy;
+    public static <T> T instantiate(final String className, final Class<T> type) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        Class<?> c = Class.forName(className);
+        Object o = c.getConstructor().newInstance();
+        return type.cast(o);
     }
 
-    public static boolean isClient(HazelcastInstance instance) {
-        return ! isMember(instance);
-    }
-
-    public static <T> T instantiate(final String className, final Class<T> type){
+    public static void recordeException(Exception e) {
+        e.printStackTrace();
         try {
-            Class<?> c = Class.forName(className);
-            Object o = c.getConstructor().newInstance();
-            return type.cast(o);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new IllegalStateException(e);
+            e.printStackTrace( new PrintStream(new FileOutputStream("exception.txt", true)) );
+        } catch (FileNotFoundException e1) {
+            e1.printStackTrace();
         }
     }
 
-    public static void sendBackError(String msg){
-        sendBack("ERROR "+msg);
-    }
-
-    public static void sendBack(String msg) {
+    public static void recordSendException(Exception e, String queueName) {
+        recordeException(e);
         try {
-            Bash.ssh(Controler.home.user, Controler.home.ip, "echo " + msg + " >> " + Controler.home.cwd + "/" + Controler.home.inputFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            MQ.sendObj(queueName, e);
+        } catch (JMSException jmsError) {
+            recordeException(jmsError);
         }
     }
+
 }
