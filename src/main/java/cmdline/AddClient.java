@@ -2,6 +2,7 @@ package cmdline;
 
 import com.github.rvesse.airline.annotations.Arguments;
 import com.github.rvesse.airline.annotations.Option;
+import global.Bash;
 import main.HzCmd;
 
 import java.io.Serializable;
@@ -24,6 +25,7 @@ public class AddClient extends Command implements Serializable{
 
 
     public void exe(HzCmd hzCmd) {
+        System.out.println(Bash.ANSI_PURPLE +this + Bash.ANSI_RESET);
         try {
             StringBuilder cmd = new StringBuilder();
             for (String s : jvmOptions)
@@ -33,5 +35,15 @@ public class AddClient extends Command implements Serializable{
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String toString() {
+        return "AddClient{" +
+                "cluster='" + cluster + '\'' +
+                ", qty=" + qty +
+                ", version='" + version + '\'' +
+                ", jvmOptions=" + jvmOptions +
+                '}';
     }
 }

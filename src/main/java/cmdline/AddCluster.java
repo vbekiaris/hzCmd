@@ -27,4 +27,13 @@ public  class AddCluster extends Command {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public String toString() {
+        return "AddCluster{" +
+                "boxes='" + boxes + '\'' +
+                ", cluster='" + cluster + '\'' +
+                ", type='" + type + '\'' +
+                '}';
+    }
 }

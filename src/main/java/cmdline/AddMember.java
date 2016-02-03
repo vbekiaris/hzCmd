@@ -2,6 +2,7 @@ package cmdline;
 
 import com.github.rvesse.airline.annotations.Arguments;
 import com.github.rvesse.airline.annotations.Option;
+import global.Bash;
 import main.HzCmd;
 
 import java.io.Serializable;
@@ -24,7 +25,7 @@ public class AddMember extends Command implements Serializable{
 
 
     public void exe(HzCmd hzCmd) {
-        System.out.println(this);
+        System.out.println(Bash.ANSI_PURPLE +this + Bash.ANSI_RESET);
         try {
             StringBuilder cmd = new StringBuilder();
             for (String s : jvmOptions)
