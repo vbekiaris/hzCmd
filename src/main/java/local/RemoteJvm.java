@@ -70,6 +70,11 @@ public abstract class RemoteJvm implements Serializable {
             System.out.println(Bash.ANSI_RED+"NO launchCmd, jvm never started"+this+Bash.ANSI_RESET);
             return;
         }
+        if(  isRunning() ){
+            System.out.println(Bash.ANSI_RED+" JVM is Running "+this+Bash.ANSI_RESET);
+            return;
+        }
+
         launchJvm(launchCmd);
     }
 
