@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static remote.Utils.instantiate;
 import static remote.Utils.recordeException;
 
-public class TaskClazz implements Callable<Object> {
+public class TaskRunner implements Callable<Object> {
 
     private AtomicInteger threadCount = new AtomicInteger();
     private final String id;
@@ -23,7 +23,7 @@ public class TaskClazz implements Callable<Object> {
     private String targetFunction;
     private Method method;
 
-    public TaskClazz(String id, String clasz,  Object vendorObject) throws Exception{
+    public TaskRunner(String id, String clasz, Object vendorObject) throws Exception{
         this.id=id;
         task = instantiate(clasz, Task.class);
         task.setJvmID(Controler.ID);
@@ -56,8 +56,8 @@ public class TaskClazz implements Callable<Object> {
     //TODO maybe a string builder
     public Object call() {
         int count = threadCount.getAndIncrement();
-        long start = System.currentTimeMillis();
-        String info = this.toString() + "thread "+ count + "started at "+start;
+        long wallClockStart = System.currentTimeMillis();
+        String info = this.toString() + "thread "+ count + "started at "+wallClockStart;
         try {
             if (method!=null) {
                 System.out.println(info);
@@ -67,13 +67,13 @@ public class TaskClazz implements Callable<Object> {
                 method.invoke(task);
                 long end = System.currentTimeMillis();
 
-                info+=" ended at "+end+" elapsed time "+ (start-end);
+                info+=" ended at "+end+" elapsed time "+ (wallClockStart-end);
                 System.out.println(info);
                 MQ.sendObj(Controler.EVENTQ, info);
             }
         }catch (Exception e){
             long end = System.currentTimeMillis();
-            info+=" Exception at "+end+" elapsed time "+ (start-end);
+            info+=" Exception at "+end+" elapsed time "+ (wallClockStart-end);
             System.out.println(info);
 
             recordeException(e);
