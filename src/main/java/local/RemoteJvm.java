@@ -52,7 +52,8 @@ public abstract class RemoteJvm implements Serializable {
         jvmArgs += "-D"+Args.ID+"=" + id + " ";
         jvmArgs += "-XX:+HeapDumpOnOutOfMemoryError" + " ";
         jvmArgs += "-XX:HeapDumpPath="+id+".hprof" + " ";
-        jvmArgs += "-XX:OnOutOfMemoryError=\"touch " + id + ".oome" + "\" ";
+        jvmArgs += "-XX:OnOutOfMemoryError=\" date >> " + id + ".oome" + "\" ";
+
 
         /*
           String takipiJavaAgent = "-agentlib:TakipiAgent";    String takipiProp = "\"-Dtakipi.name=\"" + id;

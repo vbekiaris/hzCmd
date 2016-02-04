@@ -55,9 +55,9 @@ public class TaskRunner implements Callable<Object> {
 
     //TODO maybe a string builder
     public Object call() {
-        int count = threadCount.getAndIncrement();
+        int count = threadCount.incrementAndGet();
         long wallClockStart = System.currentTimeMillis();
-        String info = this.toString() + "thread "+ count + "started at "+wallClockStart;
+        String info = this.toString() + " thread "+ count + " started at "+wallClockStart;
         try {
             if (method!=null) {
                 System.out.println(info);
@@ -66,14 +66,16 @@ public class TaskRunner implements Callable<Object> {
                 task.setRunning(true);
                 method.invoke(task);
                 long end = System.currentTimeMillis();
+                long elapsed = end - wallClockStart;
 
-                info+=" ended at "+end+" elapsed time "+ (wallClockStart-end);
+                info+=" ended at "+end+" elapsed time "+elapsed;
                 System.out.println(info);
                 MQ.sendObj(Controler.EVENTQ, info);
             }
         }catch (Exception e){
             long end = System.currentTimeMillis();
-            info+=" Exception at "+end+" elapsed time "+ (wallClockStart-end);
+            long elapsed = end - wallClockStart;
+            info+=" Exception at "+end+" elapsed time "+elapsed;
             System.out.println(info);
 
             recordeException(e);
