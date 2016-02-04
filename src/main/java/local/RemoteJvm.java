@@ -51,7 +51,7 @@ public abstract class RemoteJvm implements Serializable {
         jvmArgs += "-D"+Args.EVENTQ+"="+System.getProperty("user.dir")+"/"+Args.EVENTQ.name() + " ";
         jvmArgs += "-D"+Args.ID+"=" + id + " ";
         jvmArgs += "-XX:+HeapDumpOnOutOfMemoryError" + " ";
-        jvmArgs += "-XX:HeapDumpPath="+id+".hprof" + "";
+        jvmArgs += "-XX:HeapDumpPath="+id+".hprof" + " ";
         jvmArgs += "-XX:OnOutOfMemoryError=\"touch " + id + ".oome" + "\" ";
 
         /*
