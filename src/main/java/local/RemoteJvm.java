@@ -20,6 +20,8 @@ public abstract class RemoteJvm implements Serializable {
     protected final NodeType type;
     protected final String id;
     protected final String dir;
+
+    private String launchCmd;
     protected int pid = 0;
 
     public RemoteJvm(Box box, NodeType type, String id) throws IOException, InterruptedException {
@@ -40,7 +42,7 @@ public abstract class RemoteJvm implements Serializable {
         beforeJvmStart(myCluster);
 
         if (isRunning()) {
-            System.out.println("all ready started " + this);
+            System.out.println(Bash.ANSI_CYAN+"all ready started " + this +Bash.ANSI_RESET);
             return;
         }
 
@@ -58,14 +60,26 @@ public abstract class RemoteJvm implements Serializable {
         /*
           String takipiJavaAgent = "-agentlib:TakipiAgent";    String takipiProp = "\"-Dtakipi.name=\"" + id;
         */
+        launchCmd = "cd " + dir + "; nohup java -cp \"" + Installer.REMOTE_HZCMD_LIB_FULL_PATH+"/*" + ":" +  vendorLibDir+"/*"  + "\" " + jvmArgs + " " + jvmOptions + " " + classToRun + " >> " + outFile + " 2>&1 & echo $!";
 
-        String launchCmd = "cd " + dir + "; nohup java -cp \"" + Installer.REMOTE_HZCMD_LIB_FULL_PATH+"/*" + ":" +  vendorLibDir+"/*"  + "\" " + jvmArgs + " " + jvmOptions + " " + classToRun + " >> " + outFile + " 2>&1 & echo $!";
+        launchJvm(launchCmd);
+    }
 
-        String pidStr = box.ssh(launchCmd);
+    public final void reStartJvm() throws IOException, InterruptedException {
+        if(launchCmd==null){
+            System.out.println(Bash.ANSI_RED+"NO launchCmd, jvm never started"+this+Bash.ANSI_RESET);
+            return;
+        }
+        launchJvm(launchCmd);
+    }
+
+    private void launchJvm(String launch) throws IOException, InterruptedException {
+        String pidStr = box.ssh(launch);
         pid = Integer.parseInt(pidStr.trim());
     }
 
     public void clean() throws IOException, InterruptedException {
+        kill();
         box.rm(dir + "/*");
     }
 
@@ -136,7 +150,7 @@ public abstract class RemoteJvm implements Serializable {
     }
 
     public String ls() throws IOException, InterruptedException {
-        return box.ssh("ls "+dir+"/");
+        return box.ssh("ls " + dir + "/");
     }
 
     public String ssh(String cmd) throws IOException, InterruptedException {
