@@ -167,6 +167,13 @@ public class HzCmd implements Serializable {
         }
     }
 
+
+    public void ls(String jvmId) throws Exception {
+        for (ClusterManager c : clusters.values()) {
+            c.ls(jvmId);
+        }
+    }
+
     public void cat(String jvmId) throws Exception {
         for (ClusterManager c : clusters.values()) {
             c.cat(jvmId);
@@ -371,6 +378,5 @@ public class HzCmd implements Serializable {
             r.run();
         }
     }
-
 
 }

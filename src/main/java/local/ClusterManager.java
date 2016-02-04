@@ -85,8 +85,9 @@ public class ClusterManager implements Serializable {
 
     public List<RemoteJvm> getMatchingJms(String jvmId) {
         List<RemoteJvm> matching = new ArrayList<RemoteJvm>();
+
         for(RemoteJvm jvm : jvms.values()){
-            if ( jvm.getId().matches(jvmId) ){
+            if ( jvm.getId().matches(".*"+jvmId+".*") ){
                 matching.add(jvm);
             }
         }
@@ -156,6 +157,13 @@ public class ClusterManager implements Serializable {
     public void kill(String jvmId) throws IOException, InterruptedException {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.kill();
+        }
+    }
+
+    public void ls(String jvmId) throws IOException, InterruptedException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+            System.out.println(jvm);
+            System.out.println(jvm.ls());
         }
     }
 
@@ -238,6 +246,5 @@ public class ClusterManager implements Serializable {
     public JvmFactory getJvmFactory() {
         return jvmFactory;
     }
-
 
 }
