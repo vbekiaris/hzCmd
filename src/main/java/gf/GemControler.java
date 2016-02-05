@@ -30,7 +30,7 @@ public class GemControler extends Controler {
             //Example 1: Create a cache and a replicate region named customers.
             //serverCache = new CacheFactory().create();
 
-            serverCache = new CacheFactory().set("cache-xml-file", "cache.xml").create();
+            serverCache = new CacheFactory().set("cache-xml-file", "server-cache.xml").create();
 
 
             //Region r = c.createRegionFactory(RegionShortcut.REPLICATE).create("customers");
@@ -47,7 +47,7 @@ public class GemControler extends Controler {
         }else{
             //Connect to a CacheServer on the default host and port and access a region "customers"
 
-            clientCache = new ClientCacheFactory().create();
+            clientCache = new ClientCacheFactory().set("cache-xml-file", "client-cache.xml").create();
 
             //Region r = c.createClientRegionFactory(ClientRegionShortcut.PROXY).create("customers");
 
