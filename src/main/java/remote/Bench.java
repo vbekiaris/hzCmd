@@ -5,10 +5,7 @@ import com.codahale.metrics.MetricRegistry;
 import org.HdrHistogram.ConcurrentHistogram;
 import org.HdrHistogram.Histogram;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.concurrent.TimeUnit;
 
 public abstract class Bench extends Task{
@@ -45,8 +42,28 @@ public abstract class Bench extends Task{
             case Hdr:
                 benchHdr(seconds, title);
                 break;
+            case Counter:
+                counter(seconds, title);
         }
     }
+
+    private void counter(int seconds, String outputTitle){
+        long count=0;
+        long startTime = System.currentTimeMillis();
+        long endTime = startTime + (seconds * 1000);
+
+        while(System.currentTimeMillis() < endTime){
+            timeStep();
+            count++;
+        }
+        try {
+            PrintWriter output = new PrintWriter(new FileWriter(outputTitle+".txt", true));
+            output.println(count);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void benchMetric(int seconds, String metricsCsvtitle){
         csvReporter = CsvReporter.forRegistry(metrics).build(new File(System.getProperty("user.dir")) );

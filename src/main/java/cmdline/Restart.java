@@ -9,7 +9,7 @@ import main.HzCmd;
 public class Restart extends Command
 {
     @Option(name = "-id", description = "jvm id / name")
-    public String jvmId;
+    public String jvmId=".*";
 
     @Option(name = "-v", description = "hazelcast version e.g. 9.7")
     public String version;

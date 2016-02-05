@@ -9,18 +9,21 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static remote.Utils.instantiate;
 import static remote.Utils.recordeException;
 
-public class TaskClazz implements Callable<Object> {
+public class TaskRunner implements Callable<Object> {
 
+    private AtomicInteger threadCount = new AtomicInteger();
     private final String id;
     private Task task;
     private String targetFunction;
     private Method method;
 
-    public TaskClazz(String id, String clasz,  Object vendorObject) throws Exception{
+    public TaskRunner(String id, String clasz, Object vendorObject) throws Exception{
         this.id=id;
         task = instantiate(clasz, Task.class);
         task.setJvmID(Controler.ID);
@@ -46,34 +49,44 @@ public class TaskClazz implements Callable<Object> {
         }
     }
 
-
     public void stop(){
         task.setRunning(false);
     }
 
-
-    //TODO KEEP track of number of threads exicuting a task method in a map
-    //key taskId-method value thread count
+    //TODO maybe a string builder
     public Object call() {
+        int count = threadCount.incrementAndGet();
+        long wallClockStart = System.currentTimeMillis();
+        String info = this.toString() + " thread "+ count + " started at "+wallClockStart;
         try {
             if (method!=null) {
-                String start = infoStart();
-                System.out.println(start);
-                MQ.sendObj(Controler.EVENTQ, start);
+                System.out.println(info);
+                MQ.sendObj(Controler.EVENTQ, info);
+
                 task.setRunning(true);
                 method.invoke(task);
-                String stop = infoStop();
-                MQ.sendObj(Controler.EVENTQ, stop);
-                System.out.println(stop);
+                long end = System.currentTimeMillis();
+                long elapsed = end - wallClockStart;
+
+                info+=" ended at "+end+" elapsed time "+elapsed;
+                System.out.println(info);
+                MQ.sendObj(Controler.EVENTQ, info);
             }
         }catch (Exception e){
+            long end = System.currentTimeMillis();
+            long elapsed = end - wallClockStart;
+            info+=" Exception at "+end+" elapsed time "+elapsed;
+            System.out.println(info);
+
             recordeException(e);
             try {
-                MQ.sendObj(Controler.EVENTQ, new Exception(infoString(), e.getCause()) );
+                MQ.sendObj(Controler.EVENTQ, e);
             } catch (JMSException jmsE) {
                 jmsE.printStackTrace();
             }
             throw new RuntimeException(e);
+        }finally {
+            threadCount.getAndDecrement();
         }
         return null;
     }
@@ -83,20 +96,8 @@ public class TaskClazz implements Callable<Object> {
         return task.getTaskID();
     }
 
-    protected String infoStart(){ return infoString() + " started"; }
-
-    protected String infoStop(){ return infoString() +  " stopped"; }
-
-    protected String infoString(){
-        return Controler.ID+" "+ task.getTaskID()+" "+ task.getClass().getName()+" "+targetFunction;
-    }
-
-
     @Override
     public String toString() {
-        return "TaskClazz{" +
-                "task=" + task +
-                ", method=" + method +
-                '}';
+        return Controler.ID+" "+task.getTaskID()+" "+task.getClass().getName()+" "+targetFunction;
     }
 }

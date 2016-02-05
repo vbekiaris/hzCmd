@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 public class TaskManager {
 
-    private Map<String, TaskClazz> tasks = new HashMap();
+    private Map<String, TaskRunner> tasks = new HashMap();
     private ExecutorService executorService =  Executors.newCachedThreadPool();
 
     private Object vendorObject;
@@ -21,20 +21,20 @@ public class TaskManager {
         if(tasks.containsKey(taskId)){
            throw new IllegalStateException(Controler.ID+" taskId "+taskId+" all ready loaded");
         }
-        TaskClazz task = new TaskClazz(taskId, className, vendorObject);
+        TaskRunner task = new TaskRunner(taskId, className, vendorObject);
         tasks.put(task.getId(), task);
     }
 
     public void setField(String taskId, String field, String value) throws Exception{
-        for(TaskClazz t : getMatchingTasks(taskId) ) {
+        for(TaskRunner t : getMatchingTasks(taskId) ) {
             t.setField(field, value);
         }
     }
 
     public void invokeAsync(int threadCount, String function, String taskId) throws NoSuchMethodException {
-        Collection<TaskClazz> tasks = getMatchingTasks(taskId);
+        Collection<TaskRunner> tasks = getMatchingTasks(taskId);
 
-        for(TaskClazz t : tasks) {
+        for(TaskRunner t : tasks) {
             try {
                 t.setMethod(function);
             }catch (NoSuchMethodException e){
@@ -42,7 +42,7 @@ public class TaskManager {
             }
         }
 
-        for(TaskClazz t : tasks) {
+        for(TaskRunner t : tasks) {
             for (int i = 0; i <threadCount; i++) {
                 executorService.submit(t);
             }
@@ -50,9 +50,9 @@ public class TaskManager {
     }
 
     public void invokeSync(int threadCount, String function, String taskId) throws NoSuchMethodException, InterruptedException {
-        Collection<TaskClazz> tasks = getMatchingTasks(taskId);
+        Collection<TaskRunner> tasks = getMatchingTasks(taskId);
 
-        for(TaskClazz t : tasks) {
+        for(TaskRunner t : tasks) {
             try {
                 t.setMethod(function);
             }catch (NoSuchMethodException e){
@@ -62,7 +62,7 @@ public class TaskManager {
 
         ExecutorService executor = Executors.newFixedThreadPool(tasks.size()*threadCount);
 
-        for(TaskClazz t : tasks) {
+        for(TaskRunner t : tasks) {
             for (int i = 0; i <threadCount; i++) {
                 executor.submit(t);
             }
@@ -73,14 +73,14 @@ public class TaskManager {
 
 
     public void stop(String taskId){
-        for(TaskClazz t : getMatchingTasks(taskId)) {
+        for(TaskRunner t : getMatchingTasks(taskId)) {
             t.stop();
         }
     }
 
-    private List<TaskClazz> getMatchingTasks(String taskId) {
-        List<TaskClazz> matching = new ArrayList();
-        for( TaskClazz t : tasks.values()){
+    private List<TaskRunner> getMatchingTasks(String taskId) {
+        List<TaskRunner> matching = new ArrayList();
+        for( TaskRunner t : tasks.values()){
             if ( t.getId().matches(taskId) ){
                 matching.add(t);
             }
@@ -93,7 +93,7 @@ public class TaskManager {
 
         String str = new String();
 
-        for(TaskClazz t : tasks.values()){
+        for(TaskRunner t : tasks.values()){
             str+=t+", ";
         }
 
