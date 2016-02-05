@@ -38,7 +38,6 @@ public class GemControler extends Controler {
             //Region r = c.createClientRegionFactory(ClientRegionShortcut.PROXY).create("customers");
 
 
-
             //Example 2: Connect using the GemFire locator and create a local LRU cache
             //ClientCache c = new ClientCacheFactory()
             //            .addPoolLocator(host, port)
