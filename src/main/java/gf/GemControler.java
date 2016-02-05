@@ -28,8 +28,9 @@ public class GemControler extends Controler {
         if(type == NodeType.Member){
 
             //Example 1: Create a cache and a replicate region named customers.
-            serverCache = new CacheFactory().create();
-//            serverCache = new CacheFactory().set("cache-xml-file", "cache.xml").create();
+            //serverCache = new CacheFactory().create();
+
+            serverCache = new CacheFactory().set("cache-xml-file", "cache.xml").create();
 
 
             //Region r = c.createRegionFactory(RegionShortcut.REPLICATE).create("customers");
