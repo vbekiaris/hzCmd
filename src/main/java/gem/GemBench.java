@@ -8,7 +8,7 @@ import remote.Bench;
  */
 public abstract class GemBench extends Bench{
 
-    GemFireCache gemFireCache;
+    protected GemFireCache gemFireCache;
 
     @Override
     public void setVendorObject(Object vendorObject) {
