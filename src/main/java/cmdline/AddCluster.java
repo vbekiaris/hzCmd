@@ -13,7 +13,7 @@ public  class AddCluster extends Command {
     @Option(name = "-boxes", description = "name of boxes")
     public String boxes = "agents.txt";
 
-    @Option(name = "-type", description = "default HZ,  type of cluster [ClusterType.HZ | ClusterType.GG | ClusterType.GEM]" )
+    @Option(name = "-type", description = "default HZ, type of cluster [ClusterType.HZ | ClusterType.GG | ClusterType.GEM]" )
     public String type = "HZ";
 
 
