@@ -1,12 +1,9 @@
-package gf;
+package gem;
 
 import com.gemstone.gemfire.cache.*;
 import com.gemstone.gemfire.cache.client.ClientCache;
 import com.gemstone.gemfire.cache.client.ClientCacheFactory;
-import com.gemstone.gemfire.cache.client.ClientRegionShortcut;
 import global.NodeType;
-import org.apache.ignite.Ignite;
-import org.apache.ignite.Ignition;
 import remote.Controler;
 
 public class GemControler extends Controler {

@@ -2,7 +2,7 @@ package main;
 
 import cmdline.CmdLine;
 import cmdline.Command;
-import gf.GemJvmFactory;
+import gem.GemJvmFactory;
 import gg.GgJvmFactory;
 import global.Args;
 import global.Bash;

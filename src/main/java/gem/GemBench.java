@@ -1,7 +1,6 @@
-package gf;
+package gem;
 
 import com.gemstone.gemfire.cache.GemFireCache;
-import org.apache.ignite.Ignite;
 import remote.Bench;
 
 /**
