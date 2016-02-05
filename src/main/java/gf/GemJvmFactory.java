@@ -28,6 +28,7 @@ public class GemJvmFactory implements JvmFactory, Serializable {
         //8.2.0
         jars.add("gemfire-"+version+".jar");
         jars.add("log4j-core-2.1.jar");
+        jars.add("log4j-api-2.1.jar");
 
         return jars;
     }
