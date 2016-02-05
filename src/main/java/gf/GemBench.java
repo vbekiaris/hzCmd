@@ -6,7 +6,7 @@ import remote.Bench;
 /**
  * Created by danny on 24/01/2016.
  */
-public abstract class GfBench extends Bench{
+public abstract class GemBench extends Bench{
 
 
 

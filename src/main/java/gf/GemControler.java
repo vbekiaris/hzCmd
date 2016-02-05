@@ -12,14 +12,14 @@ import org.apache.ignite.Ignite;
 import org.apache.ignite.Ignition;
 import remote.Controler;
 
-public class GfControler extends Controler {
+public class GemControler extends Controler {
 
     private Cache serverCache;
     private ClientCache clientCache;
 
     private NodeType type;
 
-    public GfControler(NodeType type) throws Exception {
+    public GemControler(NodeType type) throws Exception {
         super(type);
         this.type = type;
     }

@@ -1,9 +1,8 @@
 package main;
 
-import cmdline.AddClient;
-import cmdline.AddMember;
 import cmdline.CmdLine;
 import cmdline.Command;
+import gf.GemJvmFactory;
 import gg.GgJvmFactory;
 import global.Args;
 import global.Bash;
@@ -90,7 +89,7 @@ public class HzCmd implements Serializable {
                 cluster = new ClusterManager(clusterId, boxi, brokerIP, new GgJvmFactory());
                 break;
             case GEM:
-                cluster = new ClusterManager(clusterId, boxi, brokerIP, new GgJvmFactory());
+                cluster = new ClusterManager(clusterId, boxi, brokerIP, new GemJvmFactory());
                 break;
 
             default:

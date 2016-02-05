@@ -3,9 +3,9 @@ package gf;
 import global.NodeType;
 import remote.Controler;
 
-public class GfMember {
+public class GemMember {
     public static void main(String[] args) throws Throwable {
-        Controler c = new GfControler(NodeType.Member);
+        Controler c = new GemControler(NodeType.Member);
         c.run();
     }
 }
