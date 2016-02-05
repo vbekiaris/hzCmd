@@ -37,8 +37,6 @@ public class GemControler extends Controler {
 
             //Region r = c.createClientRegionFactory(ClientRegionShortcut.PROXY).create("customers");
 
-            // The PROXY shortcut tells GemFire to route all requests to the servers
-            //. i.e. there is no local caching
 
 
             //Example 2: Connect using the GemFire locator and create a local LRU cache
