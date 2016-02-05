@@ -21,21 +21,14 @@ public class GemControler extends Controler {
     public void init(NodeType type) throws Exception {
         if(type == NodeType.Member){
 
-            //Example 1: Create a cache and a replicate region named customers.
-            //serverCache = new CacheFactory().create();
 
             serverCache = new CacheFactory().set("cache-xml-file", "server-cache.xml").set("mcast-port", "0").create();
 
             //Region r = c.createRegionFactory(RegionShortcut.REPLICATE).create("customers");
-
-            //Example 2: Create a partition region with redundancy
             //Region r = c.createRegionFactory(RegionShortcut.PARTITION_REDUNDANT).create("customers");
 
             //Example 3: Construct the cache region declaratively in cache.xml
             //Now, create the cache telling it to read your cache.xml file:
-
-            //Region r = c.getRegion("myRegion");
-
 
         }else{
             //Connect to a CacheServer on the default host and port and access a region "customers"
