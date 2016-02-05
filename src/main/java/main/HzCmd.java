@@ -89,6 +89,10 @@ public class HzCmd implements Serializable {
             case GG:
                 cluster = new ClusterManager(clusterId, boxi, brokerIP, new GgJvmFactory());
                 break;
+            case GEM:
+                cluster = new ClusterManager(clusterId, boxi, brokerIP, new GgJvmFactory());
+                break;
+
             default:
                 System.out.println(Bash.ANSI_RED+"box group "+boxGroupId + " not found"+Bash.ANSI_RESET);
                 return;
@@ -119,7 +123,7 @@ public class HzCmd implements Serializable {
         List<RemoteJvm> added = new ArrayList();
         for (ClusterManager c : clusters.values()) {
             if(c.matchClusterId(clusterId)){
-                added.addAll( c.addMembers(qty, version, jvmOptions) );
+                added.addAll(c.addMembers(qty, version, jvmOptions));
             }
         }
         checkAddJvms(added);
@@ -129,7 +133,7 @@ public class HzCmd implements Serializable {
         List<RemoteJvm> added = new ArrayList();
         for (ClusterManager c : clusters.values()) {
             if(c.matchClusterId(clusterId)){
-                added.addAll( c.addClients(qty, version, jvmOptions) );
+                added.addAll(c.addClients(qty, version, jvmOptions));
             }
         }
         checkAddJvms(added);
@@ -150,7 +154,7 @@ public class HzCmd implements Serializable {
             if(o instanceof Exception){
                 System.out.println(Bash.ANSI_RED+o+Bash.ANSI_RESET);
             }else{
-                System.out.println(Bash.ANSI_GREEN+o+Bash.ANSI_RESET);
+                System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
             }
         }
     }

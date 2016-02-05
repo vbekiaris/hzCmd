@@ -1,5 +1,12 @@
 package gf;
 
+import com.gemstone.gemfire.cache.Cache;
+import com.gemstone.gemfire.cache.CacheFactory;
+import com.gemstone.gemfire.cache.Region;
+import com.gemstone.gemfire.cache.RegionShortcut;
+import com.gemstone.gemfire.cache.client.ClientCache;
+import com.gemstone.gemfire.cache.client.ClientCacheFactory;
+import com.gemstone.gemfire.cache.client.ClientRegionShortcut;
 import global.NodeType;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.Ignition;
@@ -7,23 +14,63 @@ import remote.Controler;
 
 public class GfControler extends Controler {
 
+    private Cache serverCache;
+    private ClientCache clientCache;
+
+    private NodeType type;
 
     public GfControler(NodeType type) throws Exception {
         super(type);
+        this.type = type;
     }
 
     public void init(NodeType type) throws Exception {
         if(type == NodeType.Member){
 
+            //Example 1: Create a cache and a replicate region named customers.
+            serverCache = new CacheFactory().create();
+//            serverCache = new CacheFactory().set("cache-xml-file", "cache.xml").create();
+
+
+            //Region r = c.createRegionFactory(RegionShortcut.REPLICATE).create("customers");
+
+            //Example 2: Create a partition region with redundancy
+            //Region r = c.createRegionFactory(RegionShortcut.PARTITION_REDUNDANT).create("customers");
+
+            //Example 3: Construct the cache region declaratively in cache.xml
+            //Now, create the cache telling it to read your cache.xml file:
+
+            //Region r = c.getRegion("myRegion");
+
 
         }else{
+            //Connect to a CacheServer on the default host and port and access a region "customers"
+
+            clientCache = new ClientCacheFactory().create();
+
+            //Region r = c.createClientRegionFactory(ClientRegionShortcut.PROXY).create("customers");
+
+            // The PROXY shortcut tells GemFire to route all requests to the servers
+            //. i.e. there is no local caching
+
+
+            //Example 2: Connect using the GemFire locator and create a local LRU cache
+            //ClientCache c = new ClientCacheFactory()
+            //            .addPoolLocator(host, port)
+            //            .create();
+
+
+            //Region r = c.createClientRegionFactory(CACHING_PROXY_HEAP_LRU)
+            //           .create("customers");
+            //The local LRU "customers" data region will automatically start evicting, by default, at 80% heap utilization threshold
 
         }
     }
 
     public Object getVendorObject(){
-
-
-
+        if(type == NodeType.Member){
+            return serverCache;
+        }
+        return clientCache;
     }
 }

@@ -23,10 +23,6 @@ public class RemoteGfJvm extends RemoteJvm {
     }
 
     public void beforeJvmStart(ClusterManager myCluster) throws Exception {
-        box.upload("gg-config.xml", dir+"/");
-        //box.upload("ignite-base-config.xml", dir+"/");
-        box.mkdir(dir + "/" +"config");
-        box.upload("java.util.logging.properties", dir+"/"+"config");
 
     }
 
