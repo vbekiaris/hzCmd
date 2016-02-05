@@ -12,6 +12,8 @@ public abstract class GfBench extends Bench{
 
 
     @Override
-    public void setVendorObject(Object vendorObject) { ignite = (Ignite) vendorObject; }
+    public void setVendorObject(Object vendorObject) {
+        (Ignite) vendorObject;
+    }
 
 }
