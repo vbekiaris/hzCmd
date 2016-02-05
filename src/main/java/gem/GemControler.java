@@ -22,7 +22,7 @@ public class GemControler extends Controler {
         if(type == NodeType.Member){
 
 
-            serverCache = new CacheFactory().set("cache-xml-file", "server-cache.xml").set("mcast-port", "0").set("start-locator","localhost:50505").create();
+            serverCache = new CacheFactory().set("cache-xml-file", "server-cache.xml").set("mcast-port", "0").set("start-locator","localhost[50505]").create();
 
             //Region r = c.createRegionFactory(RegionShortcut.REPLICATE).create("customers");
             //Region r = c.createRegionFactory(RegionShortcut.PARTITION_REDUNDANT).create("customers");
