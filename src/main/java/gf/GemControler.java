@@ -1,9 +1,6 @@
 package gf;
 
-import com.gemstone.gemfire.cache.Cache;
-import com.gemstone.gemfire.cache.CacheFactory;
-import com.gemstone.gemfire.cache.Region;
-import com.gemstone.gemfire.cache.RegionShortcut;
+import com.gemstone.gemfire.cache.*;
 import com.gemstone.gemfire.cache.client.ClientCache;
 import com.gemstone.gemfire.cache.client.ClientCacheFactory;
 import com.gemstone.gemfire.cache.client.ClientRegionShortcut;
@@ -31,7 +28,6 @@ public class GemControler extends Controler {
             //serverCache = new CacheFactory().create();
 
             serverCache = new CacheFactory().set("cache-xml-file", "server-cache.xml").create();
-
 
             //Region r = c.createRegionFactory(RegionShortcut.REPLICATE).create("customers");
 
