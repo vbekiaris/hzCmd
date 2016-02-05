@@ -138,7 +138,6 @@ public class ClusterManager implements Serializable {
 
     public void restart(String jvmId, String version, String options) throws Exception {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
-
             if (version==null && options==null ){
                 jvm.reStartJvm();
             }else{

@@ -135,6 +135,12 @@ public class HzCmd implements Serializable {
         checkAddJvms(added);
     }
 
+    public void restart(String jvmId, String version,  String options) throws Exception {
+        for (ClusterManager c : clusters.values()) {
+            c.restart(jvmId, version, options);
+        }
+    }
+
     private void checkAddJvms(List<RemoteJvm> added) throws JMSException, IOException, InterruptedException {
         for (RemoteJvm jvm : added) {
             System.out.println(jvm);
@@ -158,12 +164,6 @@ public class HzCmd implements Serializable {
     public void kill(String jvmId) throws Exception {
         for (ClusterManager c : clusters.values()) {
             c.kill(jvmId);
-        }
-    }
-
-    public void restart(String jvmId, String version,  String options) throws Exception {
-        for (ClusterManager c : clusters.values()) {
-            c.restart(jvmId, version, options);
         }
     }
 

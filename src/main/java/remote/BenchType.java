@@ -1,7 +1,7 @@
 package remote;
 
 public enum BenchType {
-    Hdr, Metrics
+    Hdr, Metrics, Counter
 }
 
 
