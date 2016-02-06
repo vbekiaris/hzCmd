@@ -2,6 +2,10 @@ package remote;
 
 import com.codahale.metrics.CsvReporter;
 import com.codahale.metrics.MetricRegistry;
+import net.openhft.chronicle.Chronicle;
+import net.openhft.chronicle.ChronicleQueueBuilder;
+import net.openhft.chronicle.ExcerptAppender;
+import net.openhft.lang.io.FileLifecycleListener;
 import org.HdrHistogram.ConcurrentHistogram;
 import org.HdrHistogram.Histogram;
 
@@ -44,6 +48,12 @@ public abstract class Bench extends Task{
                 break;
             case Counter:
                 counter(seconds, title);
+                break;
+            case Recorder:
+                recorder(seconds, title);
+                break;
+            default :
+                throw new RuntimeException("BenchType invalid");
         }
     }
 
@@ -59,11 +69,46 @@ public abstract class Bench extends Task{
         try {
             PrintWriter output = new PrintWriter(new FileWriter(outputTitle+".txt", true));
             output.println(count);
+            output.flush();
+            output.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    private void recorder(int seconds, String title) {
+        String basePath = System.getProperty("user.dir");
+        Chronicle chronicle;
+        ExcerptAppender appender;
+
+        FileLifecycleListener sa;
+
+        try {
+            chronicle = ChronicleQueueBuilder.indexed(basePath + "/" + title).build();
+            appender = chronicle.createAppender();
+
+            long startTime = System.currentTimeMillis();
+            long endTime = startTime + (seconds * 1000);
+
+            while(System.currentTimeMillis() < endTime){
+                long start = System.nanoTime();
+                timeStep();
+                long end = System.nanoTime();
+
+                appender.startExcerpt();
+                appender.writeLong(start);
+                appender.writeLong(end);
+                appender.writeLong(end - start);
+                appender.finish();
+            }
+
+            appender.close();
+            chronicle.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void benchMetric(int seconds, String metricsCsvtitle){
         csvReporter = CsvReporter.forRegistry(metrics).build(new File(System.getProperty("user.dir")) );

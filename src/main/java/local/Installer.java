@@ -26,6 +26,10 @@ public abstract class Installer {
         String mq = Bash.find(M2_Repo, "activemq-all-5.13.0.jar");
         String metrics = Bash.find(M2_Repo, "metrics-core-3.1.1.jar");
         String slf4j = Bash.find(M2_Repo, "slf4j-api-1.7.7.jar");
+        String chronicle = Bash.find(M2_Repo, "chronicle-3.6.0.jar");
+        String lang = Bash.find(M2_Repo, "lang-6.7.6.jar");
+
+
 
         boxes.mkdir(REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(mainJars, REMOTE_HZCMD_ROOT_LIB);
@@ -35,6 +39,8 @@ public abstract class Installer {
         boxes.upload(mq, REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(metrics, REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(slf4j, REMOTE_HZCMD_ROOT_LIB);
+        boxes.upload(chronicle, REMOTE_HZCMD_ROOT_LIB);
+        boxes.upload(lang, REMOTE_HZCMD_ROOT_LIB);
 
         for (String version : versions) {
 
