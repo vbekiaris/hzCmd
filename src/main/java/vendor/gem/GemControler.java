@@ -22,16 +22,18 @@ public class GemControler extends Controler {
     public void init(NodeType type) throws Exception {
         if(type == NodeType.Member){
 
+            LocatorLauncher locatorLauncher = new LocatorLauncher.Builder()
+                    .setPort(13489)
+                    .build();
+            locatorLauncher.start();
+
             serverCache = new CacheFactory().set("cache-xml-file", "server-cache.xml").set("mcast-port", "0").create();
 
                     //.set("start-locator","[50505]").create();
 
 
             //if(ID.equals("GgMember1")) {
-                LocatorLauncher locatorLauncher = new LocatorLauncher.Builder()
-                        .setPort(13489)
-                        .build();
-                        locatorLauncher.start();
+
             //}
 
             System.out.println("Locator successfully started");
