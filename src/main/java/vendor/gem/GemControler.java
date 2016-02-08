@@ -28,7 +28,7 @@ public class GemControler extends Controler {
                 .set("start-locator","localhost[13489]").set("locators", "localhost[13489]").create();
 
             } else {
-                serverCache = new CacheFactory().set("cache-xml-file", "server-cache.xml").set("mcast-port", "0").set("locators", "54.173.123.102[13489]").create();
+                serverCache = new CacheFactory().set("cache-xml-file", "server-cache.xml").set("mcast-port", "0").set("locators", "10.0.0.193[13489]").create();
             }
             //.set("start-locator","[50505]").create();
 
