@@ -22,14 +22,14 @@ public class GemControler extends Controler {
     public void init(NodeType type) throws Exception {
         if(type == NodeType.Member){
 
-            if(ID.equals("GgMember1")) {
+            //if(ID.equals("GgMember1")) {
                 LocatorLauncher locatorLauncher = new LocatorLauncher.Builder()
                         .setMemberName("locator1")
-                        .setPort(13489)
+                        .setPort(50505)
                         .build();
 
                 locatorLauncher.start();
-            }
+            //}
 
             System.out.println("Locator successfully started");
 
