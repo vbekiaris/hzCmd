@@ -1,13 +1,10 @@
 package vendor.gg;
 
 import global.NodeType;
+import local.*;
 import vendor.hz.HzClient;
 import vendor.hz.HzMember;
 import vendor.hz.RemoteHzJvm;
-import local.Box;
-import local.Installer;
-import local.JvmFactory;
-import local.RemoteJvm;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -37,6 +34,10 @@ public class GgJvmFactory implements JvmFactory, Serializable {
 
 
         return jars;
+    }
+
+    public void clusterInit(BoxManager boxes) {
+
     }
 
     public RemoteJvm createJvm(Box box, NodeType type, int count, String clusterId) throws IOException, InterruptedException {

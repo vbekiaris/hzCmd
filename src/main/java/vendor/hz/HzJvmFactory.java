@@ -1,10 +1,7 @@
 package vendor.hz;
 
 import global.NodeType;
-import local.Box;
-import local.Installer;
-import local.JvmFactory;
-import local.RemoteJvm;
+import local.*;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -41,6 +38,10 @@ public class HzJvmFactory implements JvmFactory, Serializable {
             jars.add(hazelcastClient + version + ".jar");
         }
         return jars;
+    }
+
+    public void clusterInit(BoxManager boxes) {
+
     }
 
 
