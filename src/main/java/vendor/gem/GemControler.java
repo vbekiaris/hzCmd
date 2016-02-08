@@ -25,19 +25,19 @@ public class GemControler extends Controler {
             if(ID.equals("GemMember1F")){
 
 
-                //10.0.0.193
+                //54.173.123.102  //10.0.0.193
                 serverCache = new CacheFactory().set("cache-xml-file", "server-cache.xml")
                         .set("mcast-port", "0")
                         .set("start-locator", "11001")
-                        .set("locators", "localhost[11001],10.0.0.192[11002]").create();
+                        .set("locators", "localhost[11001],54.172.198.157[11002]").create();
 
             } else if ( ID.equals("GemMember2F") ) {
 
-                //10.0.0.192
+                //54.172.198.157 //10.0.0.192
                 serverCache = new CacheFactory().set("cache-xml-file", "server-cache.xml")
                         .set("mcast-port", "0")
                         .set("start-locator", "11002")
-                        .set("locators", "10.0.0.193[11001],localhost[11002]").create();
+                        .set("locators", "54.173.123.102[11001],localhost[11002]").create();
 
 
                 //serverCache = new CacheFactory().set("cache-xml-file", "server-cache.xml").set("mcast-port", "0").set("locators", "10.0.0.193[13489]").create();
