@@ -28,7 +28,7 @@ public class GemControler extends Controler {
             //if(ID.equals("GgMember1")) {
                 LocatorLauncher locatorLauncher = new LocatorLauncher.Builder()
                         .setMemberName("locator1")
-                        .setPort(50505)
+                        .setPort(13489)
                         .build();
 
                 locatorLauncher.start();
