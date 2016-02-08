@@ -20,8 +20,8 @@ public class InvokeSyncCmd implements Cmd, Serializable{
         this.threadCount = threadCount;
         this.function = function;
         this.taskId = taskId;
-        timeOut=30;
-        timeUnit = TimeUnit.SECONDS;
+        timeOut=3;
+        timeUnit = TimeUnit.DAYS;
     }
 
     public void exicute(Controler c){
