@@ -22,23 +22,15 @@ public class GemControler extends Controler {
     public void init(NodeType type) throws Exception {
         if(type == NodeType.Member){
 
-            LocatorLauncher locatorLauncher = new LocatorLauncher.Builder()
-                    .setPort(13489)
-                    .build();
-            locatorLauncher.start();
+            if(ID.equals("GemMember1F")){
 
-            serverCache = new CacheFactory().set("cache-xml-file", "server-cache.xml").set("mcast-port", "0").create();
+                serverCache = new CacheFactory().set("cache-xml-file", "server-cache.xml").set("mcast-port", "0")
+                .set("start-locator","[13489]").create();
 
-                    //.set("start-locator","[50505]").create();
-
-
-            //if(ID.equals("GgMember1")) {
-
-            //}
-
-            System.out.println("Locator successfully started");
-
-
+            } else {
+                serverCache = new CacheFactory().set("cache-xml-file", "server-cache.xml").set("mcast-port", "0").create();
+            }
+            //.set("start-locator","[50505]").create();
 
             //Region r = c.createRegionFactory(RegionShortcut.REPLICATE).create("customers");
             //Region r = c.createRegionFactory(RegionShortcut.PARTITION_REDUNDANT).create("customers");
