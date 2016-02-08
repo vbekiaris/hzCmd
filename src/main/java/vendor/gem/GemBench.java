@@ -1,4 +1,4 @@
-package gem;
+package vendor.gem;
 
 import com.gemstone.gemfire.cache.GemFireCache;
 import remote.Bench;

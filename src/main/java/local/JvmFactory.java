@@ -1,7 +1,7 @@
 package local;
 
 import global.NodeType;
-import hz.HzJvmFactory;
+import vendor.hz.HzJvmFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,4 +16,6 @@ public interface JvmFactory {
     String getVendorLibDir(String version);
 
     List<String> getVendorLibNames(String version, boolean ee);
+
+    void clusterInit(BoxManager boxes);
 }

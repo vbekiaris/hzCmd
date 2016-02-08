@@ -1,4 +1,4 @@
-package gem;
+package vendor.gem;
 
 import global.NodeType;
 import local.Box;

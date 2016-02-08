@@ -1,9 +1,9 @@
-package gg;
+package vendor.gg;
 
 import global.NodeType;
-import hz.HzClient;
-import hz.HzMember;
-import hz.RemoteHzJvm;
+import vendor.hz.HzClient;
+import vendor.hz.HzMember;
+import vendor.hz.RemoteHzJvm;
 import local.Box;
 import local.Installer;
 import local.JvmFactory;

@@ -1,4 +1,4 @@
-package hz;
+package vendor.hz;
 
 import global.NodeType;
 import local.Box;

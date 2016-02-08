@@ -1,11 +1,11 @@
-package hz;
+package vendor.gem;
 
 import global.NodeType;
 import remote.Controler;
 
-public class HzClient {
+public class GemClient {
     public static void main(String[] args) throws Throwable {
-        Controler c = new HzControler(NodeType.Client);
+        Controler c = new GemControler(NodeType.Client);
         c.run();
     }
 }

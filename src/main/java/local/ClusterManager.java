@@ -27,6 +27,7 @@ public class ClusterManager implements Serializable {
         this.boxes=boxes;
         this.brokerIP =brokerIP;
         this.jvmFactory=jvmFactory;
+        jvmFactory.clusterInit(boxes);
     }
 
     public boolean matchClusterId(String clusterId){

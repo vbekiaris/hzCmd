@@ -1,9 +1,8 @@
-package hz;
+package vendor.hz;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.instance.HazelcastInstanceProxy;
 import remote.Bench;
-import remote.Task;
 
 /**
  * Created by danny on 24/01/2016.

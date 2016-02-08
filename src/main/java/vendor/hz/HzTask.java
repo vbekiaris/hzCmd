@@ -1,4 +1,4 @@
-package hz;
+package vendor.hz;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.instance.HazelcastInstanceProxy;

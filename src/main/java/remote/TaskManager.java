@@ -49,7 +49,7 @@ public class TaskManager {
         }
     }
 
-    public void invokeSync(int threadCount, String function, String taskId) throws NoSuchMethodException, InterruptedException {
+    public boolean invokeSync(int threadCount, String function, String taskId, long timeOut, TimeUnit timeUnit) throws NoSuchMethodException, InterruptedException {
         Collection<TaskRunner> tasks = getMatchingTasks(taskId);
 
         for(TaskRunner t : tasks) {
@@ -68,7 +68,7 @@ public class TaskManager {
             }
         }
         executor.shutdown();
-        executor.awaitTermination(1, TimeUnit.DAYS);
+        return executor.awaitTermination(timeOut, timeUnit);
     }
 
 

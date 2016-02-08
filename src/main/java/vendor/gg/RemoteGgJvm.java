@@ -1,9 +1,8 @@
-package gg;
+package vendor.gg;
 
 import global.NodeType;
 import local.Box;
 import local.ClusterManager;
-import local.Installer;
 import local.RemoteJvm;
 
 import java.io.IOException;

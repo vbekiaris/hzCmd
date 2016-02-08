@@ -7,6 +7,8 @@ import javax.jms.JMSException;
 
 import java.io.*;
 import java.lang.management.ManagementFactory;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import remote.command.Cmd;
 
@@ -66,10 +68,14 @@ public abstract class Controler{
         }
     }
 
-    public void invokeSync(int threadCount, String function, String taskId){
+    public void invokeSync(int threadCount, String function, String taskId, long timeOut, TimeUnit timeUnit){
         try {
-            tasks.invokeSync(threadCount, function, taskId);
-            MQ.sendObj(ID+"reply", ID+" finished "+function+" on "+taskId);
+            if ( tasks.invokeSync(threadCount, function, taskId, timeOut, timeUnit) ) {
+                MQ.sendObj(ID+"reply", ID+" finished "+function+" on "+taskId);
+            }else {
+                MQ.sendObj(ID+"reply", new TimeoutException( ID+" at least one thread timed out running "+function+" on "+taskId) );
+            }
+
         } catch (Exception e) {
             recordSendException(e, ID+"reply");
         }

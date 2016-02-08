@@ -1,10 +1,7 @@
-package gem;
+package vendor.gem;
 
 import global.NodeType;
-import local.Box;
-import local.Installer;
-import local.JvmFactory;
-import local.RemoteJvm;
+import local.*;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -33,6 +30,10 @@ public class GemJvmFactory implements JvmFactory, Serializable {
         return jars;
     }
 
+    public void clusterInit(BoxManager boxes) {
+
+    }
+
     public RemoteJvm createJvm(Box box, NodeType type, int count, String clusterId) throws IOException, InterruptedException {
 
         String id;
@@ -45,4 +46,6 @@ public class GemJvmFactory implements JvmFactory, Serializable {
 
         return new RemoteGemJvm(box, type, id);
     }
+
+
 }

@@ -5,7 +5,6 @@ import com.codahale.metrics.MetricRegistry;
 import net.openhft.chronicle.Chronicle;
 import net.openhft.chronicle.ChronicleQueueBuilder;
 import net.openhft.chronicle.ExcerptAppender;
-import net.openhft.lang.io.FileLifecycleListener;
 import org.HdrHistogram.ConcurrentHistogram;
 import org.HdrHistogram.Histogram;
 
@@ -81,8 +80,6 @@ public abstract class Bench extends Task{
         Chronicle chronicle;
         ExcerptAppender appender;
 
-        FileLifecycleListener sa;
-
         try {
             chronicle = ChronicleQueueBuilder.indexed(basePath + "/" + title).build();
             appender = chronicle.createAppender();
@@ -99,6 +96,7 @@ public abstract class Bench extends Task{
                 appender.writeLong(start);
                 appender.writeLong(end);
                 appender.writeLong(end - start);
+                //appender.flush();
                 appender.finish();
             }
 
@@ -124,7 +122,9 @@ public abstract class Bench extends Task{
             timeStep();
             context.stop();
         }
+
         csvReporter.stop();
+
 
         metrics.remove(metricsCsvtitle);
     }
@@ -154,7 +154,7 @@ public abstract class Bench extends Task{
             histogram.outputPercentileDistribution(ps, 1000.0);
 
             ps = new PrintStream(new FileOutputStream(title+"-CO", true));
-            histogram = histogram.copyCorrectedForCoordinatedOmission(0);
+            histogram = histogram.copyCorrectedForCoordinatedOmission(1);
             histogram.outputPercentileDistribution(ps, 1000.0);
 
         } catch (FileNotFoundException e) {

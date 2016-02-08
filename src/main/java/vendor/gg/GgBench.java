@@ -1,4 +1,4 @@
-package gg;
+package vendor.gg;
 
 import org.apache.ignite.Ignite;
 import remote.Bench;

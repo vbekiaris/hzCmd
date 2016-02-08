@@ -1,12 +1,11 @@
-package gg;
+package vendor.hz;
 
 import global.NodeType;
-import hz.HzControler;
 import remote.Controler;
 
-public class GgMember {
+public class HzMember {
     public static void main(String[] args) throws Throwable {
-        Controler c = new GgControler(NodeType.Member);
+        Controler c = new HzControler(NodeType.Member);
         c.run();
     }
 }

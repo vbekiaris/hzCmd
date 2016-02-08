@@ -2,12 +2,12 @@ package main;
 
 import cmdline.CmdLine;
 import cmdline.Command;
-import gem.GemJvmFactory;
-import gg.GgJvmFactory;
+import vendor.gem.GemJvmFactory;
+import vendor.gg.GgJvmFactory;
 import global.Args;
 import global.Bash;
 import global.ClusterType;
-import hz.HzJvmFactory;
+import vendor.hz.HzJvmFactory;
 import jms.MQ;
 import local.BoxManager;
 import local.ClusterManager;

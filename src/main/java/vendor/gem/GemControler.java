@@ -1,8 +1,9 @@
-package gem;
+package vendor.gem;
 
 import com.gemstone.gemfire.cache.*;
 import com.gemstone.gemfire.cache.client.ClientCache;
 import com.gemstone.gemfire.cache.client.ClientCacheFactory;
+import com.gemstone.gemfire.distributed.LocatorLauncher;
 import global.NodeType;
 import remote.Controler;
 
@@ -20,6 +21,17 @@ public class GemControler extends Controler {
 
     public void init(NodeType type) throws Exception {
         if(type == NodeType.Member){
+
+            if(ID.equals("GgMember1")) {
+                LocatorLauncher locatorLauncher = new LocatorLauncher.Builder()
+                        .setMemberName("locator1")
+                        .setPort(13489)
+                        .build();
+
+                locatorLauncher.start();
+            }
+
+            System.out.println("Locator successfully started");
 
 
             serverCache = new CacheFactory().set("cache-xml-file", "server-cache.xml").set("mcast-port", "0").set("start-locator","127.0.0.1[50505]").create();

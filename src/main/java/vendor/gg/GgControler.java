@@ -1,4 +1,4 @@
-package gg;
+package vendor.gg;
 
 import global.NodeType;
 import org.apache.ignite.Ignite;
