@@ -24,13 +24,16 @@ public class GemControler extends Controler {
     }
 
     public void init(NodeType type) throws Exception {
+
+        String pubIp = System.getProperty("MY_PUB_IP");
+        String priIp = System.getProperty("MY_PRI_IP");
+        String peersIp = System.getProperty("MY_PEERS_LIST");
+
+        System.out.println("pub="+pubIp+", pri="+priIp+" peers="+peersIp);
+
+
         if(type == NodeType.Member){
 
-            String pubIp = System.getProperty("MY_PUB_IP");
-            String priIp = System.getProperty("MY_PRI_IP");
-            String peersIp = System.getProperty("MY_PEERS_LIST");
-
-            System.out.println("pub="+pubIp+", pri="+priIp+" peers="+peersIp);
 
 
             serverCache = new CacheFactory().set("cache-xml-file", "server-cache.xml")
@@ -71,7 +74,10 @@ public class GemControler extends Controler {
         }else{
             //Connect to a CacheServer on the default host and port and access a region "customers"
 
-            clientCache = new ClientCacheFactory().set("cache-xml-file", "client-cache.xml").create();
+            clientCache = new ClientCacheFactory().set("cache-xml-file", "client-cache.xml")
+                    .set("mcast-port", "0")
+                    .set("locators", peersIp).create();
+
 
             //Region r = c.createClientRegionFactory(ClientRegionShortcut.PROXY).create("customers");
 
