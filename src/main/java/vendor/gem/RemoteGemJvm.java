@@ -11,6 +11,7 @@ import java.util.List;
 
 public class RemoteGemJvm extends RemoteJvm {
 
+    private static final int gemFireLocatorPort=11001;
 
     public RemoteGemJvm(Box box, NodeType type, String id) throws IOException, InterruptedException {
         super(box, type, id);
@@ -39,19 +40,19 @@ public class RemoteGemJvm extends RemoteJvm {
             return null;
         }
 
-        String jvmArgs = new String();
-
-        jvmArgs += "-D"+"MY_PUB_IP="+box.pub+" ";
-        jvmArgs += "-D"+"MY_PRI_IP="+box.pri+" ";
+        StringBuilder jvmArgs = new StringBuilder();
+        jvmArgs.append("-D" + "MY_PUB_IP=" + box.pub + " ");
+        jvmArgs.append("-D"+"MY_PRI_IP="+box.pri+" ");
 
         List<Box> peers = myCluster.getBoxManager().getBoxListExcluding(thisBox);
 
-        jvmArgs += "-D"+"MY_PEERS_LIST=";
+        jvmArgs.append("-D"+"MY_PEERS_LIST=");
         for (Box peer : peers) {
-            jvmArgs += peer.pri+",";
+            jvmArgs.append(peer.pri+"["+gemFireLocatorPort+"]"+",");
         }
+        jvmArgs.deleteCharAt(jvmArgs.length()-1);
 
-        return jvmArgs;
+        return jvmArgs.toString();
     }
 
 

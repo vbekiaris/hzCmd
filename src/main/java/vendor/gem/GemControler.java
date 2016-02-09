@@ -32,9 +32,16 @@ public class GemControler extends Controler {
 
             System.out.println("pub="+pubIp+", pri="+priIp+" peers="+peersIp);
 
+
+            serverCache = new CacheFactory().set("cache-xml-file", "server-cache.xml")
+                    .set("mcast-port", "0")
+                    .set("bind-address", priIp)
+                    .set("start-locator", "11001")
+                    .set("locators", peersIp).create();
+
+
+            /*
             if(ID.equals("GemMember1F")){
-
-
                 //54.173.123.102  //10.0.0.193
                 serverCache = new CacheFactory().set("cache-xml-file", "server-cache.xml")
                         .set("mcast-port", "0")
@@ -51,15 +58,13 @@ public class GemControler extends Controler {
                         .set("bind-address", "10.0.0.192")
                         .set("start-locator", "11001")
                         .set("locators", "10.0.0.193[11001]").create();
-                //localhost[11002]
-
-                //serverCache = new CacheFactory().set("cache-xml-file", "server-cache.xml").set("mcast-port", "0").set("locators", "10.0.0.193[13489]").create();
             }
-            //.set("start-locator","[50505]").create();
+            */
 
+
+            //.set("start-locator","[50505]").create();
             //Region r = c.createRegionFactory(RegionShortcut.REPLICATE).create("customers");
             //Region r = c.createRegionFactory(RegionShortcut.PARTITION_REDUNDANT).create("customers");
-
             //Example 3: Construct the cache region declaratively in cache.xml
             //Now, create the cache telling it to read your cache.xml file:
 
