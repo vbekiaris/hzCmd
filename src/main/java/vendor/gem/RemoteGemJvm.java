@@ -36,9 +36,6 @@ public class RemoteGemJvm extends RemoteJvm {
     @Override
     public String setJvmStartOptions(Box thisBox, ClusterManager myCluster) throws Exception {
 
-        if(isClient()){
-            return null;
-        }
 
         StringBuilder jvmArgs = new StringBuilder();
         jvmArgs.append("-D" + "MY_PUB_IP=" + box.pub + " ");
