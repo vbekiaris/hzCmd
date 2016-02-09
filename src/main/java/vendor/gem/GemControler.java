@@ -9,6 +9,7 @@ import global.NodeType;
 import local.Box;
 import remote.Controler;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class GemControler extends Controler {
@@ -74,10 +75,17 @@ public class GemControler extends Controler {
         }else{
             //Connect to a CacheServer on the default host and port and access a region "customers"
 
-            clientCache = new ClientCacheFactory().set("cache-xml-file", "client-cache.xml")
-                    .set("mcast-port", "0")
-                    .set("locators", peersIp).create();
+            ClientCacheFactory clientCacheFactory = new ClientCacheFactory();
+            clientCacheFactory.set("cache-xml-file", "client-cache.xml");
+            clientCacheFactory.set("mcast-port", "0");
 
+            List<String> locators = Arrays.asList(peersIp.split(","));
+            for (String locator : locators) {
+                clientCacheFactory.addPoolLocator(locator, 11001);
+            }
+
+
+            clientCache = clientCacheFactory.create();
 
             //Region r = c.createClientRegionFactory(ClientRegionShortcut.PROXY).create("customers");
 

@@ -36,21 +36,25 @@ public class RemoteGemJvm extends RemoteJvm {
     @Override
     public String setJvmStartOptions(Box thisBox, ClusterManager myCluster) throws Exception {
 
-
         StringBuilder jvmArgs = new StringBuilder();
-        jvmArgs.append("-D" + "MY_PUB_IP=" + box.pub + " ");
+        jvmArgs.append("-D" +"MY_PUB_IP=" + box.pub + " ");
         jvmArgs.append("-D"+"MY_PRI_IP="+box.pri+" ");
 
         List<Box> peers = myCluster.getBoxManager().getBoxListExcluding(thisBox);
 
         jvmArgs.append("-D"+"MY_PEERS_LIST=");
-        for (Box peer : peers) {
-            jvmArgs.append(peer.pri+"["+gemFireLocatorPort+"]"+",");
+        if(isMember()){
+            for (Box peer : peers) {
+                jvmArgs.append(peer.pri+"["+gemFireLocatorPort+"]"+",");
+            }
+        }else{
+            for (Box peer : peers) {
+                jvmArgs.append(peer.pri+",");
+            }
         }
         jvmArgs.deleteCharAt(jvmArgs.length()-1);
 
         return jvmArgs.toString();
     }
-
 
 }
