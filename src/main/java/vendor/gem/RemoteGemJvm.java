@@ -6,6 +6,7 @@ import local.ClusterManager;
 import local.RemoteJvm;
 
 import java.io.IOException;
+import java.util.List;
 
 
 public class RemoteGemJvm extends RemoteJvm {
@@ -30,5 +31,28 @@ public class RemoteGemJvm extends RemoteJvm {
             box.upload("client-cache.xml", dir + "/");
         }
     }
+
+    @Override
+    public String setJvmStartOptions(Box thisBox, ClusterManager myCluster) throws Exception {
+
+        if(isClient()){
+            return null;
+        }
+
+        String jvmArgs = new String();
+
+        jvmArgs += "-D"+"MY_PUB_IP="+box.pub+" ";
+        jvmArgs += "-D"+"MY_PRI_IP="+box.pri+" ";
+
+        List<Box> peers = myCluster.getBoxManager().getBoxListExcluding(thisBox);
+
+        jvmArgs += "-D"+"MY_PEERS_LIST=";
+        for (Box peer : peers) {
+            jvmArgs += peer.pri+",";
+        }
+
+        return jvmArgs;
+    }
+
 
 }

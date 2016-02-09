@@ -36,19 +36,26 @@ public abstract class RemoteJvm implements Serializable {
 
     public abstract void beforeJvmStart(ClusterManager myCluster) throws Exception;
 
+    public abstract String setJvmStartOptions(Box thisBox, ClusterManager myCluster) throws Exception;
+
 
     public final void startJvm(String jvmOptions, String vendorLibDir, ClusterManager myCluster, String brokerIP) throws Exception {
-
-        beforeJvmStart(myCluster);
 
         if (isRunning()) {
             System.out.println(Bash.ANSI_CYAN+"all ready started " + this +Bash.ANSI_RESET);
             return;
         }
 
+        beforeJvmStart(myCluster);
+
+        String jvmArgs = setJvmStartOptions(box, myCluster);
+        if(jvmArgs==null){
+            jvmArgs = new String();
+        }
+
         String classToRun = getClassToRun();
 
-        String jvmArgs = new String();
+        jvmArgs +=" ";
         jvmArgs += "-D"+"MQ_BROKER_IP="+brokerIP+" ";
         jvmArgs += "-D"+Args.EVENTQ+"="+System.getProperty("user.dir")+"/"+Args.EVENTQ.name() + " ";
         jvmArgs += "-D"+Args.ID+"=" + id + " ";
@@ -171,7 +178,7 @@ public abstract class RemoteJvm implements Serializable {
     }
 
     public void downlonad(String destDir) throws IOException, InterruptedException {
-        box.downlonad(dir+"/*", destDir+"/"+id+"-"+box.pri);
+        box.downlonad(dir + "/*", destDir + "/" + id + "-" + box.pri);
     }
 
     public void upload(String src, String dst) throws IOException, InterruptedException {

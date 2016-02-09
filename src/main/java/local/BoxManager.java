@@ -48,6 +48,13 @@ public class BoxManager implements Serializable {
 
     public List<Box> getBoxList(){ return boxes; }
 
+    public List<Box> getBoxListExcluding(Box thisbox){
+        List<Box> sublist = new ArrayList<Box>(boxes);
+        sublist.remove(thisbox);
+        return sublist;
+    }
+
+
     public void upload(String souce, String dest) throws IOException, InterruptedException {
         for (Box box : boxes) {
             box.upload(souce, dest);

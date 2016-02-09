@@ -34,4 +34,7 @@ public class RemoteHzJvm extends RemoteJvm {
         }
     }
 
+    public String setJvmStartOptions(Box thisBox, ClusterManager myCluster) throws Exception {
+        return null;
+    }
 }

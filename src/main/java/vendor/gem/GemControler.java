@@ -4,8 +4,12 @@ import com.gemstone.gemfire.cache.*;
 import com.gemstone.gemfire.cache.client.ClientCache;
 import com.gemstone.gemfire.cache.client.ClientCacheFactory;
 import com.gemstone.gemfire.distributed.LocatorLauncher;
+import global.Args;
 import global.NodeType;
+import local.Box;
 import remote.Controler;
+
+import java.util.List;
 
 public class GemControler extends Controler {
 
@@ -21,6 +25,12 @@ public class GemControler extends Controler {
 
     public void init(NodeType type) throws Exception {
         if(type == NodeType.Member){
+
+            String pubIp = System.getProperty("MY_PUB_IP");
+            String priIp = System.getProperty("MY_PRI_IP");
+            String peersIp = System.getProperty("MY_PEERS_LIST");
+
+            System.out.println("pub="+pubIp+", pri="+priIp+" peers="+peersIp);
 
             if(ID.equals("GemMember1F")){
 
