@@ -32,10 +32,7 @@ public class GemControler extends Controler {
 
         System.out.println("pub="+pubIp+", pri="+priIp+" peers="+peersIp);
 
-
         if(type == NodeType.Member){
-
-
 
             serverCache = new CacheFactory().set("cache-xml-file", "server-cache.xml")
                     .set("mcast-port", "0")
