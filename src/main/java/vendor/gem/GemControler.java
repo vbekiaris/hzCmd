@@ -78,7 +78,7 @@ public class GemControler extends Controler {
 
             List<String> locators = Arrays.asList(peersIp.split(","));
             for (String locator : locators) {
-                //clientCacheFactory.addPoolLocator(locator, 11001);
+                clientCacheFactory.addPoolLocator(locator, 11001);
                 //clientCacheFactory.addPoolServer(locator, 40404);
             }
 
