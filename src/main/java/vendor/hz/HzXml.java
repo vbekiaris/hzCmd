@@ -1,4 +1,4 @@
-package xml;
+package vendor.hz;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,8 +29,8 @@ public class HzXml {
         }
     }
 
-    public static final String memberXml = "hazelcast.xml";
-    public static final String clientXml = "client-hazelcast.xml";
+    public static final String memberXml = "config-hz/hazelcast.xml";
+    public static final String clientXml = "config-hz/client-hazelcast.xml";
 
     public static void makeMemberXml(ClusterManager m) throws Exception{
 

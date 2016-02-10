@@ -44,7 +44,7 @@ public class ClusterManager implements Serializable {
 
 
     public void setMembersOnlyCount(int count) {
-        if(count < 0 || count > boxes.size()){
+        if(count < 0 || count >= boxes.size()){
             membersOnlyCount=0;
         }else{
             membersOnlyCount = count;

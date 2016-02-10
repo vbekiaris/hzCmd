@@ -4,7 +4,6 @@ import global.NodeType;
 import local.Box;
 import local.ClusterManager;
 import local.RemoteJvm;
-import xml.HzXml;
 
 import java.io.IOException;
 
