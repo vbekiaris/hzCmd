@@ -178,7 +178,7 @@ public abstract class RemoteJvm implements Serializable {
     }
 
     public void downlonad(String destDir) throws IOException, InterruptedException {
-        box.downlonad(dir + "/*", destDir + "/" + id + "-" + box.pri);
+        box.downlonad(dir + "/*", destDir + "/" + id);
     }
 
     public void upload(String src, String dst) throws IOException, InterruptedException {
