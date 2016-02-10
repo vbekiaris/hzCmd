@@ -40,7 +40,9 @@ public class GemControler extends Controler {
                     .set("start-locator", "11001")
                     .set("locators", peersIp).create();
 
-            System.out.print( serverCache.getMembers() );
+            if (serverCache==null){
+                throw  new RuntimeException("serverCache==null");
+            }
 
             /*
             if(ID.equals("GemMember1F")){
