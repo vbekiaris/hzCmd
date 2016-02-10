@@ -74,11 +74,11 @@ public class GemControler extends Controler {
 
             ClientCacheFactory clientCacheFactory = new ClientCacheFactory();
             clientCacheFactory.set("cache-xml-file", "client-cache.xml");
-            clientCacheFactory.set("mcast-port", "0");
+            //clientCacheFactory.set("mcast-port", "0");
 
             List<String> locators = Arrays.asList(peersIp.split(","));
             for (String locator : locators) {
-                clientCacheFactory.addPoolLocator(locator, 11001);
+                //clientCacheFactory.addPoolLocator(locator, 11001);
                 //clientCacheFactory.addPoolServer(locator, 40404);
             }
 
