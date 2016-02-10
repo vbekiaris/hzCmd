@@ -24,15 +24,12 @@ public class GemControler extends Controler {
     }
 
     public void init(NodeType type) throws Exception {
-
         String pubIp = System.getProperty("MY_PUB_IP");
         String priIp = System.getProperty("MY_PRI_IP");
         String peersIp = System.getProperty("MY_PEERS_LIST");
-
         System.out.println("pub="+pubIp+", pri="+priIp+" peers="+peersIp);
 
         this.type = type;
-
         if(type == NodeType.Member){
 
             serverCache = new CacheFactory().set("cache-xml-file", "server-cache.xml")
@@ -41,40 +38,7 @@ public class GemControler extends Controler {
                     .set("start-locator", "11001")
                     .set("locators", peersIp).create();
 
-            if (serverCache==null){
-                throw  new RuntimeException("serverCache==null");
-            }
-
-            /*
-            if(ID.equals("GemMember1F")){
-                //54.173.123.102  //10.0.0.193
-                serverCache = new CacheFactory().set("cache-xml-file", "server-cache.xml")
-                        .set("mcast-port", "0")
-                        .set("bind-address", "10.0.0.193")
-                        .set("start-locator", "11001")
-                        .set("locators", "10.0.0.192[11001]").create();
-                //localhost[11001]
-
-            } else if ( ID.equals("GemMember2F") ) {
-
-                //54.172.198.157 //10.0.0.192
-                serverCache = new CacheFactory().set("cache-xml-file", "server-cache.xml")
-                        .set("mcast-port", "0")
-                        .set("bind-address", "10.0.0.192")
-                        .set("start-locator", "11001")
-                        .set("locators", "10.0.0.193[11001]").create();
-            }
-            */
-
-
-            //.set("start-locator","[50505]").create();
-            //Region r = c.createRegionFactory(RegionShortcut.REPLICATE).create("customers");
-            //Region r = c.createRegionFactory(RegionShortcut.PARTITION_REDUNDANT).create("customers");
-            //Example 3: Construct the cache region declaratively in cache.xml
-            //Now, create the cache telling it to read your cache.xml file:
-
         }else{
-            //Connect to a CacheServer on the default host and port and access a region "customers"
 
             ClientCacheFactory clientCacheFactory = new ClientCacheFactory();
             clientCacheFactory.set("cache-xml-file", "client-cache.xml");
@@ -85,31 +49,12 @@ public class GemControler extends Controler {
                 clientCacheFactory.addPoolLocator(locator, 11001);
                 //clientCacheFactory.addPoolServer(locator, 40404);
             }
-
-
             clientCache = clientCacheFactory.create();
             System.out.println( clientCache.getCurrentServers() );
-
-
-            //Region r = c.createClientRegionFactory(ClientRegionShortcut.PROXY).create("customers");
-
-
-            //Example 2: Connect using the GemFire locator and create a local LRU cache
-            //ClientCache c = new ClientCacheFactory()
-            //            .addPoolLocator(host, port)
-            //            .create();
-
-
-            //Region r = c.createClientRegionFactory(CACHING_PROXY_HEAP_LRU)
-            //           .create("customers");
-            //The local LRU "customers" data region will automatically start evicting, by default, at 80% heap utilization threshold
-
         }
     }
 
     public Object getVendorObject(){
-        System.out.println("serverCache="+serverCache);
-        System.out.println("clientCache="+clientCache);
         if(type == NodeType.Member){
             return serverCache;
         }
