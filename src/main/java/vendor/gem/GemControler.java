@@ -21,7 +21,6 @@ public class GemControler extends Controler {
 
     public GemControler(NodeType type) throws Exception {
         super(type);
-        this.type = type;
     }
 
     public void init(NodeType type) throws Exception {
@@ -31,6 +30,8 @@ public class GemControler extends Controler {
         String peersIp = System.getProperty("MY_PEERS_LIST");
 
         System.out.println("pub="+pubIp+", pri="+priIp+" peers="+peersIp);
+
+        this.type = type;
 
         if(type == NodeType.Member){
 
@@ -107,6 +108,8 @@ public class GemControler extends Controler {
     }
 
     public Object getVendorObject(){
+        System.out.println("serverCache="+serverCache);
+        System.out.println("clientCache="+clientCache);
         if(type == NodeType.Member){
             return serverCache;
         }
