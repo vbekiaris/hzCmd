@@ -40,6 +40,7 @@ public class GemControler extends Controler {
                     .set("start-locator", "11001")
                     .set("locators", peersIp).create();
 
+            serverCache.getMembers();
 
             /*
             if(ID.equals("GemMember1F")){
@@ -84,6 +85,7 @@ public class GemControler extends Controler {
 
 
             clientCache = clientCacheFactory.create();
+            clientCache.getCurrentServers();
 
             //Region r = c.createClientRegionFactory(ClientRegionShortcut.PROXY).create("customers");
 
