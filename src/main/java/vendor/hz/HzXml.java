@@ -158,10 +158,10 @@ public class HzXml {
     }
 
     public static String memberXmlFileForCluster(ClusterManager m ){
-        return xmlDir+"/"+m.getClusterId()+"-"+ memberXml;
+        return xmlDir+"/"+m.getClusterId()+"-"+ "hazelcast.xml";
     }
 
     public static String clientXmlFileForCluster(ClusterManager m ){
-        return xmlDir+"/"+m.getClusterId()+"-"+ clientXml;
+        return xmlDir+"/"+m.getClusterId()+"-"+ "client-hazelcast.xml";
     }
 }
