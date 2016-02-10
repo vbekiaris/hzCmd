@@ -13,5 +13,9 @@ public abstract class GemBench extends Bench{
     @Override
     public void setVendorObject(Object vendorObject) {
         gemFireCache = (GemFireCache) vendorObject;
+
+        if(gemFireCache==null){
+            System.out.println("gemFireCache==null");
+        }
     }
 }
