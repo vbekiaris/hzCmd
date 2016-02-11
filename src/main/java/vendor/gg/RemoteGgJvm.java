@@ -7,6 +7,8 @@ import local.RemoteJvm;
 
 import java.io.IOException;
 
+import static vendor.gg.GgXml.addServerIpsToGgXml;
+
 
 public class RemoteGgJvm extends RemoteJvm {
 
@@ -23,9 +25,11 @@ public class RemoteGgJvm extends RemoteJvm {
     }
 
     public void beforeJvmStart(ClusterManager myCluster) throws Exception {
-        box.upload("config-gg/gg-config.xml", dir+"/");
+        addServerIpsToGgXml(myCluster);
+
+        box.upload("config-gg/"+myCluster.getClusterId()+"gg-config.xml", dir+"/"+"gg-config.xml");
         box.mkdir(dir + "/" +"config");
-        box.upload("config-gg/java.util.logging.properties", dir+"/"+"config");
+        box.upload("config-gg/java.util.logging.properties", dir+"/"+"config"+"/");
     }
 
     public String setJvmStartOptions(Box thisBox, ClusterManager myCluster) throws Exception {
