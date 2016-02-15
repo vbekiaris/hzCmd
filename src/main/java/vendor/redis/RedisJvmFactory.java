@@ -27,6 +27,7 @@ public class RedisJvmFactory implements JvmFactory, Serializable {
         List<String> jars = new ArrayList();
 
         jars.add("embedded-redis-0.6.jar");
+        jars.add("commons-io-2.3.jar");
         return jars;
     }
 
