@@ -24,14 +24,7 @@ public class RedisControler extends Controler {
             redisServer = new RedisServer(6379);
             redisServer.start();
 
-
-            RedisServer.builder()
-
-
-                    .port(6379)
-                    .slaveOf("locahost", 6378)
-                    .configFile("redis.conf")
-                    .build();
+            System.out.println("redisServer.isActive()="+redisServer.isActive());
 
         } else {
             jedisClient = new Jedis("host", 6379);
