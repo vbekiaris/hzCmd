@@ -1,7 +1,7 @@
 package global;
 
 public enum ClusterType {
-    HZ, GG, GEM
+    HZ, GG, GEM, RED
 }
 
 

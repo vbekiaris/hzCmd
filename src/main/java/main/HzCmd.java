@@ -13,6 +13,7 @@ import local.BoxManager;
 import local.ClusterManager;
 import local.Installer;
 import local.RemoteJvm;
+import vendor.redis.RedisJvmFactory;
 
 import javax.jms.JMSException;
 import java.io.*;
@@ -91,7 +92,9 @@ public class HzCmd implements Serializable {
             case GEM:
                 cluster = new ClusterManager(clusterId, boxi, brokerIP, new GemJvmFactory());
                 break;
-
+            case RED:
+                cluster = new ClusterManager(clusterId, boxi, brokerIP, new RedisJvmFactory());
+                break;
             default:
                 System.out.println(Bash.ANSI_RED+"box group "+boxGroupId + " not found"+Bash.ANSI_RESET);
                 return;
