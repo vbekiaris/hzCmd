@@ -25,7 +25,7 @@ public class CmdLine {
                 .withCommands(AddBox.class, AddCluster.class, AddMember.class, AddClient.class);
 
         builder.withGroup("chart")
-                .withDescription("chart bench data")
+                .withDescription("chart bench data gnuplot install required")
                 .withDefaultCommand(Help.class)
                 .withCommands(ChartMetrics.class, ChartMetricsCompair.class);
 
