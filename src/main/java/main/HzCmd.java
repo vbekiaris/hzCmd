@@ -388,4 +388,8 @@ public class HzCmd implements Serializable {
     public void chartAllJavaMetrics(String dir) throws IOException, InterruptedException {
         Bash.executeCommand("chartAllJavaMetrics "+dir);
     }
+
+    public void chartComparisonMetrics(String dir, String red, String blue) throws IOException, InterruptedException {
+        Bash.executeCommand("chartComparisonMetrics "+dir+" "+red+" "+blue);
+    }
 }

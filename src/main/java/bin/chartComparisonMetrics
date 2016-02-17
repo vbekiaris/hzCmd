@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+path=$1
+a=$2
+b=$3
+
+cd ${path}
+
+find . -name *${a}*.csv | xargs -n1 basename | sort | uniq > a.txt
+
+find . -name *${b}*.csv | xargs -n1 basename | sort | uniq > b.txt
+
+paste a.txt b.txt > a-and-b.txt
+
+mkdir ${a}-vs-${b}
+
+while read line; do
+  f=($line)
+  echo ${f[0]}  '<-->'  ${f[1]}
+
+  find . -name ${f[0]}
+  find . -name ${f[1]}
+
+  chartCompairMetrics ${f[0]} ${f[1]} "${f[0]}-VS-${f[1]}"
+
+  mv *.png ${a}-vs-${b}/
+
+done < a-and-b.txt
+
+
