@@ -28,7 +28,7 @@ public class RedisControler extends Controler {
             Bash.executeCommand("tar xzf redis-"+version+".tar.gz");
             Bash.executeCommand("cd redis-"+version+"; make MALLOC=libc install");
 
-            String pidStr = Bash.executeCommand("nohup redis-server redis.conf > out.txt & echo $! ");
+            String pidStr = Bash.executeCommand("nohup redis-server redis.conf >> out.txt & echo $! ");
             int pid = Integer.parseInt(pidStr.trim());
 
             System.out.println("redis-server pid="+pid);

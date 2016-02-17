@@ -122,10 +122,7 @@ public abstract class Bench extends Task{
             timeStep();
             context.stop();
         }
-
         csvReporter.stop();
-
-
         metrics.remove(metricsCsvtitle);
     }
 
