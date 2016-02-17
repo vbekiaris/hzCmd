@@ -1,5 +1,6 @@
 package vendor.redis;
 
+import global.Bash;
 import global.NodeType;
 import redis.clients.jedis.Jedis;
 import redis.embedded.RedisServer;
@@ -21,11 +22,20 @@ public class RedisControler extends Controler {
 
         if (type == NodeType.Member) {
 
-            redisServer = new RedisServer(6379);
-            redisServer.start();
+            String version="3.0.7";
 
-            System.out.println("redisServer.isActive()="+redisServer.isActive());
+            Bash.executeCommand("wget http://download.redis.io/releases/redis-"+version+".tar.gz");
+            Bash.executeCommand("tar xzf redis-"+version+".tar.gz");
+            Bash.executeCommand("cd redis-"+version+"; make MALLOC=libc install");
 
+            String pidStr = Bash.executeCommand("nohup redis-server redis.conf > out.txt & echo $! ");
+            int pid = Integer.parseInt(pidStr.trim());
+
+            System.out.println("redis-server pid="+pid);
+
+            //redisServer = new RedisServer(6379);
+            //redisServer.start();
+            //System.out.println("redisServer.isActive()="+redisServer.isActive());
         } else {
             jedisClient = new Jedis("host", 6379);
         }

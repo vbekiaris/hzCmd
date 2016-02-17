@@ -61,7 +61,7 @@ public abstract class Bash {
 
 
 
-    private static String executeCommand(String command) throws IOException, InterruptedException {
+    public static String executeCommand(String command) throws IOException, InterruptedException {
         if (showSSH) {
             System.out.println(command);
         }
@@ -91,7 +91,7 @@ public abstract class Bash {
         return output.toString();
     }
 
-    private static int executeCommandWithExitCode(String command) throws IOException, InterruptedException {
+    public static int executeCommandWithExitCode(String command) throws IOException, InterruptedException {
         Process p = Runtime.getRuntime().exec(command);
         p.waitFor();
         return p.exitValue();
