@@ -16,12 +16,19 @@ public class CmdLine {
                 .withCommands(Help.class, Info.class, Add.class, Set.class, MemberBox.class, Install.class,
                               Kill.class, Restart.class, Cat.class, Tail.class, Grep.class, Download.class,
                               Clean.class, Wipe.class, Load.class, Async.class, Sync.class, Exit.class, Listen.class,
-                              Bench.class, Ssh.class, Ping.class, scpUp.class, UploadCwd.class, UploadLib.class, Broker.class, Ls.class);
+                              Bench.class, Ssh.class, Ping.class, scpUp.class, UploadCwd.class, UploadLib.class, Broker.class,
+                              Ls.class, Chart.class);
 
         builder.withGroup("add")
                 .withDescription("add boxes, clusters, members clients")
                 .withDefaultCommand(Help.class)
                 .withCommands(AddBox.class, AddCluster.class, AddMember.class, AddClient.class);
+
+        builder.withGroup("chart")
+                .withDescription("chart bench data")
+                .withDefaultCommand(Help.class)
+                .withCommands(ChartMetrics.class);
+
 
         return builder.build();
     }
