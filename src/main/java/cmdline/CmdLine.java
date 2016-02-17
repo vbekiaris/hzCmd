@@ -27,7 +27,7 @@ public class CmdLine {
         builder.withGroup("chart")
                 .withDescription("chart bench data")
                 .withDefaultCommand(Help.class)
-                .withCommands(ChartMetrics.class);
+                .withCommands(ChartMetrics.class, ChartMetricsCompair.class);
 
 
         return builder.build();
