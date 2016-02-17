@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+path=$1
+
+cd ${path}
+
+files=$(find . -name *.csv | xargs -n1 basename | sort | uniq)
+
+while read -r f; do
+
+ echo ${f}
+ mkdir ${f}-charts
+
+ chartJavaMetrics ${f} ${f}
+ mv *.png ${f}-charts
+
+done <<< "$files"

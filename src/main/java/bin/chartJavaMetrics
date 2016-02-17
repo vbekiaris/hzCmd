@@ -2,8 +2,7 @@
 
 filePattern=$1
 title=$2
-ytitle=$3
-keyState=${4:-on}
+keyState=${3:-on}
 
 
 
@@ -12,19 +11,19 @@ keyState=${4:-on}
 
 
 
-plotMetrics ${filePattern} 2  ${title} count ${keyState}
-plotMetrics ${filePattern} 13 ${title} ops-perSec-mean-rate ${keyState}
-plotMetrics ${filePattern} 14 ${title} ops-perSec-1min-rate ${keyState}
-plotMetrics ${filePattern} 15 ${title} ops-perSec-5min-rate ${keyState}
-plotMetrics ${filePattern} 16 ${title} ops-perSec-15min-rate ${keyState}
+chartMetrics ${filePattern} 2  ${title} count ${keyState}
+chartMetrics ${filePattern} 13 ${title} ops-perSec-mean-rate ${keyState}
+chartMetrics ${filePattern} 14 ${title} ops-perSec-1min-rate ${keyState}
+chartMetrics ${filePattern} 15 ${title} ops-perSec-5min-rate ${keyState}
+chartMetrics ${filePattern} 16 ${title} ops-perSec-15min-rate ${keyState}
 
-plotMetrics ${filePattern} 5 ${title} min-latency ${keyState}
-plotMetrics ${filePattern} 3 ${title} max-latency ${keyState}
-plotMetrics ${filePattern} 4 ${title} mean-latency ${keyState}
-plotMetrics ${filePattern} 6 ${title} stdDev-latency ${keyState}
+chartMetrics ${filePattern} 5 ${title} min-latency ${keyState}
+chartMetrics ${filePattern} 3 ${title} max-latency ${keyState}
+chartMetrics ${filePattern} 4 ${title} mean-latency ${keyState}
+chartMetrics ${filePattern} 6 ${title} stdDev-latency ${keyState}
 
-plotMetrics ${filePattern} 8  ${title} 75-latency-percentile ${keyState}
-plotMetrics ${filePattern} 9  ${title} 95-latency-percentile ${keyState}
-plotMetrics ${filePattern} 10 ${title} 98-latency-percentile ${keyState}
-plotMetrics ${filePattern} 11 ${title} 99-latency-percentile ${keyState}
-plotMetrics ${filePattern} 12 ${title} 999-latency-percentile ${keyState}
+chartMetrics ${filePattern} 8  ${title} 75-latency-percentile ${keyState}
+chartMetrics ${filePattern} 9  ${title} 95-latency-percentile ${keyState}
+chartMetrics ${filePattern} 10 ${title} 98-latency-percentile ${keyState}
+chartMetrics ${filePattern} 11 ${title} 99-latency-percentile ${keyState}
+chartMetrics ${filePattern} 12 ${title} 999-latency-percentile ${keyState}
