@@ -9,6 +9,7 @@ tar xvf ./apache-activemq-5.13.0-bin.tar.gz
 mv ./apache-activemq-5.13.0 ~/.
 
 echo "export ACTIVE_MQ_BIN=~/apache-activemq-5.13.0/bin" >> ~/.bashrc
+
 echo 'PATH=${PATH}:${ACTIVE_MQ_BIN}' >> ~/.bashrc
 
 
