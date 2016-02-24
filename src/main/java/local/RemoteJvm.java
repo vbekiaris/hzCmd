@@ -82,6 +82,7 @@ public abstract class RemoteJvm implements Serializable {
             return;
         }
 
+        System.out.println(launchCmd);
         launchJvm(launchCmd);
     }
 
