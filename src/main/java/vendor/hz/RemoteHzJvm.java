@@ -21,7 +21,7 @@ public class RemoteHzJvm extends RemoteJvm {
         return HzClient.class.getName();
     }
 
-    public void beforeJvmStart(ClusterManager myCluster) throws Exception {
+    public void beforeJvmStart(ClusterManager myCluster) throws Exception{
 
         HzXml.makeMemberXml(myCluster);
         HzXml.makeClientXml(myCluster);

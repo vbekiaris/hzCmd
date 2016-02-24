@@ -72,7 +72,7 @@ public abstract class RemoteJvm implements Serializable {
         launchJvm(launchCmd);
     }
 
-    public final void reStartJvm() throws IOException, InterruptedException {
+    public final void reStartJvm(ClusterManager myCluster) throws Exception {
         if(launchCmd==null){
             System.out.println(Bash.ANSI_RED+"NO launchCmd, jvm never started"+this+Bash.ANSI_RESET);
             return;
@@ -83,6 +83,7 @@ public abstract class RemoteJvm implements Serializable {
         }
 
         System.out.println(launchCmd);
+        beforeJvmStart(myCluster);
         launchJvm(launchCmd);
     }
 
