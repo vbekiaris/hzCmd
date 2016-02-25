@@ -20,7 +20,7 @@ public class AddMember extends Command implements Serializable{
     @Option(name = "-v", description = "hazelcast version e.g. 3.6")
     public String version;
 
-    @Option(name = "-up", description = "files to upload to cwd of jvm")
+    @Option(name = "-up", description = "contigues list of file in a comma delimited string to upload to cwd of jvm")
     public String files;
 
 

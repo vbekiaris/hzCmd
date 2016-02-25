@@ -9,6 +9,8 @@ import remote.command.*;
 import javax.jms.JMSException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 import static global.Utils.myIp;
 
@@ -189,7 +191,10 @@ public abstract class RemoteJvm implements Serializable {
 
     public void uploadcwd(String src) throws IOException, InterruptedException {
         if (src!=null){
-            box.upload(src, dir + "/");
+            List<String> files = Arrays.asList(src.split(","));
+            for (String file : files) {
+                box.upload(file, dir + "/");
+            }
         }
     }
 
