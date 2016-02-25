@@ -121,21 +121,21 @@ public class HzCmd implements Serializable {
         }
     }
 
-    public void addMembers(String clusterId, int qty, String version, String jvmOptions) throws Exception {
+    public void addMembers(String clusterId, int qty, String version, String jvmOptions, String files) throws Exception {
         List<RemoteJvm> added = new ArrayList();
         for (ClusterManager c : clusters.values()) {
             if(c.matchClusterId(clusterId)){
-                added.addAll(c.addMembers(qty, version, jvmOptions));
+                added.addAll(c.addMembers(qty, version, jvmOptions, files));
             }
         }
         checkAddJvms(added);
     }
 
-    public void addClients(String clusterId, int qty, String version, String jvmOptions) throws Exception {
+    public void addClients(String clusterId, int qty, String version, String jvmOptions, String files) throws Exception {
         List<RemoteJvm> added = new ArrayList();
         for (ClusterManager c : clusters.values()) {
             if(c.matchClusterId(clusterId)){
-                added.addAll(c.addClients(qty, version, jvmOptions));
+                added.addAll(c.addClients(qty, version, jvmOptions, files));
             }
         }
         checkAddJvms(added);

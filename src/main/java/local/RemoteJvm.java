@@ -188,7 +188,9 @@ public abstract class RemoteJvm implements Serializable {
     }
 
     public void uploadcwd(String src) throws IOException, InterruptedException {
-        box.upload(src, dir + "/");
+        if (src!=null){
+            box.upload(src, dir + "/");
+        }
     }
 
     public String getId(){ return id; }
