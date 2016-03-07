@@ -14,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 public abstract class Bench extends Task{
 
     public BenchType benchType = BenchType.Metrics;
-
     public String title;
 
     public int warmupSec=30;
@@ -30,11 +29,11 @@ public abstract class Bench extends Task{
     public abstract void setup();
 
     public void warmup(){
-        runBench(benchType, warmupSec, title + "-Warmup-"+warmupSec+"Sec");
+        runBench(benchType, warmupSec, title + "_warmup-"+warmupSec+"Sec");
     }
 
     public void run() {
-        runBench(benchType, durationSec, title + "-Bench-"+durationSec+"Sec");
+        runBench(benchType, durationSec, title + "_bench-"+durationSec+"Sec");
     }
 
     private void runBench(BenchType type, int seconds, String title){

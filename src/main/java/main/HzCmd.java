@@ -2,6 +2,7 @@ package main;
 
 import cmdline.CmdLine;
 import cmdline.Command;
+import local.*;
 import vendor.gem.GemJvmFactory;
 import vendor.gg.GgJvmFactory;
 import global.Args;
@@ -9,10 +10,6 @@ import global.Bash;
 import global.ClusterType;
 import vendor.hz.HzJvmFactory;
 import jms.MQ;
-import local.BoxManager;
-import local.ClusterManager;
-import local.Installer;
-import local.RemoteJvm;
 import vendor.redis.RedisJvmFactory;
 
 import javax.jms.JMSException;
@@ -29,6 +26,8 @@ public class HzCmd implements Serializable {
 
     private Map<String, BoxManager> boxes = new HashMap();
     private Map<String, ClusterManager> clusters = new HashMap();
+
+    private BenchMarkSettings benchMarkSettings = new BenchMarkSettings();
 
     private String brokerIP=null;
 
@@ -275,10 +274,59 @@ public class HzCmd implements Serializable {
         }
     }
 
+    public void invokeBenchMarks(String clusterId, String benchFile) throws Exception {
+        ClusterManager c = clusters.get(clusterId);
+
+        BenchManager bencher = new BenchManager(benchFile);
+
+        for (String taskId : bencher.getTaskIds()) {
+
+            for (String drivers : benchMarkSettings.getDrivers()) {
+
+                String className = bencher.getClassName(taskId);
+                load(drivers, taskId, className);
+
+                setField(drivers, taskId, "warmupSec", benchMarkSettings.getWarmupSec());
+                setField(drivers, taskId, "durationSec", benchMarkSettings.getDurationSec());
+
+                String filedSetup = new String();
+                for (FieldValue field : bencher.getFieldsToSet(taskId)) {
+                    setField(drivers, taskId, field.field, field.value);
+                    filedSetup+="_"+field.field+"-"+field.value;
+                }
+
+                for (String benchType : benchMarkSettings.getTypes()) {
+
+                    setField(drivers, taskId, "benchType", benchType);
+
+                    for (List<FieldValue> settings : bencher.getSettings(taskId)) {
+
+                        String itteratedFieldSetup = new String();
+                        for (FieldValue setting : settings) {
+                            setField(drivers, taskId, setting.field, setting.value);
+                            itteratedFieldSetup += "_" + setting.field + "-" + setting.value;
+                        }
+
+                        for (int threadCount : benchMarkSettings.getThreads()) {
+
+                            String title = clusterId+"_"+"M"+c.getMemberCount()+"-C"+c.getClientCount()+"_driver-"+drivers+" "+benchType+"_"+taskId+"_"+className+"_"+filedSetup+"_"+itteratedFieldSetup+"_threads-"+threadCount;
+                            setField(drivers, taskId, "title", title);
+
+                            invokeBenchMark(drivers, threadCount, taskId);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
     public void invokeBenchMark(String jvmId, int threadCound, String taksId) throws Exception {
         invokeSync(jvmId, 1, "init", taksId);
         invokeSync(jvmId, threadCound, "warmup", taksId);
         invokeSync(jvmId, threadCound, "run", taksId);
+        //invokeSync(jvmId, 1, "cleanup", taksId);
     }
 
     public void stop(String jvmId, String taskId) throws Exception {
@@ -391,5 +439,26 @@ public class HzCmd implements Serializable {
 
     public void chartComparisonMetrics(String dir, String red, String blue) throws IOException, InterruptedException {
         Bash.executeCommand("chartComparisonMetrics "+dir+" "+red+" "+blue);
+    }
+
+
+    public void setBenchDrivers(String drivers){
+        benchMarkSettings.setDrivers(drivers);
+    }
+
+    public void setBenchThreadCounts(String threadsCount) {
+        benchMarkSettings.setThreads(threadsCount);
+    }
+
+    public void setBenchWarmupSec(int warmupSec) {
+        benchMarkSettings.setWarmupSec(warmupSec);
+    }
+
+    public void setBenchBenchDurationSec(int durationSec) {
+        benchMarkSettings.setDurationSec(durationSec);
+    }
+
+    public void setBenchType(String type) {
+        benchMarkSettings.setType(type);
     }
 }

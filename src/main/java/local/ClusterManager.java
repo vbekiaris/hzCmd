@@ -85,11 +85,31 @@ public class ClusterManager implements Serializable {
         return jvm;
     }
 
+    public int getMemberCount( ) {
+        int count=0;
+        for(RemoteJvm jvm : jvms.values()){
+            if ( jvm.isMember() ){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int getClientCount( ) {
+        int count=0;
+        for(RemoteJvm jvm : jvms.values()){
+            if ( jvm.isClient() ){
+                count++;
+            }
+        }
+        return count;
+    }
+
     public List<RemoteJvm> getMatchingJms(String jvmId) {
         List<RemoteJvm> matching = new ArrayList<RemoteJvm>();
 
         for(RemoteJvm jvm : jvms.values()){
-            if ( jvm.getId().matches(".*"+jvmId+".*") ){
+            if ( jvm.getId().matches(".*" + jvmId + ".*") ){
                 matching.add(jvm);
             }
         }
