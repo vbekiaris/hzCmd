@@ -22,7 +22,6 @@ public class CmdLine {
     *
     * hzCmd bench run -clusterid HZ bench.properties -out output/dir/
     *
-
     *
     * putBench@class.name.of.PutBench
     * putBench@keyDomain=1000
