@@ -63,7 +63,7 @@ public class CmdLine {
         builder.withGroup("init")
                 .withDescription("init a cluster ")
                 .withDefaultCommand(Help.class)
-                .withCommands(AddCluster.class);
+                .withCommands(InitCluster.class);
 
         builder.withGroup("add")
                 .withDescription("add boxes, clusters, members clients")
