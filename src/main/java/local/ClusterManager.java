@@ -130,8 +130,10 @@ public class ClusterManager implements Serializable {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             Object o = jvm.getResponse();
             if(o instanceof Exception){
-                System.out.println(Bash.ANSI_RED+o+Bash.ANSI_RESET);
-                System.out.println(Bash.ANSI_RED+((Exception) o).getMessage()+Bash.ANSI_RESET);
+                Exception e = (Exception) o;
+                System.out.println(Bash.ANSI_RED+" "+e+" "+e.getCause()+Bash.ANSI_RESET);
+                e.printStackTrace();
+
             }else{
                 System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
             }
