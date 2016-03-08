@@ -2,7 +2,6 @@ package cmdline;
 
 import com.github.rvesse.airline.builder.CliBuilder;
 import com.github.rvesse.airline.help.Help;
-import remote.BenchType;
 
 @SuppressWarnings("unchecked")
 public class CmdLine {
@@ -74,7 +73,7 @@ public class CmdLine {
         builder.withGroup("bench")
                 .withDescription("benchmarking tools")
                 .withDefaultCommand(Help.class)
-                .withCommands(BenchDriver.class, BenchThreads.class, BenchDuration.class, BenchWarmup.class, BenchType.class, BenchRun.class);
+                .withCommands(BenchDriver.class, BenchThreads.class, BenchDuration.class, BenchWarmup.class, BenchTypes.class, BenchRun.class);
 
         builder.withGroup("chart")
                 .withDescription("chart bench data gnuplot install required")
