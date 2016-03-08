@@ -55,7 +55,11 @@ public abstract class Controler{
     public void setField(String taskId, String field, String value){
         try {
             tasks.setField(taskId, field, value);
+            MQ.sendObj(ID+"reply", "set "+taskId+" "+field+" "+value );
         } catch (Exception e) {
+            try {
+                MQ.sendObj(ID+"reply", e);
+            } catch (JMSException e2) {}
             recordSendException(e, EVENTQ);
         }
     }
