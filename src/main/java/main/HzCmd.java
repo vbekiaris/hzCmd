@@ -2,6 +2,7 @@ package main;
 
 import cmdline.CmdLine;
 import cmdline.Command;
+import global.ClusterSize;
 import local.*;
 import vendor.gem.GemJvmFactory;
 import vendor.gg.GgJvmFactory;
@@ -51,6 +52,21 @@ public class HzCmd implements Serializable {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void initCluster(String user, String boxes, String clusterId, ClusterType type, ClusterSize size, boolean ee, String version, String memberJvmOptions, String clientJvmOption, String libFiles, String cwdFiles) throws Exception{
+
+        addBoxes(user, boxes);
+        addCluster(clusterId, boxes, type);
+        install(clusterId, ee, version);
+
+        //uploadLib(clusterId, );
+
+        int m = ClusterSize.getMemberCount(size);
+        addMembers(clusterId, m, version,  memberJvmOptions, cwdFiles);
+
+        int c = ClusterSize.getClientCount(size);
+        addClients(clusterId, c, version, clientJvmOption, cwdFiles);
     }
 
     public void addBoxes(String user, String file) throws IOException, InterruptedException{
@@ -120,21 +136,21 @@ public class HzCmd implements Serializable {
         }
     }
 
-    public void addMembers(String clusterId, int qty, String version, String jvmOptions, String files) throws Exception {
+    public void addMembers(String clusterId, int qty, String version, String jvmOptions, String cwdfiles) throws Exception {
         List<RemoteJvm> added = new ArrayList();
         for (ClusterManager c : clusters.values()) {
             if(c.matchClusterId(clusterId)){
-                added.addAll(c.addMembers(qty, version, jvmOptions, files));
+                added.addAll(c.addMembers(qty, version, jvmOptions, cwdfiles));
             }
         }
         checkAddJvms(added);
     }
 
-    public void addClients(String clusterId, int qty, String version, String jvmOptions, String files) throws Exception {
+    public void addClients(String clusterId, int qty, String version, String jvmOptions, String cwdfiles) throws Exception {
         List<RemoteJvm> added = new ArrayList();
         for (ClusterManager c : clusters.values()) {
             if(c.matchClusterId(clusterId)){
-                added.addAll(c.addClients(qty, version, jvmOptions, files));
+                added.addAll(c.addClients(qty, version, jvmOptions, cwdfiles));
             }
         }
         checkAddJvms(added);

@@ -60,6 +60,11 @@ public class CmdLine {
                               Bench.class, Ssh.class, Ping.class, scpUp.class, UploadCwd.class, UploadLib.class, Broker.class,
                               Ls.class, Chart.class);
 
+        builder.withGroup("init")
+                .withDescription("init a cluster ")
+                .withDefaultCommand(Help.class)
+                .withCommands(AddCluster.class);
+
         builder.withGroup("add")
                 .withDescription("add boxes, clusters, members clients")
                 .withDefaultCommand(Help.class)
@@ -74,7 +79,6 @@ public class CmdLine {
                 .withDescription("chart bench data gnuplot install required")
                 .withDefaultCommand(Help.class)
                 .withCommands(ChartMetrics.class, ChartMetricsCompair.class);
-
 
         return builder.build();
     }

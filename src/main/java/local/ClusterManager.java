@@ -52,23 +52,23 @@ public class ClusterManager implements Serializable {
     }
 
 
-    public List<RemoteJvm> addMembers(int qty, String version, String options, String files) throws Exception {
-        return addJvms(qty, version, options, files, NodeType.Member);
+    public List<RemoteJvm> addMembers(int qty, String version, String options, String cwdFiles) throws Exception {
+        return addJvms(qty, version, options, cwdFiles, NodeType.Member);
     }
 
-    public List<RemoteJvm> addClients(int qty, String version, String options, String files) throws Exception {
-        return addJvms(qty, version, options, files, NodeType.Client);
+    public List<RemoteJvm> addClients(int qty, String version, String options, String cwdFiles) throws Exception {
+        return addJvms(qty, version, options, cwdFiles, NodeType.Client);
     }
 
-    private List<RemoteJvm> addJvms(int qty, String hzVersion, String options, String files, NodeType type) throws Exception {
+    private List<RemoteJvm> addJvms(int qty, String hzVersion, String options, String cwdFiles, NodeType type) throws Exception {
         List<RemoteJvm> added = new ArrayList();
         for(int i=0; i<qty; i++) {
-            added.add(addJvm(hzVersion, options, files, type));
+            added.add(addJvm(hzVersion, options, cwdFiles, type));
         }
         return added;
     }
 
-    private RemoteJvm addJvm(String jarVersion, String options, String files, NodeType type) throws Exception {
+    private RemoteJvm addJvm(String jarVersion, String options, String cwdFiles, NodeType type) throws Exception {
         int idx;
         int count;
         if(type == NodeType.Member) {
@@ -79,7 +79,7 @@ public class ClusterManager implements Serializable {
             count=clientCount;
         }
         RemoteJvm jvm = jvmFactory.createJvm(boxes.get(idx), type, count, clusterId);
-        jvm.uploadcwd(files);
+        jvm.uploadcwd(cwdFiles);
         jvms.put(jvm.getId(), jvm);
         jvm.startJvm(options, jvmFactory.getVendorLibDir(jarVersion), this, brokerIP);
         return jvm;
