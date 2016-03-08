@@ -325,7 +325,7 @@ public class HzCmd implements Serializable {
 
                         for (int threadCount : benchMarkSettings.getThreads()) {
 
-                            String title = clusterId+"_"+"M"+c.getMemberCount()+"-C"+c.getClientCount()+"_driver-"+drivers+" "+benchType+"_"+taskId+"_"+className+"_"+filedSetup+"_"+itteratedFieldSetup+"_threads-"+threadCount;
+                            String title = clusterId+"_"+"M"+c.getMemberCount()+"-C"+c.getClientCount()+"_driver-"+drivers+"_"+benchType+"_"+taskId+"_"+className+"_"+filedSetup+"_"+itteratedFieldSetup+"_threads-"+threadCount;
                             setField(drivers, taskId, "title", title);
 
                             invokeBenchMark(drivers, threadCount, taskId);
