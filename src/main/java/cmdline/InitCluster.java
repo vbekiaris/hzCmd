@@ -13,22 +13,22 @@ public  class InitCluster extends Command {
 
     //hzCmd init cluster -id A -size small -type HZ -boxes agent.txt -uplib ${benchJar} -upcwd ${trust} -version 3.6 "jvmOps"
 
-    @Option(name = "-user", description = "user name to assess boxes")
+    @Option(name = "-user", description = "user name to access boxes (default ec2-user)")
     public String user="ec2-user";
 
     @Option(name = "-id", description = "set name of cluster")
     public String id;
 
-    @Option(name = "-size", description = "set size of cluster default S")
+    @Option(name = "-size", description = "set size of cluster (default S)")
     public String size="S";
 
-    @Option(name = "-boxes", description = "name of boxes file default agents.txt")
+    @Option(name = "-boxes", description = "name of boxes file (default agents.txt)")
     public String boxes = "agents.txt";
 
-    @Option(name = "-type", description = "default HZ, type of cluster [ClusterType.HZ | ClusterType.GG | ClusterType.GEM]" )
+    @Option(name = "-type", description = "(default HZ), type of cluster [ClusterType.HZ | ClusterType.GG | ClusterType.GEM]" )
     public String type = "HZ";
 
-    @Option(name = "-ee", description = "default false Hazelcast enterprise")
+    @Option(name = "-ee", description = "Hazelcast enterprise (default false)")
     public boolean ee = false;
 
     @Option(name = "-v", description = "hazelcast version e.g. 3.6")
