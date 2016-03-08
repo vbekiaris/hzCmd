@@ -131,6 +131,7 @@ public class ClusterManager implements Serializable {
             Object o = jvm.getResponse();
             if(o instanceof Exception){
                 System.out.println(Bash.ANSI_RED+o+Bash.ANSI_RESET);
+                System.out.println(Bash.ANSI_RED+((Exception) o).getMessage()+Bash.ANSI_RESET);
             }else{
                 System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
             }
