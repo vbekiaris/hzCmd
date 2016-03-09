@@ -27,7 +27,7 @@ public class RedisControler extends Controler {
             Bash.executeCommand("sudo yum install -y gcc-c++");
             Bash.executeCommand("wget http://download.redis.io/releases/redis-"+version+".tar.gz");
             Bash.executeCommand("tar xzf redis-"+version+".tar.gz");
-            Bash.executeCommand("cd hzCmd-root/*M*/redis-3.0.7; cd deps; make lua hiredis linenoise");
+            Bash.executeCommand("cd redis-"+version+"; cd deps; make lua hiredis linenoise");
             Bash.executeCommand("cd redis-"+version+"; sudo make MALLOC=libc install");
 
             String pidStr = Bash.executeCommand("nohup redis-server redis.conf >> out.txt & echo $! ");
