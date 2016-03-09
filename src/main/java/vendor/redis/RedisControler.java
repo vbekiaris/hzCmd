@@ -24,11 +24,13 @@ public class RedisControler extends Controler {
 
             String version="3.0.7";
 
+
+            Bash.executeCommand("pwd; ls;");
             Bash.executeCommand("sudo yum install -y gcc-c++");
             Bash.executeCommand("wget http://download.redis.io/releases/redis-"+version+".tar.gz");
             Bash.executeCommand("tar xzf redis-"+version+".tar.gz");
             Bash.executeCommand("cd redis-"+version+"; cd deps; make lua hiredis linenoise");
-            Bash.executeCommand("cd redis-"+version+"; sudo make MALLOC=libc install");
+            Bash.executeCommand("cd redis-" + version + "; sudo make MALLOC=libc install");
 
             String pidStr = Bash.executeCommand("nohup redis-server redis.conf >> out.txt & echo $! ");
             int pid = Integer.parseInt(pidStr.trim());
