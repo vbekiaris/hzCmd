@@ -32,7 +32,7 @@ public class RedisControler extends Controler {
 
             System.out.println( Bash.executeCommand("ls") );
 
-            System.out.println( Bash.executeCommand("pwd; ls;") );
+            System.out.println( Bash.executeCommand("pwd") );
 
             Bash.executeCommand("cd redis-"+version+"; cd deps; make lua hiredis linenoise");
             Bash.executeCommand("cd redis-" + version + "; sudo make MALLOC=libc install");
