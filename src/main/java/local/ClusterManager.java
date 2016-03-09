@@ -177,6 +177,7 @@ public class ClusterManager implements Serializable {
             }else{
                 jvm.startJvm(version, options, this, brokerIP);
             }
+            //jvm.getResponse()
         }
     }
 
