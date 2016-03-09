@@ -25,10 +25,15 @@ public class RedisControler extends Controler {
             String version="3.0.7";
 
 
-            System.out.println( Bash.executeCommand("pwd; ls;") );
             Bash.executeCommand("sudo yum install -y gcc-c++");
             Bash.executeCommand("wget http://download.redis.io/releases/redis-"+version+".tar.gz");
             Bash.executeCommand("tar xzf redis-"+version+".tar.gz");
+
+
+            System.out.println( Bash.executeCommand("ls;") );
+
+            System.out.println( Bash.executeCommand("pwd; ls;") );
+
             Bash.executeCommand("cd redis-"+version+"; cd deps; make lua hiredis linenoise");
             Bash.executeCommand("cd redis-" + version + "; sudo make MALLOC=libc install");
 
