@@ -34,7 +34,7 @@ public class RedisControler extends Controler {
 
 
 
-            String pidStr = Bash.executeCommand("redis-server");
+            String pidStr = Bash.executeCommand("redis-server >> out.txt 2>&1 & echo $!");
             //redis.conf
             //String pidStr = Bash.executeCommand("redis-server >> out.txt 2>&1 & echo $!");
             int pid = Integer.parseInt(pidStr.trim());
