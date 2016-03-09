@@ -30,7 +30,7 @@ public class RedisControler extends Controler {
             System.out.println( Bash.executeCommand("tar xzf redis-" + version + ".tar.gz"));
 
 
-            System.out.println( Bash.executeCommand("ls;") );
+            System.out.println( Bash.executeCommand("ls") );
 
             System.out.println( Bash.executeCommand("pwd; ls;") );
 
