@@ -25,7 +25,7 @@ public class RemoteRedisJvm extends RemoteJvm {
     public void beforeJvmStart(ClusterManager myCluster) throws Exception {
 
         if(isMember()) {
-            box.upload("config-redis/redis.conf", dir + "/");
+            //box.upload("config-redis/redis.conf", dir + "/");
         }else {
 
         }
