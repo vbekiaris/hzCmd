@@ -33,8 +33,8 @@ public class RedisControler extends Controler {
             System.out.println( Bash.executeCommand("pwd") );
             System.out.println( Bash.executeCommand("ls") );
 
-            Bash.executeCommand("sh -c ' cd redis-"+version+"/deps; make lua hiredis linenoise ' ");
-            Bash.executeCommand("sh -c ' cd redis-" + version + "; sudo make MALLOC=libc install ' ");
+            Bash.executeCommand("sh -c cd redis-"+version+"/deps && make lua hiredis linenoise ");
+            Bash.executeCommand("sh -c cd redis-"+version+"      && make MALLOC=libc install   ");
 
 
             String pidStr = Bash.executeCommand("sudo nohup redis-server redis.conf >> out.txt  2>&1 & echo $!");
