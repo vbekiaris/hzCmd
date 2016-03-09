@@ -29,8 +29,12 @@ public class RedisControler extends Controler {
             System.out.println( Bash.executeCommand("wget http://download.redis.io/releases/redis-" + version + ".tar.gz") );
             System.out.println( Bash.executeCommand("tar xzf redis-" + version + ".tar.gz"));
 
-            System.out.println( Bash.executeCommand("sh -c cd redis-" + version + "/deps && sudo make lua hiredis linenoise > make.out") );
-            System.out.println( Bash.executeCommand("sh -c cd redis-" + version + "      && sudo make MALLOC=libc install   > make2.out") );
+            //System.out.println( Bash.executeCommand("sh -c cd redis-" + version + "/deps && sudo make lua hiredis linenoise") );
+            //System.out.println( Bash.executeCommand("sh -c cd redis-" + version + "      && sudo make MALLOC=libc install   ") );
+
+            System.out.println( Bash.executeCommand("sudo make -C redis-"+version+"/deps lua hiredis linenoise") );
+            System.out.println( Bash.executeCommand("sudo make -C cd redis-"+version+" MALLOC=libc install") );
+
 
 
 
