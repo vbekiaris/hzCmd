@@ -33,7 +33,7 @@ public class RedisControler extends Controler {
             //System.out.println( Bash.executeCommand("sh -c cd redis-" + version + "      && sudo make MALLOC=libc install   ") );
 
             System.out.println( Bash.executeCommand("sudo make -C redis-"+version+"/deps lua hiredis linenoise") );
-            System.out.println( Bash.executeCommand("sudo make -C cd redis-"+version+" MALLOC=libc install") );
+            System.out.println( Bash.executeCommand("sudo make -C redis-"+version+" MALLOC=libc install") );
 
 
 
