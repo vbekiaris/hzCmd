@@ -30,9 +30,7 @@ public class RedisControler extends Controler {
             System.out.println( Bash.executeCommand("tar xzf redis-" + version + ".tar.gz"));
 
 
-            System.out.println( Bash.executeCommand("ls") );
-
-            System.out.println( Bash.executeCommand("pwd") );
+            System.out.println( Bash.executeCommand("pwd; ls") );
 
             Bash.executeCommand("cd redis-"+version+"; cd deps; make lua hiredis linenoise");
             Bash.executeCommand("cd redis-" + version + "; sudo make MALLOC=libc install");
