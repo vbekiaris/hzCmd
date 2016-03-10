@@ -48,7 +48,7 @@ public class RedisControler extends Controler {
             //redisServer.start();
             //System.out.println("redisServer.isActive()="+redisServer.isActive());
         } else {
-            jedisClient = new Jedis("host", 6379);
+            jedisClient = new Jedis( "host", 6379);
         }
     }
 

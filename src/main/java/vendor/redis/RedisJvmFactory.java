@@ -39,11 +39,15 @@ public class RedisJvmFactory implements JvmFactory, Serializable {
         String id;
         if ( type == NodeType.Member ){
             id = RedisMember.class.getSimpleName();
+            id += count+""+clusterId;
+
+            return new RemoteRedisMember(box, type, id);
+
         }else {
             id = RedisClient.class.getSimpleName();
-        }
-        id += count+""+clusterId;
+            id += count+""+clusterId;
 
-        return new RemoteRedisJvm(box, type, id);
+            return new RemoteRedisJvm(box, type, id);
+        }
     }
 }

@@ -41,7 +41,7 @@ public abstract class RemoteJvm implements Serializable {
     public abstract String setJvmStartOptions(Box thisBox, ClusterManager myCluster) throws Exception;
 
 
-    public final void startJvm(String jvmOptions, String vendorLibDir, ClusterManager myCluster, String brokerIP) throws Exception {
+    public void startJvm(String jvmOptions, String vendorLibDir, ClusterManager myCluster, String brokerIP) throws Exception {
 
         if (isRunning()) {
             System.out.println(Bash.ANSI_CYAN+"all ready started " + this +Bash.ANSI_RESET);
