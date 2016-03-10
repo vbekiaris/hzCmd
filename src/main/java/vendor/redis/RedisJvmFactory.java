@@ -2,9 +2,6 @@ package vendor.redis;
 
 import global.NodeType;
 import local.*;
-import vendor.hz.HzClient;
-import vendor.hz.HzMember;
-import vendor.hz.RemoteHzJvm;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -62,7 +59,7 @@ public class RedisJvmFactory implements JvmFactory, Serializable {
             id = RedisClient.class.getSimpleName();
             id += count+""+clusterId;
 
-            return new RemoteRedisJvm(box, type, id);
+            return new RemoteJedisJvm(box, type, id);
         }
     }
 }

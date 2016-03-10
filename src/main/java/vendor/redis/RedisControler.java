@@ -22,9 +22,8 @@ public class RedisControler extends Controler {
 
         if (type == NodeType.Member) {
 
+            /*
             String version="3.0.7";
-
-
             System.out.println( Bash.executeCommand("sudo yum install -y expect") );
             System.out.println( Bash.executeCommand("sudo yum install -y gcc-c++") );
             System.out.println( Bash.executeCommand("wget http://download.redis.io/releases/redis-" + version + ".tar.gz") );
@@ -34,7 +33,6 @@ public class RedisControler extends Controler {
             System.out.println( Bash.executeCommand("sudo make -C redis-"+version+" MALLOC=libc install") );
 
             System.out.println( Bash.executeCommand("gem install redis") );
-
 
 
             String pidStr = Bash.executeCommand("nohup redis-server >> out.txt 2>&1 & echo $!");
@@ -47,10 +45,17 @@ public class RedisControler extends Controler {
             //redisServer = new RedisServer(6379);
             //redisServer.start();
             //System.out.println("redisServer.isActive()="+redisServer.isActive());
+            */
         } else {
 
-            jedisClient = new Jedis("host", RedisJvmFactory.redisMemberPort);
+            jedisClient = new Jedis("localhost", RedisJvmFactory.redisMemberPort);
 
+            jedisClient.clientSetname(jvmPidId);
+            System.out.println(jedisClient.clusterInfo());
+
+            System.out.println( jedisClient.set("k", "val") );
+
+            System.out.println( jedisClient.get("k") );
         }
     }
 
