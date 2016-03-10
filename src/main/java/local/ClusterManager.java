@@ -105,6 +105,17 @@ public class ClusterManager implements Serializable {
         return count;
     }
 
+    public List<RemoteJvm> getMemberBoxes( ) {
+        List<RemoteJvm> matching = new ArrayList<RemoteJvm>();
+
+        for(RemoteJvm jvm : jvms.values()){
+            if ( jvm.isMember() ){
+                matching.add(jvm);
+            }
+        }
+        return matching;
+    }
+
     public List<RemoteJvm> getMatchingJms(String jvmId) {
         List<RemoteJvm> matching = new ArrayList<RemoteJvm>();
 

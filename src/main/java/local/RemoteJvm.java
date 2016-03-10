@@ -198,6 +198,8 @@ public abstract class RemoteJvm implements Serializable {
         }
     }
 
+    public Box getBox(){return box;}
+
     public String getId(){ return id; }
 
     public String toString() {

@@ -18,6 +18,7 @@ public class RedisJvmFactory implements JvmFactory, Serializable {
 
     private static final String redisPath = Installer.REMOTE_HZCMD_ROOT_FULL_PATH+"/"+"redis-lib";
 
+    public static final int redisMemberPort = 6379;
 
     public String getVendorLibDir(String version) {
         return redisPath+"/"+version;
@@ -32,6 +33,19 @@ public class RedisJvmFactory implements JvmFactory, Serializable {
     }
 
     public void clusterInit(BoxManager boxes) {  }
+
+    public void membersAdded(List<RemoteJvm> memberJmvs) throws IOException, InterruptedException {
+
+        String boxs = new String();
+        for (RemoteJvm memberJmv : memberJmvs) {
+            boxs += memberJmv.getBox().pub + ":" + redisMemberPort + " ";
+        }
+
+        RemoteJvm remoteJvm = memberJmvs.get(0);
+        String res = remoteJvm.ssh( "echo yes | ./redis-3.0.7/src/redis-trib.rb create --replicas 1 "+boxs );
+
+        System.out.println(res);
+    }
 
 
     public RemoteJvm createJvm(Box box, NodeType type, int count, String clusterId) throws IOException, InterruptedException {

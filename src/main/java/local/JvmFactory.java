@@ -18,4 +18,6 @@ public interface JvmFactory {
     List<String> getVendorLibNames(String version, boolean ee);
 
     void clusterInit(BoxManager boxes);
+
+    void membersAdded(List<RemoteJvm> memberJvms) throws IOException, InterruptedException;
 }

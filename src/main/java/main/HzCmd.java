@@ -67,6 +67,10 @@ public class HzCmd implements Serializable {
         int m = ClusterSize.getMemberCount(size);
         addMembers(clusterId, m, version,  memberJvmOptions, cwdFiles);
 
+        ClusterManager cm = clusters.get(clusterId);
+        JvmFactory jvmFactory = cm.getJvmFactory();
+        jvmFactory.membersAdded(cm.getMemberBoxes());
+
         int c = ClusterSize.getClientCount(size);
         addClients(clusterId, c, version, clientJvmOption, cwdFiles);
     }
