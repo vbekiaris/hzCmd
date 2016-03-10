@@ -23,7 +23,7 @@ public enum ClusterSize {
     public static int getClientCount(ClusterSize size){
         switch (size){
             case S:
-                return 8;
+                return 6;
             case M:
                 return 32;
             case L:
