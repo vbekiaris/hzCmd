@@ -43,7 +43,7 @@ public class RedisJvmFactory implements JvmFactory, Serializable {
 
         RemoteJvm remoteJvm = memberJmvs.get(0);
         String red = RemoteRedisMember.getRedisInstallHome();
-        String res = remoteJvm.ssh( "echo yes | "+red+"/src/redis-trib.rb create --replicas 1 "+boxs );
+        String res = remoteJvm.getBox().ssh( "echo yes | "+red+"/src/redis-trib.rb create --replicas 1 "+boxs );
 
         System.out.println(res);
     }
