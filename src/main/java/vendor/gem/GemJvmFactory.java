@@ -33,6 +33,10 @@ public class GemJvmFactory implements JvmFactory, Serializable {
 
     }
 
+    public void membersAdded(List<RemoteJvm> memberJvms) throws IOException, InterruptedException {
+
+    }
+
     public RemoteJvm createJvm(Box box, NodeType type, int count, String clusterId) throws IOException, InterruptedException {
 
         String id;
