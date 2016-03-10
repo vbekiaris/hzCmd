@@ -27,8 +27,8 @@ public class RedisJvmFactory implements JvmFactory, Serializable {
     public List<String> getVendorLibNames(String version, boolean ee) {
         List<String> jars = new ArrayList();
 
-        jars.add("embedded-redis-0.6.jar");
-        jars.add("commons-io-2.3.jar");
+        jars.add("jedis-2.8.0.jar");
+        //jars.add("commons-io-2.3.jar");
         return jars;
     }
 
@@ -43,7 +43,7 @@ public class RedisJvmFactory implements JvmFactory, Serializable {
 
         RemoteJvm remoteJvm = memberJmvs.get(0);
         String red = RemoteRedisMember.getRedisInstallHome();
-        String res = remoteJvm.getBox().ssh( "echo yes | "+red+"/src/redis-trib.rb create --replicas 1 "+boxs );
+        String res = remoteJvm.getBox().ssh("echo yes | " + red + "/src/redis-trib.rb create --replicas 1 "+boxs );
 
         System.out.println(res);
     }
