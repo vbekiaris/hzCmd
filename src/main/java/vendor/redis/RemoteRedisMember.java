@@ -3,6 +3,7 @@ package vendor.redis;
 import global.Args;
 import global.Bash;
 import global.NodeType;
+import jms.MQ;
 import local.Box;
 import local.ClusterManager;
 import local.Installer;
@@ -12,6 +13,8 @@ import java.io.IOException;
 
 
 public class RemoteRedisMember extends RemoteJvm {
+
+    public static final String version="3.0.7";
 
     public RemoteRedisMember(Box box, NodeType type, String id) throws IOException, InterruptedException {
         super(box, type, id);
@@ -43,12 +46,13 @@ public class RemoteRedisMember extends RemoteJvm {
 
         beforeJvmStart(myCluster);
 
-        String version="3.0.7";
 
         System.out.println( box.ssh("sudo yum install -y expect") );
         System.out.println( box.ssh("sudo yum install -y gcc-c++") );
         System.out.println( box.ssh("wget http://download.redis.io/releases/redis-" + version + ".tar.gz") );
         System.out.println( box.ssh("tar xzf redis-" + version + ".tar.gz") );
+        System.out.println( box.ssh("rm -fr redis-" + version + ".tar.gz") );
+
 
         System.out.println( box.ssh("sudo make -C redis-"+version+"/deps lua hiredis linenoise") );
         System.out.println( box.ssh("sudo make -C redis-"+version+" MALLOC=libc install") );
@@ -60,8 +64,15 @@ public class RemoteRedisMember extends RemoteJvm {
         pid = Integer.parseInt(pidStr.trim());
 
         System.out.println("redis-server pid="+pid);
+
+        String q = getEventQueueName();
+
+        MQ.sendObj(q + "reply", "started"+pid);
     }
 
+    public static String getRedisInstallHome(){
+        return "redis-"+version;
+    }
 
 
     @Override
