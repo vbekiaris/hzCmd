@@ -59,7 +59,7 @@ public abstract class RemoteJvm implements Serializable {
 
         jvmArgs +=" ";
         jvmArgs += "-D"+"MQ_BROKER_IP="+brokerIP+" ";
-        jvmArgs += "-D"+ getEventQueueName() + " ";
+        jvmArgs += "-D"+Args.EVENTQ+"="+getEventQueueName() + " ";
         jvmArgs += "-D"+Args.ID+"=" + id + " ";
         jvmArgs += "-XX:+HeapDumpOnOutOfMemoryError" + " ";
         jvmArgs += "-XX:HeapDumpPath="+id+".hprof" + " ";
@@ -75,7 +75,7 @@ public abstract class RemoteJvm implements Serializable {
     }
 
     public String getEventQueueName(){
-        return  Args.EVENTQ+"="+System.getProperty("user.dir")+"/"+Args.EVENTQ.name();
+        return  System.getProperty("user.dir")+"/"+Args.EVENTQ.name();
     }
 
     public final void reStartJvm(ClusterManager myCluster) throws Exception {

@@ -65,9 +65,7 @@ public class RemoteRedisMember extends RemoteJvm {
 
         System.out.println("redis-server pid="+pid);
 
-        String q = getEventQueueName();
-
-        MQ.sendObj(q + "reply", "started"+pid);
+        MQ.sendObj(id + "reply", "started"+pid);
     }
 
     public static String getRedisInstallHome(){
