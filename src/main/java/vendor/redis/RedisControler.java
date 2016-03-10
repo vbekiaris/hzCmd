@@ -25,7 +25,7 @@ public class RedisControler extends Controler {
             String version="3.0.7";
 
 
-            System.out.println( Bash.executeCommand("sudo yum install - y expect") );
+            System.out.println( Bash.executeCommand("sudo yum install -y expect") );
             System.out.println( Bash.executeCommand("sudo yum install -y gcc-c++") );
             System.out.println( Bash.executeCommand("wget http://download.redis.io/releases/redis-" + version + ".tar.gz") );
             System.out.println( Bash.executeCommand("tar xzf redis-" + version + ".tar.gz") );
