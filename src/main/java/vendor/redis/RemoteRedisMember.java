@@ -56,7 +56,7 @@ public class RemoteRedisMember extends RemoteJvm {
         System.out.println( box.ssh("gem install redis") );
 
 
-        String pidStr = box.ssh("cd "+dir+";" + "nohup redis-server redis.conf >> out.txt 2>&1 & echo $!");
+        String pidStr = box.ssh("cd "+dir+";"+" nohup redis-server redis.conf >> out.txt 2>&1 & echo $!");
         pid = Integer.parseInt(pidStr.trim());
 
         System.out.println("redis-server pid="+pid);
