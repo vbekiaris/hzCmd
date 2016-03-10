@@ -6,7 +6,7 @@ public enum ClusterSize {
     public static int getMemberCount(ClusterSize size){
         switch (size){
             case S:
-                return 4;
+                return 6;
             case M:
                 return 8;
             case L:
