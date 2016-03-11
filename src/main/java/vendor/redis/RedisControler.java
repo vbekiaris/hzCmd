@@ -7,6 +7,7 @@ import redis.clients.jedis.JedisCluster;
 import remote.Controler;
 
 import java.util.HashSet;
+import java.util.Random;
 
 public class RedisControler extends Controler {
 
@@ -57,8 +58,9 @@ public class RedisControler extends Controler {
 
             System.out.println(jc);
 
-            System.out.println(jc.set("k", "val"));
-            System.out.println(jc.get("k"));
+            Random r = new Random();
+            System.out.println(jc.set("k:"+r, "val:"+r));
+            System.out.println(jc.get("k:"+r));
 
 
             /*
