@@ -47,7 +47,7 @@ public class RemoteRedisMember extends RemoteJvm {
         beforeJvmStart(myCluster);
 
 
-        System.out.println( box.ssh("sudo yum install -y expect") );
+        //System.out.println( box.ssh("sudo yum install -y expect") );
         System.out.println( box.ssh("sudo yum install -y gcc-c++") );
         System.out.println( box.ssh("wget http://download.redis.io/releases/redis-" + version + ".tar.gz") );
         System.out.println( box.ssh("tar xzf redis-" + version + ".tar.gz") );

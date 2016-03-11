@@ -1,14 +1,16 @@
 package vendor.redis;
 
-import global.Bash;
 import global.NodeType;
+import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Jedis;
-import redis.embedded.RedisServer;
+import redis.clients.jedis.JedisCluster;
 import remote.Controler;
+
+import java.util.HashSet;
 
 public class RedisControler extends Controler {
 
-    private RedisServer redisServer;
+    private JedisCluster jc;
     private Jedis jedisClient;
     private NodeType type;
 
@@ -48,20 +50,29 @@ public class RedisControler extends Controler {
             */
         } else {
 
-            jedisClient = new Jedis("localhost", RedisJvmFactory.redisMemberPort);
+            java.util.Set<HostAndPort> jedisClusterNodes = new HashSet();
 
+            jedisClusterNodes.add(new HostAndPort("127.0.0.1", RedisJvmFactory.redisMemberPort));
+            jc = new JedisCluster(jedisClusterNodes);
+
+            System.out.println(jc);
+            System.out.println( jedisClient.set("k", "val") );
+            System.out.println( jedisClient.get("k") );
+
+
+            /*
+            jedisClient = new Jedis("localhost", RedisJvmFactory.redisMemberPort);
             jedisClient.clientSetname(jvmPidId);
             System.out.println(jedisClient.clusterInfo());
-
             System.out.println( jedisClient.set("k", "val") );
-
             System.out.println( jedisClient.get("k") );
+            */
         }
     }
 
     public Object getVendorObject(){
         if(type == NodeType.Member){
-            return redisServer;
+            return null;
         }
         return jedisClient;
     }
