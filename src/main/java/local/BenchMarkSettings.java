@@ -17,7 +17,7 @@ public class BenchMarkSettings implements Serializable {
 
     private int durationSec=60;
 
-    private String types=BenchType.Metrics.toString();
+    private String types="Metrics";
 
 
     public BenchMarkSettings(){}
