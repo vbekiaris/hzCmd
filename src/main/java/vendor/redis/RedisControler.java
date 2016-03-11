@@ -2,7 +2,6 @@ package vendor.redis;
 
 import global.NodeType;
 import redis.clients.jedis.HostAndPort;
-import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
 import remote.Controler;
 
@@ -11,8 +10,7 @@ import java.util.Random;
 
 public class RedisControler extends Controler {
 
-    private JedisCluster jc;
-    private Jedis jedisClient;
+    private JedisCluster jedisCluster;
     private NodeType type;
 
 
@@ -54,14 +52,17 @@ public class RedisControler extends Controler {
             java.util.Set<HostAndPort> jedisClusterNodes = new HashSet();
 
             jedisClusterNodes.add(new HostAndPort("127.0.0.1", RedisJvmFactory.redisMemberPort));
-            jc = new JedisCluster(jedisClusterNodes);
+            jedisCluster = new JedisCluster(jedisClusterNodes);
 
-            System.out.println(jc);
+            System.out.println(jedisCluster);
 
             Random r = new Random();
             int i = r.nextInt()%1000;
-            System.out.println(jc.set("k:"+i, "val:"+i));
-            System.out.println(jc.get("k:"+i));
+
+            System.out.println("k:" + i +" val:" + i);
+            System.out.println(jedisCluster.set("k:" + i, "val:" + i));
+
+            System.out.println(jedisCluster.get("k:" + i));
 
 
             /*
@@ -78,6 +79,6 @@ public class RedisControler extends Controler {
         if(type == NodeType.Member){
             return null;
         }
-        return jedisClient;
+        return jedisCluster;
     }
 }

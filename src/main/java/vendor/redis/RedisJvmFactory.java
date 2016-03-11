@@ -13,6 +13,8 @@ import java.util.List;
  */
 public class RedisJvmFactory implements JvmFactory, Serializable {
 
+    private static final int clusterStartPause=5000;
+
     private static final String redisPath = Installer.REMOTE_HZCMD_ROOT_FULL_PATH+"/"+"redis-lib";
 
     public static final int redisMemberPort = 6379;
@@ -44,7 +46,7 @@ public class RedisJvmFactory implements JvmFactory, Serializable {
 
         System.out.println(res);
 
-        Thread.sleep(5000);
+        Thread.sleep(clusterStartPause);
     }
 
 
