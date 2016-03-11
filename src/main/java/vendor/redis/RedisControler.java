@@ -56,6 +56,7 @@ public class RedisControler extends Controler {
 
             System.out.println(jedisCluster);
 
+            /*
             Random r = new Random();
             int i = r.nextInt(1000);
 
@@ -63,7 +64,7 @@ public class RedisControler extends Controler {
             System.out.println(jedisCluster.set("k:" + i, "val:" + i));
 
             System.out.println(jedisCluster.get("k:" + i));
-
+            */
 
             /*
             jedisClient = new Jedis("localhost", RedisJvmFactory.redisMemberPort);
