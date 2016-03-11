@@ -10,7 +10,7 @@ import remote.Bench;
 public abstract class RedisBench extends Bench{
 
 
-    private JedisCluster jedisCluster;
+    protected JedisCluster jedisCluster;
 
     @Override
     public void setVendorObject(Object vendorObject) { jedisCluster = (JedisCluster) vendorObject; }

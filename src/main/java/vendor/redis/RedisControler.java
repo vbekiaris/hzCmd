@@ -57,7 +57,7 @@ public class RedisControler extends Controler {
             System.out.println(jedisCluster);
 
             Random r = new Random();
-            int i = r.nextInt()%1000;
+            int i = r.nextInt(1000);
 
             System.out.println("k:" + i +" val:" + i);
             System.out.println(jedisCluster.set("k:" + i, "val:" + i));
