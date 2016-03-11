@@ -56,8 +56,9 @@ public class RedisControler extends Controler {
             jc = new JedisCluster(jedisClusterNodes);
 
             System.out.println(jc);
-            System.out.println( jedisClient.set("k", "val") );
-            System.out.println( jedisClient.get("k") );
+
+            System.out.println(jc.set("k", "val"));
+            System.out.println(jc.get("k"));
 
 
             /*
