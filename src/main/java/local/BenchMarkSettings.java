@@ -17,7 +17,7 @@ public class BenchMarkSettings implements Serializable {
 
     private int durationSec=60;
 
-    private String types= BenchType.Metrics.name();
+    private String types=BenchType.Metrics.name();
 
 
     public BenchMarkSettings(){}
@@ -57,6 +57,7 @@ public class BenchMarkSettings implements Serializable {
     }
 
     public String[] getTypes() {
+        System.out.println("types =" +types);
         return types.split(",");
     }
 

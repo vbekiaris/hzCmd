@@ -322,6 +322,7 @@ public class HzCmd implements Serializable {
 
                 for (String benchType : benchMarkSettings.getTypes()) {
 
+                    System.out.println("setting ==> "+benchType);
                     setField(drivers, taskId, "benchType", benchType);
 
                     for (List<FieldValue> settings : bencher.getSettings(taskId)) {
