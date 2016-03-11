@@ -59,8 +59,9 @@ public class RedisControler extends Controler {
             System.out.println(jc);
 
             Random r = new Random();
-            System.out.println(jc.set("k:"+r, "val:"+r));
-            System.out.println(jc.get("k:"+r));
+            int i = r.nextInt()%1000;
+            System.out.println(jc.set("k:"+i, "val:"+i));
+            System.out.println(jc.get("k:"+i));
 
 
             /*
