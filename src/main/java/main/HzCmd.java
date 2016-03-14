@@ -340,7 +340,9 @@ public class HzCmd implements Serializable {
                     }
                 }
             }
+            download(drivers, "output/"+clusterId);
         }
+        chartAllJavaMetrics("output/"+clusterId);
     }
 
 
