@@ -332,7 +332,10 @@ public class HzCmd implements Serializable {
 
                         for (int threadCount : benchMarkSettings.getThreads()) {
 
-                            String title = clusterId+"_"+"M"+c.getMemberCount()+"-C"+c.getClientCount()+"_driver-"+drivers+"_"+benchType+"_"+taskId+"_"+className+"_"+filedSetup+"_"+itteratedFieldSetup+"_threads-"+threadCount;
+                            String dir = clusterId+"_"+"M"+c.getMemberCount()+"-C"+c.getClientCount()+"_driver-"+drivers+"_"+benchType+"_"+taskId+"_"+className+"_"+filedSetup+"_"+itteratedFieldSetup+"_threads-"+threadCount;
+                            setField(drivers, taskId, "dir", dir);
+
+                            String title = clusterId+"_"+"M"+c.getMemberCount()+"-C"+c.getClientCount()+"_driver-"+drivers+"_"  +"_"          +taskId+"_"+className+"_"                                    +"threads-"+threadCount;
                             setField(drivers, taskId, "title", title);
 
                             invokeBenchMark(drivers, threadCount, taskId);
@@ -340,9 +343,9 @@ public class HzCmd implements Serializable {
                     }
                 }
             }
-            download(drivers, "output/"+clusterId);
+            download(clusterId, "output/" + clusterId);
         }
-        chartAllJavaMetrics("output/"+clusterId);
+        chartAllJavaMetrics("output/" + clusterId);
     }
 
 

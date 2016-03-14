@@ -14,11 +14,13 @@ import java.util.concurrent.TimeUnit;
 public abstract class Bench extends Task{
 
     public BenchType benchType = BenchType.Metrics;
+    public String dir;
     public String title;
 
     public int warmupSec=30;
     public int durationSec = 60;
     public int reportSecondsInterval=5;
+
     private CsvReporter csvReporter;
     private MetricRegistry metrics = new MetricRegistry();
 
@@ -108,7 +110,10 @@ public abstract class Bench extends Task{
     }
 
     private void benchMetric(int seconds, String metricsCsvtitle){
-        csvReporter = CsvReporter.forRegistry(metrics).build(new File(System.getProperty("user.dir")) );
+
+        File file = new File(System.getProperty("user.dir")+"/"+dir);
+        file.getParentFile().mkdirs();
+        csvReporter = CsvReporter.forRegistry(metrics).build(file);
         com.codahale.metrics.Timer timer = metrics.timer(metricsCsvtitle);
         com.codahale.metrics.Timer.Context context;
 
