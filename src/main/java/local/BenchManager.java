@@ -106,17 +106,6 @@ public class BenchManager {
                 orderedTaskIds.add(key);
             }
 
-
-            for (String k : benchMap.keySet()) {
-                for (FieldValue e : benchMap.get(k)) {
-                    System.out.println(k +" => "+e);
-                }
-            }
-
-            for (String k : orderedTaskIds) {
-                System.out.println(k);
-            }
-
         } catch (IOException ex) {
             ex.printStackTrace();
         } finally {

@@ -57,7 +57,6 @@ public class BenchMarkSettings implements Serializable {
     }
 
     public String[] getTypes() {
-        System.out.println("types =" +types);
         return types.split(",");
     }
 
