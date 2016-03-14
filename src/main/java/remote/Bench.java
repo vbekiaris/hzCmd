@@ -8,6 +8,7 @@ import net.openhft.chronicle.ExcerptAppender;
 import org.HdrHistogram.ConcurrentHistogram;
 import org.HdrHistogram.Histogram;
 
+import javax.jms.JMSException;
 import java.io.*;
 import java.util.concurrent.TimeUnit;
 
@@ -113,6 +114,13 @@ public abstract class Bench extends Task{
 
         File file = new File(System.getProperty("user.dir")+"/"+dir);
         file.getParentFile().mkdirs();
+
+        try {
+            send(System.getProperty("user.dir")+"/"+dir);
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
+
         csvReporter = CsvReporter.forRegistry(metrics).build(file);
         com.codahale.metrics.Timer timer = metrics.timer(metricsCsvtitle);
         com.codahale.metrics.Timer.Context context;
