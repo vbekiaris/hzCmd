@@ -20,6 +20,9 @@ public class AddClient extends Command implements Serializable{
     @Option(name = "-v", description = "hazelcast version e.g. 3.6")
     public String version;
 
+    @Option(name = "-up", description = "files to upload to cwd of jvm")
+    public String files;
+
     @Arguments(description = "jvm options")
     public List<String> jvmOptions;
 
@@ -31,7 +34,7 @@ public class AddClient extends Command implements Serializable{
             for (String s : jvmOptions)
                 cmd.append(s+" ");
 
-            hzCmd.addClients(cluster, qty, version, cmd.toString());
+            hzCmd.addClients(cluster, qty, version, cmd.toString(), files);
         } catch (Exception e) {
             e.printStackTrace();
         }

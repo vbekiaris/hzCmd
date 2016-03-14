@@ -1,6 +1,7 @@
 package vendor.redis;
 
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisCluster;
 import remote.Bench;
 
 /**
@@ -8,9 +9,10 @@ import remote.Bench;
  */
 public abstract class RedisBench extends Bench{
 
-    protected Jedis jedisClient;
+
+    protected JedisCluster jedisCluster;
 
     @Override
-    public void setVendorObject(Object vendorObject) { jedisClient = (Jedis) vendorObject; }
+    public void setVendorObject(Object vendorObject) { jedisCluster = (JedisCluster) vendorObject; }
 
 }

@@ -2,6 +2,8 @@ package main;
 
 import cmdline.CmdLine;
 import cmdline.Command;
+import global.ClusterSize;
+import local.*;
 import vendor.gem.GemJvmFactory;
 import vendor.gg.GgJvmFactory;
 import global.Args;
@@ -9,10 +11,6 @@ import global.Bash;
 import global.ClusterType;
 import vendor.hz.HzJvmFactory;
 import jms.MQ;
-import local.BoxManager;
-import local.ClusterManager;
-import local.Installer;
-import local.RemoteJvm;
 import vendor.redis.RedisJvmFactory;
 
 import javax.jms.JMSException;
@@ -29,6 +27,8 @@ public class HzCmd implements Serializable {
 
     private Map<String, BoxManager> boxes = new HashMap();
     private Map<String, ClusterManager> clusters = new HashMap();
+
+    private BenchMarkSettings benchMarkSettings = new BenchMarkSettings();
 
     private String brokerIP=null;
 
@@ -52,6 +52,27 @@ public class HzCmd implements Serializable {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void initCluster(String user, String boxes, String clusterId, ClusterType type, ClusterSize size, boolean ee, String version, String memberJvmOptions, String clientJvmOption, String libFiles, String cwdFiles) throws Exception{
+
+        addBoxes(user, boxes);
+        addCluster(clusterId, boxes, type);
+        install(clusterId, ee, version);
+
+        if(libFiles!=null) {
+            uploadLib(clusterId, libFiles);
+        }
+
+        int m = ClusterSize.getMemberCount(size);
+        addMembers(clusterId, m, version,  memberJvmOptions, cwdFiles);
+
+        ClusterManager cm = clusters.get(clusterId);
+        JvmFactory jvmFactory = cm.getJvmFactory();
+        jvmFactory.membersAdded(cm.getMemberBoxes());
+
+        int c = ClusterSize.getClientCount(size);
+        addClients(clusterId, c, version, clientJvmOption, cwdFiles);
     }
 
     public void addBoxes(String user, String file) throws IOException, InterruptedException{
@@ -121,21 +142,21 @@ public class HzCmd implements Serializable {
         }
     }
 
-    public void addMembers(String clusterId, int qty, String version, String jvmOptions) throws Exception {
+    public void addMembers(String clusterId, int qty, String version, String jvmOptions, String cwdfiles) throws Exception {
         List<RemoteJvm> added = new ArrayList();
         for (ClusterManager c : clusters.values()) {
             if(c.matchClusterId(clusterId)){
-                added.addAll(c.addMembers(qty, version, jvmOptions));
+                added.addAll(c.addMembers(qty, version, jvmOptions, cwdfiles));
             }
         }
         checkAddJvms(added);
     }
 
-    public void addClients(String clusterId, int qty, String version, String jvmOptions) throws Exception {
+    public void addClients(String clusterId, int qty, String version, String jvmOptions, String cwdfiles) throws Exception {
         List<RemoteJvm> added = new ArrayList();
         for (ClusterManager c : clusters.values()) {
             if(c.matchClusterId(clusterId)){
-                added.addAll(c.addClients(qty, version, jvmOptions));
+                added.addAll(c.addClients(qty, version, jvmOptions, cwdfiles));
             }
         }
         checkAddJvms(added);
@@ -153,8 +174,11 @@ public class HzCmd implements Serializable {
         }
         for (RemoteJvm jvm : added) {
             Object o = jvm.getResponse();
+
             if(o instanceof Exception){
-                System.out.println(Bash.ANSI_RED+o+Bash.ANSI_RESET);
+                Exception e = (Exception) o;
+                System.out.println(Bash.ANSI_RED+" "+e+" "+e.getCause()+Bash.ANSI_RESET);
+                e.printStackTrace();
             }else{
                 System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
             }
@@ -275,10 +299,59 @@ public class HzCmd implements Serializable {
         }
     }
 
+    public void invokeBenchMarks(String clusterId, String benchFile) throws Exception {
+        ClusterManager c = clusters.get(clusterId);
+
+        BenchManager bencher = new BenchManager(benchFile);
+
+        for (String drivers : benchMarkSettings.getDrivers()) {
+
+            for (String taskId : bencher.getTaskIds()) {
+
+                String className = bencher.getClassName(taskId);
+                load(drivers, taskId, className);
+
+                setField(drivers, taskId, "warmupSec", benchMarkSettings.getWarmupSec());
+                setField(drivers, taskId, "durationSec", benchMarkSettings.getDurationSec());
+
+                String filedSetup = new String();
+                for (FieldValue field : bencher.getFieldsToSet(taskId)) {
+                    setField(drivers, taskId, field.field, field.value);
+                    filedSetup+="_"+field.field+"-"+field.value;
+                }
+
+                for (String benchType : benchMarkSettings.getTypes()) {
+
+                    for (List<FieldValue> settings : bencher.getSettings(taskId)) {
+
+                        String itteratedFieldSetup = new String();
+                        for (FieldValue setting : settings) {
+                            setField(drivers, taskId, setting.field, setting.value);
+                            itteratedFieldSetup += "_" + setting.field + "-" + setting.value;
+                        }
+
+                        for (int threadCount : benchMarkSettings.getThreads()) {
+
+                            String title = clusterId+"_"+"M"+c.getMemberCount()+"-C"+c.getClientCount()+"_driver-"+drivers+"_"+benchType+"_"+taskId+"_"+className+"_"+filedSetup+"_"+itteratedFieldSetup+"_threads-"+threadCount;
+                            setField(drivers, taskId, "title", title);
+
+                            invokeBenchMark(drivers, threadCount, taskId);
+                        }
+                    }
+                }
+            }
+            download(drivers, "output/"+clusterId);
+        }
+        chartAllJavaMetrics("output/"+clusterId);
+    }
+
+
+
     public void invokeBenchMark(String jvmId, int threadCound, String taksId) throws Exception {
         invokeSync(jvmId, 1, "init", taksId);
         invokeSync(jvmId, threadCound, "warmup", taksId);
         invokeSync(jvmId, threadCound, "run", taksId);
+        //invokeSync(jvmId, 1, "cleanup", taksId);
     }
 
     public void stop(String jvmId, String taskId) throws Exception {
@@ -391,5 +464,26 @@ public class HzCmd implements Serializable {
 
     public void chartComparisonMetrics(String dir, String red, String blue) throws IOException, InterruptedException {
         Bash.executeCommand("chartComparisonMetrics "+dir+" "+red+" "+blue);
+    }
+
+
+    public void setBenchDrivers(String drivers){
+        benchMarkSettings.setDrivers(drivers);
+    }
+
+    public void setBenchThreadCounts(String threadsCount) {
+        benchMarkSettings.setThreads(threadsCount);
+    }
+
+    public void setBenchWarmupSec(int warmupSec) {
+        benchMarkSettings.setWarmupSec(warmupSec);
+    }
+
+    public void setBenchBenchDurationSec(int durationSec) {
+        benchMarkSettings.setDurationSec(durationSec);
+    }
+
+    public void setBenchType(String type) {
+        benchMarkSettings.setType(type);
     }
 }

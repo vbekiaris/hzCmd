@@ -9,6 +9,8 @@ import remote.command.*;
 import javax.jms.JMSException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 import static global.Utils.myIp;
 
@@ -39,7 +41,7 @@ public abstract class RemoteJvm implements Serializable {
     public abstract String setJvmStartOptions(Box thisBox, ClusterManager myCluster) throws Exception;
 
 
-    public final void startJvm(String jvmOptions, String vendorLibDir, ClusterManager myCluster, String brokerIP) throws Exception {
+    public void startJvm(String jvmOptions, String vendorLibDir, ClusterManager myCluster, String brokerIP) throws Exception {
 
         if (isRunning()) {
             System.out.println(Bash.ANSI_CYAN+"all ready started " + this +Bash.ANSI_RESET);
@@ -57,7 +59,7 @@ public abstract class RemoteJvm implements Serializable {
 
         jvmArgs +=" ";
         jvmArgs += "-D"+"MQ_BROKER_IP="+brokerIP+" ";
-        jvmArgs += "-D"+Args.EVENTQ+"="+System.getProperty("user.dir")+"/"+Args.EVENTQ.name() + " ";
+        jvmArgs += "-D"+Args.EVENTQ+"="+getEventQueueName() + " ";
         jvmArgs += "-D"+Args.ID+"=" + id + " ";
         jvmArgs += "-XX:+HeapDumpOnOutOfMemoryError" + " ";
         jvmArgs += "-XX:HeapDumpPath="+id+".hprof" + " ";
@@ -72,7 +74,11 @@ public abstract class RemoteJvm implements Serializable {
         launchJvm(launchCmd);
     }
 
-    public final void reStartJvm() throws IOException, InterruptedException {
+    public String getEventQueueName(){
+        return  System.getProperty("user.dir")+"/"+Args.EVENTQ.name();
+    }
+
+    public final void reStartJvm(ClusterManager myCluster) throws Exception {
         if(launchCmd==null){
             System.out.println(Bash.ANSI_RED+"NO launchCmd, jvm never started"+this+Bash.ANSI_RESET);
             return;
@@ -82,6 +88,8 @@ public abstract class RemoteJvm implements Serializable {
             return;
         }
 
+        System.out.println(launchCmd);
+        beforeJvmStart(myCluster);
         launchJvm(launchCmd);
     }
 
@@ -186,8 +194,15 @@ public abstract class RemoteJvm implements Serializable {
     }
 
     public void uploadcwd(String src) throws IOException, InterruptedException {
-        box.upload(src, dir + "/");
+        if (src!=null){
+            List<String> files = Arrays.asList(src.split(","));
+            for (String file : files) {
+                box.upload(file, dir + "/");
+            }
+        }
     }
+
+    public Box getBox(){return box;}
 
     public String getId(){ return id; }
 

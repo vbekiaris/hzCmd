@@ -24,7 +24,7 @@ public class RemoteGemJvm extends RemoteJvm {
         return GemClient.class.getName();
     }
 
-    public void beforeJvmStart(ClusterManager myCluster) throws Exception {
+    public void beforeJvmStart(ClusterManager myCluster) throws Exception{
 
         if(isMember()) {
             box.upload("config-gem/server-cache.xml", dir + "/");

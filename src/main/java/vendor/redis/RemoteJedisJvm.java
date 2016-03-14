@@ -9,9 +9,9 @@ import java.io.IOException;
 import java.util.List;
 
 
-public class RemoteRedisJvm extends RemoteJvm {
+public class RemoteJedisJvm extends RemoteJvm {
 
-    public RemoteRedisJvm(Box box, NodeType type, String id) throws IOException, InterruptedException {
+    public RemoteJedisJvm(Box box, NodeType type, String id) throws IOException, InterruptedException {
         super(box, type, id);
     }
 
@@ -25,7 +25,7 @@ public class RemoteRedisJvm extends RemoteJvm {
     public void beforeJvmStart(ClusterManager myCluster) throws Exception {
 
         if(isMember()) {
-            box.upload("config-redis/redis.conf", dir + "/");
+
         }else {
 
         }

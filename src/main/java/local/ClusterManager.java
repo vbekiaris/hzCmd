@@ -52,23 +52,23 @@ public class ClusterManager implements Serializable {
     }
 
 
-    public List<RemoteJvm> addMembers(int qty, String version, String options) throws Exception {
-        return addJvms(qty, version, options, NodeType.Member);
+    public List<RemoteJvm> addMembers(int qty, String version, String options, String cwdFiles) throws Exception {
+        return addJvms(qty, version, options, cwdFiles, NodeType.Member);
     }
 
-    public List<RemoteJvm> addClients(int qty, String version, String options) throws Exception {
-        return addJvms(qty, version, options, NodeType.Client);
+    public List<RemoteJvm> addClients(int qty, String version, String options, String cwdFiles) throws Exception {
+        return addJvms(qty, version, options, cwdFiles, NodeType.Client);
     }
 
-    private List<RemoteJvm> addJvms(int qty, String hzVersion, String options, NodeType type) throws Exception {
+    private List<RemoteJvm> addJvms(int qty, String hzVersion, String options, String cwdFiles, NodeType type) throws Exception {
         List<RemoteJvm> added = new ArrayList();
         for(int i=0; i<qty; i++) {
-            added.add(addJvm(hzVersion, options, type));
+            added.add(addJvm(hzVersion, options, cwdFiles, type));
         }
         return added;
     }
 
-    private RemoteJvm addJvm(String jarVersion, String options, NodeType type) throws Exception {
+    private RemoteJvm addJvm(String jarVersion, String options, String cwdFiles, NodeType type) throws Exception {
         int idx;
         int count;
         if(type == NodeType.Member) {
@@ -79,16 +79,48 @@ public class ClusterManager implements Serializable {
             count=clientCount;
         }
         RemoteJvm jvm = jvmFactory.createJvm(boxes.get(idx), type, count, clusterId);
+        jvm.uploadcwd(cwdFiles);
         jvms.put(jvm.getId(), jvm);
         jvm.startJvm(options, jvmFactory.getVendorLibDir(jarVersion), this, brokerIP);
         return jvm;
+    }
+
+    public int getMemberCount( ) {
+        int count=0;
+        for(RemoteJvm jvm : jvms.values()){
+            if ( jvm.isMember() ){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int getClientCount( ) {
+        int count=0;
+        for(RemoteJvm jvm : jvms.values()){
+            if ( jvm.isClient() ){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public List<RemoteJvm> getMemberBoxes( ) {
+        List<RemoteJvm> matching = new ArrayList<RemoteJvm>();
+
+        for(RemoteJvm jvm : jvms.values()){
+            if ( jvm.isMember() ){
+                matching.add(jvm);
+            }
+        }
+        return matching;
     }
 
     public List<RemoteJvm> getMatchingJms(String jvmId) {
         List<RemoteJvm> matching = new ArrayList<RemoteJvm>();
 
         for(RemoteJvm jvm : jvms.values()){
-            if ( jvm.getId().matches(".*"+jvmId+".*") ){
+            if ( jvm.getId().matches(".*" + jvmId + ".*") ){
                 matching.add(jvm);
             }
         }
@@ -104,6 +136,18 @@ public class ClusterManager implements Serializable {
     public void setField(String jvmId, String taskId, String field, String value) throws Exception {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.setField(taskId, field, value);
+        }
+
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+            Object o = jvm.getResponse();
+            if(o instanceof Exception){
+                Exception e = (Exception) o;
+                System.out.println(Bash.ANSI_RED+" "+e+" "+e.getCause()+Bash.ANSI_RESET);
+                e.printStackTrace();
+
+            }else{
+                System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
+            }
         }
     }
 
@@ -140,10 +184,11 @@ public class ClusterManager implements Serializable {
     public void restart(String jvmId, String version, String options) throws Exception {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             if (version==null && options==null ){
-                jvm.reStartJvm();
+                jvm.reStartJvm(this);
             }else{
                 jvm.startJvm(version, options, this, brokerIP);
             }
+            //jvm.getResponse()
         }
     }
 
