@@ -113,7 +113,7 @@ public abstract class Bench extends Task{
     private void benchMetric(int seconds, String metricsCsvtitle){
 
         File file = new File(System.getProperty("user.dir")+"/"+dir);
-        file.getParentFile().mkdirs();
+        file.mkdirs();
 
         try {
             send(System.getProperty("user.dir")+"/"+dir);
