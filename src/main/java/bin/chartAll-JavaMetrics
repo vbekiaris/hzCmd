@@ -6,7 +6,7 @@ cd ${path}
 
 #files=$(find . -name *.csv | xargs -n1 basename | sort | uniq)
 
-files=$(find . -name *.csv | xargs -n1 | sort | uniq)
+files=$(find . -name *.csv | sort | uniq)
 
 
 while read -r f; do
