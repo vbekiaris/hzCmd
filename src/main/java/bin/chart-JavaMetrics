@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+filePattern=$1
+title=$2
+keyState=${3:-on}
+
+
+
+#1   2      3    4     5     6      7    8    9    10   11  12    13         14       15        16       17           18
+#t, count, max, mean, min, stddev, p50, p75, p95, p98, p99, p999, mean_rate, m1_rate, m5_rate, m15_rate, rate_unit, duration_unit
+
+
+
+chart-Metrics ${filePattern} 2  ${title} count ${keyState}
+chart-Metrics ${filePattern} 13 ${title} ops-perSec-mean-rate ${keyState}
+chart-Metrics ${filePattern} 14 ${title} ops-perSec-1min-rate ${keyState}
+chart-Metrics ${filePattern} 15 ${title} ops-perSec-5min-rate ${keyState}
+chart-Metrics ${filePattern} 16 ${title} ops-perSec-15min-rate ${keyState}
+
+chart-Metrics ${filePattern} 5 ${title} min-latency ${keyState}
+chart-Metrics ${filePattern} 3 ${title} max-latency ${keyState}
+chart-Metrics ${filePattern} 4 ${title} mean-latency ${keyState}
+chart-Metrics ${filePattern} 6 ${title} stdDev-latency ${keyState}
+
+chart-Metrics ${filePattern} 8  ${title} 75-latency-percentile ${keyState}
+chart-Metrics ${filePattern} 9  ${title} 95-latency-percentile ${keyState}
+chart-Metrics ${filePattern} 10 ${title} 98-latency-percentile ${keyState}
+chart-Metrics ${filePattern} 11 ${title} 99-latency-percentile ${keyState}
+chart-Metrics ${filePattern} 12 ${title} 999-latency-percentile ${keyState}

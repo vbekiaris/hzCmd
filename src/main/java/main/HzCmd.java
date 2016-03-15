@@ -332,10 +332,10 @@ public class HzCmd implements Serializable {
 
                         for (int threadCount : benchMarkSettings.getThreads()) {
 
-                            String dir = clusterId+"_"+"M"+c.getMemberCount()+"-C"+c.getClientCount()+"_driver-"+drivers+"_"+benchType+"_"+taskId+"_"+className+"_"+filedSetup+"_"+itteratedFieldSetup+"_threads-"+threadCount;
+                            String dir = clusterId+"_"+"M"+c.getMemberCount()+"-C"+c.getClientCount()+"_driver-"+drivers+"_"+benchType+"_"+taskId+"_"+className + filedSetup + itteratedFieldSetup+"_threads-"+threadCount;
                             setField(drivers, taskId, "dir", dir);
 
-                            String title = clusterId+"_"+"M"+c.getMemberCount()+"-C"+c.getClientCount()+"_driver-"+drivers+"_"  +"_"          +taskId+"_"+className+"_"                                    +"threads-"+threadCount;
+                            String title = clusterId+"_"+"M"+c.getMemberCount()+"-C"+c.getClientCount()+"_driver-"+drivers+"_"            +taskId+"_"+className+"_"                               +"threads-"+threadCount;
                             setField(drivers, taskId, "title", title);
 
                             invokeBenchMark(drivers, threadCount, taskId);
@@ -462,7 +462,7 @@ public class HzCmd implements Serializable {
     }
 
     public void chartAllJavaMetrics(String dir) throws IOException, InterruptedException {
-        Bash.executeCommand("chartAllJavaMetrics "+dir);
+        Bash.executeCommand("chartAll-JavaMetrics "+dir);
     }
 
     public void chartComparisonMetrics(String dir, String red, String blue) throws IOException, InterruptedException {

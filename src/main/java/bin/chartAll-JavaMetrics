@@ -11,7 +11,7 @@ while read -r f; do
  echo ${f}
  mkdir ${f}-charts
 
- chartJavaMetrics ${f} ${f}
+ chart-JavaMetrics ${f} ${f}
  mv *.png ${f}-charts
 
 done <<< "$files"
