@@ -15,8 +15,8 @@ import java.util.concurrent.TimeUnit;
 public abstract class Bench extends Task{
 
     public BenchType benchType = BenchType.Metrics;
-    public String dir;
-    public String title;
+    public String metaData;
+    public String fileName;
 
     public int warmupSec=30;
     public int durationSec = 60;
@@ -32,14 +32,23 @@ public abstract class Bench extends Task{
     public abstract void setup();
 
     public void warmup(){
-        runBench(benchType, warmupSec, title + "_warmup-"+warmupSec+"Sec");
+        runBench(benchType, warmupSec, fileName+"_warmup-"+warmupSec+"Sec");
     }
 
     public void run() {
-        runBench(benchType, durationSec, title + "_bench-"+durationSec+"Sec");
+        runBench(benchType, durationSec, fileName+"_bench-"+durationSec+"Sec");
     }
 
     private void runBench(BenchType type, int seconds, String title){
+
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(title+".meta"));
+            bw.write(metaData);
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         switch (type){
             case Metrics:
                 benchMetric(seconds, title);
@@ -112,15 +121,7 @@ public abstract class Bench extends Task{
 
     private void benchMetric(int seconds, String metricsCsvtitle){
 
-        File file = new File(System.getProperty("user.dir")+"/"+dir);
-        file.mkdirs();
-
-        try {
-            send(System.getProperty("user.dir")+"/"+dir);
-        } catch (JMSException e) {
-            e.printStackTrace();
-        }
-
+        File file = new File(System.getProperty("user.dir"));
         csvReporter = CsvReporter.forRegistry(metrics).build(file);
         com.codahale.metrics.Timer timer = metrics.timer(metricsCsvtitle);
         com.codahale.metrics.Timer.Context context;

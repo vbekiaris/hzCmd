@@ -300,6 +300,7 @@ public class HzCmd implements Serializable {
     }
 
     public void invokeBenchMarks(String clusterId, String benchFile) throws Exception {
+        int benchNumber=0;
         ClusterManager c = clusters.get(clusterId);
 
         BenchManager bencher = new BenchManager(benchFile);
@@ -340,13 +341,15 @@ public class HzCmd implements Serializable {
                             setField(drivers, taskId, "title", title);
                             */
 
-                            String dir = clusterId+"_"+"M"+c.getMemberCount()+"-C"+c.getClientCount()+"_driver-"+drivers+"_"+benchType + filedSetup + itteratedFieldSetup+"_threads-"+threadCount;
-                            setField(drivers, taskId, "dir", dir);
+                            String metaData = clusterId+"_"+"M"+c.getMemberCount()+"-C"+c.getClientCount()+"_driver-"+drivers+"_"+benchType+"_"+taskId+"_"+className + filedSetup + itteratedFieldSetup+"_threads-"+threadCount;
+                            setField(drivers, taskId, "metaData", metaData);
 
-                            String title=taskId+"_"+className;
-                            setField(drivers, taskId, "title", title);
+                            String fileName=taskId+"_"+className+"_"+benchNumber;
+                            setField(drivers, taskId, "fileName", fileName);
 
+                            benchNumber++;
                             invokeBenchMark(drivers, threadCount, taskId);
+
                         }
                     }
                 }
