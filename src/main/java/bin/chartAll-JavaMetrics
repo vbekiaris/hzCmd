@@ -4,14 +4,17 @@ path=$1
 
 cd ${path}
 
-files=$(find . -name *.csv | xargs -n1 basename | sort | uniq)
+#files=$(find . -name *.csv | xargs -n1 basename | sort | uniq)
+
+files=$(find . -name *.csv | xargs -n1 | sort | uniq)
+
 
 while read -r f; do
 
  echo ${f}
  mkdir ${f}-charts
 
- chart-JavaMetrics ${f} ${f}
+ chart-JavaMetrics $(basename ${f}) ${f}
  mv *.png ${f}-charts
 
 done <<< "$files"
