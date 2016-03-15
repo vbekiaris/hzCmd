@@ -344,7 +344,7 @@ public class HzCmd implements Serializable {
                             String metaData = clusterId+"_"+"M"+c.getMemberCount()+"-C"+c.getClientCount()+"_driver-"+drivers+"_"+benchType+"_"+taskId+"_"+className + filedSetup + itteratedFieldSetup+"_threads-"+threadCount;
                             setField(drivers, taskId, "metaData", metaData);
 
-                            String fileName=taskId+"_"+className+"_"+benchNumber;
+                            String fileName = clusterId+"_"+taskId+"_"+className+"_"+benchNumber;
                             setField(drivers, taskId, "fileName", fileName);
 
                             benchNumber++;
