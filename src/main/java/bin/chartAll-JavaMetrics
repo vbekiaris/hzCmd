@@ -14,9 +14,14 @@ while read -r f; do
  #name=$(basename ${f})
  #dir=$(dirname ${f})
 
+ meta=${f##*.}
+
+ title=$(find . -name ${meta}".meta" -print -quit | xargs -n1 | sort | uniq | xargs -n1 cat )
+
+
  mkdir ${f}-charts
 
- chart-JavaMetrics ${f} ${f}
+ chart-JavaMetrics ${f} ${title}
  mv *.png ${f}-charts
 
 done <<< "$files"
