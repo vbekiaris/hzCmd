@@ -13,7 +13,7 @@ while read -r f; do
 
  name=$(basename ${f})
 
- dir=${dirname ${f}}
+ dir=$(dirname ${f})
 
  echo ${name}
  mkdir ${dir}-charts
