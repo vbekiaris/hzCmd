@@ -11,10 +11,12 @@ files=$(find . -name *.csv | sort | uniq)
 
 while read -r f; do
 
- echo ${f}
- mkdir ${f}-charts
+ name=$(basename ${f})
 
- chart-JavaMetrics $(basename ${f}) ${f}
- mv *.png ${f}-charts
+ echo ${name}
+ mkdir ${name}-charts
+
+ chart-JavaMetrics ${name} ${f}
+ mv *.png ${name}-charts
 
 done <<< "$files"
