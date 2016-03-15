@@ -13,10 +13,12 @@ while read -r f; do
 
  name=$(basename ${f})
 
+ dir=${dirname ${f}}
+
  echo ${name}
- mkdir ${name}-charts
+ mkdir ${dir}-charts
 
  chart-JavaMetrics ${name} ${f}
- mv *.png ${name}-charts
+ mv *.png ${dir}-charts
 
 done <<< "$files"
