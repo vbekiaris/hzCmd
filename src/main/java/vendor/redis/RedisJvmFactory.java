@@ -37,7 +37,7 @@ public class RedisJvmFactory implements JvmFactory, Serializable {
 
         String boxs = new String();
         for (RemoteJvm memberJmv : memberJmvs) {
-            boxs += memberJmv.getBox().pub + ":" + redisMemberPort + " ";
+            boxs += memberJmv.getBox().pri + ":" + redisMemberPort + " ";
         }
 
         RemoteJvm remoteJvm = memberJmvs.get(0);
