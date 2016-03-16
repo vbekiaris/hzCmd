@@ -58,7 +58,7 @@ public class CmdLine {
                               Kill.class, Restart.class, Cat.class, Tail.class, Grep.class, Download.class,
                               Clean.class, Wipe.class, Load.class, Async.class, Sync.class, Exit.class, Listen.class,
                               Bench.class, Ssh.class, Ping.class, scpUp.class, UploadCwd.class, UploadLib.class, Broker.class,
-                              Ls.class, Chart.class);
+                              Ls.class, Chart.class, Redis.class);
 
         builder.withGroup("init")
                 .withDescription("init a cluster ")
@@ -79,6 +79,12 @@ public class CmdLine {
                 .withDescription("chart bench data gnuplot install required")
                 .withDefaultCommand(Help.class)
                 .withCommands(ChartMetrics.class, ChartMetricsCompair.class);
+
+        builder.withGroup("redis")
+                .withDescription("init redis props")
+                .withDefaultCommand(Help.class)
+                .withCommands(RedisInit.class);
+
 
         return builder.build();
     }
