@@ -21,7 +21,7 @@ while read line; do
   find . -name ${f[0]}
   find . -name ${f[1]}
 
-  chartCompairMetrics ${f[0]} ${f[1]} "${f[0]}-VS-${f[1]}"
+  chart-CompairMetrics ${f[0]} ${f[1]} "${f[0]}-VS-${f[1]}"
 
   mv *.png ${a}-vs-${b}/
 
