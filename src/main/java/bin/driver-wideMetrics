@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+path=$1
+a=$2
+b=$3
+
+cd ${path}
+
+find . -name *${a}*.csv | xargs -n1 | sort | uniq > a.txt
+find . -name *${b}*.csv | xargs -n1 | sort | uniq > b.txt
+
+for file in a.txt b.txt; do
+  while read line; do
+
+    echo ${line}
+    awk -F',' '{sum+=$14; ++n} END { print sum/n }' ${line} > ${line}-1min-AVG.txt
+
+  done < ${file}
+done
+
+
+find . -name *${a}*-1min-AVG.txt | xargs -n1 basename | sort | uniq > a.txt
+find . -name *${b}*-1min-AVG.txt | xargs -n1 basename | sort | uniq > b.txt
+
+for file in a.txt b.txt; do
+  while read avgFileName; do
+
+    echo ${avgFileName}
+
+    sum=0
+    count=0
+
+    find . -name ${avgFileName} > 1min-avg-files.txt
+
+    while read avge; do
+      num=$(cat ${avge})
+      ((count++))
+      sum=$(echo $sum + $num | bc)
+    done < 1min-avg-files.txt
+
+    echo $sum   $count
+    echo $sum / $count | bc
+
+    echo $sum / $count | bc > ${avgFileName}-driver.wide
+
+
+  done < ${file}
+done
