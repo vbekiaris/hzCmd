@@ -42,6 +42,5 @@ for file in a.txt b.txt; do
 
     echo $sum / $count | bc > ${avgFileName}-driver.wide
 
-
   done < ${file}
 done
