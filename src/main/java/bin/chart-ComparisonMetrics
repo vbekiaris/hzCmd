@@ -27,12 +27,12 @@ while read line; do
   mv *.png ${a}-vs-${b}/${f[0]}'-VS-'${f[1]}
 
 
-  meta=$(${f[0]})
+  meta=${f[0]}
   meta=${meta%.csv}".meta"
   meta=$(find . -name ${meta} -print -quit)
   cp ${meta} ${a}-vs-${b}/${f[0]}'-VS-'${f[1]}
 
-  meta=$(${f[1]})
+  meta=${f[1]}
   meta=${meta%.csv}".meta"
   meta=$(find . -name ${meta} -print -quit)
   cp ${meta} ${a}-vs-${b}/${f[0]}'-VS-'${f[1]}
