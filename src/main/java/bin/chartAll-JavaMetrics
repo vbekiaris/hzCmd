@@ -6,17 +6,17 @@ cd ${path}
 
 files=$(find . -name *.csv | xargs -n1 basename | sort | uniq)
 
- #files=$(find . -name *.csv | sort | uniq)
-
 
 while read -r f; do
-
- #name=$(basename ${f})
- #dir=$(dirname ${f})
 
  mkdir ${f}-charts
 
  chart-JavaMetrics ${f} ${f}
  mv *.png ${f}-charts
+
+ meta=$(basename ${f})
+ meta=${meta%.csv}".meta"
+ meta=$(find . -name ${meta} -print -quit)
+ cp ${meta} ${f}-charts
 
 done <<< "$files"
