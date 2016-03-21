@@ -5,8 +5,8 @@ b=$3
 
 cd ${path}
 
-find . -name *${a}*.csv | xargs -n1 | sort | uniq > a.txt
-find . -name *${b}*.csv | xargs -n1 | sort | uniq > b.txt
+find . -type f -name *${a}*.csv | xargs -n1 | sort | uniq > a.txt
+find . -type f -name *${b}*.csv | xargs -n1 | sort | uniq > b.txt
 
 for file in a.txt b.txt; do
   while read line; do
@@ -18,8 +18,8 @@ for file in a.txt b.txt; do
 done
 
 
-find . -name *${a}*-1min-AVG.txt | xargs -n1 basename | sort | uniq > a.txt
-find . -name *${b}*-1min-AVG.txt | xargs -n1 basename | sort | uniq > b.txt
+find . -type f -name *${a}*-1min-AVG.txt | xargs -n1 basename | sort | uniq > a.txt
+find . -type f -name *${b}*-1min-AVG.txt | xargs -n1 basename | sort | uniq > b.txt
 
 for file in a.txt b.txt; do
   while read avgFileName; do
@@ -29,7 +29,7 @@ for file in a.txt b.txt; do
     sum=0
     count=0
 
-    find . -name ${avgFileName} > 1min-avg-files.txt
+    find . -type f -name ${avgFileName} > 1min-avg-files.txt
 
     while read avge; do
       num=$(cat ${avge})
