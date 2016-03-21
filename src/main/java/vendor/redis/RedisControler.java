@@ -1,6 +1,7 @@
 package vendor.redis;
 
 import global.NodeType;
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
 import remote.Controler;
@@ -50,9 +51,12 @@ public class RedisControler extends Controler {
         } else {
 
             java.util.Set<HostAndPort> jedisClusterNodes = new HashSet();
-
             jedisClusterNodes.add(new HostAndPort("127.0.0.1", RedisJvmFactory.redisMemberPort));
-            jedisCluster = new JedisCluster(jedisClusterNodes);
+
+            GenericObjectPoolConfig poolConfig = new GenericObjectPoolConfig();
+            poolConfig.setMaxTotal(64);
+
+            jedisCluster = new JedisCluster(jedisClusterNodes, poolConfig);
 
             System.out.println(jedisCluster);
 
