@@ -44,3 +44,22 @@ for file in a.txt b.txt; do
 
   done < ${file}
 done
+
+
+find . -type f -name *${a}*-driver.wide | xargs -n1 basename | sort | uniq > a.txt
+find . -type f -name *${b}*-driver.wide | xargs -n1 basename | sort | uniq > b.txt
+paste a.txt b.txt > a-and-b.txt
+
+while read line; do
+  f=($line)
+
+  a=$(cat ${f[0]})
+  b=$(cat ${f[1]})
+
+  if (( $(bc <<< "$a < $b") )) ; then
+
+    echo ${f[0]} < ${f[1]}
+
+  fi
+
+done < a-and-b.txt
