@@ -6,7 +6,7 @@ title=$3
 yAxisTitle=$4
 keyState=${5:-on}
 
-files=$(find . -name ${FILE_PATTERN} | xargs -n1 -I% echo -n " \"%\" using 1:$idx with lines,")
+files=$(find . -type f -name ${FILE_PATTERN} | xargs -n1 -I% echo -n " \"%\" using 1:$idx with lines,")
 files="${files%?}"
 
 cat > plotScript << EOF

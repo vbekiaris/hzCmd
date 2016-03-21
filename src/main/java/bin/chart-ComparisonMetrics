@@ -6,9 +6,8 @@ b=$3
 
 cd ${path}
 
-find . -name *${a}*.csv | xargs -n1 basename | sort | uniq > a.txt
-
-find . -name *${b}*.csv | xargs -n1 basename | sort | uniq > b.txt
+find . -type f -name *${a}*.csv | xargs -n1 basename | sort | uniq > a.txt
+find . -type f -name *${b}*.csv | xargs -n1 basename | sort | uniq > b.txt
 
 paste a.txt b.txt > a-and-b.txt
 
@@ -18,8 +17,8 @@ while read line; do
   f=($line)
   echo ${f[0]}  '<-->'  ${f[1]}
 
-  find . -name ${f[0]}
-  find . -name ${f[1]}
+  find . -type f -name ${f[0]}
+  find . -type f -name ${f[1]}
 
   chart-CompairMetrics ${f[0]} ${f[1]} "${f[0]}-VS-${f[1]}"
 
@@ -29,12 +28,12 @@ while read line; do
 
   meta=${f[0]}
   meta=${meta%.csv}".meta"
-  meta=$(find . -name ${meta} -print -quit)
+  meta=$(find . -type f -name ${meta} -print -quit)
   cp ${meta} ${a}-vs-${b}/${f[0]}'-VS-'${f[1]}
 
   meta=${f[1]}
   meta=${meta%.csv}".meta"
-  meta=$(find . -name ${meta} -print -quit)
+  meta=$(find . -type f -name ${meta} -print -quit)
   cp ${meta} ${a}-vs-${b}/${f[0]}'-VS-'${f[1]}
 
 done < a-and-b.txt

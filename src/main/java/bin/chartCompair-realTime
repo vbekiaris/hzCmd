@@ -7,8 +7,8 @@ title=$4
 yAxisTitle=$5
 keyState=${6:-on}
 
-red=$(find . -name ${redFiles} | xargs -n1 -I% echo -n " \"%\" using 1:$idx with lines lt rgb \"red\" axes x1y1 ,")
-blue=$(find . -name ${blueFiles} | xargs -n1 -I% echo -n " \"%\" using 1:$idx with lines lt rgb \"blue\" axes x2y1 ,")
+red=$(find . -type f -name ${redFiles} | xargs -n1 -I% echo -n " \"%\" using 1:$idx with lines lt rgb \"red\" axes x1y1 ,")
+blue=$(find . -type f -name ${blueFiles} | xargs -n1 -I% echo -n " \"%\" using 1:$idx with lines lt rgb \"blue\" axes x2y1 ,")
 
 red="${red%?}"
 blue="${blue%?}"
