@@ -46,8 +46,8 @@ for file in a.txt b.txt; do
 done
 
 
-find . -type f -name *${a}*-driver.wide | xargs -n1 basename | sort | uniq > a.txt
-find . -type f -name *${b}*-driver.wide | xargs -n1 basename | sort | uniq > b.txt
+find . -type f -name '*'${a}'*-driver.wide' | sort > a.txt
+find . -type f -name '*'${b}'*-driver.wide' | sort > b.txt
 paste a.txt b.txt > a-and-b.txt
 
 while read line; do
@@ -58,10 +58,7 @@ while read line; do
 
   if (( $(bc <<< "$a < $b") )) ; then
 
-    echo ${f[0]} < ${f[1]}
-
     slack-post benchmark-regression WARN "${f[0]} < ${f[1]}"
-
   fi
 
 done < a-and-b.txt
