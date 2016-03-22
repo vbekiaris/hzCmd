@@ -24,11 +24,6 @@ public class RemoteJedisJvm extends RemoteJvm {
 
     public void beforeJvmStart(ClusterManager myCluster) throws Exception {
 
-        if(isMember()) {
-
-        }else {
-
-        }
     }
 
     @Override
