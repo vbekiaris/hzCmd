@@ -60,6 +60,8 @@ while read line; do
 
     echo ${f[0]} < ${f[1]}
 
+    slack-post benchmark-regression WARN "\< ${f[0]} ' ' ${f[1]} \>"
+
   fi
 
 done < a-and-b.txt
