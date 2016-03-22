@@ -366,14 +366,14 @@ public class HzCmd implements Serializable {
     public void invokeBenchMark(String jvmId, int threadCound, String taksId) throws Exception {
         invokeSync(jvmId, 1, "init", taksId);
 
-        invokeSync(jvmId, threadCound, "preBench", taksId);
+        invokeSync(jvmId, 1, "preBench", taksId);
         invokeSync(jvmId, threadCound, "warmup", taksId);
-        invokeSync(jvmId, threadCound, "postBench", taksId);
+        invokeSync(jvmId, 1, "postBench", taksId);
 
 
-        invokeSync(jvmId, threadCound, "preBench", taksId);
+        invokeSync(jvmId, 1, "preBench", taksId);
         invokeSync(jvmId, threadCound, "run", taksId);
-        invokeSync(jvmId, threadCound, "postBench", taksId);
+        invokeSync(jvmId, 1, "postBench", taksId);
         //invokeSync(jvmId, 1, "cleanup", taksId);
     }
 
