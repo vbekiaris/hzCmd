@@ -14,6 +14,8 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class Bench extends Task{
 
+    public Histogram histogram = new ConcurrentHistogram(TimeUnit.SECONDS.toNanos(30), 3);
+
     public BenchType benchType = BenchType.Metrics;
     public String metaData;
     public String fileName;
@@ -30,6 +32,39 @@ public abstract class Bench extends Task{
     }
 
     public abstract void setup();
+
+    public void preBench(){
+        switch (benchType){
+            case Metrics:
+                File file = new File(System.getProperty("user.dir"));
+                csvReporter = CsvReporter.forRegistry(metrics).build(file);
+                csvReporter.start(reportSecondsInterval, TimeUnit.SECONDS);
+                break;
+            case Hdr:
+                histogram.reset();
+                histogram.setStartTimeStamp(System.nanoTime());
+                break;
+        }
+    }
+
+    public void postBench(){
+        switch (benchType){
+            case Metrics:
+                csvReporter.stop();
+                break;
+            case Hdr:
+                histogram.setEndTimeStamp(System.nanoTime());
+                PrintStream ps;
+                try {
+                    ps = new PrintStream(new FileOutputStream(fileName+".hdr", true));
+                    histogram.outputPercentileDistribution(ps, 1000.0);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                break;
+        }
+    }
+
 
     public void warmup(){
         runBench(benchType, warmupSec, fileName+"_warmup-"+warmupSec+"Sec");
@@ -56,9 +91,6 @@ public abstract class Bench extends Task{
             case Hdr:
                 benchHdr(seconds, title);
                 break;
-            case Counter:
-                counter(seconds, title);
-                break;
             case Recorder:
                 recorder(seconds, title);
                 break;
@@ -67,22 +99,32 @@ public abstract class Bench extends Task{
         }
     }
 
-    private void counter(int seconds, String outputTitle){
-        long count=0;
+
+    private void benchMetric(int seconds, String metricsCsvtitle){
+        com.codahale.metrics.Timer timer = metrics.timer(metricsCsvtitle);
+        com.codahale.metrics.Timer.Context context;
+
         long startTime = System.currentTimeMillis();
         long endTime = startTime + (seconds * 1000);
-
         while(System.currentTimeMillis() < endTime){
+            context = timer.time();
             timeStep();
-            count++;
+            context.stop();
         }
-        try {
-            PrintWriter output = new PrintWriter(new FileWriter(outputTitle+".txt", true));
-            output.println(count);
-            output.flush();
-            output.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        metrics.remove(metricsCsvtitle);
+    }
+
+
+    private void benchHdr(int seconds, String title){
+
+        long startTime = System.currentTimeMillis();
+        long endTime = startTime + (seconds * 1000);
+        while(System.currentTimeMillis() < endTime){
+
+            long start = System.nanoTime();
+            timeStep();
+            long end = System.nanoTime();
+            histogram.recordValue(end-start);
         }
     }
 
@@ -118,56 +160,6 @@ public abstract class Bench extends Task{
             e.printStackTrace();
         }
     }
-
-    private void benchMetric(int seconds, String metricsCsvtitle){
-
-        File file = new File(System.getProperty("user.dir"));
-        csvReporter = CsvReporter.forRegistry(metrics).build(file);
-        com.codahale.metrics.Timer timer = metrics.timer(metricsCsvtitle);
-        com.codahale.metrics.Timer.Context context;
-
-        long startTime = System.currentTimeMillis();
-        long endTime = startTime + (seconds * 1000);
-
-        csvReporter.start(reportSecondsInterval, TimeUnit.SECONDS);
-        while(System.currentTimeMillis() < endTime){
-            context = timer.time();
-            timeStep();
-            context.stop();
-        }
-        csvReporter.stop();
-        metrics.remove(metricsCsvtitle);
-    }
-
-
-    private void benchHdr(int seconds, String title){
-
-        Histogram histogram = new ConcurrentHistogram(TimeUnit.SECONDS.toNanos(30), 3);
-
-        histogram.reset();
-        long startTime = System.currentTimeMillis();
-        long endTime = startTime + (seconds * 1000);
-
-        histogram.setStartTimeStamp(System.nanoTime());
-        while(System.currentTimeMillis() < endTime){
-
-            long start = System.nanoTime();
-            timeStep();
-            long end = System.nanoTime();
-            histogram.recordValue(end-start);
-        }
-        histogram.setEndTimeStamp(System.nanoTime());
-
-        PrintStream ps;
-        try {
-            ps = new PrintStream(new FileOutputStream(title+".hdr", true));
-            histogram.outputPercentileDistribution(ps, 1000.0);
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     public abstract void timeStep( );
 }
