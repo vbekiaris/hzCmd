@@ -323,6 +323,8 @@ public class HzCmd implements Serializable {
 
                 for (String benchType : benchMarkSettings.getTypes()) {
 
+                    setField(drivers, taskId, "benchType", benchType);
+
                     for (List<FieldValue> settings : bencher.getSettings(taskId)) {
 
                         String itteratedFieldSetup = new String();
@@ -341,7 +343,7 @@ public class HzCmd implements Serializable {
                             setField(drivers, taskId, "title", title);
                             */
 
-                            String metaData = clusterId+"_"+"M"+c.getMemberCount()+"-C"+c.getClientCount()+"_driver-"+drivers+"_"+benchType+"_"+taskId+"_"+className + filedSetup + itteratedFieldSetup+"_threads-"+threadCount;
+                            String metaData = clusterId+"_"+"M"+c.getMemberCount()+"-C"+c.getClientCount()+"_driver-"+drivers+"_benchType-"+benchType+"_"+taskId+"_"+className + filedSetup + itteratedFieldSetup+"_threads-"+threadCount;
                             setField(drivers, taskId, "metaData", metaData);
 
                             String fileName = clusterId+"_"+taskId+"_"+className+"_"+benchNumber;
