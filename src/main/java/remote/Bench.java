@@ -160,11 +160,7 @@ public abstract class Bench extends Task{
 
         PrintStream ps;
         try {
-            ps = new PrintStream(new FileOutputStream(title, true));
-            histogram.outputPercentileDistribution(ps, 1000.0);
-
-            ps = new PrintStream(new FileOutputStream(title+"-CO", true));
-            histogram = histogram.copyCorrectedForCoordinatedOmission(1);
+            ps = new PrintStream(new FileOutputStream(title+".hdr", true));
             histogram.outputPercentileDistribution(ps, 1000.0);
 
         } catch (FileNotFoundException e) {
