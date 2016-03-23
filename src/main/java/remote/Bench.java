@@ -100,7 +100,7 @@ public abstract class Bench extends Task{
 
 
     private void benchMetric(int seconds){
-        com.codahale.metrics.Timer timer = metrics.timer(fileName+".csv");
+        com.codahale.metrics.Timer timer = metrics.timer(fileName);
         com.codahale.metrics.Timer.Context context;
 
         long startTime = System.currentTimeMillis();
@@ -110,7 +110,7 @@ public abstract class Bench extends Task{
             timeStep();
             context.stop();
         }
-        metrics.remove(fileName+".csv");
+        metrics.remove(fileName);
     }
 
 
