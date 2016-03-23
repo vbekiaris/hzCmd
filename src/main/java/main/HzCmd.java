@@ -380,7 +380,7 @@ public class HzCmd implements Serializable {
         invokeSync(jvmId, threadCound, "run", taksId);
         invokeSync(jvmId, 1, "postBench", taksId);
 
-        invokeSync(jvmId, 1, "cleanup", taksId);
+        //invokeSync(jvmId, 1, "cleanup", taksId);
     }
 
     public void stop(String jvmId, String taskId) throws Exception {

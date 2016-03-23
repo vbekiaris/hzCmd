@@ -140,14 +140,7 @@ public class ClusterManager implements Serializable {
 
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             Object o = jvm.getResponse();
-            if(o instanceof Exception){
-                Exception e = (Exception) o;
-                System.out.println(Bash.ANSI_RED+" "+e+" "+e.getCause()+Bash.ANSI_RESET);
-                e.printStackTrace();
-
-            }else{
-                System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
-            }
+            printResponse(o);
         }
     }
 
@@ -165,7 +158,19 @@ public class ClusterManager implements Serializable {
 
     public void getResponse(String jvmId) throws IOException, InterruptedException, JMSException {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
-            System.out.println(jvm.getResponse());
+            Object o = jvm.getResponse();
+            printResponse(o);
+        }
+    }
+
+    private void printResponse(Object o){
+        if(o instanceof Exception){
+            Exception e = (Exception) o;
+            System.out.println(Bash.ANSI_RED+" "+e+" "+e.getCause()+Bash.ANSI_RESET);
+            e.printStackTrace();
+
+        }else{
+            System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
         }
     }
 
