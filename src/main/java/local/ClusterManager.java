@@ -59,7 +59,7 @@ public class ClusterManager implements Serializable {
     }
 
     public String getVersionString( ) {
-        return Arrays.toString(versions);
+        return Arrays.toString(versions).replace('[', '-').replace(']', '-');
     }
 
 
