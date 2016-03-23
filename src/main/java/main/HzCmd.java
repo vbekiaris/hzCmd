@@ -491,7 +491,7 @@ public class HzCmd implements Serializable {
     }
 
     public void chartComparisonHdr(String dir, String red, String blue) throws IOException, InterruptedException {
-        Bash.executeCommand("chart-ComparisonHdr "+dir+" "+red+" "+blue);
+        Bash.executeCommand("chart-allComparisonHdr "+dir+" "+red+" "+blue);
     }
 
 
