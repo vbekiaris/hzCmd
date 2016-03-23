@@ -12,6 +12,9 @@ import static global.Utils.rangeMap;
 public class ClusterManager implements Serializable {
 
     private final String clusterId;
+
+    private String[] versions;
+
     private BoxManager boxes;
     private Map<String, RemoteJvm> jvms = new HashMap();
 
@@ -49,6 +52,14 @@ public class ClusterManager implements Serializable {
         }else{
             membersOnlyCount = count;
         }
+    }
+
+    public void setVersion(String[] versions) {
+      this.versions=versions;
+    }
+
+    public String getVersionString( ) {
+        return Arrays.toString(versions);
     }
 
 
@@ -302,5 +313,6 @@ public class ClusterManager implements Serializable {
     public JvmFactory getJvmFactory() {
         return jvmFactory;
     }
+
 
 }

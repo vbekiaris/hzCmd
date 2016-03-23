@@ -131,6 +131,7 @@ public class HzCmd implements Serializable {
             if(c.matchClusterId(clusterId)){
                 System.out.println(Bash.ANSI_YELLOW+"Installing cluster "+c.getClusterId()+Bash.ANSI_RESET);
                 Installer.install(c.getBoxManager(), c.getJvmFactory(), ee, versions);
+                c.setVersion(versions);
             }
         }
     }
@@ -336,23 +337,16 @@ public class HzCmd implements Serializable {
 
                         for (int threadCount : benchMarkSettings.getThreads()) {
 
-                            /*
-                            String dir = clusterId+"_"+"M"+c.getMemberCount()+"-C"+c.getClientCount()+"_driver-"+drivers+"_"+benchType+"_"+taskId+"_"+className + filedSetup + itteratedFieldSetup+"_threads-"+threadCount;
-                            setField(drivers, taskId, "dir", dir);
 
-                            String title = clusterId+"_"+"M"+c.getMemberCount()+"-C"+c.getClientCount()+"_driver-"+drivers+"_"            +taskId+"_"+className+"_"                               +"threads-"+threadCount;
-                            setField(drivers, taskId, "title", title);
-                            */
-
-                            String metaData = clusterId+"_"+"M"+c.getMemberCount()+"-C"+c.getClientCount()+"_driver-"+drivers+"_benchType-"+benchType+"_"+taskId+"_"+className + filedSetup + itteratedFieldSetup+"_threads-"+threadCount;
+                            String version = c.getVersionString();
+                            String metaData = clusterId+"_"+version+"_"+"M"+c.getMemberCount()+"-C"+c.getClientCount()+"_driver-"+drivers+"_benchType-"+benchType+"_"+taskId+"_"+className + filedSetup + itteratedFieldSetup+"_threads-"+threadCount;
                             setField(drivers, taskId, "metaData", metaData);
 
-                            String fileName = clusterId+"_"+taskId+"_"+className+"_"+benchNumber;
+                            String fileName = clusterId+"_"+version+"_"+taskId+"_"+className+"_"+benchNumber;
                             setField(drivers, taskId, "fileName", fileName);
 
                             benchNumber++;
                             invokeBenchMark(drivers, threadCount, taskId);
-
                         }
                     }
                 }
