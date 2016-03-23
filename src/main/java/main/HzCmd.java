@@ -309,14 +309,14 @@ public class HzCmd implements Serializable {
 
         for (String drivers : benchMarkSettings.getDrivers()) {
 
-            for (String benchType : benchMarkSettings.getTypes()) {
+            for (String taskId : bencher.getTaskIds()) {
 
-                for (String taskId : bencher.getTaskIds()) {
+                String className = bencher.getClassName(taskId);
+                load(drivers, taskId, className);
+
+                for (String benchType : benchMarkSettings.getTypes()) {
 
                     setField(drivers, taskId, "benchType", benchType);
-
-                    String className = bencher.getClassName(taskId);
-                    load(drivers, taskId, className);
 
                     setField(drivers, taskId, "warmupSec", benchMarkSettings.getWarmupSec());
                     setField(drivers, taskId, "durationSec", benchMarkSettings.getDurationSec());
