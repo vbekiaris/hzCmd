@@ -343,9 +343,8 @@ public class HzCmd implements Serializable {
                             setField(drivers, taskId, "metaData", metaData);
 
                             String fileName = clusterId+"_"+version+"_"+taskId+"_"+className+"_"+benchNumber;
-
-                            benchNumber++;
                             invokeBenchMark(drivers, threadCount, taskId, fileName);
+                            benchNumber++;
                         }
                     }
                 }
