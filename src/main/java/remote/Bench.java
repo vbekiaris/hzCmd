@@ -66,17 +66,17 @@ public abstract class Bench extends Task{
 
 
     public void warmup(){
-        runBench(benchType, warmupSec, fileName+"_warmup-"+warmupSec+"Sec");
+        runBench(benchType, warmupSec);
     }
 
     public void run() {
-        runBench(benchType, durationSec, fileName+"_bench-"+durationSec+"Sec");
+        runBench(benchType, durationSec);
     }
 
-    private void runBench(BenchType type, int seconds, String title){
+    private void runBench(BenchType type, int seconds){
 
         try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(title+".meta"));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(fileName+".meta"));
             bw.write(metaData);
             bw.close();
         } catch (IOException e) {
@@ -85,13 +85,13 @@ public abstract class Bench extends Task{
 
         switch (type){
             case Metrics:
-                benchMetric(seconds, title);
+                benchMetric(seconds);
                 break;
             case Hdr:
-                benchHdr(seconds, title);
+                benchHdr(seconds);
                 break;
             case Recorder:
-                recorder(seconds, title);
+                recorder(seconds);
                 break;
             default :
                 throw new RuntimeException("BenchType invalid");
@@ -99,8 +99,8 @@ public abstract class Bench extends Task{
     }
 
 
-    private void benchMetric(int seconds, String metricsCsvtitle){
-        com.codahale.metrics.Timer timer = metrics.timer(metricsCsvtitle);
+    private void benchMetric(int seconds){
+        com.codahale.metrics.Timer timer = metrics.timer(fileName+".csv");
         com.codahale.metrics.Timer.Context context;
 
         long startTime = System.currentTimeMillis();
@@ -110,11 +110,11 @@ public abstract class Bench extends Task{
             timeStep();
             context.stop();
         }
-        metrics.remove(metricsCsvtitle);
+        metrics.remove(fileName+".csv");
     }
 
 
-    private void benchHdr(int seconds, String title){
+    private void benchHdr(int seconds){
 
         long startTime = System.currentTimeMillis();
         long endTime = startTime + (seconds * 1000);
@@ -128,13 +128,13 @@ public abstract class Bench extends Task{
     }
 
 
-    private void recorder(int seconds, String title) {
+    private void recorder(int seconds) {
         String basePath = System.getProperty("user.dir");
         Chronicle chronicle;
         ExcerptAppender appender;
 
         try {
-            chronicle = ChronicleQueueBuilder.indexed(basePath + "/" + title).build();
+            chronicle = ChronicleQueueBuilder.indexed(basePath + "/" +fileName+".chr").build();
             appender = chronicle.createAppender();
 
             long startTime = System.currentTimeMillis();
@@ -149,7 +149,6 @@ public abstract class Bench extends Task{
                 appender.writeLong(start);
                 appender.writeLong(end);
                 appender.writeLong(end - start);
-                //appender.flush();
                 appender.finish();
             }
 

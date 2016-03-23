@@ -343,10 +343,9 @@ public class HzCmd implements Serializable {
                             setField(drivers, taskId, "metaData", metaData);
 
                             String fileName = clusterId+"_"+version+"_"+taskId+"_"+className+"_"+benchNumber;
-                            setField(drivers, taskId, "fileName", fileName);
 
                             benchNumber++;
-                            invokeBenchMark(drivers, threadCount, taskId);
+                            invokeBenchMark(drivers, threadCount, taskId, fileName);
                         }
                     }
                 }
@@ -362,14 +361,16 @@ public class HzCmd implements Serializable {
 
 
 
-    public void invokeBenchMark(String jvmId, int threadCound, String taksId) throws Exception {
+    public void invokeBenchMark(String jvmId, int threadCound, String taksId, String fileName) throws Exception {
         invokeSync(jvmId, 1, "init", taksId);
 
+        setField(jvmId, taksId, "fileName", fileName+"-warmup");
         invokeSync(jvmId, 1, "preBench", taksId);
         invokeSync(jvmId, threadCound, "warmup", taksId);
         invokeSync(jvmId, 1, "postBench", taksId);
 
 
+        setField(jvmId, taksId, "fileName", fileName+"-bench");
         invokeSync(jvmId, 1, "preBench", taksId);
         invokeSync(jvmId, threadCound, "run", taksId);
         invokeSync(jvmId, 1, "postBench", taksId);
