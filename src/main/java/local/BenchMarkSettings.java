@@ -60,6 +60,18 @@ public class BenchMarkSettings implements Serializable {
         return types.split(",");
     }
 
+    public boolean benchTypesContains(BenchType type){
+
+        for (String name : getTypes()) {
+            BenchType t = BenchType.valueOf(name);
+
+            if(t.equals(type)){
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public String getWarmupSec() {
         return Integer.toString(warmupSec);

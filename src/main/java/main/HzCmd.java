@@ -4,6 +4,7 @@ import cmdline.CmdLine;
 import cmdline.Command;
 import global.ClusterSize;
 import local.*;
+import remote.BenchType;
 import vendor.gem.GemJvmFactory;
 import vendor.gg.GgJvmFactory;
 import global.Args;
@@ -356,9 +357,13 @@ public class HzCmd implements Serializable {
                     }
                 }
             }
-            download(clusterId, "output/" + clusterId);
         }
-        chartAllJavaMetrics("output/" + clusterId);
+
+        download(clusterId, "output/" + clusterId);
+
+        if(benchMarkSettings.benchTypesContains(BenchType.Metrics)){
+            chartAllJavaMetrics("output/" + clusterId);
+        }
     }
 
 
@@ -374,7 +379,8 @@ public class HzCmd implements Serializable {
         invokeSync(jvmId, 1, "preBench", taksId);
         invokeSync(jvmId, threadCound, "run", taksId);
         invokeSync(jvmId, 1, "postBench", taksId);
-        //invokeSync(jvmId, 1, "cleanup", taksId);
+
+        invokeSync(jvmId, 1, "cleanup", taksId);
     }
 
     public void stop(String jvmId, String taskId) throws Exception {
