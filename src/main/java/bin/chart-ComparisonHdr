@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+path=$1
+a=$2
+b=$3
+
+cd ${path}
+
+
+echo "1.0	0.0	0%" > ./xlabels.dat
+echo "10.0	0.0	90%" >> ./xlabels.dat
+echo "100.0	0.0	99%" >> ./xlabels.dat
+echo "1000.0	0.0	99.9%" >> ./xlabels.dat
+echo "10000.0	0.0	99.99%" >> ./xlabels.dat
+echo "100000.0	0.0	99.999%" >> ./xlabels.dat
+echo "1000000.0	0.0	99.9999%" >> ./xlabels.dat
+echo "10000000.0	0.0	99.99999%" >> ./xlabels.dat
+
+
+
+red=$(find . -type f  -name '*'${a}'*.hgrm' | xargs -n1 -I% echo -n " \"%\" using 4:1 with lines lt rgb \"red\"  ,")
+blue=$(find . -type f -name '*'${b}'*.hgrm' | xargs -n1 -I% echo -n " \"%\" using 4:1 with lines lt rgb \"blue\" ,")
+
+red="${red%?}"
+blue="${blue%?}"
+
+cat > plotScript << EOF
+
+     set terminal png enhanced size 1280,720
+     set output "${a}-VS-${b}.png"
+
+     set logscale x
+     unset xtics
+
+     set key top left
+
+     plot './xlabels.dat' with labels center offset 0, 1.5 point, $red , $blue
+EOF
+
+gnuplot plotScript

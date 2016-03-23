@@ -128,6 +128,7 @@ public abstract class Bench extends Task{
         }
     }
 
+
     private void recorder(int seconds, String title) {
         String basePath = System.getProperty("user.dir");
         Chronicle chronicle;
