@@ -309,23 +309,23 @@ public class HzCmd implements Serializable {
 
         for (String drivers : benchMarkSettings.getDrivers()) {
 
-            for (String taskId : bencher.getTaskIds()) {
+            for (String benchType : benchMarkSettings.getTypes()) {
 
-                String className = bencher.getClassName(taskId);
-                load(drivers, taskId, className);
-
-                setField(drivers, taskId, "warmupSec", benchMarkSettings.getWarmupSec());
-                setField(drivers, taskId, "durationSec", benchMarkSettings.getDurationSec());
-
-                String filedSetup = new String();
-                for (FieldValue field : bencher.getFieldsToSet(taskId)) {
-                    setField(drivers, taskId, field.field, field.value);
-                    filedSetup+="_"+field.field+"-"+field.value;
-                }
-
-                for (String benchType : benchMarkSettings.getTypes()) {
+                for (String taskId : bencher.getTaskIds()) {
 
                     setField(drivers, taskId, "benchType", benchType);
+
+                    String className = bencher.getClassName(taskId);
+                    load(drivers, taskId, className);
+
+                    setField(drivers, taskId, "warmupSec", benchMarkSettings.getWarmupSec());
+                    setField(drivers, taskId, "durationSec", benchMarkSettings.getDurationSec());
+
+                    String filedSetup = new String();
+                    for (FieldValue field : bencher.getFieldsToSet(taskId)) {
+                        setField(drivers, taskId, field.field, field.value);
+                        filedSetup+="_"+field.field+"-"+field.value;
+                    }
 
                     for (List<FieldValue> settings : bencher.getSettings(taskId)) {
 
@@ -336,7 +336,6 @@ public class HzCmd implements Serializable {
                         }
 
                         for (int threadCount : benchMarkSettings.getThreads()) {
-
 
                             String version = c.getVersionString();
                             String metaData = clusterId+"_"+version+"_"+"M"+c.getMemberCount()+"-C"+c.getClientCount()+"_driver-"+drivers+"_benchType-"+benchType+"_"+taskId+"_"+className + filedSetup + itteratedFieldSetup+"_threads-"+threadCount;
