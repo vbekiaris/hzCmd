@@ -60,10 +60,10 @@ public class ClusterManager implements Serializable {
         return addJvms(qty, version, options, cwdFiles, NodeType.Client);
     }
 
-    private List<RemoteJvm> addJvms(int qty, String hzVersion, String options, String cwdFiles, NodeType type) throws Exception {
+    private List<RemoteJvm> addJvms(int qty, String version, String options, String cwdFiles, NodeType type) throws Exception {
         List<RemoteJvm> added = new ArrayList();
         for(int i=0; i<qty; i++) {
-            added.add(addJvm(hzVersion, options, cwdFiles, type));
+            added.add(addJvm(version, options, cwdFiles, type));
         }
         return added;
     }
@@ -81,6 +81,7 @@ public class ClusterManager implements Serializable {
         RemoteJvm jvm = jvmFactory.createJvm(boxes.get(idx), type, count, clusterId);
         jvm.uploadcwd(cwdFiles);
         jvms.put(jvm.getId(), jvm);
+
         jvm.startJvm(options, jvmFactory.getVendorLibDir(jarVersion), this, brokerIP);
         return jvm;
     }

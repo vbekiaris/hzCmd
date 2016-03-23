@@ -23,6 +23,9 @@ public abstract class RemoteJvm implements Serializable {
     protected final String id;
     protected final String dir;
 
+    protected String version;
+    protected String vendorLibDir;
+
     private String launchCmd;
     protected int pid = 0;
 
@@ -41,7 +44,9 @@ public abstract class RemoteJvm implements Serializable {
     public abstract String setJvmStartOptions(Box thisBox, ClusterManager myCluster) throws Exception;
 
 
-    public void startJvm(String jvmOptions, String vendorLibDir, ClusterManager myCluster, String brokerIP) throws Exception {
+    public void startJvm(String jvmOptions, String libDir, ClusterManager myCluster, String brokerIP) throws Exception {
+
+        this.vendorLibDir = libDir;
 
         if (isRunning()) {
             System.out.println(Bash.ANSI_CYAN+"all ready started " + this +Bash.ANSI_RESET);
@@ -213,7 +218,7 @@ public abstract class RemoteJvm implements Serializable {
                 " ID=" + id +
                 ", isRunning=" + running +
                 ", pid=" + pid +
-                ", type=" + type +
+                ", lib=" + vendorLibDir +
                 ", dir=" + dir +
                 " ip=" + box +
                 '}' + Bash.ANSI_RESET;
