@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+path=$1
+a=$2
+b=$3
+
+cd ${path}
+
+find . -type f -name *${a}*.csv | xargs -n1 basename | sort | uniq > a.txt
+find . -type f -name *${b}*.csv | xargs -n1 basename | sort | uniq > b.txt
+
+paste a.txt b.txt > a-and-b.txt
+
+mkdir ${a}-vs-${b}
+
+while read line; do
+  f=($line)
+  echo ${f[0]}  '<-->'  ${f[1]}
+
+  find . -type f -name ${f[0]}
+  find . -type f -name ${f[1]}
+
+  chart-ComparisonHdr ${f[0]} ${f[1]} "${f[0]}-VS-${f[1]}"
+
+  mkdir ${a}-vs-${b}/${f[0]}'-VS-'${f[1]}
+  mv *.png ${a}-vs-${b}/${f[0]}'-VS-'${f[1]}
+
+
+  meta=${f[0]}
+  meta=${meta%.csv}".meta"
+  meta=$(find . -type f -name ${meta} -print -quit)
+  cp ${meta} ${a}-vs-${b}/${f[0]}'-VS-'${f[1]}
+
+  meta=${f[1]}
+  meta=${meta%.csv}".meta"
+  meta=$(find . -type f -name ${meta} -print -quit)
+  cp ${meta} ${a}-vs-${b}/${f[0]}'-VS-'${f[1]}
+
+done < a-and-b.txt
+
+

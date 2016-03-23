@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
-path=$1
-a=$2
-b=$3
-
-cd ${path}
+a=$1
+b=$2
+title=$3
 
 
 echo "1.0	0.0	0%" > ./xlabels.dat
@@ -26,7 +24,7 @@ blue="${blue%?}"
 cat > plotScript << EOF
 
      set terminal png enhanced size 1280,720
-     set output "${a}-VS-${b}.png"
+     set output "${title}.png"
 
      set logscale x
      unset xtics
