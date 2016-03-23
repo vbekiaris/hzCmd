@@ -490,6 +490,10 @@ public class HzCmd implements Serializable {
         Bash.executeCommand("driver-wideMetrics "+dir+" "+red+" "+blue);
     }
 
+    public void chartComparisonHdr(String dir, String red, String blue) throws IOException, InterruptedException {
+        Bash.executeCommand("chart-ComparisonHdr "+dir+" "+red+" "+blue);
+    }
+
 
     public void setBenchDrivers(String drivers){
         benchMarkSettings.setDrivers(drivers);
