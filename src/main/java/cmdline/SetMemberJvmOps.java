@@ -6,6 +6,7 @@ import global.Bash;
 import local.OrderedProperties;
 import main.HzCmd;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.Serializable;
@@ -28,13 +29,17 @@ public class SetMemberJvmOps extends Command implements Serializable{
 
             Properties props = new OrderedProperties();
 
-            FileInputStream in = new FileInputStream(HzCmd.propertiesFile);
+            File yourFile = new File(HzCmd.propertiesFile);
+            yourFile.createNewFile();
+            
+
+            FileInputStream in = new FileInputStream(yourFile);
             props.load(in);
             in.close();
 
             props.setProperty("memberOps", ops.toString());
 
-            FileOutputStream out = new FileOutputStream(HzCmd.propertiesFile);
+            FileOutputStream out = new FileOutputStream(yourFile);
             props.store(out, null);
             out.close();
 
