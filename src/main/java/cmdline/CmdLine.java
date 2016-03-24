@@ -27,7 +27,7 @@ public class CmdLine {
         builder.withGroup("set")
                 .withDescription("set properties")
                 .withDefaultCommand(Help.class)
-                .withCommands(SetMemberJvmOps.class);
+                .withCommands(SetMemberJvmOps.class, SetClientJvmOps.class);
 
         builder.withGroup("add")
                 .withDescription("add boxes, clusters, members clients")

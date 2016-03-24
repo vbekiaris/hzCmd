@@ -1,8 +1,6 @@
 package cmdline;
 
 import com.github.rvesse.airline.annotations.Arguments;
-import com.github.rvesse.airline.annotations.Option;
-import global.Bash;
 import local.OrderedProperties;
 import main.HzCmd;
 
@@ -13,8 +11,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Properties;
 
-@com.github.rvesse.airline.annotations.Command(name = "memberOps", description = "Set jvm options for Members")
-public class SetMemberJvmOps extends Command implements Serializable{
+@com.github.rvesse.airline.annotations.Command(name = "clientOps", description = "Set jvm options for Clients")
+public class SetClientJvmOps extends Command implements Serializable{
 
     @Arguments(description = "jvm options")
     public List<String> jvmOptions;
@@ -28,7 +26,7 @@ public class SetMemberJvmOps extends Command implements Serializable{
             }
 
             OrderedProperties props = new OrderedProperties();
-            props.writePropertie(HzCmd.propertiesFile, "memberOps", ops.toString());
+            props.writePropertie(HzCmd.propertiesFile, "clientOps", ops.toString());
 
         } catch (Exception e) {
             e.printStackTrace();

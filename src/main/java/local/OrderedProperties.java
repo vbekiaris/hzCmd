@@ -1,6 +1,12 @@
 package local;
 
 
+import main.HzCmd;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Vector;
@@ -37,6 +43,23 @@ public class OrderedProperties extends Properties {
         _names.remove(key);
 
         return super .remove(key);
+    }
+
+    public void writePropertie(String file, String key, String value) throws IOException {
+
+        File yourFile = new File(HzCmd.propertiesFile);
+        yourFile.createNewFile();
+
+
+        FileInputStream in = new FileInputStream(yourFile);
+        load(in);
+        in.close();
+
+        setProperty(key, value);
+
+        FileOutputStream out = new FileOutputStream(yourFile);
+        store(out, null);
+        out.close();
     }
 
     private Vector _names;
