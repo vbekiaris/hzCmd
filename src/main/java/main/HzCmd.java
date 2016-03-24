@@ -66,7 +66,9 @@ public class HzCmd implements Serializable {
         install(clusterId, ee, version);
 
         if(libFiles!=null) {
-            uploadLib(clusterId, libFiles);
+            for (String f : libFiles.split(",")) {
+                uploadLib(clusterId, libFiles);
+            }
         }
 
         int m = ClusterSize.getMemberCount(size);
