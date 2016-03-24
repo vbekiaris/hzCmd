@@ -67,7 +67,7 @@ public class HzCmd implements Serializable {
 
         if(libFiles!=null) {
             for (String f : libFiles.split(",")) {
-                uploadLib(clusterId, libFiles);
+                uploadLib(clusterId, f);
             }
         }
 
