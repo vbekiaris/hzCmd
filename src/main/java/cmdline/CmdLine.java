@@ -25,7 +25,7 @@ public class CmdLine {
                 .withCommands(InitCluster.class);
 
         builder.withGroup("set")
-                .withDescription("init a cluster ")
+                .withDescription("set properties")
                 .withDefaultCommand(Help.class)
                 .withCommands(SetMemberJvmOps.class);
 
