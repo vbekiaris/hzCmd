@@ -24,6 +24,11 @@ public class CmdLine {
                 .withDefaultCommand(Help.class)
                 .withCommands(InitCluster.class);
 
+        builder.withGroup("set")
+                .withDescription("init a cluster ")
+                .withDefaultCommand(Help.class)
+                .withCommands(SetMemberJvmOps.class);
+
         builder.withGroup("add")
                 .withDescription("add boxes, clusters, members clients")
                 .withDefaultCommand(Help.class)
@@ -43,7 +48,6 @@ public class CmdLine {
                 .withDescription("init redis props")
                 .withDefaultCommand(Help.class)
                 .withCommands(RedisInit.class);
-
 
         return builder.build();
     }

@@ -26,6 +26,8 @@ import static global.Utils.myIp;
 //TODO exampe 3 3node cluster wan replicate ring, with rolling upgrade,  members putting,  clients getting,  kill restart members,  man center isRunning,
 public class HzCmd implements Serializable {
 
+    public static final String propertiesFile = "main.properties";
+
     private Map<String, BoxManager> boxes = new HashMap();
     private Map<String, ClusterManager> clusters = new HashMap();
 
