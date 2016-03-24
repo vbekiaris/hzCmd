@@ -1,0 +1,14 @@
+
+files=$(find . -type f -name hiccuplog*)
+
+while read -r f; do
+
+ jhicName=$(basename ${f})
+ pathName=$(dirname  ${f})
+
+ jHiccupLogProcessor -i ${f} -o ${pathName}/${jhicName}-processed
+
+done <<< "$files"
+
+
+
