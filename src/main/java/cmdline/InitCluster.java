@@ -48,7 +48,7 @@ public  class InitCluster extends Command {
             ClusterType clusterType = ClusterType.valueOf(type);
             ClusterSize clusterSize = ClusterSize.valueOf(size);
 
-            hzCmd.initCluster(user, boxes, id, clusterType, clusterSize, ee, version, "", "", lib_files, cwd_file);
+            hzCmd.initCluster(user, boxes, id, clusterType, clusterSize, ee, version, lib_files, cwd_file);
 
         } catch (Exception e) {
             e.printStackTrace();

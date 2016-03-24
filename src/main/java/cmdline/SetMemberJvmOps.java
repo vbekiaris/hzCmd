@@ -3,6 +3,7 @@ package cmdline;
 import com.github.rvesse.airline.annotations.Arguments;
 import com.github.rvesse.airline.annotations.Option;
 import global.Bash;
+import local.HzCmdProperties;
 import local.OrderedProperties;
 import main.HzCmd;
 
@@ -27,8 +28,8 @@ public class SetMemberJvmOps extends Command implements Serializable{
                 ops.append(s+" ");
             }
 
-            OrderedProperties props = new OrderedProperties();
-            props.writePropertie(HzCmd.propertiesFile, "memberOps", ops.toString());
+            HzCmdProperties props = new HzCmdProperties();
+            props.writePropertie(HzCmdProperties.memberOps, ops.toString());
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -57,7 +57,9 @@ public class HzCmd implements Serializable {
         }
     }
 
-    public void initCluster(String user, String boxes, String clusterId, ClusterType type, ClusterSize size, boolean ee, String version, String memberJvmOptions, String clientJvmOption, String libFiles, String cwdFiles) throws Exception{
+    public void initCluster(String user, String boxes, String clusterId, ClusterType type, ClusterSize size, boolean ee, String version, String libFiles, String cwdFiles) throws Exception{
+
+        HzCmdProperties properties = new HzCmdProperties();
 
         addBoxes(user, boxes);
         addCluster(clusterId, boxes, type);
@@ -68,6 +70,7 @@ public class HzCmd implements Serializable {
         }
 
         int m = ClusterSize.getMemberCount(size);
+        String memberJvmOptions = properties.readPropertie(HzCmdProperties.memberOps, "");
         addMembers(clusterId, m, version,  memberJvmOptions, cwdFiles);
 
         ClusterManager cm = clusters.get(clusterId);
@@ -75,6 +78,7 @@ public class HzCmd implements Serializable {
         jvmFactory.membersAdded(cm.getMemberBoxes());
 
         int c = ClusterSize.getClientCount(size);
+        String clientJvmOption = properties.readPropertie(HzCmdProperties.clientOps, "");
         addClients(clusterId, c, version, clientJvmOption, cwdFiles);
     }
 

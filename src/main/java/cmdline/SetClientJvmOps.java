@@ -1,6 +1,7 @@
 package cmdline;
 
 import com.github.rvesse.airline.annotations.Arguments;
+import local.HzCmdProperties;
 import local.OrderedProperties;
 import main.HzCmd;
 
@@ -25,8 +26,8 @@ public class SetClientJvmOps extends Command implements Serializable{
                 ops.append(s+" ");
             }
 
-            OrderedProperties props = new OrderedProperties();
-            props.writePropertie(HzCmd.propertiesFile, "clientOps", ops.toString());
+            HzCmdProperties props = new HzCmdProperties();
+            props.writePropertie(HzCmdProperties.clientOps, ops.toString());
 
         } catch (Exception e) {
             e.printStackTrace();
