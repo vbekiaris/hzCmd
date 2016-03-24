@@ -17,6 +17,8 @@ public class BenchMarkSettings implements Serializable {
 
     private int durationSec=60;
 
+    private int repeatCount=1;
+
     private String types="Metrics";
 
 
@@ -40,6 +42,7 @@ public class BenchMarkSettings implements Serializable {
         this.threads = threads;
     }
 
+    public void setRepeatCount(int repeatCount) { this.repeatCount = repeatCount; }
 
 
     public String[] getDrivers() {
@@ -80,4 +83,7 @@ public class BenchMarkSettings implements Serializable {
     public String getDurationSec() {
         return Integer.toString(durationSec);
     }
+
+    public int repeatCount(){ return repeatCount; }
+
 }

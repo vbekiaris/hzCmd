@@ -342,14 +342,16 @@ public class HzCmd implements Serializable {
                         }
 
                         for (int threadCount : benchMarkSettings.getThreads()) {
+                            for (int repeater=0; repeater<benchMarkSettings.repeatCount(); repeater++) {
 
-                            String version = c.getVersionString();
-                            String metaData = clusterId+"_"+version+"_"+"M"+c.getMemberCount()+"-C"+c.getClientCount()+"_driver-"+drivers+"_benchType-"+benchType+"_"+taskId+"_"+className + filedSetup + itteratedFieldSetup+"_threads-"+threadCount;
-                            setField(drivers, taskId, "metaData", metaData);
+                                String version = c.getVersionString();
+                                String metaData = clusterId + "_" + version + "_" + "M" + c.getMemberCount() + "-C" + c.getClientCount() + "_driver-" + drivers + "_benchType-" + benchType + "_" + taskId + "_" + className + filedSetup + itteratedFieldSetup + "_threads-" + threadCount;
+                                setField(drivers, taskId, "metaData", metaData);
 
-                            String fileName = clusterId+"_"+version+"_"+taskId+"_"+className+"_"+benchNumber;
-                            invokeBenchMark(drivers, threadCount, taskId, fileName);
-                            benchNumber++;
+                                String fileName = clusterId + "_" + version + "_" + taskId + "_" + className + "_" + benchNumber;
+                                invokeBenchMark(drivers, threadCount, taskId, fileName);
+                                benchNumber++;
+                            }
                         }
                     }
                 }
@@ -361,6 +363,7 @@ public class HzCmd implements Serializable {
         if(benchMarkSettings.benchTypesContains(BenchType.Metrics)){
             chartAllJavaMetrics("output/" + clusterId);
         }
+        System.out.println(Bash.ANSI_YELLOW+"The End"+Bash.ANSI_RESET);
     }
 
 
@@ -518,5 +521,9 @@ public class HzCmd implements Serializable {
 
     public void setBenchType(String type) {
         benchMarkSettings.setType(type);
+    }
+
+    public void setRepeatCount(int repeatCount) {
+        benchMarkSettings.setRepeatCount(repeatCount);
     }
 }
