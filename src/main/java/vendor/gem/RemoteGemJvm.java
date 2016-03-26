@@ -13,8 +13,8 @@ public class RemoteGemJvm extends RemoteJvm {
 
     private static final int gemFireLocatorPort=11001;
 
-    public RemoteGemJvm(Box box, NodeType type, String id) throws IOException, InterruptedException {
-        super(box, type, id);
+    public RemoteGemJvm(Box box, NodeType type, String id, String clusterId) throws IOException, InterruptedException {
+        super(box, type, id, clusterId);
     }
 
     public String getClassToRun() {

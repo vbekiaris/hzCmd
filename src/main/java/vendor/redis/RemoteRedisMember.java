@@ -16,8 +16,8 @@ public class RemoteRedisMember extends RemoteJvm {
 
     public static final String version="3.0.7";
 
-    public RemoteRedisMember(Box box, NodeType type, String id) throws IOException, InterruptedException {
-        super(box, type, id);
+    public RemoteRedisMember(Box box, NodeType type, String id, String clusterId) throws IOException, InterruptedException {
+        super(box, type, id, clusterId);
     }
 
     public String getClassToRun() {

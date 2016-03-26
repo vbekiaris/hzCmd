@@ -10,8 +10,8 @@ import java.io.IOException;
 
 public class RemoteHzJvm extends RemoteJvm {
 
-    public RemoteHzJvm(Box box, NodeType type, String id) throws IOException, InterruptedException {
-        super(box, type, id);
+    public RemoteHzJvm(Box box, NodeType type, String id, String clusterId) throws IOException, InterruptedException {
+        super(box, type, id, clusterId);
     }
 
     public String getClassToRun() {

@@ -13,7 +13,6 @@ import java.util.List;
  */
 public class RedisJvmFactory implements JvmFactory, Serializable {
 
-    public  static int replicasCount=0;
     private static final int clusterStartPause=5000;
 
     private static final String redisPath = Installer.REMOTE_HZCMD_ROOT_FULL_PATH+"/"+"redis-lib";
@@ -44,6 +43,9 @@ public class RedisJvmFactory implements JvmFactory, Serializable {
         RemoteJvm remoteJvm = memberJmvs.get(0);
         String red = RemoteRedisMember.getRedisInstallHome();
 
+        HzCmdProperties p = new HzCmdProperties();
+
+        String replicasCount=p.readPropertie(HzCmdProperties.redisReplicas, "1");
         String res = remoteJvm.getBox().ssh("echo yes | " + red + "/src/redis-trib.rb create --replicas "+replicasCount+" "+boxs );
         System.out.println(res);
 
@@ -58,13 +60,13 @@ public class RedisJvmFactory implements JvmFactory, Serializable {
             id = RedisMember.class.getSimpleName();
             id += count+""+clusterId;
 
-            return new RemoteRedisMember(box, type, id);
+            return new RemoteRedisMember(box, type, id, clusterId);
 
         }else {
             id = RedisClient.class.getSimpleName();
             id += count+""+clusterId;
 
-            return new RemoteJedisJvm(box, type, id);
+            return new RemoteJedisJvm(box, type, id, clusterId);
         }
     }
 }

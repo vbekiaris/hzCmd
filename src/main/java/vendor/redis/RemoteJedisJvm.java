@@ -11,8 +11,8 @@ import java.util.List;
 
 public class RemoteJedisJvm extends RemoteJvm {
 
-    public RemoteJedisJvm(Box box, NodeType type, String id) throws IOException, InterruptedException {
-        super(box, type, id);
+    public RemoteJedisJvm(Box box, NodeType type, String id, String clusterId) throws IOException, InterruptedException {
+        super(box, type, id, clusterId);
     }
 
     public String getClassToRun() {

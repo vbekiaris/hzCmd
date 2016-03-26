@@ -47,7 +47,7 @@ public class GemJvmFactory implements JvmFactory, Serializable {
         }
         id += count+""+clusterId;
 
-        return new RemoteGemJvm(box, type, id);
+        return new RemoteGemJvm(box, type, id, clusterId);
     }
 
 }

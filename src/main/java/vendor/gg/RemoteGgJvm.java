@@ -13,8 +13,8 @@ import static vendor.gg.GgXml.addServerIpsToGgXml;
 public class RemoteGgJvm extends RemoteJvm {
 
 
-    public RemoteGgJvm(Box box, NodeType type, String id) throws IOException, InterruptedException {
-        super(box, type, id);
+    public RemoteGgJvm(Box box, NodeType type, String id, String clusterId) throws IOException, InterruptedException {
+        super(box, type, id, clusterId);
     }
 
     public String getClassToRun() {

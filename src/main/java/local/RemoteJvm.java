@@ -21,6 +21,8 @@ public abstract class RemoteJvm implements Serializable {
     protected final Box box;
     protected final NodeType type;
     protected final String id;
+    protected final String clusterId;
+
     protected final String dir;
 
     //protected String version;
@@ -29,10 +31,11 @@ public abstract class RemoteJvm implements Serializable {
     private String launchCmd;
     protected int pid = 0;
 
-    public RemoteJvm(Box box, NodeType type, String id) throws IOException, InterruptedException {
+    public RemoteJvm(Box box, NodeType type, String id, String clusterId) throws IOException, InterruptedException {
         this.box = box;
         this.type = type;
         this.id = id;
+        this.clusterId=clusterId;
         this.dir = Installer.REMOTE_HZCMD_ROOT + "/" + id;
         box.ssh("mkdir -p " + dir);
     }
@@ -77,7 +80,9 @@ public abstract class RemoteJvm implements Serializable {
 
         //HzCmdProperties properties = new HzCmdProperties();
 
-        String jhicAgent = "-javaagent:jHiccup.jar=\"-d 0 -i 1000 -l "+id+"-hiccuplog -c\"";
+
+
+        String jhicAgent = "-javaagent:jHiccup.jar=\"-d 0 -i 1000 -l "+clusterId+"-hiccuplog -c\"";
 
         launchCmd = "cd " + dir + "; nohup java "+jhicAgent+" -cp \"" + Installer.REMOTE_HZCMD_LIB_FULL_PATH+"/*" + ":" +  vendorLibDir+"/*"  + "\" " + jvmArgs + " " + jvmOptions + " " + classToRun + " >> " + outFile + " 2>&1 & echo $!";
 

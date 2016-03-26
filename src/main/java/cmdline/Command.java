@@ -2,6 +2,8 @@ package cmdline;
 
 import main.HzCmd;
 
+import java.io.IOException;
+
 @com.github.rvesse.airline.annotations.Command(name = "cmd")
 public class Command implements Runnable {
 
@@ -10,7 +12,7 @@ public class Command implements Runnable {
         System.out.println(getClass().getSimpleName());
     }
 
-    public void exe(HzCmd hzCmd) {
+    public void exe(HzCmd hzCmd) throws IOException {
 
     }
 }
