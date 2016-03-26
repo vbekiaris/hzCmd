@@ -71,12 +71,13 @@ public abstract class RemoteJvm implements Serializable {
         jvmArgs += "-XX:OnOutOfMemoryError=\" date >> " + id + ".oome" + "\" ";
 
 
-        /*
-          String takipiJavaAgent = "-agentlib:TakipiAgent";    String takipiProp = "\"-Dtakipi.name=\"" + id;
-          -javaagent:jHiccup.jar
-        */
 
-        String jhicAgent = "-javaagent:jHiccup.jar=\"-d 0 -i 1000 -l hiccuplog -c\"";
+        //String takipiJavaAgent = "-agentlib:TakipiAgent";    String takipiProp = "\"-Dtakipi.name=\"" + id;
+
+
+        //HzCmdProperties properties = new HzCmdProperties();
+
+        String jhicAgent = "-javaagent:jHiccup.jar=\"-d 0 -i 1000 -l "+id+"-hiccuplog -c\"";
 
         launchCmd = "cd " + dir + "; nohup java "+jhicAgent+" -cp \"" + Installer.REMOTE_HZCMD_LIB_FULL_PATH+"/*" + ":" +  vendorLibDir+"/*"  + "\" " + jvmArgs + " " + jvmOptions + " " + classToRun + " >> " + outFile + " 2>&1 & echo $!";
 
