@@ -26,11 +26,18 @@ public class HzCmdProperties extends OrderedProperties {
 
     public static final String redisReplicas = "redisReplicas";
 
+    public static final String jhic = "jhic";
+
+
     public void writePropertie(String key, String value) throws IOException {
         writePropertie(HzCmd.propertiesFile, key, value);
     }
 
     public String readPropertie(String key, String defaultValue) throws IOException {
         return readPropertie(HzCmd.propertiesFile, key, defaultValue);
+    }
+
+    public boolean getBoolean(String key, String defaultValue){
+        return Boolean.parseBoolean(getProperty(key, defaultValue));
     }
 }
