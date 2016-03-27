@@ -56,7 +56,7 @@ public abstract class Bench extends Task{
                 histogram.setEndTimeStamp(System.nanoTime());
                 try {
                     PrintStream ps = new PrintStream(new FileOutputStream(fileName+".hgrm", true));
-                    histogram.outputPercentileDistribution(ps, 1000.0);
+                    histogram.outputPercentileDistribution(ps, 1000000.0);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }

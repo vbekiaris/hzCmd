@@ -82,9 +82,9 @@ public abstract class RemoteJvm implements Serializable {
 
 
         HzCmdProperties properties = new HzCmdProperties();
-        if(properties.getBoolean(HzCmdProperties.jhic, "false")) {
+        //if(properties.getBoolean(HzCmdProperties.jhic, "false")) {
             jhicAgent = "-javaagent:jHiccup.jar=\"-d 0 -i 1000 -l " + clusterId + "-hiccuplog -c\"";
-        }
+        //}
 
         launchCmd = "cd " + dir + "; nohup java "+jhicAgent+" -cp \"" + Installer.REMOTE_HZCMD_LIB_FULL_PATH+"/*" + ":" +  vendorLibDir+"/*"  + "\" " + jvmArgs + " " + jvmOptions + " " + classToRun + " >> " + outFile + " 2>&1 & echo $!";
 
