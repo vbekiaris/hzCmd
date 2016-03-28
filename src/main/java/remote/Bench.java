@@ -147,7 +147,6 @@ public abstract class Bench extends Task{
             long end = System.nanoTime();
             long elapsedNanos = end-start;
             long nextStart = start + expectedInterval_1Milli_asNanos;
-
             histogram.recordValueWithExpectedInterval(elapsedNanos, expectedInterval_1Milli_asNanos);
 
             while( System.nanoTime() < nextStart) {
