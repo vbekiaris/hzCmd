@@ -27,6 +27,11 @@ public abstract class Bash {
         return executeCommand("find " + path + " -name " + file);
     }
 
+    public static String cp(String src, String dst) throws IOException, InterruptedException {
+        return executeCommand("cp " + src + " " + dst);
+    }
+
+
     public static void mkdir(String dir) throws IOException, InterruptedException {
         executeCommand("mkdir -p " + dir);
     }

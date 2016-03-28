@@ -37,7 +37,7 @@ public class HzCmdProperties extends OrderedProperties {
         return readPropertie(HzCmd.propertiesFile, key, defaultValue);
     }
 
-    public boolean getBoolean(String key, String defaultValue){
-        return Boolean.parseBoolean(getProperty(key, defaultValue));
+    public boolean getBoolean(String key, String defaultValue) throws IOException {
+        return Boolean.parseBoolean( readPropertie(HzCmd.propertiesFile, key, defaultValue) );
     }
 }
