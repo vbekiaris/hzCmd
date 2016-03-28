@@ -20,10 +20,7 @@ import java.util.*;
 
 import static global.Utils.myIp;
 
-// mvn clean install dependency:copy-dependencies
-//TODO WAN REP xml SETUP
-//TODO man center integ
-//TODO exampe 3 3node cluster wan replicate ring, with rolling upgrade,  members putting,  clients getting,  kill restart members,  man center isRunning,
+
 public class HzCmd implements Serializable {
 
     public static final String propertiesFile = "HzCmd.properties";
