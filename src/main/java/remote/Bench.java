@@ -2,6 +2,7 @@ package remote;
 
 import com.codahale.metrics.CsvReporter;
 import com.codahale.metrics.MetricRegistry;
+import com.google.common.util.concurrent.RateLimiter;
 import net.openhft.chronicle.Chronicle;
 import net.openhft.chronicle.ChronicleQueueBuilder;
 import net.openhft.chronicle.ExcerptAppender;
@@ -10,11 +11,14 @@ import org.HdrHistogram.Histogram;
 
 import javax.jms.JMSException;
 import java.io.*;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public abstract class Bench extends Task{
 
     public Histogram histogram = new ConcurrentHistogram(TimeUnit.SECONDS.toNanos(30), 3);
+
+    //public long expectedNanoInterval  = 1000000;
 
     public BenchType benchType = BenchType.Metrics;
     public String metaData;
@@ -124,6 +128,27 @@ public abstract class Bench extends Task{
             timeStep();
             long end = System.nanoTime();
             histogram.recordValue(end-start);
+            histogram.recordValueWithExpectedInterval(end-startTime, 0);
+        }
+    }
+
+    private void benchHdrAtExpected_1milli_Interval(int seconds) throws InterruptedException {
+
+        long expectedInterval_1Milli_asNanos = 1000000;
+
+        long startTime = System.currentTimeMillis();
+        long endTime = startTime + (seconds * 1000);
+        while(System.currentTimeMillis() < endTime){
+
+            long start = System.nanoTime();
+            timeStep();
+            long end = System.nanoTime();
+            long elapsedNanos = end-start;
+
+            while( elapsedNanos < expectedInterval_1Milli_asNanos){
+                elapsedNanos = System.nanoTime() - start;
+            }
+            histogram.recordValueWithExpectedInterval(elapsedNanos, expectedInterval_1Milli_asNanos);
         }
     }
 
@@ -161,4 +186,33 @@ public abstract class Bench extends Task{
     }
 
     public abstract void timeStep( );
+
+
+
+
+    public static void main(String[] args) throws InterruptedException, IOException {
+        RateLimiter throttle = RateLimiter.create(1000.0);
+        Random random = new Random();
+
+        long expectedInterval_1Milli_asNanos = 1000000;
+
+        while(true){
+            long start = System.nanoTime();
+
+            throttle.acquire();
+            //Thread.sleep(1000);
+
+            long end = System.nanoTime();
+            long elapsedNanos = end-start;
+
+            while( elapsedNanos < expectedInterval_1Milli_asNanos){
+                //System.out.println("hi steady "+elapsedNanos);
+                elapsedNanos = System.nanoTime() - start;
+            }
+
+            System.out.println(elapsedNanos);
+            //System.out.println("conv "+TimeUnit.MILLISECONDS.convert(elapsedNanos, TimeUnit.NANOSECONDS) );
+        }
+    }
+
 }
