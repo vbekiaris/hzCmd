@@ -51,7 +51,7 @@ INSTALLED_PATH=$(readlink_f $0)
 # (running from the source repository build).
 JHICCUP_JAR_FILE=$INSTALLED_PATH/jHiccup.jar
 if [ ! -f $JHICCUP_JAR_FILE ] ; then
-  JHICCUP_JAR_FILE=jHiccup.jar
+  JHICCUP_JAR_FILE=${HZ_CMD_SRC}/lib-jars/jHiccup.jar
 fi
 
 JAVA_BIN=`which java`
