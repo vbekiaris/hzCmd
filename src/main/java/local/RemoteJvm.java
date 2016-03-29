@@ -81,7 +81,6 @@ public abstract class RemoteJvm implements Serializable {
         HzCmdProperties properties = new HzCmdProperties();
         if(properties.getBoolean(HzCmdProperties.jhic, "false")) {
             String hz_cmd_src = System.getenv("HZ_CMD_SRC");
-            Bash.cp(hz_cmd_src+"/lib-jars/jHiccup.jar", ".");
             this.uploadcwd(hz_cmd_src+"/lib-jars/jHiccup.jar");
 
             String jhicArgs = properties.readPropertie(HzCmdProperties.jhicArgs, "-d 0 -i 1000");
