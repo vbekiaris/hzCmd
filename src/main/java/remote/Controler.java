@@ -7,6 +7,8 @@ import javax.jms.JMSException;
 
 import java.io.*;
 import java.lang.management.ManagementFactory;
+import java.util.Enumeration;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -27,6 +29,15 @@ public abstract class Controler{
 
     public Controler(NodeType type) throws Exception {
         this.type=type;
+
+        Properties p = System.getProperties();
+        Enumeration keys = p.keys();
+        while (keys.hasMoreElements()) {
+            String key = (String)keys.nextElement();
+            String value = (String)p.get(key);
+            System.out.println(key + ": " + value);
+        }
+
 
         try {
             init(type);
