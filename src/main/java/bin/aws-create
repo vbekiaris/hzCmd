@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+awsArgs="$awsArgs --count ${1} "
+awsArgs="$awsArgs --image-id ${2} "
+awsArgs="$awsArgs --region ${3} "
+awsArgs="$awsArgs --instance-type ${4} "
+awsArgs="$awsArgs --key ${5} "
+awsArgs="$awsArgs --subnet-id ${6} "
+awsArgs="$awsArgs --placement GroupName=${7} "
+awsArgs="$awsArgs --output text "
+
+outputFile=${8}
+
+ids=$(aws ec2 run-instances  ${awsArgs} --query 'Instances[*].InstanceId')
+rc=$?
+
+if ((${rc} != 0)) ; then
+  exit ${rc}
+fi
+
+ec2-create-tags $ids --tag "Name=$(pwd)"
+aws ec2 describe-instances --instance-ids ${ids}  --output text --query 'Reservations[*].Instances[*].[PublicIpAddress,PrivateIpAddress]' | tr "\\t" "," >> ${outputFile}
