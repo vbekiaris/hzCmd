@@ -83,7 +83,9 @@ public abstract class RemoteJvm implements Serializable {
             String hz_cmd_src = System.getenv("HZ_CMD_SRC");
             Bash.cp(hz_cmd_src+"/lib-jars/jHiccup.jar", ".");
             this.uploadcwd(hz_cmd_src+"/lib-jars/jHiccup.jar");
-            jhicAgent = "-javaagent:jHiccup.jar=\"-d 0 -i 1000 -l " + clusterId + "-hiccuplog -c\"";
+
+            String jhicArgs = properties.readPropertie(HzCmdProperties.jhicArgs, "-d 0 -i 1000");
+            jhicAgent = "-javaagent:jHiccup.jar=\""+jhicArgs+" -l "+clusterId+"-hiccuplog -c\"";
         }
 
         launchCmd = "cd " + dir + "; nohup java "+jhicAgent+" -cp \"" + Installer.REMOTE_HZCMD_LIB_FULL_PATH+"/*" + ":" +  vendorLibDir+"/*"  + "\" " + jvmArgs + " " + jvmOptions + " " + classToRun + " >> " + outFile + " 2>&1 & echo $!";

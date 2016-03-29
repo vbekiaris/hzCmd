@@ -27,6 +27,7 @@ public class HzCmdProperties extends OrderedProperties {
     public static final String redisReplicas = "redisReplicas";
 
     public static final String jhic = "jhic";
+    public static final String jhicArgs = "jhicArgs";
 
 
     public void writePropertie(String key, String value) throws IOException {
