@@ -18,8 +18,6 @@ public abstract class Bench extends Task{
 
     public Histogram histogram = new ConcurrentHistogram(TimeUnit.SECONDS.toNanos(30), 3);
 
-    //public long expectedNanoInterval  = 1000000;
-
     public BenchType benchType = BenchType.Metrics;
     public String metaData;
     public String fileName;
@@ -189,35 +187,5 @@ public abstract class Bench extends Task{
     }
 
     public abstract void timeStep( );
-
-
-
-
-    public static void main(String[] args) throws InterruptedException, IOException {
-        RateLimiter throttle = RateLimiter.create(1000.0);
-        Random random = new Random();
-
-        long expectedInterval_1Milli_asNanos = 1000000;
-
-        while(true){
-            long start = System.nanoTime();
-
-            throttle.acquire();
-            //Thread.sleep(1000);
-
-            long end = System.nanoTime();
-            long elapsedNanos = end-start;
-
-            while( elapsedNanos < expectedInterval_1Milli_asNanos){
-                //System.out.println("hi steady "+elapsedNanos);
-                elapsedNanos = System.nanoTime() - start;
-            }
-
-            System.out.println(elapsedNanos);
-            //System.out.println("conv "+TimeUnit.MILLISECONDS.convert(elapsedNanos, TimeUnit.NANOSECONDS) );
-        }
-
-
-    }
 
 }
