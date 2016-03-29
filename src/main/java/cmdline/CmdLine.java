@@ -17,7 +17,7 @@ public class CmdLine {
                               Kill.class, Restart.class, Cat.class, Tail.class, Grep.class, Download.class,
                               Clean.class, Wipe.class, Load.class, Async.class, Sync.class, Exit.class, Listen.class,
                               Bench.class, Ssh.class, Ping.class, scpUp.class, UploadCwd.class, UploadLib.class, Broker.class,
-                              Ls.class, Chart.class, Redis.class);
+                              Ls.class, Chart.class, Redis.class, ProcessJhicOutput.class);
 
         builder.withGroup("init")
                 .withDescription("init a cluster ")

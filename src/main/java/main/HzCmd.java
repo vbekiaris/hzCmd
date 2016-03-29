@@ -501,6 +501,9 @@ public class HzCmd implements Serializable {
         Bash.executeCommand("chart-allComparisonHdr "+dir+" "+red+" "+blue);
     }
 
+    public void processJhicOutput(String dir) throws IOException, InterruptedException {
+        Bash.executeCommand("process-hic "+dir);
+    }
 
     public void setBenchDrivers(String drivers){
         benchMarkSettings.setDrivers(drivers);
