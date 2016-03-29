@@ -197,9 +197,6 @@ public abstract class Bench extends Task{
         RateLimiter throttle = RateLimiter.create(1000.0);
         Random random = new Random();
 
-        System.out.println( System.getenv("HZ_CMD_SRC") );
-
-        /*
         long expectedInterval_1Milli_asNanos = 1000000;
 
         while(true){
@@ -219,7 +216,7 @@ public abstract class Bench extends Task{
             System.out.println(elapsedNanos);
             //System.out.println("conv "+TimeUnit.MILLISECONDS.convert(elapsedNanos, TimeUnit.NANOSECONDS) );
         }
-        */
+
 
     }
 
