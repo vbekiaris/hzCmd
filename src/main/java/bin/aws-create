@@ -19,4 +19,4 @@ if ((${rc} != 0)) ; then
 fi
 
 ec2-create-tags $ids --tag "Name=$(pwd)"
-aws ec2 describe-instances --instance-ids ${ids}  --output text --query 'Reservations[*].Instances[*].[PublicIpAddress,PrivateIpAddress]' | tr "\\t" "," >> ${outputFile}
+aws ec2 describe-instances --region ${3} --instance-ids ${ids}  --output text --query 'Reservations[*].Instances[*].[PublicIpAddress,PrivateIpAddress]' | tr "\\t" "," >> ${outputFile}
