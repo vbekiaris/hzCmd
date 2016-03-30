@@ -28,7 +28,6 @@ public abstract class RemoteJvm implements Serializable {
 
     protected final String dir;
 
-    //protected String version;
     protected String vendorLibDir;
 
     private String launchCmd;
