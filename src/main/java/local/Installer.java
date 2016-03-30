@@ -21,7 +21,7 @@ public abstract class Installer {
 
         String mainJars = Bash.find(M2_Repo, "hzCmd-1.0.1.jar");
         String cacheJars = Bash.find(M2_Repo, "cache-api-1.0.0.jar");
-        String guavaars = Bash.find(M2_Repo, "guava-15.0-rc1.jar");
+        //String guavaars = Bash.find(M2_Repo, "guava-15.0-rc1.jar");
         String hdr = Bash.find(M2_Repo, "HdrHistogram-2.1.8.jar");
         String mq = Bash.find(M2_Repo, "activemq-all-5.13.0.jar");
         //String mq = Bash.find(M2_Repo, "activemq-client-5.13.2.jar");
@@ -35,7 +35,7 @@ public abstract class Installer {
         boxes.mkdir(REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(mainJars, REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(cacheJars, REMOTE_HZCMD_ROOT_LIB);
-        boxes.upload(guavaars, REMOTE_HZCMD_ROOT_LIB);
+        //boxes.upload(guavaars, REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(hdr, REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(mq, REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(metrics, REMOTE_HZCMD_ROOT_LIB);
