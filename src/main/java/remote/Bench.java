@@ -42,7 +42,8 @@ public abstract class Bench extends Task{
                 csvReporter = CsvReporter.forRegistry(metrics).build(file);
                 csvReporter.start(reportSecondsInterval, TimeUnit.SECONDS);
                 break;
-            case Hdr:
+            case Hdr :
+            case HdrCo:
                 histogram.reset();
                 histogram.setStartTimeStamp(System.nanoTime());
                 break;
@@ -55,6 +56,7 @@ public abstract class Bench extends Task{
                 csvReporter.stop();
                 break;
             case Hdr:
+            case HdrCo:
                 histogram.setEndTimeStamp(System.nanoTime());
                 try {
                     PrintStream ps = new PrintStream(new FileOutputStream(fileName+".hgrm", true));
@@ -91,7 +93,9 @@ public abstract class Bench extends Task{
                 break;
             case Hdr:
                 benchHdr(seconds);
-                //benchHdrAtExpected_1milli_Interval(seconds);
+                break;
+            case HdrCo:
+                benchHdrAtExpected_1milli_Interval(seconds);
                 break;
             case Recorder:
                 recorder(seconds);
