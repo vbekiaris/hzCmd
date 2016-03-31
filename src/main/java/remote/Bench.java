@@ -90,8 +90,8 @@ public abstract class Bench extends Task{
                 benchMetric(seconds);
                 break;
             case Hdr:
-                //benchHdr(seconds);
-                benchHdrAtExpected_1milli_Interval(seconds);
+                benchHdr(seconds);
+                //benchHdrAtExpected_1milli_Interval(seconds);
                 break;
             case Recorder:
                 recorder(seconds);
@@ -127,7 +127,6 @@ public abstract class Bench extends Task{
             timeStep();
             long end = System.nanoTime();
             histogram.recordValue(end-start);
-            histogram.recordValueWithExpectedInterval(end-startTime, 0);
         }
     }
 
