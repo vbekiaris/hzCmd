@@ -136,7 +136,7 @@ public abstract class Bench extends Task{
 
     private void benchHdrAtExpected_1milli_Interval(int seconds) {
 
-        long expectedInterval_1Milli_asNanos = 1000000;
+        long expectedInterval_100Milli_asNanos = 100000000;
 
         long startTime = System.currentTimeMillis();
         long endTime = startTime + (seconds * 1000);
@@ -147,8 +147,8 @@ public abstract class Bench extends Task{
             timeStep();
             long end = System.nanoTime();
             long elapsedNanos = end-start;
-            long nextStart = start + expectedInterval_1Milli_asNanos;
-            histogram.recordValueWithExpectedInterval(elapsedNanos, expectedInterval_1Milli_asNanos);
+            long nextStart = start + expectedInterval_100Milli_asNanos;
+            histogram.recordValueWithExpectedInterval(elapsedNanos, expectedInterval_100Milli_asNanos);
 
             while( System.nanoTime() < nextStart ) {
                 //busy-waiting until the next expected interval
