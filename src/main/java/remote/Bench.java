@@ -95,7 +95,7 @@ public abstract class Bench extends Task{
                 benchHdr(seconds);
                 break;
             case HdrCo:
-                benchHdrAtExpected_1milli_Interval(seconds);
+                benchHdrAtExpected_100milli_Interval(seconds);
                 break;
             case Recorder:
                 recorder(seconds);
@@ -134,7 +134,7 @@ public abstract class Bench extends Task{
         }
     }
 
-    private void benchHdrAtExpected_1milli_Interval(int seconds) {
+    private void benchHdrAtExpected_100milli_Interval(int seconds) {
 
         long expectedInterval_100Milli_asNanos = 100000000;
 
