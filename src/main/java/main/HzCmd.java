@@ -366,8 +366,7 @@ public class HzCmd implements Serializable {
                 }
             }
         }
-
-        download(clusterId, "output/" + clusterId);
+        cluster.downlonad(clusterId, "output/");
 
         if(benchMarkSettings.benchTypesContains(BenchType.Metrics)){
             chartAllJavaMetrics("output/" + clusterId);
