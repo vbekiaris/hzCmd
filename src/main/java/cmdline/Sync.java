@@ -20,7 +20,9 @@ public class Sync extends Command
 
     public void exe(HzCmd hzCmd) {
         try {
-            hzCmd.invokeSync(jvmId, threadCount, function, taskId);
+
+            throw new RuntimeException("not valid any more ");
+            //hzCmd.invokeSync(jvmId, threadCount, function, taskId);
         } catch (Exception e) {
             e.printStackTrace();
         }

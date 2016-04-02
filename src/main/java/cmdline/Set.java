@@ -20,7 +20,8 @@ public class Set extends Command {
 
     public void exe(HzCmd hzCmd) {
         try {
-            hzCmd.setField(jvmId, taskId, var, val);
+            throw new RuntimeException("not valid any more ");
+            //hzCmd.setField(jvmId, taskId, var, val);
         } catch (Exception e) {
             e.printStackTrace();
         }
