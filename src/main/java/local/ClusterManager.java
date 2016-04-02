@@ -156,6 +156,23 @@ public class ClusterManager implements Serializable {
         }
     }
 
+    public void invokeBenchMark(String jvmId, int threadCound, String taksId, String fileName) throws Exception {
+        invokeSync(jvmId, 1, "init", taksId);
+
+        setField(jvmId, taksId, "fileName", fileName+"-warmup");
+        invokeSync(jvmId, 1, "preBench", taksId);
+        invokeSync(jvmId, threadCound, "warmup", taksId);
+        invokeSync(jvmId, 1, "postBench", taksId);
+
+
+        setField(jvmId, taksId, "fileName", fileName+"-bench");
+        invokeSync(jvmId, 1, "preBench", taksId);
+        invokeSync(jvmId, threadCound, "run", taksId);
+        invokeSync(jvmId, 1, "postBench", taksId);
+
+        //invokeSync(jvmId, 1, "cleanup", taksId);
+    }
+
     public void invokeAsync(String jvmId, int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.invokeAsync(threadCount, method, taskId);
@@ -166,6 +183,7 @@ public class ClusterManager implements Serializable {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.invokeSync(threadCount, method, taskId);
         }
+        getResponse(jvmId);
     }
 
     public void getResponse(String jvmId) throws IOException, InterruptedException, JMSException {
