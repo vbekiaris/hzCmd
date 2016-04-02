@@ -327,7 +327,7 @@ public class HzCmd implements Serializable {
 
                 for (String benchType : benchMarkSettings.getTypes()) {
 
-                    if (benchType.equals(BenchType.HdrInterval) || benchType.equals(BenchType.MetricsInterval)){
+                    if (benchType.equals(BenchType.HdrInterval.name()) || benchType.equals(BenchType.MetricsInterval.name())){
                         String expectedIntervalNanos = benchMarkSettings.getIntervalNanos();
                         cluster.setField(drivers, taskId, "expectedIntervalNanos", expectedIntervalNanos);
                     }
