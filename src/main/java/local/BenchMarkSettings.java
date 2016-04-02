@@ -3,6 +3,7 @@ package local;
 import remote.BenchType;
 
 import java.io.Serializable;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by danny on 04/03/2016.
@@ -21,6 +22,7 @@ public class BenchMarkSettings implements Serializable {
 
     private String types="Metrics";
 
+    private long intervalNanos= TimeUnit.MILLISECONDS.toNanos(1);
 
     public BenchMarkSettings(){}
 
@@ -30,6 +32,10 @@ public class BenchMarkSettings implements Serializable {
 
     public void setDurationSec(int durationSec) {
         this.durationSec = durationSec;
+    }
+
+    public void setIntervalByMsec(long intervalMillis) {
+        intervalNanos= TimeUnit.MILLISECONDS.toNanos(intervalMillis);
     }
 
     public void setType(String types) { this.types = types; }
@@ -82,6 +88,10 @@ public class BenchMarkSettings implements Serializable {
 
     public String getDurationSec() {
         return Integer.toString(durationSec);
+    }
+
+    public String getIntervalNanos() {
+        return Long.toString(intervalNanos);
     }
 
     public int repeatCount(){ return repeatCount; }

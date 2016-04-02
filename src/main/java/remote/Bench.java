@@ -2,21 +2,20 @@ package remote;
 
 import com.codahale.metrics.CsvReporter;
 import com.codahale.metrics.MetricRegistry;
-import com.google.common.util.concurrent.RateLimiter;
 import net.openhft.chronicle.Chronicle;
 import net.openhft.chronicle.ChronicleQueueBuilder;
 import net.openhft.chronicle.ExcerptAppender;
 import org.HdrHistogram.ConcurrentHistogram;
 import org.HdrHistogram.Histogram;
 
-import javax.jms.JMSException;
 import java.io.*;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public abstract class Bench extends Task{
 
     public Histogram histogram = new ConcurrentHistogram(TimeUnit.SECONDS.toNanos(30), 3);
+
+    public long expectedIntervalNanos = TimeUnit.MILLISECONDS.toNanos(1);
 
     public BenchType benchType = BenchType.Metrics;
     public String metaData;
@@ -38,12 +37,13 @@ public abstract class Bench extends Task{
     public void preBench(){
         switch (benchType){
             case Metrics:
+            case MetricsInterval:
                 File file = new File(System.getProperty("user.dir"));
                 csvReporter = CsvReporter.forRegistry(metrics).build(file);
                 csvReporter.start(reportSecondsInterval, TimeUnit.SECONDS);
                 break;
             case Hdr :
-            case HdrCo:
+            case HdrInterval:
                 histogram.reset();
                 histogram.setStartTimeStamp(System.nanoTime());
                 break;
@@ -53,10 +53,11 @@ public abstract class Bench extends Task{
     public void postBench(){
         switch (benchType){
             case Metrics:
+            case MetricsInterval:
                 csvReporter.stop();
                 break;
             case Hdr:
-            case HdrCo:
+            case HdrInterval:
                 histogram.setEndTimeStamp(System.nanoTime());
                 try {
                     PrintStream ps = new PrintStream(new FileOutputStream(fileName+".hgrm", true));
@@ -67,7 +68,6 @@ public abstract class Bench extends Task{
                 break;
         }
     }
-
 
     public void warmup(){
         runBench(benchType, warmupSec);
@@ -91,11 +91,14 @@ public abstract class Bench extends Task{
             case Metrics:
                 benchMetric(seconds);
                 break;
+            case MetricsInterval:
+                benchMetricAtExpectedInterval(seconds);
+                break;
             case Hdr:
                 benchHdr(seconds);
                 break;
-            case HdrCo:
-                benchHdrAtExpected_100milli_Interval(seconds);
+            case HdrInterval:
+                benchHdrAtExpectedInterval(seconds);
                 break;
             case Recorder:
                 recorder(seconds);
@@ -120,6 +123,26 @@ public abstract class Bench extends Task{
         metrics.remove(fileName);
     }
 
+    private void benchMetricAtExpectedInterval(int seconds) {
+        com.codahale.metrics.Timer timer = metrics.timer(fileName);
+        com.codahale.metrics.Timer.Context context;
+
+        long startTime = System.currentTimeMillis();
+        long endTime = startTime + (seconds * 1000);
+        while(System.currentTimeMillis() < endTime){
+            context = timer.time();
+            long start = System.nanoTime();
+            timeStep();
+            context.stop();
+
+            long nextStart = start + expectedIntervalNanos;
+            while( System.nanoTime() < nextStart ) {
+                //busy-waiting until the next expected interval
+            }
+        }
+        metrics.remove(fileName);
+    }
+
 
     private void benchHdr(int seconds){
 
@@ -134,9 +157,7 @@ public abstract class Bench extends Task{
         }
     }
 
-    private void benchHdrAtExpected_100milli_Interval(int seconds) {
-
-        long expectedInterval_100Milli_asNanos = 100000000;
+    private void benchHdrAtExpectedInterval(int seconds) {
 
         long startTime = System.currentTimeMillis();
         long endTime = startTime + (seconds * 1000);
@@ -147,8 +168,8 @@ public abstract class Bench extends Task{
             timeStep();
             long end = System.nanoTime();
             long elapsedNanos = end-start;
-            long nextStart = start + expectedInterval_100Milli_asNanos;
-            histogram.recordValueWithExpectedInterval(elapsedNanos, expectedInterval_100Milli_asNanos);
+            long nextStart = start + expectedIntervalNanos;
+            histogram.recordValueWithExpectedInterval(elapsedNanos, expectedIntervalNanos);
 
             while( System.nanoTime() < nextStart ) {
                 //busy-waiting until the next expected interval
@@ -190,5 +211,4 @@ public abstract class Bench extends Task{
     }
 
     public abstract void timeStep( );
-
 }

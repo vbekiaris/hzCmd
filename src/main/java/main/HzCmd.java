@@ -2,6 +2,7 @@ package main;
 
 import cmdline.CmdLine;
 import cmdline.Command;
+import com.codahale.metrics.CsvReporter;
 import global.ClusterSize;
 import local.*;
 import remote.BenchType;
@@ -17,6 +18,7 @@ import vendor.redis.RedisJvmFactory;
 import javax.jms.JMSException;
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static global.Utils.myIp;
 
@@ -321,6 +323,11 @@ public class HzCmd implements Serializable {
 
                 for (String benchType : benchMarkSettings.getTypes()) {
 
+                    if (benchType.equals(BenchType.HdrInterval) || benchType.equals(BenchType.MetricsInterval)){
+                        String expectedIntervalNanos = benchMarkSettings.getIntervalNanos();
+                        setField(drivers, taskId, "expectedIntervalNanos", expectedIntervalNanos);
+                    }
+
                     setField(drivers, taskId, "benchType", benchType);
 
                     setField(drivers, taskId, "warmupSec", benchMarkSettings.getWarmupSec());
@@ -524,6 +531,11 @@ public class HzCmd implements Serializable {
     public void setBenchType(String type) {
         benchMarkSettings.setType(type);
     }
+
+    public void setBenchInterval(long intervalMillis) {
+        benchMarkSettings.setIntervalByMsec(intervalMillis);
+    }
+
 
     public void setRepeatCount(int repeatCount) {
         benchMarkSettings.setRepeatCount(repeatCount);
