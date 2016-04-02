@@ -323,7 +323,7 @@ public class HzCmd implements Serializable {
             for (String taskId : bencher.getTaskIds()) {
 
                 String className = bencher.getClassName(taskId);
-                load(drivers, taskId, className);
+                cluster.load(drivers, taskId, className);
 
                 for (String benchType : benchMarkSettings.getTypes()) {
 
