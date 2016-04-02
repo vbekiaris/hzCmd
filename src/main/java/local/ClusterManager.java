@@ -285,7 +285,7 @@ public class ClusterManager implements Serializable {
 
     public void downlonad(String jvmId, String destDir) throws IOException, InterruptedException {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
-            jvm.downlonad(destDir);
+            jvm.downlonad(destDir+"/"+clusterId);
         }
     }
 
