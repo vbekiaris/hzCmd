@@ -2,6 +2,6 @@
 
 file=$1
 cmd=$2
-user=${2:-$(whoami)}
+user=${3:-$(whoami)}
 
 forCsvColApply "${file}" sshCmd "${cmd}" "${user}"
