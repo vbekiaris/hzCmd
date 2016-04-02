@@ -17,7 +17,8 @@ public class Load extends Command
 
     public void exe(HzCmd hzCmd) {
         try {
-            hzCmd.load(jvmId, task, className);
+            throw new RuntimeException("not valid any more ");
+            //hzCmd.load(jvmId, task, className);
         } catch (Exception e) {
             e.printStackTrace();
         }

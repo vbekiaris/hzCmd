@@ -262,11 +262,13 @@ public class HzCmd implements Serializable {
         boxes.clear();
     }
 
+    /*
     public void load(String jvmId,  String taskId, String className) throws Exception {
         for (ClusterManager c : clusters.values()) {
             c.load(jvmId, taskId, className);
         }
     }
+    */
 
     /*
     public void setField(String jvmId, String taskId, String field, String value) throws Exception {
