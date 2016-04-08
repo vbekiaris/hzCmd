@@ -11,6 +11,8 @@ find . -type f -name *${b}*.csv | xargs -n1 basename | sort | uniq > b.txt
 
 paste a.txt b.txt > a-and-b.txt
 
+[ -s a-and-b.txt ] || (echo "no csv files found"; exit)
+
 mkdir ${a}-vs-${b}
 
 while read line; do
