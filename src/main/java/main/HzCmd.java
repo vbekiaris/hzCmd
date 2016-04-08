@@ -356,7 +356,21 @@ public class HzCmd implements Serializable {
                             for (int repeater=0; repeater<benchMarkSettings.repeatCount(); repeater++) {
 
                                 String version = cluster.getVersionString();
-                                String metaData = clusterId + "_" + version + "_" + "M" + cluster.getMemberCount() + "-C" + cluster.getClientCount() + "_driver-" + drivers + "_benchType-" + benchType + "_" + taskId + "_" + className + filedSetup + itteratedFieldSetup + "_threads-" + threadCount;
+                                String metaData = clusterId + "_" +
+                                                  version + "_" +
+                                                  "M" + cluster.getMemberCount() +
+                                                  "-C" + cluster.getClientCount() +
+                                                  "_driver-" + drivers +
+                                                  "_benchType-" + benchType +
+                                                  "_" + taskId +
+                                                  "_" + className +
+                                                  filedSetup +
+                                                  itteratedFieldSetup +
+                                                  "_threads-" + threadCount +
+                                                  "_warmup-" + benchMarkSettings.getWarmupSec() +
+                                                  "_bench-" + benchMarkSettings.getDurationSec() +
+                                                  "_benchNumber-" + benchNumber;
+
                                 cluster.setField(drivers, taskId, "metaData", metaData+"\n");
 
                                 String fileName = clusterId + "_" + version + "_" + taskId + "_" + className + "_" + benchNumber;
@@ -373,7 +387,7 @@ public class HzCmd implements Serializable {
         if(benchMarkSettings.benchTypesContains(BenchType.Metrics)){
             chartAllJavaMetrics("output/" + clusterId);
         }
-        System.out.println(Bash.ANSI_YELLOW+"The End"+Bash.ANSI_RESET);
+        System.out.println(Bash.ANSI_YELLOW + "The End" + Bash.ANSI_RESET);
     }
 
 
