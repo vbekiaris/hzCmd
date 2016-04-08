@@ -60,7 +60,11 @@ public class Box implements Serializable{
     }
 
     public String cat(String arg) throws IOException, InterruptedException {
-        return  ssh("cat " +arg);
+        return ssh("cat " +arg);
+    }
+
+    public String find(String dir, String name) throws IOException, InterruptedException {
+        return ssh("find "+dir+" -name " +name);
     }
 
     public void tail(String arg) throws IOException, InterruptedException {

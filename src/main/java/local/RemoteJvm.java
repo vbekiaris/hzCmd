@@ -186,6 +186,27 @@ public abstract class RemoteJvm implements Serializable {
         return box.cat(dir + "/" + outFile);
     }
 
+    public String findHprof() throws IOException, InterruptedException {
+        return box.find(dir, "*.hprof");
+    }
+
+    public String findOOME() throws IOException, InterruptedException {
+        return box.find(dir, "*.oome");
+    }
+
+    public String findException() throws IOException, InterruptedException {
+        return box.find(dir, "exception.txt");
+    }
+
+    public String findHsError() throws IOException, InterruptedException {
+        return box.find(dir, "hs_err_pid*");
+    }
+
+    public String findErrors() throws IOException, InterruptedException {
+        return findHprof()+"\n"+findOOME()+"\n"+findException()+"\n"+findHsError();
+    }
+
+
     public String ls() throws IOException, InterruptedException {
         return box.ssh("ls " + dir + "/");
     }
