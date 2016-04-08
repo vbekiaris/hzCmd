@@ -13,7 +13,8 @@ paste a.txt b.txt > a-and-b.txt
 
 [ -s a-and-b.txt ] || (echo "no hgrm files found"; exit)
 
-mkdir ${a}-vs-${b}
+basepath="${a}-vs-${b}/metrics"
+mkdir -p ${basepath}
 
 while read line; do
   f=($line)
@@ -24,20 +25,18 @@ while read line; do
 
   chart-ComparisonHdr ${f[0]} ${f[1]} "${f[0]}-VS-${f[1]}"
 
-  mkdir ${a}-vs-${b}/${f[0]}'-VS-'${f[1]}
-  mv *.png ${a}-vs-${b}/${f[0]}'-VS-'${f[1]}
+  mkdir ${basepath}/${f[0]}'-VS-'${f[1]}
+  mv *.png ${basepath}/${f[0]}'-VS-'${f[1]}
 
 
   meta=${f[0]}
   meta=${meta%.hgrm}".meta"
   meta=$(find . -type f -name ${meta} -print -quit)
-  cp ${meta} ${a}-vs-${b}/${f[0]}'-VS-'${f[1]}
+  cp ${meta} ${basepath}/${f[0]}'-VS-'${f[1]}
 
   meta=${f[1]}
   meta=${meta%.hgrm}".meta"
   meta=$(find . -type f -name ${meta} -print -quit)
-  cp ${meta} ${a}-vs-${b}/${f[0]}'-VS-'${f[1]}
+  cp ${meta} ${basepath}/${f[0]}'-VS-'${f[1]}
 
 done < a-and-b.txt
-
-
