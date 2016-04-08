@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class BenchMarkSettings implements Serializable {
 
-    private String drivers="Members";
+    private String drivers="Member";
 
     private String threads="64";
 
