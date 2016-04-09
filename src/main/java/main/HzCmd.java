@@ -320,6 +320,8 @@ public class HzCmd implements Serializable {
 
         BenchManager bencher = new BenchManager(benchFile);
 
+        Map<String, Integer> benchTypeCountMap = new HashMap();
+
         for (String drivers : benchMarkSettings.getDrivers()) {
 
             for (String taskId : bencher.getTaskIds()) {
@@ -328,6 +330,8 @@ public class HzCmd implements Serializable {
                 cluster.load(drivers, taskId, className);
 
                 for (String benchType : benchMarkSettings.getTypes()) {
+                    benchTypeCountMap.putIfAbsent(benchType, 0);
+                    Integer benchTypeCount = benchTypeCountMap.get(benchType);
 
                     if (benchType.equals(BenchType.HdrInterval.name()) || benchType.equals(BenchType.MetricsInterval.name())){
                         String expectedIntervalNanos = benchMarkSettings.getIntervalNanos();
@@ -355,13 +359,14 @@ public class HzCmd implements Serializable {
                         for (int threadCount : benchMarkSettings.getThreads()) {
                             for (int repeater=0; repeater<benchMarkSettings.repeatCount(); repeater++) {
 
+
                                 String version = cluster.getVersionString();
                                 String metaData = clusterId + "_" +
                                                   version + "_" +
                                                   "M" + cluster.getMemberCount() +
                                                   "-C" + cluster.getClientCount() +
                                                   "_driver-" + drivers +
-                                                  "_benchType-" + benchType +
+                                                  "_benchType-"+benchType+"-"+benchTypeCount +
                                                   "_" + taskId +
                                                   "_" + className +
                                                   filedSetup +
@@ -376,6 +381,7 @@ public class HzCmd implements Serializable {
                                 String fileName = clusterId + "_" + version + "_" + taskId + "_" + className + "_" + benchNumber;
                                 cluster.invokeBenchMark(drivers, threadCount, taskId, fileName);
                                 benchNumber++;
+                                benchTypeCount++;
                             }
                         }
                     }
