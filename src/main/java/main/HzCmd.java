@@ -330,7 +330,7 @@ public class HzCmd implements Serializable {
                 cluster.load(drivers, taskId, className);
 
                 for (String benchType : benchMarkSettings.getTypes()) {
-                    benchTypeCountMap.putIfAbsent(benchType, 0);
+                    benchTypeCountMap.putIfAbsent(benchType, new Integer(0));
                     Integer benchTypeCount = benchTypeCountMap.get(benchType);
 
                     if (benchType.equals(BenchType.HdrInterval.name()) || benchType.equals(BenchType.MetricsInterval.name())){
