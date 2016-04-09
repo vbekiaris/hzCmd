@@ -13,7 +13,7 @@ paste a.txt b.txt > a-and-b.txt
 
 [ -s a-and-b.txt ] || (echo "no hgrm files found"; exit)
 
-basepath="${a}-vs-${b}/metrics"
+basepath="${a}-vs-${b}/hdr"
 mkdir -p ${basepath}
 
 while read line; do
