@@ -316,11 +316,16 @@ public class HzCmd implements Serializable {
 
     public void invokeBenchMarks(String clusterId, String benchFile) throws Exception {
         int benchNumber=0;
+
+        Map<String, Integer> benchTypeCountMap = new HashMap();
+        for (String benchType : benchMarkSettings.getTypes()) {
+            benchTypeCountMap.putIfAbsent(benchType, new Integer(0));
+        }
+
         ClusterManager cluster = clusters.get(clusterId);
 
         BenchManager bencher = new BenchManager(benchFile);
 
-        Map<String, Integer> benchTypeCountMap = new HashMap();
 
         for (String drivers : benchMarkSettings.getDrivers()) {
 
@@ -330,7 +335,6 @@ public class HzCmd implements Serializable {
                 cluster.load(drivers, taskId, className);
 
                 for (String benchType : benchMarkSettings.getTypes()) {
-                    benchTypeCountMap.putIfAbsent(benchType, new Integer(0));
                     Integer benchTypeCount = benchTypeCountMap.get(benchType);
 
                     if (benchType.equals(BenchType.HdrInterval.name()) || benchType.equals(BenchType.MetricsInterval.name())){
