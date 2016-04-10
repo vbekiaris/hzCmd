@@ -319,7 +319,7 @@ public class HzCmd implements Serializable {
 
         Map<String, Integer> benchTypeCountMap = new HashMap();
         for (String benchType : benchMarkSettings.getTypes()) {
-            benchTypeCountMap.putIfAbsent(benchType, new Integer(0));
+            benchTypeCountMap.put(benchType, new Integer(0));
         }
 
         ClusterManager cluster = clusters.get(clusterId);
