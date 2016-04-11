@@ -381,7 +381,7 @@ public class HzCmd implements Serializable {
 
                                 cluster.setField(drivers, taskId, "metaData", metaData+"\n");
 
-                                String fileName = clusterId + "_" + version + "_" + taskId + "_" + className + "_" +benchTypeCount+ "_" + benchNumber;
+                                String fileName = clusterId + "_" + version + "_" + taskId + "_" + className + "_"+benchType+"-"+benchTypeCount+ "_" + benchNumber;
                                 cluster.invokeBenchMark(drivers, threadCount, taskId, fileName);
                                 benchNumber++;
                                 benchTypeCount++;
