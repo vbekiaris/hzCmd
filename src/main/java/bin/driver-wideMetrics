@@ -5,8 +5,8 @@ b=$3
 
 cd ${path}
 
-find . -type f -name *${a}*.csv | xargs -n1 | sort | uniq > a.txt
-find . -type f -name *${b}*.csv | xargs -n1 | sort | uniq > b.txt
+find . -type f -name *${a}*bench.csv | xargs -n1 | sort | uniq > a.txt
+find . -type f -name *${b}*bench.csv | xargs -n1 | sort | uniq > b.txt
 
 for file in a.txt b.txt; do
   while read line; do
