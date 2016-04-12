@@ -21,6 +21,7 @@ done
 find . -type f -name *${a}*-1min-AVG.txt | xargs -n1 basename | sort | uniq > a.txt
 find . -type f -name *${b}*-1min-AVG.txt | xargs -n1 basename | sort | uniq > b.txt
 
+mkdir driverWideMetrics
 for file in a.txt b.txt; do
   while read avgFileName; do
 
@@ -40,7 +41,7 @@ for file in a.txt b.txt; do
     echo $sum   $count
     echo $sum / $count | bc
 
-    echo $sum / $count | bc > ${avgFileName}-driverWide.txt
+    echo $sum / $count | bc > driverWideMetrics/${avgFileName}-driverWide.txt
 
   done < ${file}
 done
