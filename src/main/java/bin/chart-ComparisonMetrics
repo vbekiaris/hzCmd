@@ -11,7 +11,7 @@ find . -type f -name *${b}*.csv | xargs -n1 basename | sort | uniq > b.txt
 
 paste a.txt b.txt > a-and-b.txt
 
-[ -s a-and-b.txt ] || (echo "no csv files found"; exit)
+[ -s a-and-b.txt ] || exit 1
 
 basepath="${a}-vs-${b}/metrics"
 mkdir -p ${basepath}
