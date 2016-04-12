@@ -388,6 +388,7 @@ public class HzCmd implements Serializable {
                             }
                         }
                     }
+                    benchTypeCountMap.put(benchType, benchTypeCount);
                 }
             }
         }

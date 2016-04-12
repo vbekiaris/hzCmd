@@ -9,6 +9,9 @@ import org.HdrHistogram.ConcurrentHistogram;
 import org.HdrHistogram.Histogram;
 
 import java.io.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public abstract class Bench extends Task{
@@ -211,4 +214,37 @@ public abstract class Bench extends Task{
     }
 
     public abstract void timeStep( );
+
+
+    public static void main(String[] args) throws InterruptedException, IOException {
+
+        Map<String, Integer> benchTypeCountMap = new HashMap();
+
+        String[] s = {"a","b"};
+
+        for (String benchType : s) {
+            benchTypeCountMap.put(benchType, new Integer(0));
+        }
+
+        for (String benchType : s) {
+            Integer c = benchTypeCountMap.get(benchType);
+
+            for(int i=0; i<3; i++){
+                c++;
+                System.out.println("s="+benchType+" c="+c);
+            }
+            benchTypeCountMap.put(benchType, c);
+        }
+
+        for (String benchType : s) {
+            Integer c = benchTypeCountMap.get(benchType);
+
+            for(int i=0; i<3; i++){
+                c++;
+
+                System.out.println("s="+benchType+" c="+c);
+            }
+        }
+    }
+
 }
