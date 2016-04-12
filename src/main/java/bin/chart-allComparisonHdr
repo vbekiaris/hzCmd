@@ -4,7 +4,7 @@ path=$1
 a=$2
 b=$3
 
-cd ${path}
+cd ${path} || exit 1
 
 find . -type f -name '*'${a}'*.hgrm' | xargs -n1 basename | sort | uniq > a.txt
 find . -type f -name '*'${b}'*.hgrm' | xargs -n1 basename | sort | uniq > b.txt
