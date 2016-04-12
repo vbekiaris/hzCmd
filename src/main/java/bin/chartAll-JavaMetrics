@@ -4,7 +4,7 @@ path=$1
 
 cd ${path} || exit 1
 
-files=$(find . -type f -name *.csv | xargs -n1 basename | sort | uniq)
+files=$(find . -type f -name '*.csv' | xargs -n1 basename | sort | uniq)
 
 
 while read -r f; do

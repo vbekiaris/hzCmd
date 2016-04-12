@@ -6,8 +6,8 @@ b=$3
 
 cd ${path} || exit 1
 
-find . -type f -name *${a}*.csv | xargs -n1 basename | sort | uniq > a.txt
-find . -type f -name *${b}*.csv | xargs -n1 basename | sort | uniq > b.txt
+find . -type f -name '*'${a}'*.csv' | xargs -n1 basename | sort | uniq > a.txt
+find . -type f -name '*'${b}'*.csv' | xargs -n1 basename | sort | uniq > b.txt
 
 paste a.txt b.txt > a-and-b.txt
 

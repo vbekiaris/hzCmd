@@ -6,8 +6,8 @@ b=$3
 cd ${path} || exit 1
 mkdir driverWideHdr
 
-find . -type f -name *${a}*bench.hgrm | xargs -n1 | sort | uniq > a.txt
-find . -type f -name *${b}*bench.hgrm | xargs -n1 | sort | uniq > b.txt
+find . -type f -name '*'${a}'*bench.hgrm' | xargs -n1 | sort | uniq > a.txt
+find . -type f -name '*'${b}'*bench.hgrm' | xargs -n1 | sort | uniq > b.txt
 
 for file in a.txt b.txt; do
  while read line; do
@@ -19,8 +19,8 @@ for file in a.txt b.txt; do
  done < ${file}
 done
 
-find . -type f -name *${a}*bench.hgrm-max | xargs -n1 basename | sort | uniq > a.txt
-find . -type f -name *${b}*bench.hgrm-max | xargs -n1 basename | sort | uniq > b.txt
+find . -type f -name '*'${a}'*bench.hgrm-max' | xargs -n1 basename | sort | uniq > a.txt
+find . -type f -name '*'${b}'*bench.hgrm-max' | xargs -n1 basename | sort | uniq > b.txt
 
 for file in a.txt b.txt; do
   while read hdrMaxFile; do
@@ -40,8 +40,8 @@ for file in a.txt b.txt; do
 done
 
 
-find . -type f -name *${a}*-driverWideAvgMax.txt | sort > a.txt
-find . -type f -name *${b}*-driverWideAvgMax.txt | sort > b.txt
+find . -type f -name '*'${a}'*-driverWideAvgMax.txt' | sort > a.txt
+find . -type f -name '*'${b}'*-driverWideAvgMax.txt' | sort > b.txt
 paste a.txt b.txt > a-and-b.txt
 
 while read line; do
