@@ -56,9 +56,9 @@ while read line; do
   a=$(cat ${f[0]})
   b=$(cat ${f[1]})
 
-  if (( $(bc <<< "$a < $b") )) ; then
+  if (( $(bc <<< "$b > $a * 1.06") == 1 )) ; then
 
-    slack-post benchmark-regression WARN "${f[0]} < ${f[1]}"
+    slack-post benchmark-regression WARN \<http://54.87.52.100/~jenkins/${f[0]}\>
   fi
 
 done < a-and-b.txt
