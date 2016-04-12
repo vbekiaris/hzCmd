@@ -40,14 +40,14 @@ for file in a.txt b.txt; do
     echo $sum   $count
     echo $sum / $count | bc
 
-    echo $sum / $count | bc > ${avgFileName}-driver.wide
+    echo $sum / $count | bc > ${avgFileName}-driverWide.txt
 
   done < ${file}
 done
 
 
-find . -type f -name '*'${a}'*-driver.wide' | sort > a.txt
-find . -type f -name '*'${b}'*-driver.wide' | sort > b.txt
+find . -type f -name '*'${a}'*-driverWide.txt' | sort > a.txt
+find . -type f -name '*'${b}'*-driverWide.txt' | sort > b.txt
 paste a.txt b.txt > a-and-b.txt
 
 while read line; do
