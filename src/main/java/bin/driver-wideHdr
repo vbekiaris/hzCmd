@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+path=$1
+a=$2
+b=$3
+
+cd ${path} || exit 1
+mkdir driverWideHdr
+
+find . -type f -name *${a}*bench.hgrm | xargs -n1 | sort | uniq > a.txt
+find . -type f -name *${b}*bench.hgrm | xargs -n1 | sort | uniq > b.txt
+
+for file in a.txt b.txt; do
+ while read line; do
+
+    echo ${line}
+    grep Max ${line} | awk '{print $3}' | tr -d , > ${line}-max
+    grep Max ${line} | awk '{print $7}' > ${line}-ops
+
+ done < ${file}
+done
+
+find . -type f -name *${a}*bench.hgrm-max | xargs -n1 basename | sort | uniq > a.txt
+find . -type f -name *${b}*bench.hgrm-max | xargs -n1 basename | sort | uniq > b.txt
+
+for file in a.txt b.txt; do
+  while read hdrMaxFile; do
+    sum=0
+    count=0
+    find . -type f -name ${hdrMaxFile} > hdrMaxFiles.txt
+
+    while read avge; do
+      num=$(cat ${avge})
+      ((count++))
+      sum=$(echo $sum + $num | bc)
+    done < hdrMaxFiles.txt
+
+    echo $sum / $count | bc > driverWideHdr/${hdrMaxFile}-driverWideAvgMax.txt
+
+  done < ${file}
+done
+
+
+find . -type f -name *${a}*-driverWideAvgMax.txt | sort > a.txt
+find . -type f -name *${b}*-driverWideAvgMax.txt | sort > b.txt
+paste a.txt b.txt > a-and-b.txt
+
+while read line; do
+  f=($line)
+  a=$(cat ${f[0]})
+  b=$(cat ${f[1]})
+
+  if (( $(bc <<< "$a > $b * 1.06") == 1 )) ; then
+   echo $a $b ${f[0]} ${f[1]}  hi
+  #  slack-post benchmark-regression WARN \<http://54.87.52.100/~jenkins/${f[0]}\>
+  fi
+
+done < a-and-b.txt
