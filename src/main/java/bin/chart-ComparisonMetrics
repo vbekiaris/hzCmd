@@ -44,5 +44,6 @@ done < a-and-b.txt
 mkdir -p ${basepath}/warmup
 mkdir -p ${basepath}/bench
 
-mv ${basepath}/*warmup* ${basepath}/warmup
-mv ${basepath}/*bench* ${basepath}/bench
+mv ${basepath}/*warmup* ${basepath}/warmup || true
+mv ${basepath}/*bench* ${basepath}/bench   || true
+
