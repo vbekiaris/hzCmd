@@ -516,6 +516,7 @@ public class HzCmd implements Serializable {
 
     public void chartComparisonHdr(String dir, String red, String blue) throws IOException, InterruptedException {
         Bash.executeCommand("chart-allComparisonHdr "+dir+" "+red+" "+blue);
+        Bash.executeCommand("driver-wideHdr "+dir+" "+red+" "+blue);
     }
 
     public void processJhicOutput(String dir) throws IOException, InterruptedException {
