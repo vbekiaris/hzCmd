@@ -346,40 +346,41 @@ public class HzCmd implements Serializable {
                     cluster.setField(drivers, taskId, "warmupSec", benchMarkSettings.getWarmupSec());
                     cluster.setField(drivers, taskId, "durationSec", benchMarkSettings.getDurationSec());
 
-                    String filedSetup = new String();
                     for (FieldValue field : bencher.getFieldsToSet(taskId)) {
                         cluster.setField(drivers, taskId, field.field, field.value);
-                        filedSetup+="_"+field.field+"-"+field.value;
                     }
 
                     for (List<FieldValue> settings : bencher.getSettings(taskId)) {
 
-                        String itteratedFieldSetup = new String();
                         for (FieldValue setting : settings) {
                             cluster.setField(drivers, taskId, setting.field, setting.value);
-                            itteratedFieldSetup += "_" + setting.field + "-" + setting.value;
                         }
 
                         for (int threadCount : benchMarkSettings.getThreads()) {
                             for (int repeater=0; repeater<benchMarkSettings.repeatCount(); repeater++) {
 
-                                String version = cluster.getVersionString();
-                                String metaData = clusterId + "_" +
-                                                  version + "_" +
-                                                  "M" + cluster.getMemberCount() +
-                                                  "-C" + cluster.getClientCount() +
-                                                  "_driver-" + drivers +
-                                                  "_benchType-"+benchType+"-"+benchTypeCount +
-                                                  "_" + taskId +
-                                                  "_" + className +
-                                                  filedSetup +
-                                                  itteratedFieldSetup +
-                                                  "_threads-" + threadCount +
-                                                  "_warmup-" + benchMarkSettings.getWarmupSec() +
-                                                  "_bench-" + benchMarkSettings.getDurationSec() +
-                                                  "_benchNumber-" + benchNumber;
+                                String version  = cluster.getVersionString();
+                                String metaData = "clusterId " + clusterId + "\n" +
+                                                  "version " + version + "\n" +
+                                                  "Members " + cluster.getMemberCount() + "\n" +
+                                                  "Clients " + cluster.getClientCount() + "\n" +
+                                                  "drivers " + drivers + "\n" +
+                                                  "benchType "+benchType+ "\n" +
+                                                  "benchTypeID "+benchTypeCount + "\n" +
+                                                  "taskID " + taskId + "\n" +
+                                                  "class " + className + "\n" +
+                                                  "threads " + threadCount + "\n" +
+                                                  "warmupSec " + benchMarkSettings.getWarmupSec() + "\n" +
+                                                  "benchSec " + benchMarkSettings.getDurationSec() + "\n" +
+                                                  "benchID " + benchNumber + "\n";
 
-                                cluster.setField(drivers, taskId, "metaData", metaData+"\n");
+                                for (FieldValue field : bencher.getFieldsToSet(taskId)) {
+                                    metaData += field.field +" "+field.value + "\n";
+                                }
+                                for (FieldValue setting : settings) {
+                                    metaData += setting.field +" "+ setting.value + "\n";
+                                }
+                                cluster.setField(drivers, taskId, "metaData", metaData);
 
                                 String fileName = clusterId + "_" + version + "_" + taskId + "_" + className + "_"+benchType+"-"+benchTypeCount+ "_" + benchNumber;
                                 cluster.invokeBenchMark(drivers, threadCount, taskId, fileName);
