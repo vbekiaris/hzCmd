@@ -30,12 +30,12 @@ while read line; do
 
 
   meta=${f[0]}
-  meta=${meta%.csv}".meta"
+  meta=${meta%.csv}".meta.txt"
   meta=$(find . -type f -name ${meta} -print -quit)
   cp ${meta} ${basepath}/${f[0]}'-VS-'${f[1]}
 
   meta=${f[1]}
-  meta=${meta%.csv}".meta"
+  meta=${meta%.csv}".meta.txt"
   meta=$(find . -type f -name ${meta} -print -quit)
   cp ${meta} ${basepath}/${f[0]}'-VS-'${f[1]}
 

@@ -83,7 +83,7 @@ public abstract class Bench extends Task{
     private void runBench(BenchType type, int seconds){
 
         try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(fileName+".meta"));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(fileName+".meta.txt"));
             bw.write(metaData);
             bw.close();
         } catch (IOException e) {
