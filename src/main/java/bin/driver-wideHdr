@@ -49,7 +49,7 @@ while read line; do
   a=$(cat ${f[0]})
   b=$(cat ${f[1]})
 
-  if (( $(bc <<< "$a > $b * 1.06") == 1 )) ; then
+  if (( $(bc <<< "$a > $b * 1.09") == 1 )) ; then
    echo $a $b ${f[0]} ${f[1]}  hi
    picName=$(basename ${f[0]} | sed "s/-max-driverWideAvgMax.txt//")
    filePath=$(find . -type f -name ${picName}'*.png')
