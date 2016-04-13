@@ -56,7 +56,7 @@ while read line; do
    dirPath=$(dirname ${filePath})
    pathForWeb=$(pwd | grep -oh workspace.*)
 
-   slack-post benchmark-regression WARN \<http://54.87.52.100/~jenkins/${pathForWeb}/${filePath}\> "/n" \<http://54.87.52.100/~jenkins/${pathForWeb}/${dirPath}\>
+   slack-post benchmark-regression WARN \<http://54.87.52.100/~jenkins/${pathForWeb}/${filePath}\> " /n " \<http://54.87.52.100/~jenkins/${pathForWeb}/${dirPath}\>
   fi
 
 done < a-and-b.txt
