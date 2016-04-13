@@ -53,9 +53,10 @@ while read line; do
    echo $a $b ${f[0]} ${f[1]}  hi
    picName=$(basename ${f[0]} | sed "s/-max-driverWideAvgMax.txt//")
    filePath=$(find . -type f -name ${picName}'*.png')
+   dirPath=$(dirname ${filePath})
    pathForWeb=$(pwd | grep -oh workspace.*)
 
-   slack-post benchmark-regression WARN \<http://54.87.52.100/~jenkins/${pathForWeb}/${filePath}\>
+   slack-post benchmark-regression WARN \<http://54.87.52.100/~jenkins/${pathForWeb}/${filePath}\> "/n" \<http://54.87.52.100/~jenkins/${pathForWeb}/${dirPath}\>
   fi
 
 done < a-and-b.txt
