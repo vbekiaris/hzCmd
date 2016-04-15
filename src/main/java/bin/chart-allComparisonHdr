@@ -11,7 +11,7 @@ find . -type f -name '*'${b}'*.hgrm' | xargs -n1 basename | sort | uniq > b.txt
 
 paste a.txt b.txt > a-and-b.txt
 
-[ -s a-and-b.txt ] || exit 1
+[ -s a-and-b.txt ] || exit 0
 
 basepath="${a}-vs-${b}/hdr"
 mkdir -p ${basepath}
