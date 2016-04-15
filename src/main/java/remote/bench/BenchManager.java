@@ -17,6 +17,7 @@ import static remote.Utils.instantiate;
 
 public class BenchManager {
 
+    private String outputFileName="";
     private BenchType benchType = BenchType.Hdr;
     private BenchMarker benchMarker = new HdrMarker();
     private String clazzName;
@@ -25,6 +26,10 @@ public class BenchManager {
 
     public void setBenchClassName(String clazz) {
         clazzName = clazz;
+    }
+
+    public void setOutputFileName(String fileName) {
+        outputFileName = fileName;
     }
 
     public void setThreadCount(int count) throws Exception {
@@ -66,13 +71,13 @@ public class BenchManager {
     }
 
     public void warmup(int sec) throws InterruptedException {
-        benchMarker.preBench("warmup");
+        benchMarker.preBench(outputFileName+"-warmup");
         invokeSync(sec);
         benchMarker.postBench();
     }
 
     public void bench(int sec) throws InterruptedException {
-        benchMarker.preBench("benchMarkRun");
+        benchMarker.preBench(outputFileName+"-bench");
         invokeSync(sec);
         benchMarker.postBench();
     }

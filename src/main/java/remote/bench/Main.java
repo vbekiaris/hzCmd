@@ -12,10 +12,11 @@ public class Main {
         b.setBenchClassName("remote.bench.TestBench");
         b.setThreadCount(4);
         b.setField("valueSize", "1001");
+        b.setOutputFileName("0-put");
 
         b.init();
-        b.warmup(10);
-        b.bench(10);
+        b.warmup(6);
+        b.bench(11);
         b.cleanUp();
 
     }
