@@ -1,6 +1,5 @@
 package remote.bench;
 
-import remote.BenchType;
 import remote.Utils;
 import remote.bench.marker.BenchMarker;
 import remote.bench.marker.HdrMarker;

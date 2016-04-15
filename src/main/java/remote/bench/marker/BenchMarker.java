@@ -1,6 +1,5 @@
 package remote.bench.marker;
 
-import remote.BenchType;
 import remote.bench.Bench;
 
 import java.util.concurrent.TimeUnit;

@@ -2,10 +2,9 @@ package main;
 
 import cmdline.CmdLine;
 import cmdline.Command;
-import com.codahale.metrics.CsvReporter;
 import global.ClusterSize;
 import local.*;
-import remote.BenchType;
+import remote.bench.BenchType;
 import vendor.gem.GemJvmFactory;
 import vendor.gg.GgJvmFactory;
 import global.Args;
@@ -18,7 +17,6 @@ import vendor.redis.RedisJvmFactory;
 import javax.jms.JMSException;
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 import static global.Utils.myIp;
 

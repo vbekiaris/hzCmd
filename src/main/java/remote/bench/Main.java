@@ -1,7 +1,5 @@
 package remote.bench;
 
-import remote.BenchType;
-
 public class Main {
 
     public static void main(String[] args) throws Exception{

@@ -1,6 +1,6 @@
 package local;
 
-import remote.BenchType;
+import remote.bench.BenchType;
 
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
