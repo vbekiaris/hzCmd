@@ -21,4 +21,12 @@ public class ThreadCountCmd implements Cmd, Serializable{
     public void exicute(Controler c){
         c.setThreadCount(taskId, threadCount);
     }
+
+    @Override
+    public String toString() {
+        return "ThreadCountCmd{" +
+                "taskId='" + taskId + '\'' +
+                ", threadCount=" + threadCount +
+                '}';
+    }
 }

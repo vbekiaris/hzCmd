@@ -21,4 +21,12 @@ public class StopAtExceptionCmd implements Cmd, Serializable{
     public void exicute(Controler c){
         c.setStopAtException(taskId, stop);
     }
+
+    @Override
+    public String toString() {
+        return "StopAtExceptionCmd{" +
+                "stop=" + stop +
+                ", taskId='" + taskId + '\'' +
+                '}';
+    }
 }

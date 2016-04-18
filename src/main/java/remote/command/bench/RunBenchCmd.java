@@ -21,4 +21,12 @@ public class RunBenchCmd implements Cmd, Serializable{
     public void exicute(Controler c){
         c.runBench(taskId, seconds);
     }
+
+    @Override
+    public String toString() {
+        return "RunBenchCmd{" +
+                "seconds=" + seconds +
+                ", taskId='" + taskId + '\'' +
+                '}';
+    }
 }

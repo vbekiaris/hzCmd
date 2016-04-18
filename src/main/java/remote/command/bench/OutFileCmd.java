@@ -22,4 +22,11 @@ public class OutFileCmd implements Cmd, Serializable{
         c.setOutputFile(taskId, filename);
     }
 
+    @Override
+    public String toString() {
+        return "OutFileCmd{" +
+                "filename='" + filename + '\'' +
+                ", taskId='" + taskId + '\'' +
+                '}';
+    }
 }

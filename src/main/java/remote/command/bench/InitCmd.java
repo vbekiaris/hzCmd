@@ -20,4 +20,10 @@ public class InitCmd implements Cmd, Serializable{
         c.initBench(taskId);
     }
 
+    @Override
+    public String toString() {
+        return "InitCmd{" +
+                "taskId='" + taskId + '\'' +
+                '}';
+    }
 }

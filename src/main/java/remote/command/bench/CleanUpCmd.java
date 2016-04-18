@@ -20,4 +20,10 @@ public class CleanUpCmd implements Cmd, Serializable{
         c.cleanup(taskId);
     }
 
+    @Override
+    public String toString() {
+        return "CleanUpCmd{" +
+                "taskId='" + taskId + '\'' +
+                '}';
+    }
 }

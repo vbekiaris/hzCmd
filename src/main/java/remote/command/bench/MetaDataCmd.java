@@ -22,4 +22,11 @@ public class MetaDataCmd implements Cmd, Serializable{
         c.writeMetaData(taskId, metaData);
     }
 
+    @Override
+    public String toString() {
+        return "MetaDataCmd{" +
+                "metaData='" + metaData + '\'' +
+                ", taskId='" + taskId + '\'' +
+                '}';
+    }
 }

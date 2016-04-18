@@ -21,4 +21,12 @@ public class WarmupCmd implements Cmd, Serializable{
     public void exicute(Controler c){
         c.warmupBench(taskId, seconds);
     }
+
+    @Override
+    public String toString() {
+        return "WarmupCmd{" +
+                "seconds=" + seconds +
+                ", taskId='" + taskId + '\'' +
+                '}';
+    }
 }
