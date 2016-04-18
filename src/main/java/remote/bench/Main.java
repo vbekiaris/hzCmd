@@ -25,9 +25,10 @@ put@threads=2,8
         String vendorObject = "Hz instance";
         BenchManager b = new BenchManager(vendorObject);
 
-        b.loadClass("A", "remote.bench.TestBench", 4);
-        b.loadClass("B", "remote.bench.TestBench2", 2);
+        b.loadClass("A", "remote.bench.TestBench");
+        b.loadClass("B", "remote.bench.TestBench2");
 
+        b.setThreadCount(".*.", 4);
 
         b.stopAtException("A", false);
         b.setBenchType("A", BenchType.Metrics);

@@ -2,6 +2,8 @@ package local;
 
 import global.Bash;
 import global.NodeType;
+import jms.MQ;
+import remote.command.bench.*;
 
 import javax.jms.JMSException;
 import java.io.*;
@@ -143,6 +145,56 @@ public class ClusterManager implements Serializable {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.load(taskId, className);
         }
+        getResponse(jvmId);
+    }
+
+    public void setThreadCount(String jvmId, String taskId, int threadCount) throws IOException, InterruptedException, JMSException{
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+            jvm.setThreadCount(taskId, threadCount);
+        }
+        getResponse(jvmId);
+    }
+
+    public void setStopAtException(String jvmId, String taskId, boolean stop) throws IOException, InterruptedException, JMSException{
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+            jvm.stopAtExceptionCmd(taskId, stop);
+        }
+        getResponse(jvmId);
+    }
+
+    public void setOutPutFile(String jvmId, String taskId, String outFile) throws IOException, InterruptedException, JMSException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+            jvm.setOutPutFile(taskId, outFile);
+        }
+        getResponse(jvmId);
+    }
+
+    public void initBench(String jvmId,  String taskId) throws IOException, InterruptedException, JMSException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+            jvm.initBench(taskId);
+        }
+        getResponse(jvmId);
+    }
+
+    public void warmupBench(String jvmId,  String taskId, int seconds) throws IOException, InterruptedException, JMSException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+            jvm.warmupBench(taskId, seconds);
+        }
+        getResponse(jvmId);
+    }
+
+    public void runBench(String jvmId,  String taskId, int seconds) throws IOException, InterruptedException, JMSException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+            jvm.runBench(taskId, seconds);
+        }
+        getResponse(jvmId);
+    }
+
+    public void cleanupBench(String jvmId,  String taskId) throws IOException, InterruptedException, JMSException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+            jvm.cleanupBench(taskId);
+        }
+        getResponse(jvmId);
     }
 
     public void setField(String jvmId, String taskId, String field, String value) throws Exception {
@@ -331,6 +383,5 @@ public class ClusterManager implements Serializable {
     public JvmFactory getJvmFactory() {
         return jvmFactory;
     }
-
 
 }

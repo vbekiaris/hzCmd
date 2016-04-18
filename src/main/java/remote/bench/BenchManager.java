@@ -31,6 +31,12 @@ public class BenchManager {
         benchs.put(id, bc);
     }
 
+    public void setThreadCount(String id, int threadCount) throws Exception {
+        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            benchContainer.setThreadCount(threadCount);
+        }
+    }
+
     public void setOutputFileName(String id, String fileName) throws Exception {
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
             benchContainer.setOutputFileName(fileName);

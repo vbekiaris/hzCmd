@@ -1,6 +1,7 @@
-package remote.command;
+package remote.command.bench;
 
 import remote.Controler;
+import remote.command.Cmd;
 
 import java.io.Serializable;
 

@@ -339,10 +339,11 @@ public class HzCmd implements Serializable {
                             for (int repeater=0; repeater<benchMarkSettings.repeatCount(); repeater++) {
 
                                 cluster.load(drivers, taskId, className);
+                                cluster.setThreadCount(drivers, taskId, threadCount);
+                                cluster.setStopAtException(drivers, taskId, false);
 
                                 cluster.setField(drivers, taskId, "benchType", benchType);
-                                cluster.setField(drivers, taskId, "warmupSec", benchMarkSettings.getWarmupSec());
-                                cluster.setField(drivers, taskId, "durationSec", benchMarkSettings.getDurationSec());
+
 
                                 for (FieldValue setting : settings) {
                                     cluster.setField(drivers, taskId, setting.field, setting.value);
@@ -356,8 +357,6 @@ public class HzCmd implements Serializable {
                                     String expectedIntervalNanos = benchMarkSettings.getIntervalNanos();
                                     cluster.setField(drivers, taskId, "expectedIntervalNanos", expectedIntervalNanos);
                                 }
-
-
 
                                 String version  = cluster.getVersionString();
                                 String metaData = "clusterId " + clusterId + "\n" +
@@ -383,8 +382,14 @@ public class HzCmd implements Serializable {
                                 cluster.setField(drivers, taskId, "metaData", metaData);
 
                                 String fileName = clusterId+"_"+version+"_"+taskId+"_"+className+"_"+benchType+"_"+benchTypeCount+"_"+benchNumber;
+                                cluster.setOutPutFile(drivers, taskId, fileName);
 
-                                cluster.invokeBenchMark(drivers, threadCount, taskId, fileName);
+
+                                cluster.initBench(drivers, taskId);
+                                cluster.warmupBench(drivers, taskId, benchMarkSettings.getWarmupSec());
+                                cluster.runBench(drivers, taskId,  benchMarkSettings.getDurationSec());
+                                cluster.cleanupBench(drivers, taskId);
+
                                 benchNumber++;
                                 benchTypeCount++;
                             }

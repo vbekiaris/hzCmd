@@ -82,12 +82,12 @@ public class BenchMarkSettings implements Serializable {
     }
 
 
-    public String getWarmupSec() {
-        return Integer.toString(warmupSec);
+    public int getWarmupSec() {
+        return warmupSec;
     }
 
-    public String getDurationSec() {
-        return Integer.toString(durationSec);
+    public int getDurationSec() {
+        return durationSec;
     }
 
     public String getIntervalNanos() {

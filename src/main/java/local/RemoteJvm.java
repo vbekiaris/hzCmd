@@ -5,14 +5,13 @@ import global.Bash;
 import global.NodeType;
 import jms.MQ;
 import remote.command.*;
+import remote.command.bench.*;
 
 import javax.jms.JMSException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
-
-import static global.Utils.myIp;
 
 public abstract class RemoteJvm implements Serializable {
 
@@ -150,28 +149,51 @@ public abstract class RemoteJvm implements Serializable {
     }
 
     public void load(String taskId, String className) throws IOException, InterruptedException, JMSException {
-        LoadCmd cmd = new LoadCmd(taskId, className);
-        MQ.sendObj(id, cmd);
+        MQ.sendObj(id, new LoadCmd(taskId, className) );
+    }
+
+    public void setThreadCount(String taskId, int threadCount) throws IOException, InterruptedException, JMSException {
+        MQ.sendObj(id, new ThreadCountCmd(taskId, threadCount) );
+    }
+
+    public void stopAtExceptionCmd(String taskId, boolean stop) throws IOException, InterruptedException, JMSException {
+        MQ.sendObj(id, new StopAtExceptionCmd(taskId, stop) );
+    }
+
+    public void setOutPutFile(String taskId, String outFile) throws IOException, InterruptedException, JMSException {
+        MQ.sendObj(id, new OutFileCmd(taskId, outFile) );
+    }
+
+    public void initBench(String taskId) throws IOException, InterruptedException, JMSException {
+        MQ.sendObj(id, new InitCmd(taskId) );
+    }
+
+    public void warmupBench(String taskId, int seconds) throws IOException, InterruptedException, JMSException {
+        MQ.sendObj(id, new WarmupCmd(taskId, seconds) );
+    }
+
+    public void runBench(String taskId, int seconds) throws IOException, InterruptedException, JMSException {
+        MQ.sendObj(id, new RunBenchCmd(taskId, seconds) );
+    }
+
+    public void cleanupBench(String taskId) throws IOException, InterruptedException, JMSException {
+        MQ.sendObj(id, new CleanUpCmd(taskId) );
     }
 
     public void setField(String taskId, String field, String value) throws Exception {
-        SetFieldCmd cmd = new SetFieldCmd(taskId, field, value);
-        MQ.sendObj(id, cmd);
+        MQ.sendObj(id, new SetFieldCmd(taskId, field, value) );
     }
 
     public void invokeAsync(int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
-        InvokeAsyncCmd cmd = new InvokeAsyncCmd(threadCount, method, taskId);
-        MQ.sendObj(id, cmd);
+        MQ.sendObj(id, new InvokeAsyncCmd(threadCount, method, taskId) );
     }
 
     public void invokeSync(int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
-        InvokeSyncCmd cmd = new InvokeSyncCmd(threadCount, method, taskId);
-        MQ.sendObj(id, cmd);
+        MQ.sendObj(id, new InvokeSyncCmd(threadCount, method, taskId) );
     }
 
     public void ping() throws IOException, InterruptedException, JMSException {
-        PingCmd cmd = new PingCmd();
-        MQ.sendObj(id, cmd);
+        MQ.sendObj(id, new PingCmd() );
     }
 
     public Object getResponse() throws IOException, InterruptedException, JMSException {

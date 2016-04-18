@@ -55,10 +55,87 @@ public abstract class Controler{
         }
     }
 
+    public void setThreadCount(String taskId, int threadCount){
+        try {
+            benchManager.setThreadCount(taskId, threadCount);
+            MQ.sendObj(REPLYQ, taskId+" threadCount="+threadCount);
+        } catch (Exception e) {
+            try {
+                MQ.sendObj(REPLYQ, e);
+            } catch (JMSException e2) {}
+        }
+    }
+
+    public void setStopAtException(String taskId, boolean stop){
+        try {
+            benchManager.stopAtException(taskId, stop);
+            MQ.sendObj(REPLYQ, taskId+" stopAtException="+stop);
+        } catch (Exception e) {
+            try {
+                MQ.sendObj(REPLYQ, e);
+            } catch (JMSException e2) {}
+        }
+    }
+
+    public void setOutputFile(String taskId, String outputFile){
+        try {
+            benchManager.setOutputFileName(taskId, outputFile);
+            MQ.sendObj(REPLYQ, taskId+" outputFile="+outputFile);
+        } catch (Exception e) {
+            try {
+                MQ.sendObj(REPLYQ, e);
+            } catch (JMSException e2) {}
+        }
+    }
+
+    public void initBench(String taskId){
+        try {
+            benchManager.init(taskId);
+            MQ.sendObj(REPLYQ, taskId+" init end");
+        } catch (Exception e) {
+            try {
+                MQ.sendObj(REPLYQ, e);
+            } catch (JMSException e2) {}
+        }
+    }
+
+    public void warmupBench(String taskId, int seconds){
+        try {
+            benchManager.warmup(taskId, seconds);
+            MQ.sendObj(REPLYQ, taskId+" warmup end");
+        } catch (Exception e) {
+            try {
+                MQ.sendObj(REPLYQ, e);
+            } catch (JMSException e2) {}
+        }
+    }
+
+    public void runBench(String taskId, int seconds){
+        try {
+            benchManager.bench(taskId, seconds);
+            MQ.sendObj(REPLYQ, taskId+" bench end");
+        } catch (Exception e) {
+            try {
+                MQ.sendObj(REPLYQ, e);
+            } catch (JMSException e2) {}
+        }
+    }
+
+    public void cleanup(String taskId) {
+        try {
+            benchManager.cleanUp(taskId);
+            MQ.sendObj(REPLYQ, taskId+" cleanUp end");
+        } catch (Exception e) {
+            try {
+                MQ.sendObj(REPLYQ, e);
+            } catch (JMSException e2) {}
+        }
+    }
+
     public void setField(String taskId, String field, String value){
         try {
             benchManager.setField(taskId, field, value);
-            MQ.sendObj(REPLYQ, "set "+taskId+" "+field+" "+value );
+            MQ.sendObj(REPLYQ, "set " + taskId + " " + field + " " + value);
         } catch (Exception e) {
             try {
                 MQ.sendObj(REPLYQ, e);
@@ -105,4 +182,5 @@ public abstract class Controler{
                 "jvmPidId=" + jvmPidId +
                 '}';
     }
+
 }
