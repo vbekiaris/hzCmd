@@ -29,8 +29,8 @@ put@threads=2,8
         b.loadClass("B", "remote.bench.TestBench2", 2);
 
 
-        b.stopAtException("*", false);
-        b.setBenchType("*", BenchType.Metrics);
+        b.stopAtException("A", false);
+        b.setBenchType("A", BenchType.Metrics);
         b.setField("A", "valueSize", "1001");
         b.setOutputFileName("A", "A-test");
 

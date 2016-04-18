@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class BenchMarker {
 
-    protected static boolean stopAtException=false;
+    protected static boolean stopAtException=true;
     protected static long expectedIntervalNanos = TimeUnit.MILLISECONDS.toNanos(1);
     protected static String outputFileName;
     protected static int durationSeconds;

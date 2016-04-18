@@ -40,7 +40,6 @@ public abstract class Controler{
         }
     }
 
-
     public abstract void init(NodeType type)  throws Exception ;
 
     public abstract Object getVendorObject();

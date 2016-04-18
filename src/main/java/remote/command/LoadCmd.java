@@ -11,6 +11,7 @@ public class LoadCmd implements Cmd, Serializable{
 
     private String taskId;
     private String className;
+    private int threadCound;
 
     public LoadCmd(String taskId, String className){
         this.taskId = taskId;
@@ -18,7 +19,7 @@ public class LoadCmd implements Cmd, Serializable{
     }
 
     public void exicute(Controler c){
-        c.load(taskId, className);
+        c.load(taskId, className, threadCound);
     }
 
     @Override
