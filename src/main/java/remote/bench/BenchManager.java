@@ -1,143 +1,83 @@
 package remote.bench;
 
-import remote.Utils;
-import remote.bench.marker.BenchMarker;
-import remote.bench.marker.HdrMarker;
-import remote.bench.marker.MetricsMarker;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-import static remote.Utils.instantiate;
+import java.util.Map;
 
 public class BenchManager {
 
     private Object vendorObject;
-    private String outputFileName="";
-    private BenchType benchType = BenchType.Hdr;
-    private BenchMarker benchMarker = new HdrMarker();
-    private String clazzName;
-
-    private List<Bench> benchs = new ArrayList();
+    private Map<String, BenchContainer> benchs = new HashMap();
 
     public BenchManager(Object vendorObject){
         this.vendorObject=vendorObject;
     }
 
-    public void setBenchClassName(String clazz) {
-        clazzName = clazz;
-    }
+    private List<BenchContainer> getMatchingBenchContainers(String id) {
+        List<BenchContainer> matching = new ArrayList();
 
-    public void setOutputFileName(String fileName) {
-        outputFileName = fileName;
-    }
-
-    public void setThreadCount(int count) throws Exception {
-        for(int i=0; i<count; i++){
-            benchs.add(instantiate(clazzName, Bench.class));
-        }
-        for (Bench b : benchs) {
-            b.setVendorObject(vendorObject);
-        }
-    }
-
-    public void setField(String field, String value) throws Exception{
-        for (Bench b : benchs) {
-            Utils.setField(field, value, b);
-        }
-    }
-
-    public void init(){
-        for (Bench b : benchs) {
-            b.init();
-        }
-    }
-
-    public void cleanUp(){
-        for (Bench b : benchs) {
-            b.cleanup();
-        }
-    }
-
-    public void setBenchType(BenchType type){
-        benchType=type;
-        switch (benchType){
-            case Metrics:
-            case MetricsInterval:
-                benchMarker = new MetricsMarker();
-                break;
-            case Hdr :
-            case HdrInterval:
-                benchMarker = new HdrMarker();
-                break;
-        }
-    }
-
-    public void warmup(int sec) throws InterruptedException {
-        benchMarker.preBench(outputFileName+"-warmup");
-        invokeSync(sec);
-        benchMarker.postBench();
-    }
-
-    public void bench(int sec) throws InterruptedException {
-        benchMarker.preBench(outputFileName+"-bench");
-        invokeSync(sec);
-        benchMarker.postBench();
-    }
-
-    private boolean invokeSync(int seconds) throws InterruptedException {
-        benchMarker.setDurationSeconds(seconds);
-
-        ExecutorService executor = Executors.newFixedThreadPool(benchs.size());
-
-        for (Bench b : benchs) {
-            executor.submit( new Runner( b ) );
-        }
-        executor.shutdown();
-        return executor.awaitTermination(seconds+300, TimeUnit.SECONDS);
-    }
-
-    private class Runner implements Callable<Object>{
-
-        private Bench mark;
-
-        public Runner(Bench bench){
-            mark=bench;
-        }
-
-        public Object call() {
-            try {
-                long start = System.currentTimeMillis();
-                System.out.println("start "+start);
-
-                switch (benchType){
-                    case Metrics:
-                    case Hdr :
-                        benchMarker.bench(mark);
-                        break;
-
-                    case MetricsInterval:
-                    case HdrInterval:
-                        benchMarker.benchInterval(mark);
-                        break;
-                }
-
-                long end = System.currentTimeMillis();
-                long elapsed = end - start;
-
-                System.out.println("elapsed "+elapsed);
-
-            }catch (Exception e) {
-
-                e.printStackTrace();
-
+        for(BenchContainer bench : benchs.values()){
+            if ( bench.getId().matches(id) ){
+                matching.add(bench);
             }
+        }
+        return matching;
+    }
 
-            return null;
+
+    public void loadClass(String id, String clazz, int threadCount) throws Exception{
+        BenchContainer bc = new BenchContainer(vendorObject, id, clazz);
+        bc.setThreadCount(threadCount);
+        benchs.put(id, bc);
+    }
+
+    public void setOutputFileName(String id, String fileName) throws Exception {
+        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            benchContainer.setOutputFileName(fileName);
         }
     }
+
+    public void stopAtException(String id, boolean stop) throws Exception{
+        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            benchContainer.stopAtException(stop);
+        }
+    }
+
+    public void setField(String id, String field, String value) throws Exception{
+        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            benchContainer.setField(field, value);
+        }
+    }
+
+    public void init(String id){
+        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            benchContainer.init();
+        }
+    }
+
+    public void cleanUp(String id){
+        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            benchContainer.cleanUp();
+        }
+    }
+
+    public void setBenchType(String id, BenchType type){
+        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            benchContainer.setBenchType(type);
+        }
+    }
+
+    public void warmup(String id, int sec) throws InterruptedException {
+        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            benchContainer.warmup(sec);
+        }
+    }
+
+    public void bench(String id, int sec) throws InterruptedException {
+        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            benchContainer.bench(sec);
+        }
+    }
+
 }

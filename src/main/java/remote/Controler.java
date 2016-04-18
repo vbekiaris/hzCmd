@@ -9,13 +9,11 @@ import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.util.Enumeration;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
+import remote.bench.BenchContainer;
 import remote.bench.BenchManager;
 import remote.command.Cmd;
 
-import static remote.Utils.recordSendException;
 import static remote.Utils.recordeException;
 
 public abstract class Controler{
@@ -47,18 +45,10 @@ public abstract class Controler{
 
     public abstract Object getVendorObject();
 
-    public void load(String taskId, String clazz){
+    public void load(String taskId, String clazz, int threadCount){
         try {
-            //benchManager..loadClass(taskId, clazz);
-        } catch (Exception e) {
-
-        }
-    }
-
-    public void setField(String taskId, String field, String value){
-        try {
-            benchManager.setField(field, value);
-            MQ.sendObj(REPLYQ, "set "+taskId+" "+field+" "+value );
+            benchManager.loadClass(taskId, clazz, threadCount);
+            MQ.sendObj(REPLYQ, "loaded "+taskId+" "+clazz+" "+threadCount);
         } catch (Exception e) {
             try {
                 MQ.sendObj(REPLYQ, e);
@@ -66,6 +56,16 @@ public abstract class Controler{
         }
     }
 
+    public void setField(String taskId, String field, String value){
+        try {
+            benchManager.setField(taskId, field, value);
+            MQ.sendObj(REPLYQ, "set "+taskId+" "+field+" "+value );
+        } catch (Exception e) {
+            try {
+                MQ.sendObj(REPLYQ, e);
+            } catch (JMSException e2) {}
+        }
+    }
 
     public void ping(){
         try {
@@ -90,7 +90,7 @@ public abstract class Controler{
         }
     }
 
-    private void printProperties(){
+    private static void printProperties(){
         Properties p = System.getProperties();
         Enumeration keys = p.keys();
         while (keys.hasMoreElements()) {

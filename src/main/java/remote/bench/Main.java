@@ -25,16 +25,19 @@ put@threads=2,8
         String vendorObject = "Hz instance";
         BenchManager b = new BenchManager(vendorObject);
 
-        b.setBenchType(BenchType.Metrics);
-        b.setBenchClassName("remote.bench.TestBench");
-        b.setThreadCount(4);
-        b.setField("valueSize", "1001");
-        b.setOutputFileName("0-put");
+        b.loadClass("A", "remote.bench.TestBench", 4);
+        b.loadClass("B", "remote.bench.TestBench2", 2);
 
-        b.init();
-        b.warmup(6);
-        b.bench(11);
-        b.cleanUp();
 
+        b.stopAtException("*", false);
+        b.setBenchType("*", BenchType.Metrics);
+        b.setField("A", "valueSize", "1001");
+        b.setOutputFileName("A", "A-test");
+
+        b.init("A");
+        b.warmup("A", 6);
+        b.bench("A", 11);
+        b.cleanUp("A");
     }
+
 }

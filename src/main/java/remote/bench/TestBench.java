@@ -35,7 +35,7 @@ public class TestBench implements Bench{
             case 3:
                 map.remove(random.nextInt(3));
                 break;
-            case 5:
+            case 4:
                 throw new Exception("test Exception");
         }
     }

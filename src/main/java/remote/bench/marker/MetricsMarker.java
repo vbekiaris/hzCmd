@@ -10,7 +10,6 @@ import java.util.concurrent.TimeUnit;
 
 public class MetricsMarker extends BenchMarker {
 
-
     private static MetricRegistry metrics = new MetricRegistry();
     private int reportSecondsInterval = 5;
     private CsvReporter csvReporter;
@@ -18,7 +17,6 @@ public class MetricsMarker extends BenchMarker {
 
     public void preBench(String fileName){
         System.out.println("preBench");
-
         outputFileName=fileName;
 
         File file = new File(System.getProperty("user.dir"));
@@ -39,7 +37,16 @@ public class MetricsMarker extends BenchMarker {
         long endTime = startTime + (durationSeconds * 1000);
         while(System.currentTimeMillis() < endTime){
             context = timer.time();
-            bench.timeStep();
+
+            try {
+                bench.timeStep();
+            }catch (Exception e){
+                if(stopAtException){
+                    System.out.println(e);
+                    throw e;
+                }
+            }
+
             context.stop();
         }
         metrics.remove(outputFileName);
@@ -54,7 +61,16 @@ public class MetricsMarker extends BenchMarker {
         while(System.currentTimeMillis() < endTime){
             context = timer.time();
             long start = System.nanoTime();
-            bench.timeStep();
+
+            try {
+                bench.timeStep();
+            }catch (Exception e){
+                if(stopAtException){
+                    System.out.println(e);
+                    throw e;
+                }
+            }
+
             context.stop();
 
             long nextStart = start + expectedIntervalNanos;
