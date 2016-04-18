@@ -26,9 +26,8 @@ public class BenchManager {
     }
 
 
-    public void loadClass(String id, String clazz, int threadCount) throws Exception{
+    public void loadClass(String id, String clazz) throws Exception{
         BenchContainer bc = new BenchContainer(vendorObject, id, clazz);
-        bc.setThreadCount(threadCount);
         benchs.put(id, bc);
     }
 

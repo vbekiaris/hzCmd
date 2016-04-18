@@ -324,38 +324,40 @@ public class HzCmd implements Serializable {
 
         BenchManager bencher = new BenchManager(benchFile);
 
-
         for (String drivers : benchMarkSettings.getDrivers()) {
 
             for (String taskId : bencher.getTaskIds()) {
 
                 String className = bencher.getClassName(taskId);
-                cluster.load(drivers, taskId, className);
 
                 for (String benchType : benchMarkSettings.getTypes()) {
                     Integer benchTypeCount = benchTypeCountMap.get(benchType);
 
-                    if (benchType.equals(BenchType.HdrInterval.name()) || benchType.equals(BenchType.MetricsInterval.name())){
-                        String expectedIntervalNanos = benchMarkSettings.getIntervalNanos();
-                        cluster.setField(drivers, taskId, "expectedIntervalNanos", expectedIntervalNanos);
-                    }
-
-                    cluster.setField(drivers, taskId, "benchType", benchType);
-                    cluster.setField(drivers, taskId, "warmupSec", benchMarkSettings.getWarmupSec());
-                    cluster.setField(drivers, taskId, "durationSec", benchMarkSettings.getDurationSec());
-
-                    for (FieldValue field : bencher.getFieldsToSet(taskId)) {
-                        cluster.setField(drivers, taskId, field.field, field.value);
-                    }
-
                     for (List<FieldValue> settings : bencher.getSettings(taskId)) {
-
-                        for (FieldValue setting : settings) {
-                            cluster.setField(drivers, taskId, setting.field, setting.value);
-                        }
 
                         for (int threadCount : benchMarkSettings.getThreads()) {
                             for (int repeater=0; repeater<benchMarkSettings.repeatCount(); repeater++) {
+
+                                cluster.load(drivers, taskId, className);
+
+                                cluster.setField(drivers, taskId, "benchType", benchType);
+                                cluster.setField(drivers, taskId, "warmupSec", benchMarkSettings.getWarmupSec());
+                                cluster.setField(drivers, taskId, "durationSec", benchMarkSettings.getDurationSec());
+
+                                for (FieldValue setting : settings) {
+                                    cluster.setField(drivers, taskId, setting.field, setting.value);
+                                }
+
+                                for (FieldValue field : bencher.getFieldsToSet(taskId)) {
+                                    cluster.setField(drivers, taskId, field.field, field.value);
+                                }
+
+                                if (benchType.equals(BenchType.HdrInterval.name()) || benchType.equals(BenchType.MetricsInterval.name())){
+                                    String expectedIntervalNanos = benchMarkSettings.getIntervalNanos();
+                                    cluster.setField(drivers, taskId, "expectedIntervalNanos", expectedIntervalNanos);
+                                }
+
+
 
                                 String version  = cluster.getVersionString();
                                 String metaData = "clusterId " + clusterId + "\n" +
@@ -477,7 +479,6 @@ public class HzCmd implements Serializable {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
-
                 saveHzCmd(hzCmd);
                 try {
                     MQ.shutdown();
@@ -546,7 +547,6 @@ public class HzCmd implements Serializable {
     public void setBenchInterval(long intervalMillis) {
         benchMarkSettings.setIntervalByMsec(intervalMillis);
     }
-
 
     public void setRepeatCount(int repeatCount) {
         benchMarkSettings.setRepeatCount(repeatCount);

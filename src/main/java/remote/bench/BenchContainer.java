@@ -38,9 +38,20 @@ public class BenchContainer {
     }
 
     public void setThreadCount(int count) throws Exception {
-        for(int i=0; i<count; i++){
-            benchs.add(instantiate(clazzName, Bench.class));
+
+        count = count - benchs.size();
+
+        if(count>0){
+            for(int i=0; i<count; i++){
+                benchs.add(instantiate(clazzName, Bench.class));
+            }
+        }else{
+            count = Math.abs(count);
+            for(int i=0; i<count; i++){
+                benchs.remove(i);
+            }
         }
+
         for (Bench b : benchs) {
             b.setVendorObject(vendorObject);
         }

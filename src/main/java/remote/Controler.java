@@ -44,10 +44,10 @@ public abstract class Controler{
 
     public abstract Object getVendorObject();
 
-    public void load(String taskId, String clazz, int threadCount){
+    public void load(String taskId, String clazz){
         try {
-            benchManager.loadClass(taskId, clazz, threadCount);
-            MQ.sendObj(REPLYQ, "loaded "+taskId+" "+clazz+" "+threadCount);
+            benchManager.loadClass(taskId, clazz);
+            MQ.sendObj(REPLYQ, "loaded "+taskId+" "+clazz);
         } catch (Exception e) {
             try {
                 MQ.sendObj(REPLYQ, e);
