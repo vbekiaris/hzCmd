@@ -38,7 +38,7 @@ public class BenchContainer {
     }
 
     public void writeMetaData(String metaData) {
-        benchMarker.writeMeataDataFile(metaData);
+        benchMarker.writeMeataDataFile(outputFileName, metaData);
     }
 
     public void setThreadCount(int count) throws Exception {

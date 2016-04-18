@@ -29,9 +29,9 @@ public abstract class BenchMarker {
 
     public abstract void benchInterval(Bench bench) throws Exception;
 
-    public void writeMeataDataFile(String metaData){
+    public void writeMeataDataFile(String fileName, String metaData){
         try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(outputFileName+".meta.txt"));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(fileName+".meta.txt"));
             bw.write(metaData);
             bw.close();
         } catch (IOException e) {
