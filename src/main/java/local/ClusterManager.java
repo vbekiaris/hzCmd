@@ -169,6 +169,13 @@ public class ClusterManager implements Serializable {
         getResponse(jvmId);
     }
 
+    public void writeMetaDataCmd(String jvmId, String taskId, String metaData) throws IOException, InterruptedException, JMSException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+            jvm.writeMetaDataCmd(taskId, metaData);
+        }
+        getResponse(jvmId);
+    }
+
     public void initBench(String jvmId,  String taskId) throws IOException, InterruptedException, JMSException {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.initBench(taskId);

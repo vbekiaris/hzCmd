@@ -204,7 +204,6 @@ public class HzCmd implements Serializable {
         }
     }
 
-
     public void ls(String jvmId) throws Exception {
         for (ClusterManager c : clusters.values()) {
             c.ls(jvmId);
@@ -246,7 +245,6 @@ public class HzCmd implements Serializable {
             c.ssh(jvmId, cmd);
         }
     }
-
 
     public void wipe( ) throws IOException, InterruptedException {
         for (ClusterManager c : clusters.values()) {
@@ -342,7 +340,7 @@ public class HzCmd implements Serializable {
                                 cluster.setThreadCount(drivers, taskId, threadCount);
                                 cluster.setStopAtException(drivers, taskId, false);
 
-                                cluster.setField(drivers, taskId, "benchType", benchType);
+                                //cluster.setField(drivers, taskId, "benchType", benchType);
 
 
                                 for (FieldValue setting : settings) {
@@ -353,10 +351,10 @@ public class HzCmd implements Serializable {
                                     cluster.setField(drivers, taskId, field.field, field.value);
                                 }
 
-                                if (benchType.equals(BenchType.HdrInterval.name()) || benchType.equals(BenchType.MetricsInterval.name())){
-                                    String expectedIntervalNanos = benchMarkSettings.getIntervalNanos();
-                                    cluster.setField(drivers, taskId, "expectedIntervalNanos", expectedIntervalNanos);
-                                }
+                                //if (benchType.equals(BenchType.HdrInterval.name()) || benchType.equals(BenchType.MetricsInterval.name())){
+                                //    String expectedIntervalNanos = benchMarkSettings.getIntervalNanos();
+                                //    cluster.setField(drivers, taskId, "expectedIntervalNanos", expectedIntervalNanos);
+                                //}
 
                                 String version  = cluster.getVersionString();
                                 String metaData = "clusterId " + clusterId + "\n" +
@@ -379,12 +377,12 @@ public class HzCmd implements Serializable {
                                 for (FieldValue setting : settings) {
                                     metaData += setting.field +" "+ setting.value + "\n";
                                 }
-                                cluster.setField(drivers, taskId, "metaData", metaData);
+
 
                                 String fileName = clusterId+"_"+version+"_"+taskId+"_"+className+"_"+benchType+"_"+benchTypeCount+"_"+benchNumber;
+
+                                cluster.writeMetaDataCmd(drivers, taskId, metaData);
                                 cluster.setOutPutFile(drivers, taskId, fileName);
-
-
                                 cluster.initBench(drivers, taskId);
                                 cluster.warmupBench(drivers, taskId, benchMarkSettings.getWarmupSec());
                                 cluster.runBench(drivers, taskId,  benchMarkSettings.getDurationSec());

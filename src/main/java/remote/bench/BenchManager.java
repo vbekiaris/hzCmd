@@ -43,6 +43,12 @@ public class BenchManager {
         }
     }
 
+    public void writeMetaData(String id, String metaData) {
+        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            benchContainer.writeMetaData(metaData);
+        }
+    }
+
     public void stopAtException(String id, boolean stop) throws Exception{
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
             benchContainer.stopAtException(stop);

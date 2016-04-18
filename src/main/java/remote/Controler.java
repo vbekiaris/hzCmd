@@ -88,6 +88,17 @@ public abstract class Controler{
         }
     }
 
+    public void writeMetaData(String taskId, String metaData) {
+        try {
+            benchManager.writeMetaData(taskId, metaData);
+            MQ.sendObj(REPLYQ, taskId+" metaData="+metaData);
+        } catch (Exception e) {
+            try {
+                MQ.sendObj(REPLYQ, e);
+            } catch (JMSException e2) {}
+        }
+    }
+
     public void initBench(String taskId){
         try {
             benchManager.init(taskId);
