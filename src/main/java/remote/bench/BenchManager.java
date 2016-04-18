@@ -16,12 +16,17 @@ import static remote.Utils.instantiate;
 
 public class BenchManager {
 
+    private Object vendorObject;
     private String outputFileName="";
     private BenchType benchType = BenchType.Hdr;
     private BenchMarker benchMarker = new HdrMarker();
     private String clazzName;
 
     private List<Bench> benchs = new ArrayList();
+
+    public BenchManager(Object vendorObject){
+        this.vendorObject=vendorObject;
+    }
 
     public void setBenchClassName(String clazz) {
         clazzName = clazz;
@@ -35,11 +40,14 @@ public class BenchManager {
         for(int i=0; i<count; i++){
             benchs.add(instantiate(clazzName, Bench.class));
         }
+        for (Bench b : benchs) {
+            b.setVendorObject(vendorObject);
+        }
     }
 
-    public void setField(String name, String value) throws Exception{
+    public void setField(String field, String value) throws Exception{
         for (Bench b : benchs) {
-            Utils.setField(name, value, b);
+            Utils.setField(field, value, b);
         }
     }
 

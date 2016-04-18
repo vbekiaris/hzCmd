@@ -12,6 +12,7 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import remote.bench.BenchManager;
 import remote.command.Cmd;
 
 import static remote.Utils.recordSendException;
@@ -19,33 +20,24 @@ import static remote.Utils.recordeException;
 
 public abstract class Controler{
 
-    protected static TaskManager tasks;
-
-    public static final String ID = System.getProperty(Args.ID.name());
-    public static final String EVENTQ = System.getProperty(Args.EVENTQ.name());
-    public static final String jvmPidId = ManagementFactory.getRuntimeMXBean().getName();
+    private BenchManager benchManager;
+    private static final String ID = System.getProperty(Args.ID.name());
+    private static final String REPLYQ = ID+"reply";
+    private static final String jvmPidId = ManagementFactory.getRuntimeMXBean().getName();
 
     public final NodeType type;
 
     public Controler(NodeType type) throws Exception {
         this.type=type;
-
-        Properties p = System.getProperties();
-        Enumeration keys = p.keys();
-        while (keys.hasMoreElements()) {
-            String key = (String)keys.nextElement();
-            String value = (String)p.get(key);
-            System.out.println(key + ": " + value);
-        }
-
+        printProperties();
 
         try {
             init(type);
-            tasks = new TaskManager(getVendorObject());
-            MQ.sendObj(ID+"reply", ID+" Started");
+            benchManager = new BenchManager(getVendorObject());
+            MQ.sendObj(REPLYQ, ID+" Started");
         }catch (Exception e){
             recordeException(e);
-            MQ.sendObj(ID+"reply", e);
+            MQ.sendObj(REPLYQ, e);
             throw e;
         }
     }
@@ -57,48 +49,27 @@ public abstract class Controler{
 
     public void load(String taskId, String clazz){
         try {
-            tasks.loadClass(taskId, clazz);
+            //benchManager..loadClass(taskId, clazz);
         } catch (Exception e) {
-            recordSendException(e, EVENTQ);
+
         }
     }
 
     public void setField(String taskId, String field, String value){
         try {
-            tasks.setField(taskId, field, value);
-            MQ.sendObj(ID+"reply", "set "+taskId+" "+field+" "+value );
+            benchManager.setField(field, value);
+            MQ.sendObj(REPLYQ, "set "+taskId+" "+field+" "+value );
         } catch (Exception e) {
             try {
-                MQ.sendObj(ID+"reply", e);
+                MQ.sendObj(REPLYQ, e);
             } catch (JMSException e2) {}
-            recordSendException(e, EVENTQ);
         }
     }
 
-    public void invokeAsync(int threadCount, String function, String taskId){
-        try {
-            tasks.invokeAsync(threadCount, function, taskId);
-        } catch (NoSuchMethodException e) {
-            recordSendException(e, EVENTQ);
-        }
-    }
-
-    public void invokeSync(int threadCount, String function, String taskId, long timeOut, TimeUnit timeUnit){
-        try {
-            if ( tasks.invokeSync(threadCount, function, taskId, timeOut, timeUnit) ) {
-                MQ.sendObj(ID+"reply", ID+" finished "+function+" on "+taskId);
-            }else {
-                MQ.sendObj(ID+"reply", new TimeoutException( ID+" at least one thread timed out running "+function+" on "+taskId) );
-            }
-
-        } catch (Exception e) {
-            recordSendException(e, ID+"reply");
-        }
-    }
 
     public void ping(){
         try {
-            MQ.sendObj(ID+"reply", ID+" ping");
+            MQ.sendObj(REPLYQ, ID+" ping");
         } catch (JMSException jmsError) {
             recordeException(jmsError);
         }
@@ -119,12 +90,20 @@ public abstract class Controler{
         }
     }
 
-    @Override
+    private void printProperties(){
+        Properties p = System.getProperties();
+        Enumeration keys = p.keys();
+        while (keys.hasMoreElements()) {
+            String key = (String)keys.nextElement();
+            String value = (String)p.get(key);
+            System.out.println(key + ": " + value);
+        }
+    }
+
     public String toString() {
         return "HzCmd{" +
                 "ID=" + ID +
                 "jvmPidId=" + jvmPidId +
-                ", tasks=" + tasks +
                 '}';
     }
 }

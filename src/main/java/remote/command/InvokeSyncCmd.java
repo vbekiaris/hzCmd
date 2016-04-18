@@ -25,7 +25,7 @@ public class InvokeSyncCmd implements Cmd, Serializable{
     }
 
     public void exicute(Controler c){
-        c.invokeSync(threadCount, function, taskId, timeOut, timeUnit);
+        //c.invokeSync(threadCount, function, taskId, timeOut, timeUnit);
     }
 
     @Override

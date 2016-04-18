@@ -3,13 +3,13 @@ package remote.bench;
 import java.util.HashMap;
 import java.util.Random;
 
-public class TestBench implements Bench{
+public class TestBench2 implements Bench{
 
     private Object obj;
     private Random random = new Random();
     private HashMap map;
 
-    public int valueSize=0;
+    public String theName="";
 
     public void setVendorObject(Object vendorObject){
         obj=vendorObject;
@@ -17,7 +17,7 @@ public class TestBench implements Bench{
 
     public void init() {
         map = new HashMap();
-        System.out.println("bench 1 "+random +"  valueSize="+valueSize+"  vendorObject="+obj);
+        System.out.println("TestBench2 "+random +"  theName="+theName+"  vendorObject="+obj);
     }
 
     public void timeStep()throws Exception{

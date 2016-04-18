@@ -1,7 +1,7 @@
 package remote.bench;
 
 public enum BenchType {
-    Hdr, HdrInterval, Metrics, MetricsInterval, Recorder
+    Hdr, HdrInterval, Metrics, MetricsInterval
 }
 
 

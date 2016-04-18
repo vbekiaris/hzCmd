@@ -20,7 +20,8 @@ public class InvokeAsyncCmd implements Cmd, Serializable{
     }
 
     public void exicute(Controler c){
-        c.invokeAsync(threadCount, function, taskId);
+
+        //c.invokeAsync(threadCount, function, taskId);
     }
 
     @Override
