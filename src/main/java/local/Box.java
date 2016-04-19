@@ -51,8 +51,8 @@ public class Box implements Serializable{
         ssh("rm -fr " + arg);
     }
 
-    public void killHard(int pid) throws IOException, InterruptedException {
-        ssh("kill -9 "+pid);
+    public String killHard(int pid) throws IOException, InterruptedException {
+        return ssh("kill -9 "+pid);
     }
 
     public void killAllJava() throws IOException, InterruptedException {
