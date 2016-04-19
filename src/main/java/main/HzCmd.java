@@ -200,6 +200,12 @@ public class HzCmd implements Serializable {
         }
     }
 
+    public void bounce(String jvmId, int delaySec) throws Exception {
+        for (ClusterManager c : clusters.values()) {
+            c.bounce(jvmId, delaySec);
+        }
+    }
+
     public void ls(String jvmId) throws Exception {
         for (ClusterManager c : clusters.values()) {
             c.ls(jvmId);
@@ -512,4 +518,5 @@ public class HzCmd implements Serializable {
     public void setRepeatCount(int repeatCount) {
         benchMarkSettings.setRepeatCount(repeatCount);
     }
+
 }
