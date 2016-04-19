@@ -260,7 +260,6 @@ public class ClusterManager implements Serializable {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.reStartJvm(this);
         }
-        getResponses(jvmId);
     }
 
     public void bounce(String jvmId, int delaySec) throws Exception {
