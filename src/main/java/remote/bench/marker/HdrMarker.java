@@ -12,8 +12,8 @@ public class HdrMarker extends BenchMarker {
 
     private static Histogram histogram = new ConcurrentHistogram(TimeUnit.SECONDS.toNanos(30), 3);
 
-    public HdrMarker(long expectedIntervalNanos, boolean stop, String outFile){
-        super(expectedIntervalNanos, stop, outFile);
+    public HdrMarker(long expectedIntervalNanos, boolean stop){
+        super(expectedIntervalNanos, stop);
     }
 
     public void preBench(String fileName){

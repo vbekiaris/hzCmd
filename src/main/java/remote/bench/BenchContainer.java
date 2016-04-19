@@ -19,6 +19,7 @@ public class BenchContainer {
     private String id;
     private String clazzName;
     private Object vendorObject;
+    private static String outputFileName;
     private BenchMarker benchMarker;
 
     private List<Bench> benchs = new ArrayList();
@@ -75,24 +76,25 @@ public class BenchContainer {
     }
 
     public void setBenchType(BenchType type, long expectedIntervalNanos, boolean stop, String outFile){
+        outputFileName=outFile;
         switch (type){
             case Metrics:
-                benchMarker = new MetricsMarker(expectedIntervalNanos, stop, outFile);
+                benchMarker = new MetricsMarker(expectedIntervalNanos, stop);
                 break;
             case Hdr :
-                benchMarker = new HdrMarker(expectedIntervalNanos, stop, outFile);
+                benchMarker = new HdrMarker(expectedIntervalNanos, stop);
                 break;
         }
     }
 
     public void warmup(int sec) throws InterruptedException {
-        benchMarker.preBench(benchMarker.getOutputFileName()+"-warmup");
+        benchMarker.preBench(outputFileName+"-warmup");
         invokeSync(sec);
         benchMarker.postBench();
     }
 
     public void bench(int sec) throws InterruptedException {
-        benchMarker.preBench(benchMarker.getOutputFileName()+"-bench");
+        benchMarker.preBench(outputFileName+"-bench");
         invokeSync(sec);
         benchMarker.postBench();
     }

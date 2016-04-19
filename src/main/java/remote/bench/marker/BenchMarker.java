@@ -15,14 +15,9 @@ public abstract class BenchMarker {
     protected static String outputFileName;
     protected static int durationSeconds;
 
-    public BenchMarker(long expectedIntervalNanos, boolean stop, String outFile){
+    public BenchMarker(long expectedIntervalNanos, boolean stop){
         this.expectedIntervalNanos = expectedIntervalNanos;
         stopAtException = stop;
-        outputFileName = outFile;
-    }
-
-    public String getOutputFileName(){
-        return outputFileName;
     }
 
     public void setDurationSeconds(int seconds){
