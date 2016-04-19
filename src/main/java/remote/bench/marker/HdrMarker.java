@@ -2,6 +2,7 @@ package remote.bench.marker;
 
 import org.HdrHistogram.ConcurrentHistogram;
 import org.HdrHistogram.Histogram;
+import remote.Utils;
 import remote.bench.Bench;
 
 import java.io.*;
@@ -49,8 +50,8 @@ public class HdrMarker extends BenchMarker {
             try {
                 bench.timeStep();
             }catch (Exception e){
+                Utils.recordeException(e);
                 if(stopAtException){
-                    System.out.println(e);
                     throw e;
                 }
             }
@@ -68,6 +69,7 @@ public class HdrMarker extends BenchMarker {
             try {
                 bench.timeStep();
             }catch (Exception e){
+                Utils.recordeException(e);
                 if(stopAtException){
                     throw e;
                 }

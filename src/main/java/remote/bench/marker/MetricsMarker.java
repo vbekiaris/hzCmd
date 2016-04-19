@@ -2,6 +2,7 @@ package remote.bench.marker;
 
 import com.codahale.metrics.CsvReporter;
 import com.codahale.metrics.MetricRegistry;
+import remote.Utils;
 import remote.bench.Bench;
 
 import java.io.File;
@@ -50,8 +51,8 @@ public class MetricsMarker extends BenchMarker {
             try {
                 bench.timeStep();
             }catch (Exception e){
+                Utils.recordeException(e);
                 if(stopAtException){
-                    System.out.println(e);
                     throw e;
                 }
             }
@@ -74,8 +75,8 @@ public class MetricsMarker extends BenchMarker {
             try {
                 bench.timeStep();
             }catch (Exception e){
+                Utils.recordeException(e);
                 if(stopAtException){
-                    System.out.println(e);
                     throw e;
                 }
             }
