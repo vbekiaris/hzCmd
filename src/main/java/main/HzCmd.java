@@ -200,24 +200,30 @@ public class HzCmd implements Serializable {
         }
     }
 
-    public void bounce(String jvmId, int initialDelaySec, int delaySec) throws Exception {
+    public void bounce(String jvmId, int durationSec, int initialDelaySec, int restartDelaySec, int iterationDelaySec) throws Exception {
 
-        Thread.sleep(initialDelaySec*1000);
+        Thread.sleep(initialDelaySec * 1000);
 
-        for (ClusterManager c : clusters.values()) {
-            c.kill(jvmId);
-        }
-        for (ClusterManager c : clusters.values()) {
-            c.printJvmInfo(jvmId);
-        }
+        long startTime = System.currentTimeMillis();
+        long endTime = startTime + (durationSec * 1000);
+        while(System.currentTimeMillis() < endTime) {
 
-        Thread.sleep(delaySec*1000);
+            for (ClusterManager c : clusters.values()) {
+                c.kill(jvmId);
+            }
+            for (ClusterManager c : clusters.values()) {
+                c.printJvmInfo(jvmId);
+            }
 
-        for (ClusterManager c : clusters.values()) {
-            c.restart(jvmId);
-        }
-        for (ClusterManager c : clusters.values()) {
-            c.getResponses(jvmId);
+            Thread.sleep(restartDelaySec * 1000);
+
+            for (ClusterManager c : clusters.values()) {
+                c.restart(jvmId);
+            }
+            for (ClusterManager c : clusters.values()) {
+                c.getResponses(jvmId);
+            }
+            Thread.sleep(iterationDelaySec * 1000);
         }
     }
 
