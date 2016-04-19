@@ -200,7 +200,9 @@ public class HzCmd implements Serializable {
         }
     }
 
-    public void bounce(String jvmId, int delaySec) throws Exception {
+    public void bounce(String jvmId, int initialDelaySec, int delaySec) throws Exception {
+
+        Thread.sleep(initialDelaySec*1000);
 
         for (ClusterManager c : clusters.values()) {
             c.kill(jvmId);
