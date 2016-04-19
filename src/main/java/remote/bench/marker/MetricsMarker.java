@@ -14,11 +14,12 @@ public class MetricsMarker extends BenchMarker {
     private int reportSecondsInterval = 5;
     private CsvReporter csvReporter;
 
+    public MetricsMarker(long expectedIntervalNanos, boolean stop, String outFile){
+        super(expectedIntervalNanos, stop, outFile);
+    }
 
     public void preBench(String fileName){
-        System.out.println("preBench");
         outputFileName=fileName;
-
         File file = new File(System.getProperty("user.dir"));
         csvReporter = CsvReporter.forRegistry(metrics).build(file);
         csvReporter.start(reportSecondsInterval, TimeUnit.SECONDS);
@@ -30,6 +31,14 @@ public class MetricsMarker extends BenchMarker {
     }
 
     public void bench(Bench bench) throws Exception{
+        if(expectedIntervalNanos==0){
+            benchFlatOut(bench);
+        }else{
+            benchInterval(bench);
+        }
+    }
+
+    private void benchFlatOut(Bench bench) throws Exception{
         com.codahale.metrics.Timer timer = metrics.timer(outputFileName);
         com.codahale.metrics.Timer.Context context;
 
@@ -52,7 +61,7 @@ public class MetricsMarker extends BenchMarker {
         metrics.remove(outputFileName);
     }
 
-    public void benchInterval(Bench bench) throws Exception {
+    private void benchInterval(Bench bench) throws Exception {
         com.codahale.metrics.Timer timer = metrics.timer(outputFileName);
         com.codahale.metrics.Timer.Context context;
 

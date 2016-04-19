@@ -16,12 +16,10 @@ import static remote.Utils.instantiate;
 
 public class BenchContainer {
 
-    private Object vendorObject;
-    private String outputFileName="";
-    private BenchType benchType = BenchType.Hdr;
-    private BenchMarker benchMarker = new HdrMarker();
-    private String clazzName;
     private String id;
+    private String clazzName;
+    private Object vendorObject;
+    private BenchMarker benchMarker;
 
     private List<Bench> benchs = new ArrayList();
 
@@ -33,12 +31,8 @@ public class BenchContainer {
 
     public String getId(){return id;}
 
-    public void setOutputFileName(String fileName) {
-        outputFileName = fileName;
-    }
-
     public void writeMetaData(String metaData) {
-        benchMarker.writeMeataDataFile(outputFileName, metaData);
+        benchMarker.writeMeataDataFile(metaData);
     }
 
     public void setThreadCount(int count) throws Exception {
@@ -61,9 +55,6 @@ public class BenchContainer {
         }
     }
 
-    public void stopAtException(boolean stop) throws Exception{
-        benchMarker.setStopAtException(stop);
-    }
 
     public void setField(String field, String value) throws Exception{
         for (Bench b : benchs) {
@@ -83,28 +74,25 @@ public class BenchContainer {
         }
     }
 
-    public void setBenchType(BenchType type){
-        benchType=type;
-        switch (benchType){
+    public void setBenchType(BenchType type, long expectedIntervalNanos, boolean stop, String outFile){
+        switch (type){
             case Metrics:
-            case MetricsInterval:
-                benchMarker = new MetricsMarker();
+                benchMarker = new MetricsMarker(expectedIntervalNanos, stop, outFile);
                 break;
             case Hdr :
-            case HdrInterval:
-                benchMarker = new HdrMarker();
+                benchMarker = new HdrMarker(expectedIntervalNanos, stop, outFile);
                 break;
         }
     }
 
     public void warmup(int sec) throws InterruptedException {
-        benchMarker.preBench(outputFileName+"-warmup");
+        benchMarker.preBench(benchMarker.getOutputFileName()+"-warmup");
         invokeSync(sec);
         benchMarker.postBench();
     }
 
     public void bench(int sec) throws InterruptedException {
-        benchMarker.preBench(outputFileName+"-bench");
+        benchMarker.preBench(benchMarker.getOutputFileName()+"-bench");
         invokeSync(sec);
         benchMarker.postBench();
     }
@@ -135,20 +123,11 @@ public class BenchContainer {
                 long start = System.currentTimeMillis();
                 System.out.println("start "+start);
 
-                switch (benchType){
-                    case Metrics:
-                    case Hdr :
-                        benchMarker.bench(mark);
-                        break;
+                benchMarker.bench(mark);
 
-                    case MetricsInterval:
-                    case HdrInterval:
-                        benchMarker.benchInterval(mark);
-                        break;
-                }
                 long end = System.currentTimeMillis();
                 long elapsed = end - start;
-                System.out.println("elapsed "+elapsed);
+                System.out.println("elapsed " + elapsed);
 
             }catch (Exception e) {
                 e.printStackTrace();

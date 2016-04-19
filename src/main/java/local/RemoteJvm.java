@@ -4,6 +4,7 @@ import global.Args;
 import global.Bash;
 import global.NodeType;
 import jms.MQ;
+import remote.bench.BenchType;
 import remote.command.*;
 import remote.command.bench.*;
 
@@ -156,13 +157,10 @@ public abstract class RemoteJvm implements Serializable {
         MQ.sendObj(id, new ThreadCountCmd(taskId, threadCount) );
     }
 
-    public void stopAtExceptionCmd(String taskId, boolean stop) throws IOException, InterruptedException, JMSException {
-        MQ.sendObj(id, new StopAtExceptionCmd(taskId, stop) );
+    public void setBenchType(String taskId, BenchType type, long intervalNanos, boolean stop, String outFile) throws IOException, InterruptedException, JMSException{
+        MQ.sendObj(id, new SetBenchTypeCmd(taskId, type, intervalNanos, stop, outFile) );
     }
 
-    public void setOutPutFile(String taskId, String benchOutPutFile) throws IOException, InterruptedException, JMSException {
-        MQ.sendObj(id, new OutFileCmd(taskId, benchOutPutFile) );
-    }
 
     public void writeMetaDataCmd(String taskId, String metaData) throws IOException, InterruptedException, JMSException {
         MQ.sendObj(id, new MetaDataCmd(taskId, metaData) );
@@ -290,4 +288,5 @@ public abstract class RemoteJvm implements Serializable {
     public boolean isClient(){
         return type == NodeType.Client;
     }
+
 }

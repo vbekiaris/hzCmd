@@ -37,21 +37,9 @@ public class BenchManager {
         }
     }
 
-    public void setOutputFileName(String id, String fileName) throws Exception {
-        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
-            benchContainer.setOutputFileName(fileName);
-        }
-    }
-
     public void writeMetaData(String id, String metaData) {
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
             benchContainer.writeMetaData(metaData);
-        }
-    }
-
-    public void stopAtException(String id, boolean stop) throws Exception{
-        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
-            benchContainer.stopAtException(stop);
         }
     }
 
@@ -73,9 +61,9 @@ public class BenchManager {
         }
     }
 
-    public void setBenchType(String id, BenchType type){
+    public void setBenchType(String id, BenchType type, long expectedIntervalNanos, boolean stop, String outFile){
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
-            benchContainer.setBenchType(type);
+            benchContainer.setBenchType(type, expectedIntervalNanos, stop, outFile);
         }
     }
 

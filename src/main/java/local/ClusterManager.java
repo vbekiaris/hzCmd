@@ -3,6 +3,7 @@ package local;
 import global.Bash;
 import global.NodeType;
 import jms.MQ;
+import remote.bench.BenchType;
 import remote.command.bench.*;
 
 import javax.jms.JMSException;
@@ -155,19 +156,15 @@ public class ClusterManager implements Serializable {
         getResponse(jvmId);
     }
 
-    public void setStopAtException(String jvmId, String taskId, boolean stop) throws IOException, InterruptedException, JMSException{
+
+
+    public void setBenchType(String jvmId, String taskId, BenchType type, long intervalNanos, boolean stop, String outFile) throws IOException, InterruptedException, JMSException{
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
-            jvm.stopAtExceptionCmd(taskId, stop);
+            jvm.setBenchType(taskId, type, intervalNanos, stop, outFile);
         }
         getResponse(jvmId);
     }
 
-    public void setOutPutFile(String jvmId, String taskId, String outFile) throws IOException, InterruptedException, JMSException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
-            jvm.setOutPutFile(taskId, outFile);
-        }
-        getResponse(jvmId);
-    }
 
     public void writeMetaDataCmd(String jvmId, String taskId, String metaData) throws IOException, InterruptedException, JMSException {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){

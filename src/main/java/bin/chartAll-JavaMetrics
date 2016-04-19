@@ -2,10 +2,11 @@
 
 path=$1
 
-cd ${path} || exit 1
+cd ${path} || exit 0
 
 files=$(find . -type f -name '*.csv' | xargs -n1 basename | sort | uniq)
 
+[[ -z "${files}" ]] && { exit 0; }
 
 while read -r f; do
 

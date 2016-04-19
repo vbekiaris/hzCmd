@@ -32,10 +32,6 @@ public class HzCmd implements Serializable {
 
     private String brokerIP=null;
 
-    public void showSSH(boolean show){
-        Bash.showSSH = show;
-    }
-
     public void listen() throws IOException, InterruptedException{
         String eventQ = System.getProperty("user.dir")+"/"+Args.EVENTQ.name();
         while (true){
@@ -258,38 +254,11 @@ public class HzCmd implements Serializable {
         boxes.clear();
     }
 
-    /*
-    public void load(String jvmId,  String taskId, String className) throws Exception {
-        for (ClusterManager c : clusters.values()) {
-            c.load(jvmId, taskId, className);
-        }
-    }
-    */
-
-    /*
-    public void setField(String jvmId, String taskId, String field, String value) throws Exception {
-        for (ClusterManager c : clusters.values()) {
-            c.setField(jvmId, taskId, field, value);
-        }
-    }
-    */
-
     public void invokeAsync(String jvmId, int threadCound, String method, String taksId) throws Exception {
         for (ClusterManager c : clusters.values()) {
             c.invokeAsync(jvmId, threadCound, method, taksId);
         }
     }
-
-    /*
-    public void invokeSync(String jvmId, int threadCound, String method, String taksId) throws Exception {
-        for (ClusterManager c : clusters.values()) {
-            c.invokeSync(jvmId, threadCound, method, taksId);
-        }
-        for (ClusterManager c : clusters.values()) {
-            c.getResponse(jvmId);
-        }
-    }
-    */
 
     public void ping(String jvmId, long timeout) {
         for (ClusterManager c : clusters.values()) {
@@ -314,8 +283,8 @@ public class HzCmd implements Serializable {
         int benchNumber=0;
 
         Map<String, Integer> benchTypeCountMap = new HashMap();
-        for (String benchType : benchMarkSettings.getTypes()) {
-            benchTypeCountMap.put(benchType, new Integer(0));
+        for (BenchType type : benchMarkSettings.getTypes()) {
+            benchTypeCountMap.put(type.name(), new Integer(0));
         }
 
         ClusterManager cluster = clusters.get(clusterId);
@@ -328,20 +297,13 @@ public class HzCmd implements Serializable {
 
                 String className = bencher.getClassName(taskId);
 
-                for (String benchType : benchMarkSettings.getTypes()) {
-                    Integer benchTypeCount = benchTypeCountMap.get(benchType);
+                for (BenchType benchType : benchMarkSettings.getTypes()) {
+                    Integer benchTypeCount = benchTypeCountMap.get(benchType.name());
 
                     for (List<FieldValue> settings : bencher.getSettings(taskId)) {
 
                         for (int threadCount : benchMarkSettings.getThreads()) {
                             for (int repeater=0; repeater<benchMarkSettings.repeatCount(); repeater++) {
-
-                                cluster.load(drivers, taskId, className);
-                                cluster.setThreadCount(drivers, taskId, threadCount);
-                                cluster.setStopAtException(drivers, taskId, false);
-
-                                //cluster.setField(drivers, taskId, "benchType", benchType);
-
 
                                 for (FieldValue setting : settings) {
                                     cluster.setField(drivers, taskId, setting.field, setting.value);
@@ -350,11 +312,6 @@ public class HzCmd implements Serializable {
                                 for (FieldValue field : bencher.getFieldsToSet(taskId)) {
                                     cluster.setField(drivers, taskId, field.field, field.value);
                                 }
-
-                                //if (benchType.equals(BenchType.HdrInterval.name()) || benchType.equals(BenchType.MetricsInterval.name())){
-                                //    String expectedIntervalNanos = benchMarkSettings.getIntervalNanos();
-                                //    cluster.setField(drivers, taskId, "expectedIntervalNanos", expectedIntervalNanos);
-                                //}
 
                                 String version  = cluster.getVersionString();
                                 String metaData = "clusterId " + clusterId + "\n" +
@@ -378,10 +335,13 @@ public class HzCmd implements Serializable {
                                     metaData += setting.field +" "+ setting.value + "\n";
                                 }
 
-
                                 String fileName = clusterId+"_"+version+"_"+taskId+"_"+className+"_"+benchType+"_"+benchTypeCount+"_"+benchNumber;
 
-                                cluster.setOutPutFile(drivers, taskId, fileName);
+
+                                cluster.load(drivers, taskId, className);
+                                cluster.setThreadCount(drivers, taskId, threadCount);
+                                cluster.setBenchType(drivers, taskId, benchType, benchMarkSettings.getIntervalNanos(), false, fileName);
+
                                 cluster.writeMetaDataCmd(drivers, taskId, metaData);
                                 cluster.initBench(drivers, taskId);
                                 cluster.warmupBench(drivers, taskId, benchMarkSettings.getWarmupSec());
@@ -393,15 +353,13 @@ public class HzCmd implements Serializable {
                             }
                         }
                     }
-                    benchTypeCountMap.put(benchType, benchTypeCount);
+                    benchTypeCountMap.put(benchType.name(), benchTypeCount);
                 }
             }
         }
         cluster.downlonad(clusterId, "output");
+        chartAllJavaMetrics("output/" + clusterId);
 
-        if(benchMarkSettings.benchTypesContains(BenchType.Metrics)){
-            chartAllJavaMetrics("output/" + clusterId);
-        }
         System.out.println(Bash.ANSI_YELLOW + "The End" + Bash.ANSI_RESET);
     }
 

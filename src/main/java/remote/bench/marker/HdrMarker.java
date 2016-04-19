@@ -12,6 +12,10 @@ public class HdrMarker extends BenchMarker {
 
     private static Histogram histogram = new ConcurrentHistogram(TimeUnit.SECONDS.toNanos(30), 3);
 
+    public HdrMarker(long expectedIntervalNanos, boolean stop, String outFile){
+        super(expectedIntervalNanos, stop, outFile);
+    }
+
     public void preBench(String fileName){
         outputFileName = fileName;
         histogram.reset();
@@ -29,6 +33,14 @@ public class HdrMarker extends BenchMarker {
     }
 
     public void bench(Bench bench) throws Exception{
+        if(expectedIntervalNanos==0){
+            benchFlatOut(bench);
+        }else{
+            benchInterval(bench);
+        }
+    }
+
+    private void benchFlatOut(Bench bench) throws Exception{
         long startTime = System.currentTimeMillis();
         long endTime = startTime + (durationSeconds * 1000);
         while(System.currentTimeMillis() < endTime){
@@ -47,10 +59,9 @@ public class HdrMarker extends BenchMarker {
         }
     }
 
-    public void benchInterval(Bench bench) throws Exception{
+    private void benchInterval(Bench bench) throws Exception{
         long startTime = System.currentTimeMillis();
         long endTime = startTime + (durationSeconds * 1000);
-
         while(System.currentTimeMillis() < endTime){
 
             long start = System.nanoTime();

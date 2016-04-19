@@ -12,6 +12,7 @@ import java.util.Properties;
 
 import remote.bench.BenchContainer;
 import remote.bench.BenchManager;
+import remote.bench.BenchType;
 import remote.command.Cmd;
 
 import static remote.Utils.recordeException;
@@ -66,21 +67,10 @@ public abstract class Controler{
         }
     }
 
-    public void setStopAtException(String taskId, boolean stop){
+    public void setBenchType(String taskId, BenchType type, long intervalNanos, boolean stop, String outFile) {
         try {
-            benchManager.stopAtException(taskId, stop);
-            MQ.sendObj(REPLYQ, taskId+" stopAtException="+stop);
-        } catch (Exception e) {
-            try {
-                MQ.sendObj(REPLYQ, e);
-            } catch (JMSException e2) {}
-        }
-    }
-
-    public void setOutputFile(String taskId, String outputFile){
-        try {
-            benchManager.setOutputFileName(taskId, outputFile);
-            MQ.sendObj(REPLYQ, taskId+" outputFile="+outputFile);
+            benchManager.setBenchType(taskId, type, intervalNanos, stop, outFile);
+            MQ.sendObj(REPLYQ, taskId+" BenchType="+type+" intervalNanos="+intervalNanos+" stopAtException="+stop+" outFile="+outFile);
         } catch (Exception e) {
             try {
                 MQ.sendObj(REPLYQ, e);
@@ -193,5 +183,4 @@ public abstract class Controler{
                 "jvmPidId=" + jvmPidId +
                 '}';
     }
-
 }

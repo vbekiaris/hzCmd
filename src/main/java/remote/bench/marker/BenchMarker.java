@@ -11,9 +11,19 @@ import java.util.concurrent.TimeUnit;
 public abstract class BenchMarker {
 
     protected static boolean stopAtException=true;
-    protected static long expectedIntervalNanos = TimeUnit.MILLISECONDS.toNanos(1);
+    protected static long expectedIntervalNanos=0;
     protected static String outputFileName;
     protected static int durationSeconds;
+
+    public BenchMarker(long expectedIntervalNanos, boolean stop, String outFile){
+        this.expectedIntervalNanos = expectedIntervalNanos;
+        stopAtException = stop;
+        outputFileName = outFile;
+    }
+
+    public String getOutputFileName(){
+        return outputFileName;
+    }
 
     public void setDurationSeconds(int seconds){
         durationSeconds=seconds;
@@ -27,11 +37,9 @@ public abstract class BenchMarker {
 
     public abstract void bench(Bench bench) throws Exception;
 
-    public abstract void benchInterval(Bench bench) throws Exception;
-
-    public void writeMeataDataFile(String fileName, String metaData){
+    public void writeMeataDataFile(String metaData){
         try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(fileName+".meta.txt"));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(outputFileName+"-meta.txt"));
             bw.write(metaData);
             bw.close();
         } catch (IOException e) {

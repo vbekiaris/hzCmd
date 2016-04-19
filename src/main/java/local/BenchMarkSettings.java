@@ -3,6 +3,8 @@ package local;
 import remote.bench.BenchType;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -22,7 +24,7 @@ public class BenchMarkSettings implements Serializable {
 
     private String types="Metrics";
 
-    private long intervalNanos= TimeUnit.MILLISECONDS.toNanos(1);
+    private long intervalNanos= TimeUnit.MILLISECONDS.toNanos(0);
 
     public BenchMarkSettings(){}
 
@@ -35,7 +37,9 @@ public class BenchMarkSettings implements Serializable {
     }
 
     public void setIntervalByMsec(long intervalMillis) {
-        intervalNanos= TimeUnit.MILLISECONDS.toNanos(intervalMillis);
+
+        intervalNanos=TimeUnit.MILLISECONDS.toNanos(intervalMillis);
+
     }
 
     public void setType(String types) { this.types = types; }
@@ -65,20 +69,12 @@ public class BenchMarkSettings implements Serializable {
         return numbers;
     }
 
-    public String[] getTypes() {
-        return types.split(",");
-    }
-
-    public boolean benchTypesContains(BenchType type){
-
-        for (String name : getTypes()) {
-            BenchType t = BenchType.valueOf(name);
-
-            if(t.equals(type)){
-                return true;
-            }
+    public List<BenchType> getTypes() {
+        List<BenchType> list = new ArrayList();
+        for (String t : types.split(",")) {
+            list.add(BenchType.valueOf(t));
         }
-        return false;
+        return list;
     }
 
 
@@ -90,8 +86,8 @@ public class BenchMarkSettings implements Serializable {
         return durationSec;
     }
 
-    public String getIntervalNanos() {
-        return Long.toString(intervalNanos);
+    public long getIntervalNanos() {
+        return intervalNanos;
     }
 
     public int repeatCount(){ return repeatCount; }
