@@ -122,8 +122,7 @@ public abstract class RemoteJvm implements Serializable {
 
     public void kill() throws IOException, InterruptedException {
         if (pid != 0) {
-            String killinfo = box.killHard(pid);
-            System.out.println(killinfo);
+            box.killHard(pid);
             pid = 0;
         }
     }
