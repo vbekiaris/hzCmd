@@ -333,6 +333,7 @@ public class HzCmd implements Serializable {
                                                   "Clients " + cluster.getClientCount() + "\n" +
                                                   "drivers " + drivers + "\n" +
                                                   "benchType "+benchType+ "\n" +
+                                                  "interval "+benchMarkSettings.getIntervalNanos()+ "\n" +
                                                   "benchTypeID "+benchTypeCount + "\n" +
                                                   "taskID " + taskId + "\n" +
                                                   "class " + className + "\n" +
