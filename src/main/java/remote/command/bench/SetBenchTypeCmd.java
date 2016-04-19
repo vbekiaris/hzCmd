@@ -13,26 +13,26 @@ public class SetBenchTypeCmd implements Cmd, Serializable{
 
     private String taskId;
     private BenchType type;
-    private long nanos;
+    private long intervalNanos;
     private boolean stop;
     private String outFile;
 
-    public SetBenchTypeCmd(String taskId, BenchType type, long nanos, boolean stop, String outFile){
+    public SetBenchTypeCmd(String taskId, BenchType type, long intervalNanos, boolean stop, String outFile){
         this.taskId = taskId;
         this.type = type;
-        this.nanos = nanos;
+        this.intervalNanos = intervalNanos;
         this.stop = stop;
         this.outFile = outFile;
     }
 
     public void exicute(Controler c){
-        c.setBenchType(taskId, type, nanos, stop, outFile);
+        c.setBenchType(taskId, type, intervalNanos, stop, outFile);
     }
 
     @Override
     public String toString() {
         return "SetBenchTypeCmd{" +
-                "nanos=" + nanos +
+                "intervalNanos=" + intervalNanos +
                 ", taskId='" + taskId + '\'' +
                 ", type=" + type +
                 ", stop=" + stop +
