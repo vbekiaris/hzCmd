@@ -305,14 +305,6 @@ public class HzCmd implements Serializable {
                         for (int threadCount : benchMarkSettings.getThreads()) {
                             for (int repeater=0; repeater<benchMarkSettings.repeatCount(); repeater++) {
 
-                                for (FieldValue setting : settings) {
-                                    cluster.setField(drivers, taskId, setting.field, setting.value);
-                                }
-
-                                for (FieldValue field : bencher.getFieldsToSet(taskId)) {
-                                    cluster.setField(drivers, taskId, field.field, field.value);
-                                }
-
                                 String version  = cluster.getVersionString();
                                 String metaData = "clusterId " + clusterId + "\n" +
                                                   "version " + version + "\n" +
@@ -342,8 +334,16 @@ public class HzCmd implements Serializable {
                                 cluster.setThreadCount(drivers, taskId, threadCount);
                                 cluster.setBenchType(drivers, taskId, benchType, benchMarkSettings.getIntervalNanos(), false, fileName);
 
-                                cluster.writeMetaDataCmd(drivers, taskId, metaData);
+                                for (FieldValue setting : settings) {
+                                    cluster.setField(drivers, taskId, setting.field, setting.value);
+                                }
+
+                                for (FieldValue field : bencher.getFieldsToSet(taskId)) {
+                                    cluster.setField(drivers, taskId, field.field, field.value);
+                                }
                                 cluster.initBench(drivers, taskId);
+
+                                cluster.writeMetaDataCmd(drivers, taskId, metaData);
                                 cluster.warmupBench(drivers, taskId, benchMarkSettings.getWarmupSec());
                                 cluster.runBench(drivers, taskId,  benchMarkSettings.getDurationSec());
                                 cluster.cleanupBench(drivers, taskId);
