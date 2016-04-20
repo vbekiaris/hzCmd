@@ -32,63 +32,87 @@ public class MetricsMarker extends BenchMarker {
     }
 
     public void bench(Bench bench) throws Exception{
+
+        long startTime = System.currentTimeMillis();
+        long endTime = startTime + (durationSeconds * 1000);
         if(expectedIntervalNanos==0){
-            benchFlatOut(bench);
+            if(bench.isSelfDetermined()){
+                selfDeterminedBenchFlatOut(bench);
+            }else{
+                timeBenchFlatOut(bench, endTime);
+            }
         }else{
-            benchInterval(bench);
+            if(bench.isSelfDetermined()) {
+                selfDeterminedBenchInterval(bench);
+            }else{
+                timeBenchInterval(bench, endTime);
+            }
         }
     }
 
-    private void benchFlatOut(Bench bench) throws Exception{
+    private void timeBenchFlatOut(Bench bench, long endTime) throws Exception{
         com.codahale.metrics.Timer timer = metrics.timer(outputFileName);
-        com.codahale.metrics.Timer.Context context;
-
-        long startTime = System.currentTimeMillis();
-        long endTime = startTime + (durationSeconds * 1000);
         while(System.currentTimeMillis() < endTime){
-            context = timer.time();
-
-            try {
-                bench.timeStep();
-            }catch (Exception e){
-                Utils.recordeException(e);
-                if(stopAtException){
-                    throw e;
-                }
-            }
-
-            context.stop();
+            flatOut(bench, timer);
         }
         metrics.remove(outputFileName);
     }
 
-    private void benchInterval(Bench bench) throws Exception {
+    private void timeBenchInterval(Bench bench, long endTime) throws Exception {
         com.codahale.metrics.Timer timer = metrics.timer(outputFileName);
-        com.codahale.metrics.Timer.Context context;
-
-        long startTime = System.currentTimeMillis();
-        long endTime = startTime + (durationSeconds * 1000);
         while(System.currentTimeMillis() < endTime){
-            context = timer.time();
-            long start = System.nanoTime();
-
-            try {
-                bench.timeStep();
-            }catch (Exception e){
-                Utils.recordeException(e);
-                if(stopAtException){
-                    throw e;
-                }
-            }
-
-            context.stop();
-
-            long nextStart = start + expectedIntervalNanos;
-            while( System.nanoTime() < nextStart ) {
-                //busy-waiting until the next expected interval
-            }
+            interval(bench, timer);
         }
         metrics.remove(outputFileName);
     }
 
+    private void selfDeterminedBenchFlatOut(Bench bench) throws Exception{
+        com.codahale.metrics.Timer timer = metrics.timer(outputFileName);
+        while(bench.isRunning()){
+            flatOut(bench, timer);
+        }
+        metrics.remove(outputFileName);
+    }
+
+    private void selfDeterminedBenchInterval(Bench bench) throws Exception {
+        com.codahale.metrics.Timer timer = metrics.timer(outputFileName);
+        while(bench.isRunning()){
+            interval(bench, timer);
+        }
+        metrics.remove(outputFileName);
+    }
+
+
+
+    private void flatOut(Bench bench, com.codahale.metrics.Timer timer) throws Exception{
+        com.codahale.metrics.Timer.Context context = timer.time();
+        try {
+            bench.timeStep();
+        }catch (Exception e){
+            Utils.recordeException(e);
+            if(stopAtException){
+                throw e;
+            }
+        }
+        context.stop();
+    }
+
+    private void interval(Bench bench, com.codahale.metrics.Timer timer) throws Exception{
+        com.codahale.metrics.Timer.Context context = timer.time();
+        long start = System.nanoTime();
+        try {
+            bench.timeStep();
+        }catch (Exception e){
+            Utils.recordeException(e);
+            if(stopAtException){
+                throw e;
+            }
+        }
+        context.stop();
+
+        long nextStart = start + expectedIntervalNanos;
+        while( System.nanoTime() < nextStart ) {
+            //busy-waiting until the next expected interval
+        }
+    }
 }
