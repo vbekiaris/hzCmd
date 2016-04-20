@@ -5,5 +5,9 @@ public interface Bench {
     void timeStep()throws Exception;
     void cleanup();
 
+
+    boolean isSelfDetermined();
+    boolean isRunning();
+
     void setVendorObject(Object vendorObject);
 }

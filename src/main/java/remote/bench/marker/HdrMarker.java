@@ -34,55 +34,79 @@ public class HdrMarker extends BenchMarker {
     }
 
     public void bench(Bench bench) throws Exception{
+        long startTime = System.currentTimeMillis();
+        long endTime = startTime + (durationSeconds * 1000);
         if(expectedIntervalNanos==0){
-            benchFlatOut(bench);
+            if(bench.isSelfDetermined()){
+                selfDeterminedBenchFlatOut(bench);
+            }else{
+                timeBenchFlatOut(bench, endTime);
+            }
         }else{
-            benchInterval(bench);
+            if(bench.isSelfDetermined()) {
+                selfDeterminedBenchInterval(bench);
+            }else{
+                timeBenchInterval(bench, endTime);
+            }
         }
     }
 
-    private void benchFlatOut(Bench bench) throws Exception{
-        long startTime = System.currentTimeMillis();
-        long endTime = startTime + (durationSeconds * 1000);
+    private void timeBenchFlatOut(Bench bench, long endTime) throws Exception{
         while(System.currentTimeMillis() < endTime){
-
-            long start = System.nanoTime();
-            try {
-                bench.timeStep();
-            }catch (Exception e){
-                Utils.recordeException(e);
-                if(stopAtException){
-                    throw e;
-                }
-            }
-            long end = System.nanoTime();
-            histogram.recordValue(end-start);
+            flatOut(bench);
         }
     }
 
-    private void benchInterval(Bench bench) throws Exception{
-        long startTime = System.currentTimeMillis();
-        long endTime = startTime + (durationSeconds * 1000);
+    private void timeBenchInterval(Bench bench, long endTime) throws Exception{
         while(System.currentTimeMillis() < endTime){
+            interval(bench);
+        }
+    }
 
-            long start = System.nanoTime();
-            try {
-                bench.timeStep();
-            }catch (Exception e){
-                Utils.recordeException(e);
-                if(stopAtException){
-                    throw e;
-                }
+    private void selfDeterminedBenchFlatOut(Bench bench) throws Exception{
+        while(bench.isRunning()){
+            flatOut(bench);
+        }
+    }
+
+    private void selfDeterminedBenchInterval(Bench bench) throws Exception{
+        while(bench.isRunning()){
+            interval(bench);
+        }
+    }
+
+
+
+    private void flatOut(Bench bench) throws Exception{
+        long start = System.nanoTime();
+        try {
+            bench.timeStep();
+        }catch (Exception e){
+            Utils.recordeException(e);
+            if(stopAtException){
+                throw e;
             }
-            long end = System.nanoTime();
+        }
+        long end = System.nanoTime();
+        histogram.recordValue(end-start);
+    }
 
-            long elapsedNanos = end-start;
-            long nextStart = start + expectedIntervalNanos;
-            histogram.recordValueWithExpectedInterval(elapsedNanos, expectedIntervalNanos);
-
-            while( System.nanoTime() < nextStart ) {
-                //busy-waiting until the next expected interval
+    private void interval(Bench bench) throws Exception{
+        long start = System.nanoTime();
+        try {
+            bench.timeStep();
+        }catch (Exception e){
+            Utils.recordeException(e);
+            if(stopAtException){
+                throw e;
             }
+        }
+        long end = System.nanoTime();
+        histogram.recordValueWithExpectedInterval(end-start, expectedIntervalNanos);
+
+        long nextStart = start + expectedIntervalNanos;
+        while( System.nanoTime() < nextStart ) {
+            //busy-waiting until the next expected interval
         }
     }
 }

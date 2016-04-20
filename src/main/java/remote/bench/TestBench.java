@@ -47,4 +47,12 @@ public class TestBench implements Bench{
     public void cleanup(){
         System.out.println("clean up");
     }
+
+    public boolean isSelfDetermined() {
+        return false;
+    }
+
+    public boolean isRunning() {
+        return false;
+    }
 }
