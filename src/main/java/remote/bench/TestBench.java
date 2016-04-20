@@ -15,9 +15,13 @@ public class TestBench implements Bench{
         obj=vendorObject;
     }
 
+    public TestBench(){
+        System.out.println("constructor");
+    }
+
     public void init() {
         map = new HashMap();
-        System.out.println("bench 1 "+random +"  valueSize="+valueSize+"  vendorObject="+obj);
+        System.out.println("init bench 1 "+random +"  valueSize="+valueSize+"  vendorObject="+obj);
     }
 
     public void timeStep()throws Exception{

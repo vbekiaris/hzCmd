@@ -38,9 +38,9 @@ put@threads=2,8
         b.setField("A", "valueSize", "1001");
 
         b.init("A");
-        b.warmup("A", 6);
-        b.bench("A", 11);
-        b.cleanUp("A");
+        //b.warmup("A", 6);
+        //b.bench("A", 11);
+        //b.cleanUp("A");
     }
 
 }
