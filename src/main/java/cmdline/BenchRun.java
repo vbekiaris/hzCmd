@@ -12,14 +12,14 @@ public class BenchRun extends Command
     @Option(name = "-b", description = "taskId, comer sepreated list of benchmars, to run in parellel")
     public String bench;
 
-    @Option(name = "-warmup", description = "run a warmup default true")
-    public boolean warmup=true;
+    @Option(name = "-warmup", description = "run a warmup [true|false] default true")
+    public String warmup="true";
 
 
     public void exe(HzCmd hzCmd) {
         try {
-            hzCmd.invokeBenchMarks(clusterId, bench, warmup);
-            //hzCmd.invokeBenchMark(jvmId, threadCount, taskId);
+            boolean warmupBool = Boolean.parseBoolean(warmup);
+            hzCmd.invokeBenchMarks(clusterId, bench, warmupBool);
         } catch (Exception e) {
             e.printStackTrace();
         }
