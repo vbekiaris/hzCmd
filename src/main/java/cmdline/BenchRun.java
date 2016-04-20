@@ -12,12 +12,13 @@ public class BenchRun extends Command
     @Option(name = "-b", description = "taskId, comer sepreated list of benchmars, to run in parellel")
     public String bench;
 
-    @Option(name = "-threads", description = "thread count to b used running the benchmark")
-    public int threadCount=1;
+    @Option(name = "-warmup", description = "run a warmup default true")
+    public boolean warmup=true;
+
 
     public void exe(HzCmd hzCmd) {
         try {
-            hzCmd.invokeBenchMarks(clusterId, bench);
+            hzCmd.invokeBenchMarks(clusterId, bench, warmup);
             //hzCmd.invokeBenchMark(jvmId, threadCount, taskId);
         } catch (Exception e) {
             e.printStackTrace();

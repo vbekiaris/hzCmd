@@ -306,7 +306,7 @@ public class HzCmd implements Serializable {
         }
     }
 
-    public void invokeBenchMarks(String clusterId, String benchFile) throws Exception {
+    public void invokeBenchMarks(String clusterId, String benchFile, final boolean warmup) throws Exception {
         int benchNumber=0;
 
         Map<String, Integer> benchTypeCountMap = new HashMap();
@@ -371,7 +371,9 @@ public class HzCmd implements Serializable {
                                 }
                                 cluster.initBench(drivers, taskId);
 
-                                cluster.warmupBench(drivers, taskId, benchMarkSettings.getWarmupSec());
+                                if(warmup) {
+                                    cluster.warmupBench(drivers, taskId, benchMarkSettings.getWarmupSec());
+                                }
                                 cluster.runBench(drivers, taskId,  benchMarkSettings.getDurationSec());
                                 cluster.cleanupBench(drivers, taskId);
                                 cluster.writeMetaDataCmd(drivers, taskId, metaData);
