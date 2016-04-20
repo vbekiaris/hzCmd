@@ -14,7 +14,7 @@ public class BenchMarkSettings implements Serializable {
 
     private String drivers="Member";
 
-    private String threads="64";
+    private String threads="1";
 
     private int warmupSec=30;
 
