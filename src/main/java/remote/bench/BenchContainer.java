@@ -1,10 +1,13 @@
 package remote.bench;
 
+import jms.MQ;
+import remote.Controler;
 import remote.Utils;
 import remote.bench.marker.BenchMarker;
 import remote.bench.marker.HdrMarker;
 import remote.bench.marker.MetricsMarker;
 
+import javax.jms.JMSException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -133,6 +136,11 @@ public class BenchContainer {
 
             }catch (Exception e) {
                 e.printStackTrace();
+                try {
+                    MQ.sendObj(Controler.REPLYQ, e);
+                } catch (JMSException jmsError) {
+                    jmsError.printStackTrace();
+                }
             }
             return null;
         }

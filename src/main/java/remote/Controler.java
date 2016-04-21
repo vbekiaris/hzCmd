@@ -21,7 +21,7 @@ public abstract class Controler{
 
     private BenchManager benchManager;
     private static final String ID = System.getProperty(Args.ID.name());
-    private static final String REPLYQ = ID+"reply";
+    public static final String REPLYQ = ID+"reply";
     private static final String jvmPidId = ManagementFactory.getRuntimeMXBean().getName();
 
     public final NodeType type;
