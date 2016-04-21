@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public abstract class BenchMarker {
 
-    protected static boolean allowException =true;
+    protected static boolean allowException=false;
     protected static long expectedIntervalNanos=0;
     protected static String outputFileName;
     protected static int durationSeconds;

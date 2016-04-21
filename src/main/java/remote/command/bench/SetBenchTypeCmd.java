@@ -17,11 +17,11 @@ public class SetBenchTypeCmd implements Cmd, Serializable{
     private boolean allowException;
     private String outFile;
 
-    public SetBenchTypeCmd(String taskId, BenchType type, long intervalNanos, boolean stop, String outFile){
+    public SetBenchTypeCmd(String taskId, BenchType type, long intervalNanos, boolean allowException, String outFile){
         this.taskId = taskId;
         this.type = type;
         this.intervalNanos = intervalNanos;
-        this.allowException = stop;
+        this.allowException = allowException;
         this.outFile = outFile;
     }
 
