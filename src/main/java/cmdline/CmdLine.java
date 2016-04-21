@@ -43,7 +43,7 @@ public class CmdLine {
                 .withDescription("benchmarking tools")
                 .withDefaultCommand(Help.class)
                 .withCommands(BenchDriver.class, BenchThreads.class, BenchDuration.class, BenchWarmup.class,
-                              BenchTypes.class, BenchRun.class, BenchInterval.class, BenchRepeat.class, BenchExceptionAllowed.class);
+                              BenchTypes.class, BenchRun.class, BenchInterval.class, BenchRepeat.class, BenchAllowException.class);
 
         builder.withGroup("chart")
                 .withDescription("chart bench data gnuplot install required")
