@@ -155,8 +155,8 @@ public abstract class RemoteJvm implements Serializable {
         MQ.sendObj(id, new ThreadCountCmd(taskId, threadCount));
     }
 
-    public void setBenchType(String taskId, BenchType type, long intervalNanos, boolean stopAtException, String outFile) throws IOException, InterruptedException, JMSException{
-        MQ.sendObj(id, new SetBenchTypeCmd(taskId, type, intervalNanos, stopAtException, outFile) );
+    public void setBenchType(String taskId, BenchType type, long intervalNanos, boolean allowException, String outFile) throws IOException, InterruptedException, JMSException{
+        MQ.sendObj(id, new SetBenchTypeCmd(taskId, type, intervalNanos, allowException, outFile) );
     }
 
 

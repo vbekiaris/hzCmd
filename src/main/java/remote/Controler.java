@@ -67,10 +67,10 @@ public abstract class Controler{
         }
     }
 
-    public void setBenchType(String taskId, BenchType type, long intervalNanos, boolean stop, String outFile) {
+    public void setBenchType(String taskId, BenchType type, long intervalNanos, boolean allowException, String outFile) {
         try {
-            benchManager.setBenchType(taskId, type, intervalNanos, stop, outFile);
-            MQ.sendObj(REPLYQ, taskId+" BenchType="+type+" intervalNanos="+intervalNanos+" stopAtException="+stop+" outFile="+outFile);
+            benchManager.setBenchType(taskId, type, intervalNanos, allowException, outFile);
+            MQ.sendObj(REPLYQ, taskId+" BenchType="+type+" intervalNanos="+intervalNanos+" allowException="+allowException+" outFile="+outFile);
         } catch (Exception e) {
             try {
                 MQ.sendObj(REPLYQ, e);
@@ -114,7 +114,7 @@ public abstract class Controler{
     public void runBench(String taskId, int seconds){
         try {
             benchManager.bench(taskId, seconds);
-            MQ.sendObj(REPLYQ, taskId+" bench end");
+            MQ.sendObj(REPLYQ, taskId + " bench end");
         } catch (Exception e) {
             try {
                 MQ.sendObj(REPLYQ, e);

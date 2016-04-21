@@ -61,9 +61,9 @@ public class BenchManager {
         }
     }
 
-    public void setBenchType(String id, BenchType type, long expectedIntervalNanos, boolean stop, String outFile){
+    public void setBenchType(String id, BenchType type, long expectedIntervalNanos, boolean allowException, String outFile){
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
-            benchContainer.setBenchType(type, expectedIntervalNanos, stop, outFile);
+            benchContainer.setBenchType(type, expectedIntervalNanos, allowException, outFile);
         }
     }
 

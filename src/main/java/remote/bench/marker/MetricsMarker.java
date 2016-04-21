@@ -15,8 +15,8 @@ public class MetricsMarker extends BenchMarker {
     private int reportSecondsInterval = 5;
     private CsvReporter csvReporter;
 
-    public MetricsMarker(long expectedIntervalNanos, boolean stop ){
-        super(expectedIntervalNanos, stop);
+    public MetricsMarker(long expectedIntervalNanos, boolean allowException ){
+        super(expectedIntervalNanos, allowException);
     }
 
     public void preBench(String fileName){
@@ -90,7 +90,7 @@ public class MetricsMarker extends BenchMarker {
             bench.timeStep();
         }catch (Exception e){
             Utils.recordeException(e);
-            if(stopAtException){
+            if(!allowException){
                 throw e;
             }
         }
@@ -104,7 +104,7 @@ public class MetricsMarker extends BenchMarker {
             bench.timeStep();
         }catch (Exception e){
             Utils.recordeException(e);
-            if(stopAtException){
+            if(!allowException){
                 throw e;
             }
         }

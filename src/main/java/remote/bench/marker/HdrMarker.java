@@ -83,7 +83,7 @@ public class HdrMarker extends BenchMarker {
             bench.timeStep();
         }catch (Exception e){
             Utils.recordeException(e);
-            if(stopAtException){
+            if(!allowException){
                 throw e;
             }
         }
@@ -97,7 +97,7 @@ public class HdrMarker extends BenchMarker {
             bench.timeStep();
         }catch (Exception e){
             Utils.recordeException(e);
-            if(stopAtException){
+            if(!allowException){
                 throw e;
             }
         }
