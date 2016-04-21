@@ -343,6 +343,7 @@ public class HzCmd implements Serializable {
                                                   "benchTypeID "+benchTypeCount + "\n" +
                                                   "taskID " + taskId + "\n" +
                                                   "class " + className + "\n" +
+                                                  "allowException " + benchMarkSettings.getAllowException() + "\n" +
                                                   "threads " + threadCount + "\n" +
                                                   "warmupSec " + benchMarkSettings.getWarmupSec() + "\n" +
                                                   "benchSec " + benchMarkSettings.getDurationSec() + "\n" +
@@ -360,7 +361,7 @@ public class HzCmd implements Serializable {
 
                                 cluster.load(drivers, taskId, className);
                                 cluster.setThreadCount(drivers, taskId, threadCount);
-                                cluster.setBenchType(drivers, taskId, benchType, benchMarkSettings.getIntervalNanos(), false, fileName);
+                                cluster.setBenchType(drivers, taskId, benchType, benchMarkSettings.getIntervalNanos(), benchMarkSettings.getAllowException(), fileName);
 
                                 for (FieldValue setting : settings) {
                                     cluster.setField(drivers, taskId, setting.field, setting.value);
@@ -517,6 +518,10 @@ public class HzCmd implements Serializable {
 
     public void setBenchDrivers(String drivers){
         benchMarkSettings.setDrivers(drivers);
+    }
+
+    public void setBenchAllowException(boolean allow){
+        benchMarkSettings.setAllowException(allow);
     }
 
     public void setBenchThreadCounts(String threadsCount) {

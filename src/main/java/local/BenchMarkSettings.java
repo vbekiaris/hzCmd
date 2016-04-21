@@ -24,6 +24,8 @@ public class BenchMarkSettings implements Serializable {
 
     private String types="Metrics";
 
+    private boolean allowException=false;
+
     private long intervalNanos= TimeUnit.MILLISECONDS.toNanos(0);
 
     public BenchMarkSettings(){}
@@ -92,4 +94,12 @@ public class BenchMarkSettings implements Serializable {
 
     public int repeatCount(){ return repeatCount; }
 
+
+    public boolean getAllowException() {
+        return allowException;
+    }
+
+    public void setAllowException(boolean allowException) {
+        this.allowException = allowException;
+    }
 }
