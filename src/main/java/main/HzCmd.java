@@ -1,7 +1,7 @@
 package main;
 
-import cmdline.CmdLine;
-import cmdline.Command;
+import cmdline.main.CmdLine;
+import cmdline.base.Command;
 import global.ClusterSize;
 import local.*;
 import remote.bench.BenchType;

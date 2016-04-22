@@ -157,7 +157,6 @@ public class ClusterManager implements Serializable {
     }
 
 
-
     public void setBenchType(String jvmId, String taskId, BenchType type, long intervalNanos, boolean allowException, String outFile) throws IOException, InterruptedException, JMSException{
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.setBenchType(taskId, type, intervalNanos, allowException, outFile);
@@ -275,7 +274,6 @@ public class ClusterManager implements Serializable {
             }else{
                 jvm.startJvm(version, options, this, brokerIP);
             }
-            //jvm.getResponse()
         }
     }
 
