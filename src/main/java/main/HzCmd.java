@@ -229,6 +229,13 @@ public class HzCmd implements Serializable {
         }
     }
 
+
+    public void jps( ) throws IOException, InterruptedException {
+        for (ClusterManager c : clusters.values()) {
+            c.getBoxManager().jps();
+        }
+    }
+
     public void ls(String jvmId) throws Exception {
         for (ClusterManager c : clusters.values()) {
             c.ls(jvmId);

@@ -85,6 +85,11 @@ public class BoxManager implements Serializable {
         }
     }
 
+    public void jps() throws IOException, InterruptedException {
+        for (Box box : boxes) {
+            box.jps();
+        }
+    }
 
     public int size(){return boxes.size();}
 

@@ -24,7 +24,7 @@ public class CmdLine {
         builder.withDescription("Hazelcast cluster cmd line control")
                 .withDefaultCommand(Help.class)
                 .withCommands(Help.class, Info.class, Aws.class, Add.class, Set.class, MemberBox.class, Install.class,
-                              Kill.class, Restart.class, Cat.class, Tail.class, Grep.class, Download.class,
+                              Kill.class, Restart.class, Jps.class, Cat.class, Tail.class, Grep.class, Download.class,
                               Clean.class, Wipe.class, Load.class, Async.class, Sync.class, Exit.class, Listen.class,
                               Bench.class, Ssh.class, Ping.class, scpUp.class, UploadCwd.class, UploadLib.class, Broker.class,
                               Ls.class, Chart.class, Redis.class, ProcessJhicOutput.class, Bounce.class, RegressionCheck.class);
