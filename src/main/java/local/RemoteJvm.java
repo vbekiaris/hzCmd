@@ -16,7 +16,6 @@ import java.util.List;
 
 public abstract class RemoteJvm implements Serializable {
 
-
     public static final String outFile = "out.txt";
 
     protected String jhicAgent="";
@@ -39,7 +38,7 @@ public abstract class RemoteJvm implements Serializable {
         this.id = id;
         this.clusterId=clusterId;
         this.dir = Installer.REMOTE_HZCMD_ROOT + "/" + id;
-        box.ssh("mkdir -p " + dir);
+        box.mkdir(dir);
     }
 
     public abstract String getClassToRun();
