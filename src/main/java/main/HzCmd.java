@@ -11,7 +11,7 @@ import global.Args;
 import global.Bash;
 import global.ClusterType;
 import vendor.hz.HzJvmFactory;
-import jms.MQ;
+import mq.MQ;
 import vendor.redis.RedisJvmFactory;
 
 import javax.jms.JMSException;
@@ -33,7 +33,7 @@ public class HzCmd implements Serializable {
     private String brokerIP=null;
 
     public void listen() throws IOException, InterruptedException{
-        String eventQ = System.getProperty("user.dir")+"/"+Args.EVENTQ.name();
+        String eventQ = System.getProperty("user.dir")+"/"+"Some Type of Async Q for ERROR EVENTS";
         while (true){
             try {
                 Object o = MQ.receiveObj(eventQ);

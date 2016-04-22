@@ -22,6 +22,9 @@ put@threads=2,8
 
     public static void main(String[] args) throws Exception{
 
+        System.out.println(System.getProperty("user.dir"));
+
+
         String vendorObject = "Hz instance";
         BenchManager b = new BenchManager(vendorObject);
 
@@ -37,7 +40,7 @@ put@threads=2,8
 
         b.setField("A", "valueSize", "1001");
 
-        b.init("A");
+        //b.init("A");
         //b.warmup("A", 6);
         //b.bench("A", 11);
         //b.cleanUp("A");

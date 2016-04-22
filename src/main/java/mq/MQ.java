@@ -1,5 +1,6 @@
-package jms;
+package mq;
 
+import global.Args;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.jms.*;
@@ -21,7 +22,7 @@ public abstract class MQ {
     private static Destination replyDestination;
 
 
-    private static final String brokerIp = System.getProperty("MQ_BROKER_IP", "localhost");
+    private static final String brokerIp = System.getProperty(Args.MQIP.name(), "localhost");
 
     private static final String brokerUri = "tcp://"+brokerIp+":61616";
 

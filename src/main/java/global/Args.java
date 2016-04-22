@@ -1,6 +1,6 @@
 package global;
 
 public enum  Args{
-    members, ID, cluster, EVENTQ
+    members, ID, cluster, Q, MQIP,
 }
 

@@ -1,12 +1,10 @@
 package vendor.redis;
 
-import global.Args;
 import global.Bash;
 import global.NodeType;
-import jms.MQ;
+import mq.MQ;
 import local.Box;
 import local.ClusterManager;
-import local.Installer;
 import local.RemoteJvm;
 
 import java.io.IOException;

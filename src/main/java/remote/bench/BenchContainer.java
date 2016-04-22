@@ -1,6 +1,6 @@
 package remote.bench;
 
-import jms.MQ;
+import mq.MQ;
 import remote.Controler;
 import remote.Utils;
 import remote.bench.marker.BenchMarker;

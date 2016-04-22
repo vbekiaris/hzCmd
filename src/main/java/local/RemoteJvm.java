@@ -3,7 +3,7 @@ package local;
 import global.Args;
 import global.Bash;
 import global.NodeType;
-import jms.MQ;
+import mq.MQ;
 import remote.bench.BenchType;
 import remote.command.*;
 import remote.command.bench.*;
@@ -23,6 +23,8 @@ public abstract class RemoteJvm implements Serializable {
     protected final Box box;
     protected final NodeType type;
     protected final String id;
+    protected final String Q;
+    protected final String REPLYQ;
     protected final String clusterId;
 
     protected final String dir;
@@ -36,7 +38,9 @@ public abstract class RemoteJvm implements Serializable {
         this.box = box;
         this.type = type;
         this.id = id;
-        this.clusterId=clusterId;
+        this.Q = System.getProperty("user.dir")+"/"+id;
+        this.REPLYQ = Q+"reply";
+        this.clusterId = clusterId;
         this.dir = Installer.REMOTE_HZCMD_ROOT + "/" + id;
         box.mkdir(dir);
     }
@@ -67,9 +71,9 @@ public abstract class RemoteJvm implements Serializable {
         String classToRun = getClassToRun();
 
         jvmArgs +=" ";
-        jvmArgs += "-D"+"MQ_BROKER_IP="+brokerIP+" ";
-        jvmArgs += "-D"+Args.EVENTQ+"="+getEventQueueName() + " ";
-        jvmArgs += "-D"+Args.ID+"=" + id + " ";
+        jvmArgs += "-D"+Args.MQIP+"="+brokerIP+" ";
+        jvmArgs += "-D"+Args.Q+"="+Q+" ";
+        jvmArgs += "-D"+Args.ID+"="+id+" ";
         jvmArgs += "-XX:+HeapDumpOnOutOfMemoryError" + " ";
         jvmArgs += "-XX:HeapDumpPath="+id+".hprof" + " ";
         jvmArgs += "-XX:OnOutOfMemoryError=\" date >> " + id + ".oome" + "\" ";
@@ -90,17 +94,14 @@ public abstract class RemoteJvm implements Serializable {
         launchJvm(launchCmd);
     }
 
-    public String getEventQueueName(){
-        return  System.getProperty("user.dir")+"/"+Args.EVENTQ.name();
-    }
 
     public final void reStartJvm(ClusterManager myCluster) throws Exception {
         if(launchCmd==null){
-            System.out.println(Bash.ANSI_RED+"NO launchCmd, jvm never started"+this+Bash.ANSI_RESET);
+            System.out.println(Bash.ANSI_RED+"cant restart jvm never started"+this+Bash.ANSI_RESET);
             return;
         }
         if(  isRunning() ){
-            System.out.println(Bash.ANSI_RED+" JVM is Running "+this+Bash.ANSI_RESET);
+            System.out.println(Bash.ANSI_RED+"JVM is Running "+this+Bash.ANSI_RESET);
             return;
         }
         beforeJvmStart(myCluster);
@@ -124,10 +125,6 @@ public abstract class RemoteJvm implements Serializable {
         }
     }
 
-    public void exit() throws JMSException {
-        MQ.sendObj(id, new ExitCmd());
-    }
-
     public boolean isRunning() {
         try {
             if (pid == 0) {
@@ -146,62 +143,67 @@ public abstract class RemoteJvm implements Serializable {
         return false;
     }
 
+    public void exit() throws JMSException {
+        MQ.sendObj(Q, new ExitCmd());
+    }
+
     public void load(String taskId, String className) throws IOException, InterruptedException, JMSException {
-        MQ.sendObj(id, new LoadCmd(taskId, className) );
+        MQ.sendObj(Q, new LoadCmd(taskId, className) );
     }
 
     public void setThreadCount(String taskId, int threadCount) throws IOException, InterruptedException, JMSException {
-        MQ.sendObj(id, new ThreadCountCmd(taskId, threadCount));
+        MQ.sendObj(Q, new ThreadCountCmd(taskId, threadCount));
     }
 
     public void setBenchType(String taskId, BenchType type, long intervalNanos, boolean allowException, String outFile) throws IOException, InterruptedException, JMSException{
-        MQ.sendObj(id, new SetBenchTypeCmd(taskId, type, intervalNanos, allowException, outFile) );
+        MQ.sendObj(Q, new SetBenchTypeCmd(taskId, type, intervalNanos, allowException, outFile) );
     }
 
-
     public void writeMetaDataCmd(String taskId, String metaData) throws IOException, InterruptedException, JMSException {
-        MQ.sendObj(id, new MetaDataCmd(taskId, metaData) );
+        MQ.sendObj(Q, new MetaDataCmd(taskId, metaData) );
     }
 
     public void initBench(String taskId) throws IOException, InterruptedException, JMSException {
-        MQ.sendObj(id, new InitCmd(taskId) );
+        MQ.sendObj(Q, new InitCmd(taskId) );
     }
 
     public void warmupBench(String taskId, int seconds) throws IOException, InterruptedException, JMSException {
-        MQ.sendObj(id, new WarmupCmd(taskId, seconds) );
+        MQ.sendObj(Q, new WarmupCmd(taskId, seconds) );
     }
 
     public void runBench(String taskId, int seconds) throws IOException, InterruptedException, JMSException {
-        MQ.sendObj(id, new RunBenchCmd(taskId, seconds) );
+        MQ.sendObj(Q, new RunBenchCmd(taskId, seconds) );
     }
 
     public void cleanupBench(String taskId) throws IOException, InterruptedException, JMSException {
-        MQ.sendObj(id, new CleanUpCmd(taskId) );
+        MQ.sendObj(Q, new CleanUpCmd(taskId) );
     }
 
     public void setField(String taskId, String field, String value) throws Exception {
-        MQ.sendObj(id, new SetFieldCmd(taskId, field, value) );
+        MQ.sendObj(Q, new SetFieldCmd(taskId, field, value) );
     }
 
     public void invokeAsync(int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
-        MQ.sendObj(id, new InvokeAsyncCmd(threadCount, method, taskId) );
+        MQ.sendObj(Q, new InvokeAsyncCmd(threadCount, method, taskId) );
     }
 
     public void invokeSync(int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
-        MQ.sendObj(id, new InvokeSyncCmd(threadCount, method, taskId) );
+        MQ.sendObj(Q, new InvokeSyncCmd(threadCount, method, taskId) );
     }
 
     public void ping() throws IOException, InterruptedException, JMSException {
-        MQ.sendObj(id, new PingCmd() );
+        MQ.sendObj(Q, new PingCmd() );
     }
 
     public Object getResponse() throws IOException, InterruptedException, JMSException {
-        return MQ.receiveObj(id+"reply");
+        return MQ.receiveObj(REPLYQ);
     }
 
     public Object getResponse(long timeout) throws IOException, InterruptedException, JMSException {
-        return MQ.receiveObj(id+"reply", timeout);
+        return MQ.receiveObj(REPLYQ, timeout);
     }
+
+
 
     public String cat() throws IOException, InterruptedException {
         return box.cat(dir + "/" + outFile);
@@ -268,14 +270,14 @@ public abstract class RemoteJvm implements Serializable {
     public String toString() {
         boolean running = isRunning();
         String color = running ? Bash.ANSI_GREEN : Bash.ANSI_RED;
-        return color + "RemoteJvm{" +
-                " ID=" + id +
-                ", isRunning=" + running +
-                ", pid=" + pid +
-                ", lib=" + vendorLibDir +
-                ", dir=" + dir +
+        return color + "jvm{" +
+                " id=" + id +
+                " running=" + running +
+                " pid=" + pid +
+                " lib=" + vendorLibDir +
+                " dir=" + dir +
                 " ip=" + box +
-                '}' + Bash.ANSI_RESET;
+                "}" + Bash.ANSI_RESET;
     }
 
     public boolean isMember(){

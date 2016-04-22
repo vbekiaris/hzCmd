@@ -1,6 +1,6 @@
 package remote;
 
-import jms.MQ;
+import mq.MQ;
 
 import javax.jms.JMSException;
 import java.io.FileNotFoundException;
