@@ -48,7 +48,7 @@ public class CmdLine {
         builder.withGroup("chart")
                 .withDescription("chart bench data gnuplot install required")
                 .withDefaultCommand(Help.class)
-                .withCommands(ChartMetrics.class, ChartMetricsCompair.class, ChartHdrCompair.class);
+                .withCommands(ChartMetrics.class, ChartCompare.class, ChartMetricsCompair.class, ChartHdrCompair.class);
 
         builder.withGroup("redis")
                 .withDescription("init redis props")
