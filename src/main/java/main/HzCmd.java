@@ -506,17 +506,24 @@ public class HzCmd implements Serializable {
 
     public void chartComparisonMetrics(String dir, String red, String blue) throws IOException, InterruptedException {
         Bash.executeCommand("chart-ComparisonMetrics "+dir+" "+red+" "+blue);
-        //Bash.executeCommand("driver-wideMetrics "+dir+" "+red+" "+blue);
     }
 
     public void chartComparisonHdr(String dir, String red, String blue) throws IOException, InterruptedException {
         Bash.executeCommand("chart-allComparisonHdr "+dir+" "+red+" "+blue);
-        //Bash.executeCommand("driver-wideHdr "+dir+" "+red+" "+blue);
     }
 
     public void processJhicOutput(String dir) throws IOException, InterruptedException {
         Bash.executeCommand("process-hic "+dir);
     }
+
+    public void metricsRegresionCheck(String dir, String red, String blue) throws IOException, InterruptedException {
+        Bash.executeCommand("driver-wideMetrics "+dir+" "+red+" "+blue);
+    }
+
+    public void hdrRegresionCheck(String dir, String red, String blue) throws IOException, InterruptedException {
+        Bash.executeCommand("driver-wideHdr "+dir+" "+red+" "+blue);
+    }
+
 
     public void setBenchDrivers(String drivers){
         benchMarkSettings.setDrivers(drivers);

@@ -9,6 +9,9 @@ mkdir driverWideHdr
 find . -type f -name '*'${a}'*bench.hgrm' | xargs -n1 | sort | uniq > a.txt
 find . -type f -name '*'${b}'*bench.hgrm' | xargs -n1 | sort | uniq > b.txt
 
+[ -s a.txt ] || exit 0
+[ -s b.txt ] || exit 0
+
 for file in a.txt b.txt; do
  while read line; do
 
