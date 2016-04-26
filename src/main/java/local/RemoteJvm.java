@@ -271,7 +271,7 @@ public abstract class RemoteJvm implements Serializable {
         boolean running = isRunning();
         String color = running ? Bash.ANSI_GREEN : Bash.ANSI_RED;
         return color + "jvm{" +
-                " id=" + id +
+                "id=" + id +
                 " running=" + running +
                 " pid=" + pid +
                 " lib=" + vendorLibDir +
