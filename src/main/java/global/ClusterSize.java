@@ -1,10 +1,12 @@
 package global;
 
 public enum ClusterSize {
-    M4, XS, S, M, L, XL, XXL;
+    M4C40, M4, XS, S, M, L, XL, XXL;
 
     public static int getMemberCount(ClusterSize size){
         switch (size){
+            case M4C40:
+                return 4;
             case M4:
                 return 4;
             case XS:
@@ -26,6 +28,8 @@ public enum ClusterSize {
 
     public static int getClientCount(ClusterSize size){
         switch (size){
+            case M4C40:
+                return 40;
             case M4:
                 return 0;
             case XS:
