@@ -89,6 +89,10 @@ public abstract class RemoteJvm implements Serializable {
             jhicAgent = "-javaagent:jHiccup.jar=\""+jhicArgs+" -l "+clusterId+"-hiccuplog -c\"";
         }
 
+        if(properties.getBoolean(HzCmdProperties.JFR, "true") && type == NodeType.Member) {
+            jvmArgs += "-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=delay=2m,duration=30m,filename=member.jfr,settings=debug.jfc" + " ";
+        }
+
         launchCmd = "cd " + dir + "; nohup java "+jhicAgent+" -cp \"" + Installer.REMOTE_HZCMD_LIB_FULL_PATH+"/*" + ":" +  vendorLibDir+"/*"  + "\" " + jvmArgs + " " + jvmOptions + " " + classToRun + " >> " + outFile + " 2>&1 & echo $!";
 
         launchJvm(launchCmd);

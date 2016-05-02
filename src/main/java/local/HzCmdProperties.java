@@ -2,22 +2,8 @@ package local;
 
 
 import main.HzCmd;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.Properties;
-import java.util.Vector;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-/**
- * <a href="OrderedProperties.java.html"><b><i>View Source</i></b></a>
- *
- * @author Brian Wing Shun Chan
- *
- */
 public class HzCmdProperties extends OrderedProperties {
 
     public static final String clientOps = "clientOps";
@@ -28,6 +14,8 @@ public class HzCmdProperties extends OrderedProperties {
 
     public static final String jhic = "jhic";
     public static final String jhicArgs = "jhicArgs";
+
+    public static final String JFR = "jfr";
 
 
     public void writePropertie(String key, String value) throws IOException {
