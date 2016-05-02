@@ -90,7 +90,7 @@ public abstract class RemoteJvm implements Serializable {
         }
 
         if(properties.getBoolean(HzCmdProperties.JFR, "true") && type == NodeType.Member) {
-            jvmArgs += "-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=delay=1m,duration=1m,dumponexit=true,filename="+id+".jfr,settings=debug.jfc" + " ";
+            jvmArgs += "-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=delay=5m,duration=30m,dumponexit=true,filename="+id+".jfr,settings=debug.jfc" + " ";
             //jvmArgs += "-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=name="+id+".jfr,settings=debug.jfc -XX:FlightRecorderOptions=defaultrecording=true,disk=true,maxsize=1g,maxage=1h,dumponexit=true,dumponexitpath=./"+id+".jfr" + " ";
         }
 
