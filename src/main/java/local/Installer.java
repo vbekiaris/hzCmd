@@ -20,27 +20,28 @@ public abstract class Installer {
     public static void install(BoxManager boxes, JvmFactory jvmFactory, boolean ee,  String... versions) throws IOException, InterruptedException {
 
         String mainJars = Bash.find(M2_Repo, "hzCmd-1.0.1.jar");
+        String benchJars = Bash.find(M2_Repo, "hzCmd-bench-1.0.0.jar\n");
+
         String cacheJars = Bash.find(M2_Repo, "cache-api-1.0.0.jar");
-        //String guavaars = Bash.find(M2_Repo, "guava-15.0-rc1.jar");
         String hdr = Bash.find(M2_Repo, "HdrHistogram-2.1.8.jar");
         String mq = Bash.find(M2_Repo, "activemq-all-5.13.0.jar");
         //String mq = Bash.find(M2_Repo, "activemq-client-5.13.2.jar");
         String metrics = Bash.find(M2_Repo, "metrics-core-3.1.1.jar");
         String slf4j = Bash.find(M2_Repo, "slf4j-api-1.7.7.jar");
-        String chronicle = Bash.find(M2_Repo, "chronicle-3.6.0.jar");
+        //String chronicle = Bash.find(M2_Repo, "chronicle-3.6.0.jar");
         String lang = Bash.find(M2_Repo, "lang-6.7.6.jar");
 
 
 
         boxes.mkdir(REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(mainJars, REMOTE_HZCMD_ROOT_LIB);
+        boxes.upload(benchJars, REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(cacheJars, REMOTE_HZCMD_ROOT_LIB);
-        //boxes.upload(guavaars, REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(hdr, REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(mq, REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(metrics, REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(slf4j, REMOTE_HZCMD_ROOT_LIB);
-        boxes.upload(chronicle, REMOTE_HZCMD_ROOT_LIB);
+        //boxes.upload(chronicle, REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(lang, REMOTE_HZCMD_ROOT_LIB);
 
         for (String version : versions) {
