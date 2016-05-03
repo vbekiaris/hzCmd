@@ -16,6 +16,7 @@ public class HzCmdProperties extends OrderedProperties {
     public static final String jhicArgs = "jhicArgs";
 
     public static final String JFR = "jfr";
+    public static final String JFRARGS = "jfrArgs";
 
 
     public void writePropertie(String key, String value) throws IOException {
