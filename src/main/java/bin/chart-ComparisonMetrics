@@ -33,14 +33,18 @@ while read line; do
   meta=${meta%bench.csv}
   meta=${meta%warmup.csv}
   meta=${meta}".meta.txt"
+  echo ${meta}
   meta=$(find . -type f -name ${meta} -print -quit)
+  echo ${meta} "found"
   cp ${meta} ${basepath}/${f[0]}'-VS-'${f[1]}
 
   meta=${f[1]}
   meta=${meta%bench.csv}
   meta=${meta%warmup.csv}
   meta=${meta}".meta.txt"
+  echo ${meta}
   meta=$(find . -type f -name ${meta} -print -quit)
+  echo ${meta} "found"
   cp ${meta} ${basepath}/${f[0]}'-VS-'${f[1]}
 
 done < a-and-b.txt
