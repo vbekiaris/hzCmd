@@ -318,11 +318,6 @@ public class HzCmd implements Serializable {
     public void invokeBenchMark(String clusterId, String benchFile, final boolean warmup) throws Exception {
         int benchNumber=0;
 
-        Map<String, Integer> benchTypeCountMap = new HashMap();
-        for (BenchType type : benchMarkSettings.getTypes()) {
-            benchTypeCountMap.put(type.name(), new Integer(0));
-        }
-
         ClusterManager cluster = clusters.get(clusterId);
 
         BenchManager bencher = new BenchManager(benchFile);
@@ -334,7 +329,6 @@ public class HzCmd implements Serializable {
                 String className = bencher.getClassName(taskId);
 
                 for (BenchType benchType : benchMarkSettings.getTypes()) {
-                    Integer benchTypeCount = benchTypeCountMap.get(benchType.name());
 
                     for (List<FieldValue> settings : bencher.getSettings(taskId)) {
 
@@ -349,7 +343,6 @@ public class HzCmd implements Serializable {
                                                   "drivers " + drivers + "\n" +
                                                   "benchType "+benchType+ "\n" +
                                                   "interval "+benchMarkSettings.getIntervalNanos()+ "\n" +
-                                                  "benchTypeID "+benchTypeCount + "\n" +
                                                   "taskID " + taskId + "\n" +
                                                   "class " + className + "\n" +
                                                   "allowException " + benchMarkSettings.getAllowException() + "\n" +
@@ -365,7 +358,7 @@ public class HzCmd implements Serializable {
                                     metaData += setting.field +" "+ setting.value + "\n";
                                 }
 
-                                String fileName = clusterId+"_"+version+"_"+taskId+"_"+className+"_"+benchType+"_"+benchTypeCount+"_"+benchNumber;
+                                String fileName = clusterId+"_"+version+"_"+taskId+"_"+className+"_"+benchNumber;
 
 
                                 cluster.load(drivers, taskId, className);
@@ -389,11 +382,9 @@ public class HzCmd implements Serializable {
                                 cluster.writeMetaDataCmd(drivers, taskId, metaData);
 
                                 benchNumber++;
-                                benchTypeCount++;
                             }
                         }
                     }
-                    benchTypeCountMap.put(benchType.name(), benchTypeCount);
                 }
             }
         }
