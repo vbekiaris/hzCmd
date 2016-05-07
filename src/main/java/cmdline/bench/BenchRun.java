@@ -20,7 +20,7 @@ public class BenchRun extends Command
     public void exe(HzCmd hzCmd) {
         try {
             boolean warmupBool = Boolean.parseBoolean(warmup);
-            hzCmd.invokeBenchMarks(clusterId, bench, warmupBool);
+            hzCmd.invokeBenchMark(clusterId, bench, warmupBool);
         } catch (Exception e) {
             e.printStackTrace();
         }

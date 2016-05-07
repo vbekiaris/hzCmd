@@ -315,7 +315,7 @@ public class HzCmd implements Serializable {
         }
     }
 
-    public void invokeBenchMarks(String clusterId, String benchFile, final boolean warmup) throws Exception {
+    public void invokeBenchMark(String clusterId, String benchFile, final boolean warmup) throws Exception {
         int benchNumber=0;
 
         Map<String, Integer> benchTypeCountMap = new HashMap();
