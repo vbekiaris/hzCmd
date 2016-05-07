@@ -389,7 +389,7 @@ public class HzCmd implements Serializable {
             }
         }
         cluster.downlonad(clusterId, "output");
-        chartAllJavaMetrics("output/" + clusterId);
+        //chartAllJavaMetrics("output/" + clusterId);
 
         System.out.println(Bash.ANSI_YELLOW + "The End" + Bash.ANSI_RESET);
     }
