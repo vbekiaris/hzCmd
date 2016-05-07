@@ -32,7 +32,7 @@ while read line; do
   meta=${f[0]}
   meta=${meta%bench.csv}
   meta=${meta%warmup.csv}
-  meta=${meta}".meta.txt"
+  meta=${meta}"meta.txt"
   echo ${meta}
   meta=$(find . -type f -name ${meta} -print -quit)
   echo ${meta} "found"
@@ -41,7 +41,7 @@ while read line; do
   meta=${f[1]}
   meta=${meta%bench.csv}
   meta=${meta%warmup.csv}
-  meta=${meta}".meta.txt"
+  meta=${meta}"meta.txt"
   echo ${meta}
   meta=$(find . -type f -name ${meta} -print -quit)
   echo ${meta} "found"
