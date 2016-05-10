@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+agentsFile=${1:-agents.txt}
+
+lines=($(cat ${agentsFile}))
+
+for line in "${lines[@]}" ; do
+
+ id=$(echo ${line} | awk -F',' '{print $3}' )
+ aws ec2 terminate-instances --instance-ids ${id}
+
+done
+
+echo "" > ${agentsFile}
