@@ -13,7 +13,7 @@ outputFile=${8}
 tryCount=0
 while (( ${count} != 0 )) ; do
 
- aws-create ${count} ${imageId} ${region} ${instanceType} ${key} ${subnetId} ${placement} ${outputFile}
+ aws-getBox ${count} ${imageId} ${region} ${instanceType} ${key} ${subnetId} ${placement} ${outputFile}
  aws-Terminate-brokenBox ${outputFile}
   count=$?
 
