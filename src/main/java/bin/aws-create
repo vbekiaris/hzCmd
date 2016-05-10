@@ -3,7 +3,7 @@
 count=${1}
 imageId=${2}
 region=${3}
-instanceType={4}
+instanceType=${4}
 key=${5}
 subnetId=${6}
 placement=${7}
