@@ -13,12 +13,12 @@ outputFile=${8}
 tryCount=0
 while (( ${count} != 0 )) ; do
 
- ./aws-create ${count} ${imageId} ${region} ${instanceType} ${key} ${subnetId} ${placement} ${outputFile}
- ./aws-Terminate-brokenBox ${outputFile}
+ aws-create ${count} ${imageId} ${region} ${instanceType} ${key} ${subnetId} ${placement} ${outputFile}
+ aws-Terminate-brokenBox ${outputFile}
   count=$?
 
  if (( tryCount++ > 2 )) ; then
-   ./aws-terminate ${outputFile}
+   aws-terminate ${outputFile}
    exit 1;
  fi
 
