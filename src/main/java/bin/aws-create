@@ -14,8 +14,9 @@ tryCount=0
 while (( ${count} != 0 )) ; do
 
  aws-getBox ${count} ${imageId} ${region} ${instanceType} ${key} ${subnetId} ${placement} ${outputFile}
+ sleep 30
  aws-Terminate-brokenBox ${outputFile}
-  count=$?
+ count=$?
 
  if (( tryCount++ > 2 )) ; then
    aws-terminate ${outputFile}
