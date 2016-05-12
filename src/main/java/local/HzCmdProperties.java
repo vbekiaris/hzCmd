@@ -18,6 +18,7 @@ public class HzCmdProperties extends OrderedProperties {
     public static final String JFR = "jfr";
     public static final String JFRARGS = "jfrArgs";
 
+    public static final String GCLOG = "gclog";
 
     public void writePropertie(String key, String value) throws IOException {
         writePropertie(HzCmd.propertiesFile, key, value);
