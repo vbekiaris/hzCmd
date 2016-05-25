@@ -83,6 +83,14 @@ public abstract class MQ {
         return  ((ObjectMessage) consumer.receive(time)).getObject();
     }
 
+    public static Object receiveMsgNoWait(String queueName) throws JMSException {
+        MessageConsumer consumer = getMessageConsumer(queueName);
+        return consumer.receiveNoWait();
+    }
+
+    public void drainQ(String queueName) throws JMSException {
+        while( MQ.receiveMsgNoWait(queueName) != null) { }
+    }
 
     private static MessageProducer getMessageProducer(String queueName) throws JMSException {
         if ( ! producerMap.containsKey(queueName) ){
