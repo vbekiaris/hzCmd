@@ -88,7 +88,7 @@ public abstract class MQ {
         return consumer.receiveNoWait();
     }
 
-    public void drainQ(String queueName) throws JMSException {
+    public static void drainQ(String queueName) throws JMSException {
         while( MQ.receiveMsgNoWait(queueName) != null) { }
     }
 

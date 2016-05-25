@@ -386,4 +386,9 @@ public class ClusterManager implements Serializable {
         return jvmFactory;
     }
 
+    public void drainQ() throws JMSException {
+        for(RemoteJvm jvm : jvms.values()){
+            jvm.drainQ();
+        }
+    }
 }

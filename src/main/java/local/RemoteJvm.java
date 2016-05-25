@@ -217,7 +217,10 @@ public abstract class RemoteJvm implements Serializable {
         return MQ.receiveObj(REPLYQ, timeout);
     }
 
-
+    public void drainQ() throws JMSException {
+        MQ.drainQ(Q);
+        MQ.drainQ(REPLYQ);
+    }
 
     public String cat() throws IOException, InterruptedException {
         return box.cat(dir + "/" + outFile);
