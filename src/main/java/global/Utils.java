@@ -53,4 +53,10 @@ public abstract class Utils {
             mod += p;
         return min_inclusive+mod;
     }
+
+    public static void printStringIfNotEmpty(String str, String color){
+        if(str != null && !str.isEmpty()){
+            System.out.println(color+str+Bash.ANSI_RESET);
+        }
+    }
 }

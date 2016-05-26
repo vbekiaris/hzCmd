@@ -14,6 +14,8 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
+import static global.Utils.printStringIfNotEmpty;
+
 public abstract class RemoteJvm implements Serializable {
 
     public static final String outFile = "out.txt";
@@ -226,6 +228,10 @@ public abstract class RemoteJvm implements Serializable {
         return box.cat(dir + "/" + outFile);
     }
 
+    public String findException() throws IOException, InterruptedException {
+        return box.find(dir, "exception.txt");
+    }
+
     public String findHprof() throws IOException, InterruptedException {
         return box.find(dir, "*.hprof");
     }
@@ -234,16 +240,21 @@ public abstract class RemoteJvm implements Serializable {
         return box.find(dir, "*.oome");
     }
 
-    public String findException() throws IOException, InterruptedException {
-        return box.find(dir, "exception.txt");
-    }
-
     public String findHsError() throws IOException, InterruptedException {
         return box.find(dir, "hs_err_pid*");
     }
 
-    public String findErrors() throws IOException, InterruptedException {
-        return findHprof()+"\n"+findOOME()+"\n"+findException()+"\n"+findHsError();
+    public void printErrors() throws IOException, InterruptedException {
+        String e = findException();
+        String oom = findOOME();
+        String hprof = findHprof();
+        String hs = findHsError();
+
+        System.out.println(this);
+        printStringIfNotEmpty(e, Bash.ANSI_RED);
+        printStringIfNotEmpty(oom, Bash.ANSI_RED);
+        printStringIfNotEmpty(hprof, Bash.ANSI_RED);
+        printStringIfNotEmpty(hs, Bash.ANSI_RED);
     }
 
 
