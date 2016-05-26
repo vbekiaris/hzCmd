@@ -83,6 +83,11 @@ public abstract class MQ {
         return  ((ObjectMessage) consumer.receive(time)).getObject();
     }
 
+    public static Message receiveMsg(String queueName, long time) throws JMSException {
+        MessageConsumer consumer = getMessageConsumer(queueName);
+        return consumer.receive(time);
+    }
+
     public static Object receiveMsgNoWait(String queueName) throws JMSException {
         MessageConsumer consumer = getMessageConsumer(queueName);
         return consumer.receiveNoWait();
@@ -90,18 +95,17 @@ public abstract class MQ {
 
     public static void drainQ(String queueName) throws JMSException {
 
-        while( MQ.receiveMsgNoWait(queueName) != null) {
-            System.out.println(queueName+" drain");
-        }
+        //while( MQ.receiveMsgNoWait(queueName) != null) {
+        //    System.out.println(queueName+" drain");
+        //}
 
-        /*
         int count = 0;
         Message msg = null;
-        while ((msg = co(timeout)) != null) {
+        while ((msg = MQ.receiveMsg(queueName, 500)) != null) {
             count++;
         }
         System.out.println(count + " msgs removed from queue: " + queueName);
-        */
+
     }
 
     private static MessageProducer getMessageProducer(String queueName) throws JMSException {
