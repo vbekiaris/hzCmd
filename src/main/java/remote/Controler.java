@@ -45,6 +45,7 @@ public abstract class Controler{
 
     public void startEmbeddedObject() throws Exception{
         System.out.println(this);
+        System.err.println("startEmbeddedObject "+this);
         try {
             init(type);
             benchManager = new BenchManager(getVendorObject());
