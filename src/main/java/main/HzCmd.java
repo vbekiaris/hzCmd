@@ -148,23 +148,20 @@ public class HzCmd implements Serializable {
     }
 
     public void addMembers(String clusterId, int qty, String version, String jvmOptions, String cwdfiles) throws Exception {
-        List<RemoteJvm> added = new ArrayList();
         for (ClusterManager c : clusters.values()) {
             if(c.matchClusterId(clusterId)){
-                added.addAll(c.addMembers(qty, version, jvmOptions, cwdfiles));
+                c.addMembers(qty, version, jvmOptions, cwdfiles);
             }
         }
-        checkAddJvms(added);
+
     }
 
     public void addClients(String clusterId, int qty, String version, String jvmOptions, String cwdfiles) throws Exception {
-        List<RemoteJvm> added = new ArrayList();
         for (ClusterManager c : clusters.values()) {
-            if(c.matchClusterId(clusterId)){
-                added.addAll(c.addClients(qty, version, jvmOptions, cwdfiles));
+            if (c.matchClusterId(clusterId)) {
+                c.addClients(qty, version, jvmOptions, cwdfiles);
             }
         }
-        checkAddJvms(added);
     }
 
     public void restart(String jvmId, String version,  String options) throws Exception {
@@ -173,11 +170,8 @@ public class HzCmd implements Serializable {
         }
     }
 
-    private void checkAddJvms(List<RemoteJvm> added) throws JMSException, IOException, InterruptedException {
-        for (RemoteJvm jvm : added) {
-            System.out.println(jvm);
-        }
-        for (RemoteJvm jvm : added) {
+    private void checkAddJvms(RemoteJvm jvm) throws JMSException, IOException, InterruptedException {
+
             Object o = jvm.getResponse();
 
             if(o instanceof Exception){
@@ -187,7 +181,7 @@ public class HzCmd implements Serializable {
             }else{
                 System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
             }
-        }
+
     }
 
     public void exit(String jvmId) throws Exception {

@@ -64,23 +64,21 @@ public class ClusterManager implements Serializable {
     }
 
 
-    public List<RemoteJvm> addMembers(int qty, String version, String options, String cwdFiles) throws Exception {
-        return addJvms(qty, version, options, cwdFiles, NodeType.Member);
+    public void addMembers(int qty, String version, String options, String cwdFiles) throws Exception {
+         addJvms(qty, version, options, cwdFiles, NodeType.Member);
     }
 
-    public List<RemoteJvm> addClients(int qty, String version, String options, String cwdFiles) throws Exception {
-        return addJvms(qty, version, options, cwdFiles, NodeType.Client);
+    public void addClients(int qty, String version, String options, String cwdFiles) throws Exception {
+         addJvms(qty, version, options, cwdFiles, NodeType.Client);
     }
 
-    private List<RemoteJvm> addJvms(int qty, String version, String options, String cwdFiles, NodeType type) throws Exception {
-        List<RemoteJvm> added = new ArrayList();
+    private void addJvms(int qty, String version, String options, String cwdFiles, NodeType type) throws Exception {
         for(int i=0; i<qty; i++) {
-            added.add(addJvm(version, options, cwdFiles, type));
+            addJvm(version, options, cwdFiles, type);
         }
-        return added;
     }
 
-    private RemoteJvm addJvm(String jarVersion, String options, String cwdFiles, NodeType type) throws Exception {
+    private void addJvm(String jarVersion, String options, String cwdFiles, NodeType type) throws Exception {
         int idx;
         int count;
         if(type == NodeType.Member) {
@@ -95,7 +93,17 @@ public class ClusterManager implements Serializable {
         jvms.put(jvm.getId(), jvm);
 
         jvm.startJvm(options, jvmFactory.getVendorLibDir(jarVersion), this, brokerIP);
-        return jvm;
+
+        Object o = jvm.getResponse();
+
+        if(o instanceof Exception){
+            Exception e = (Exception) o;
+            System.out.println(Bash.ANSI_RED+" "+e+" "+e.getCause()+Bash.ANSI_RESET);
+            e.printStackTrace();
+        }else{
+            System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
+        }
+
     }
 
     public int getMemberCount( ) {
