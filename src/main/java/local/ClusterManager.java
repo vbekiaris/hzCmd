@@ -140,6 +140,13 @@ public class ClusterManager implements Serializable {
         return matching;
     }
 
+    public void restartEmbeddedObject(String jvmId) throws IOException, InterruptedException, JMSException{
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+            jvm.restartEmbeddedObject();
+        }
+        getResponse(jvmId);
+    }
+
     public void load(String jvmId, String taskId, String className) throws IOException, InterruptedException, JMSException{
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.load(taskId, className);

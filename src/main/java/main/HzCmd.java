@@ -202,6 +202,12 @@ public class HzCmd implements Serializable {
         }
     }
 
+    public void restartEmbeddedObject(String jvmId) throws Exception {
+        for (ClusterManager c : clusters.values()) {
+            c.restartEmbeddedObject(jvmId);
+        }
+    }
+
     public void bounce(String jvmId, int durationSec, int initialDelaySec, int restartDelaySec, int iterationDelaySec) throws Exception {
 
         Thread.sleep(initialDelaySec * 1000);

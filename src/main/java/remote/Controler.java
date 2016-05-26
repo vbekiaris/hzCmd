@@ -31,6 +31,10 @@ public abstract class Controler{
     public Controler(NodeType type) throws Exception {
         this.type=type;
         printProperties();
+        startEmbeddedObject();
+    }
+
+    public void startEmbeddedObject() throws Exception{
         System.out.println(this);
         try {
             init(type);
@@ -154,7 +158,7 @@ public abstract class Controler{
         }
     }
 
-    public void run() throws IOException {
+    public void run() throws Exception {
         while (true){
             try {
                 Object obj = MQ.receiveObj(Q);
