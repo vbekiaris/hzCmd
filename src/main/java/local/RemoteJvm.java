@@ -244,17 +244,15 @@ public abstract class RemoteJvm implements Serializable {
         return box.find(dir, "hs_err_pid*");
     }
 
-    public void printErrors() throws IOException, InterruptedException {
+    public boolean printErrors() throws IOException, InterruptedException {
         String e = findException();
         String oom = findOOME();
         String hprof = findHprof();
         String hs = findHsError();
 
         System.out.println(this);
-        printStringIfNotEmpty(e, Bash.ANSI_RED);
-        printStringIfNotEmpty(oom, Bash.ANSI_RED);
-        printStringIfNotEmpty(hprof, Bash.ANSI_RED);
-        printStringIfNotEmpty(hs, Bash.ANSI_RED);
+        return printStringIfNotEmpty(e, Bash.ANSI_RED) || printStringIfNotEmpty(oom, Bash.ANSI_RED) ||
+               printStringIfNotEmpty(hprof, Bash.ANSI_RED) || printStringIfNotEmpty(hs, Bash.ANSI_RED);
     }
 
 

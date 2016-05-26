@@ -299,6 +299,14 @@ public class ClusterManager implements Serializable {
         }
     }
 
+    public boolean printErrors(String jvmId) throws IOException, InterruptedException {
+        boolean error=false;
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+            error = error || jvm.printErrors();
+        }
+        return error;
+    }
+
     public void ls(String jvmId) throws IOException, InterruptedException {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             System.out.println(jvm);

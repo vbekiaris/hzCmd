@@ -266,6 +266,14 @@ public class HzCmd implements Serializable {
         }
     }
 
+    public boolean printErrors(String jvmId) throws IOException, InterruptedException {
+        boolean error=false;
+        for (ClusterManager c : clusters.values()) {
+            error = error || c.printErrors(jvmId);
+        }
+        return error;
+    }
+
     public void clean(String jvmId) throws Exception {
         for (ClusterManager c : clusters.values()) {
             c.clean(jvmId);
