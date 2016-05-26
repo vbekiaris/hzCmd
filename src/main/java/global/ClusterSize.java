@@ -35,7 +35,7 @@ public enum ClusterSize {
             case M4C80:
                 return 80;
             case M4C400:
-                return 100;
+                return 400;
             case M4:
                 return 0;
             case XS:
