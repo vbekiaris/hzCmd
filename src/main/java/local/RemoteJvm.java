@@ -251,8 +251,8 @@ public abstract class RemoteJvm implements Serializable {
         String hs = findHsError();
 
         System.out.println(this);
-        return printStringIfNotEmpty(e, Bash.ANSI_RED) || printStringIfNotEmpty(oom, Bash.ANSI_RED) ||
-               printStringIfNotEmpty(hprof, Bash.ANSI_RED) || printStringIfNotEmpty(hs, Bash.ANSI_RED);
+        return printStringIfNotEmpty(e, Bash.ANSI_RED) | printStringIfNotEmpty(oom, Bash.ANSI_RED) |
+               printStringIfNotEmpty(hprof, Bash.ANSI_RED) | printStringIfNotEmpty(hs, Bash.ANSI_RED);
     }
 
 

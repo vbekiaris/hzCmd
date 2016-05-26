@@ -269,7 +269,7 @@ public class HzCmd implements Serializable {
     public boolean printErrors(String jvmId) throws IOException, InterruptedException {
         boolean error=false;
         for (ClusterManager c : clusters.values()) {
-            error = error || c.printErrors(jvmId);
+            error |= c.printErrors(jvmId);
         }
         return error;
     }
