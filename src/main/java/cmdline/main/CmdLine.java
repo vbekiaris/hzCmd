@@ -27,7 +27,8 @@ public class CmdLine {
                               Kill.class, Restart.class, Jps.class, Cat.class, Tail.class, Grep.class, Download.class,
                               Clean.class, Wipe.class, Load.class, Async.class, Sync.class, Exit.class, Listen.class,
                               Bench.class, Ssh.class, Ping.class, scpUp.class, UploadCwd.class, UploadLib.class, Broker.class,
-                              Ls.class, Chart.class, Redis.class, ProcessJhicOutput.class, Bounce.class, RegressionCheck.class, Check.class);
+                              Ls.class, Chart.class, Redis.class, ProcessJhicOutput.class, Bounce.class, RegressionCheck.class,
+                              Check.class, RestartEmbedded.class);
 
         builder.withGroup("aws")
                 .withDescription("aws create ec2 instances needs aws ec2 cmd line tools installed")
