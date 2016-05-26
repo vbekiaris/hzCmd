@@ -31,7 +31,16 @@ public abstract class Controler{
     public Controler(NodeType type) throws Exception {
         this.type=type;
         printProperties();
-        startEmbeddedObject();
+        System.out.println(this);
+        try {
+            init(type);
+            benchManager = new BenchManager(getVendorObject());
+            MQ.sendObj(REPLYQ, ID+" Started");
+        }catch (Exception e){
+            recordeException(e);
+            MQ.sendObj(REPLYQ, e);
+            throw e;
+        }
     }
 
     public void startEmbeddedObject() throws Exception{
@@ -39,7 +48,7 @@ public abstract class Controler{
         try {
             init(type);
             benchManager = new BenchManager(getVendorObject());
-            MQ.sendObj(REPLYQ, ID+" Started");
+            MQ.sendObj(REPLYQ, ID+" Re Started Embedded");
         }catch (Exception e){
             recordeException(e);
             MQ.sendObj(REPLYQ, e);
