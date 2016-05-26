@@ -89,7 +89,19 @@ public abstract class MQ {
     }
 
     public static void drainQ(String queueName) throws JMSException {
-        while( MQ.receiveMsgNoWait(queueName) != null) { }
+
+        while( MQ.receiveMsgNoWait(queueName) != null) {
+            System.out.println("drain");
+        }
+
+        /*
+        int count = 0;
+        Message msg = null;
+        while ((msg = co(timeout)) != null) {
+            count++;
+        }
+        System.out.println(count + " msgs removed from queue: " + queueName);
+        */
     }
 
     private static MessageProducer getMessageProducer(String queueName) throws JMSException {

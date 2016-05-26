@@ -289,8 +289,11 @@ public class HzCmd implements Serializable {
     public void wipe( ) throws IOException, InterruptedException, JMSException {
         for (ClusterManager c : clusters.values()) {
             c.getBoxManager().killAllJava();
+        }
+        for (ClusterManager c : clusters.values()) {
             c.drainQ();
         }
+
         clusters.clear();
 
         for (BoxManager boxManager : boxes.values()) {
