@@ -91,7 +91,7 @@ public abstract class MQ {
     public static void drainQ(String queueName) throws JMSException {
 
         while( MQ.receiveMsgNoWait(queueName) != null) {
-            System.out.println("drain");
+            System.out.println(queueName+" drain");
         }
 
         /*
