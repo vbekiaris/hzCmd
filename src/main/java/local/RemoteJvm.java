@@ -164,6 +164,7 @@ public abstract class RemoteJvm implements Serializable {
     }
 
     public void restartEmbeddedObject() throws JMSException {
+        System.out.println("restart embedded "+id);
         MQ.sendObj(Q, new RestartEmbeddedObjectCmd() );
     }
 
