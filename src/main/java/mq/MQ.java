@@ -97,12 +97,12 @@ public abstract class MQ {
 
 
         int count = 0;
-        //while ( MQ.receiveMsg(queueName, 500) != null) {
-        //    count++;
-        //}
-        while( MQ.receiveMsgNoWait(queueName) != null) {
+        while ( MQ.receiveMsg(queueName, 500) != null) {
             count++;
         }
+        //while( MQ.receiveMsgNoWait(queueName) != null) {
+        //    count++;
+        //}
 
         System.out.println(count + " msgs removed from queue: " + queueName);
 
