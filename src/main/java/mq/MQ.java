@@ -97,7 +97,7 @@ public abstract class MQ {
 
 
         int count = 0;
-        while ( MQ.receiveMsg(queueName, 500) != null) {
+        while ( MQ.receiveMsg(queueName, 10) != null) {
             count++;
         }
         //while( MQ.receiveMsgNoWait(queueName) != null) {
