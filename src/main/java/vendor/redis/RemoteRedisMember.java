@@ -35,11 +35,11 @@ public class RemoteRedisMember extends RemoteJvm {
     }
 
 
-    public final void startJvm(String jvmOptions, String vendorLibDir, ClusterManager myCluster, String brokerIP) throws Exception {
+    public final String startJvm(String jvmOptions, String vendorLibDir, ClusterManager myCluster, String brokerIP) throws Exception {
 
         if (isRunning()) {
             System.out.println(Bash.ANSI_CYAN+"all ready started " + this +Bash.ANSI_RESET);
-            return;
+            return "";
         }
 
         beforeJvmStart(myCluster);
@@ -64,6 +64,8 @@ public class RemoteRedisMember extends RemoteJvm {
         System.out.println("redis-server pid="+pid);
 
         MQ.sendObj(id + "reply", "started "+id);
+
+        return "";
     }
 
     public static String getRedisInstallHome(){
