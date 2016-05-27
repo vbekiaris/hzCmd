@@ -1,5 +1,7 @@
 package local;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import global.Bash;
 import global.NodeType;
 import remote.bench.BenchType;
@@ -19,6 +21,7 @@ public class ClusterManager implements Serializable {
     private BoxManager boxes;
     private Map<String, RemoteJvm> jvms = new HashMap();
 
+    private Multimap<Box, String> lauchMap = ArrayListMultimap.create();
     private int membersOnlyCount;
     private int memberCount=0;
     private int clientCount=0;
@@ -76,6 +79,20 @@ public class ClusterManager implements Serializable {
         for(int i=0; i<qty; i++) {
             addJvm(version, options, cwdFiles, type);
         }
+
+
+        for (Box box : lauchMap.keySet()) {
+            File fout = new File(box.pub+"launch.sh");
+            FileOutputStream fos = new FileOutputStream(fout);
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+
+            for (String s : lauchMap.get(box)) {
+                bw.write(s);
+                bw.newLine();
+            }
+
+            bw.close();
+        }
     }
 
     private void addJvm(String jarVersion, String options, String cwdFiles, NodeType type) throws Exception {
@@ -92,8 +109,11 @@ public class ClusterManager implements Serializable {
         jvm.uploadcwd(cwdFiles);
         jvms.put(jvm.getId(), jvm);
 
-        jvm.startJvm(options, jvmFactory.getVendorLibDir(jarVersion), this, brokerIP);
+        String lauchStr = jvm.startJvm(options, jvmFactory.getVendorLibDir(jarVersion), this, brokerIP);
 
+        lauchMap.put(boxes.get(idx), lauchStr);
+
+        /*
         Object o = jvm.getResponse();
 
         if(o instanceof Exception){
@@ -103,6 +123,7 @@ public class ClusterManager implements Serializable {
         }else{
             System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
         }
+        */
 
     }
 

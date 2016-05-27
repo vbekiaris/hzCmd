@@ -54,13 +54,13 @@ public abstract class RemoteJvm implements Serializable {
     public abstract String setJvmStartOptions(Box thisBox, ClusterManager myCluster) throws Exception;
 
 
-    public void startJvm(String jvmOptions, String libDir, ClusterManager myCluster, String brokerIP) throws Exception {
+    public String startJvm(String jvmOptions, String libDir, ClusterManager myCluster, String brokerIP) throws Exception {
 
         this.vendorLibDir = libDir;
 
         if (isRunning()) {
             System.out.println(Bash.ANSI_CYAN+"all ready started " + this +Bash.ANSI_RESET);
-            return;
+            return "";
         }
 
         beforeJvmStart(myCluster);
@@ -105,9 +105,10 @@ public abstract class RemoteJvm implements Serializable {
         }
 
 
-        launchCmd = "cd " + dir + "; nohup java "+jhicAgent+" -cp \"" + Installer.REMOTE_HZCMD_LIB_FULL_PATH+"/*" + ":" +  vendorLibDir+"/*"  + "\" " + jvmArgs + " " + jvmOptions + " " + classToRun + " >> " + outFile + " 2>&1 & echo $!";
+        launchCmd = "cd " + dir + "; nohup java "+jhicAgent+" -cp \"" + Installer.REMOTE_HZCMD_LIB_FULL_PATH+"/*" + ":" +  vendorLibDir+"/*"  + "\" " + jvmArgs + " " + jvmOptions + " " + classToRun + " >> " + outFile + " 2>&1 & echo $! ; cd -";
 
-        launchJvm(launchCmd);
+        return launchCmd;
+        //launchJvm(launchCmd);
     }
 
 
