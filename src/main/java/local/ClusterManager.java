@@ -105,7 +105,7 @@ public class ClusterManager implements Serializable {
             Bash.chmodExe(fout.getName());
             box.scpUp(fout.getName(), ".");
             String pids = box.ssh("./"+fout.getName());
-            System.out.println(pids);
+            //System.out.println(pids);
 
             String delim = " \n";
             StringTokenizer st = new StringTokenizer(pids,delim);
