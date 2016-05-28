@@ -6,5 +6,5 @@ fi
 
 activemq start > /dev/null
 
-ops="-Xms8g -Xmx8g"
+ops="-Xms1g -Xmx1g"
 java -cp "${HZ_CMD_BIN}/*:${HZ_CMD_BIN}/dependency/*" ${ops} main.HzCmd $@
