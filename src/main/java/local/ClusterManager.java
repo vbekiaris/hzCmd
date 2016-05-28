@@ -85,6 +85,7 @@ public class ClusterManager implements Serializable {
         List<String> files = jvmFactory.stuffToUpload(this);
 
 
+        List<RemoteJvm> addJvms = new ArrayList<RemoteJvm>(qty);
         for (Box box : lauchMap.keySet()) {
 
             for (String file : files) {
@@ -108,23 +109,28 @@ public class ClusterManager implements Serializable {
 
             String delim = " \n";
             StringTokenizer st = new StringTokenizer(pids,delim);
+
             while (st.hasMoreTokens()) {
                 String pid = st.nextToken();
                 String jmvId = st.nextToken();
 
-                jvms.get(jmvId).setPid(pid);
-
-                Object o = jvms.get(jmvId).getResponse();
-
-                if(o instanceof Exception){
-                    Exception e = (Exception) o;
-                    System.out.println(Bash.ANSI_RED+" "+e+" "+e.getCause()+Bash.ANSI_RESET);
-                    e.printStackTrace();
-                }else{
-                    System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
-                }
+                RemoteJvm jvm = jvms.get(jmvId);
+                addJvms.add(jvm);
+                jvm.setPid(pid);
             }
         }
+
+        for (RemoteJvm addJvm : addJvms) {
+            Object o = addJvm.getResponse();
+            if(o instanceof Exception){
+                Exception e = (Exception) o;
+                System.out.println(Bash.ANSI_RED+" "+e+" "+e.getCause()+Bash.ANSI_RESET);
+                e.printStackTrace();
+            }else{
+                System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
+            }
+        }
+
 
         /*
         Object o = jvm.getResponse();
