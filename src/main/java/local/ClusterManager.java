@@ -105,6 +105,25 @@ public class ClusterManager implements Serializable {
             box.scpUp(fout.getName(), ".");
             String pids = box.ssh("./"+fout.getName());
             System.out.println(pids);
+
+            String delim = " \n";
+            StringTokenizer st = new StringTokenizer(pids,delim);
+            while (st.hasMoreTokens()) {
+                String pid = st.nextToken();
+                String jmvId = st.nextToken();
+
+                jvms.get(jmvId).setPid(pid);
+
+                Object o = jvms.get(jmvId).getResponse();
+
+                if(o instanceof Exception){
+                    Exception e = (Exception) o;
+                    System.out.println(Bash.ANSI_RED+" "+e+" "+e.getCause()+Bash.ANSI_RESET);
+                    e.printStackTrace();
+                }else{
+                    System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
+                }
+            }
         }
 
         /*

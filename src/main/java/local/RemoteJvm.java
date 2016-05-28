@@ -328,4 +328,8 @@ public abstract class RemoteJvm implements Serializable {
         return type == NodeType.Client;
     }
 
+    public void setPid(String pid) {
+        int p = Integer.parseInt(pid);
+        this.pid = p;
+    }
 }
