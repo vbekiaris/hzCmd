@@ -4,11 +4,18 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import global.Bash;
 import global.NodeType;
+import mq.MQ;
+import remote.Controler;
+import remote.bench.Bench;
 import remote.bench.BenchType;
 
 import javax.jms.JMSException;
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static global.Utils.rangeMap;
 
@@ -84,9 +91,27 @@ public class ClusterManager implements Serializable {
 
         List<String> files = jvmFactory.stuffToUpload(this);
 
-
-        List<RemoteJvm> addJvms = new ArrayList<RemoteJvm>(qty);
+        ExecutorService executor = Executors.newFixedThreadPool(lauchMap.keySet().size());
         for (Box box : lauchMap.keySet()) {
+            executor.submit( new Runner( box, files ) );
+        }
+        executor.shutdown();
+        executor.awaitTermination(1, TimeUnit.DAYS);
+    }
+
+
+    private  class Runner implements Callable<Object> {
+
+        private Box box;
+        private List<String> files;
+
+        public Runner(Box box, List<String> files){
+            this.box=box;
+            this.files=files;
+        }
+
+        public Object call() throws IOException, InterruptedException, JMSException {
+
 
             for (String file : files) {
                 box.scpUp(file, ".");
@@ -105,7 +130,6 @@ public class ClusterManager implements Serializable {
             Bash.chmodExe(fout.getName());
             box.scpUp(fout.getName(), ".");
             String pids = box.ssh("./"+fout.getName());
-            //System.out.println(pids);
 
             String delim = " \n";
             StringTokenizer st = new StringTokenizer(pids,delim);
@@ -115,35 +139,24 @@ public class ClusterManager implements Serializable {
                 String jmvId = st.nextToken();
 
                 RemoteJvm jvm = jvms.get(jmvId);
-                addJvms.add(jvm);
                 jvm.setPid(pid);
+
+                Object o = jvm.getResponse();
+
+                if(o instanceof Exception){
+                    Exception e = (Exception) o;
+                    System.out.println(Bash.ANSI_RED+" "+e+" "+e.getCause()+Bash.ANSI_RESET);
+                    e.printStackTrace();
+                }else{
+                    System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
+                }
             }
+
+            return null;
         }
-
-        for (RemoteJvm addJvm : addJvms) {
-            Object o = addJvm.getResponse();
-            if(o instanceof Exception){
-                Exception e = (Exception) o;
-                System.out.println(Bash.ANSI_RED+" "+e+" "+e.getCause()+Bash.ANSI_RESET);
-                e.printStackTrace();
-            }else{
-                System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
-            }
-        }
-
-
-        /*
-        Object o = jvm.getResponse();
-
-        if(o instanceof Exception){
-            Exception e = (Exception) o;
-            System.out.println(Bash.ANSI_RED+" "+e+" "+e.getCause()+Bash.ANSI_RESET);
-            e.printStackTrace();
-        }else{
-            System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
-        }
-        */
     }
+
+
 
     private void addJvm(String jarVersion, String options, String cwdFiles, NodeType type) throws Exception {
         int idx;
