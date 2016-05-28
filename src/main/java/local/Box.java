@@ -80,6 +80,14 @@ public class Box implements Serializable{
         return ssh("jps");
     }
 
+    public void scpUp(String from, String to) throws IOException, InterruptedException {
+        Bash.scpUp(user, pub, from, to);
+    }
+
+    public void scpDown(String from, String to) throws IOException, InterruptedException {
+        Bash.scpDown(user, pub, from, to);
+    }
+
     public String toString() {
         return "Box{" +
                 "user="+user+
@@ -87,5 +95,7 @@ public class Box implements Serializable{
                 ", pri=" + pri +
                 '}';
     }
+
+
 }
 

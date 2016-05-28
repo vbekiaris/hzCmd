@@ -36,6 +36,10 @@ public abstract class Bash {
         executeCommand("mkdir -p " + dir);
     }
 
+    public static void chmodExe(String file) throws IOException, InterruptedException {
+        executeCommand("chmod +x " + file);
+    }
+
     public static String rmDir(String dir) throws IOException, InterruptedException {
         return executeCommand("rm -fr " + dir);
     }

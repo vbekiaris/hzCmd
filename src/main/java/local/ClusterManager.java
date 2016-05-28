@@ -21,7 +21,7 @@ public class ClusterManager implements Serializable {
     private BoxManager boxes;
     private Map<String, RemoteJvm> jvms = new HashMap();
 
-    private Multimap<Box, String> lauchMap = ArrayListMultimap.create();
+    private Multimap<Box, String> lauchMap;
     private int membersOnlyCount;
     private int memberCount=0;
     private int clientCount=0;
@@ -76,14 +76,15 @@ public class ClusterManager implements Serializable {
     }
 
     private void addJvms(int qty, String version, String options, String cwdFiles, NodeType type) throws Exception {
-        for(int i=0; i<qty; i++) {
+
+        lauchMap = ArrayListMultimap.create();
+        for (int i = 0; i < qty; i++) {
             addJvm(version, options, cwdFiles, type);
         }
 
 
-
         for (Box box : lauchMap.keySet()) {
-            File fout = new File(box.pub+"launch.sh");
+            File fout = new File(box.pub + "launch.sh");
             FileOutputStream fos = new FileOutputStream(fout);
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
 
@@ -91,9 +92,25 @@ public class ClusterManager implements Serializable {
                 bw.write(s);
                 bw.newLine();
             }
-
             bw.close();
+
+            Bash.chmodExe(fout.getName());
+            box.scpUp(fout.getName(), ".");
+            String pids = box.ssh("./"+fout.getName());
+            System.out.println(pids);
         }
+
+        /*
+        Object o = jvm.getResponse();
+
+        if(o instanceof Exception){
+            Exception e = (Exception) o;
+            System.out.println(Bash.ANSI_RED+" "+e+" "+e.getCause()+Bash.ANSI_RESET);
+            e.printStackTrace();
+        }else{
+            System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
+        }
+        */
     }
 
     private void addJvm(String jarVersion, String options, String cwdFiles, NodeType type) throws Exception {
@@ -113,18 +130,6 @@ public class ClusterManager implements Serializable {
         String lauchStr = jvm.startJvm(options, jvmFactory.getVendorLibDir(jarVersion), this, brokerIP);
 
         lauchMap.put(boxes.get(idx), lauchStr);
-
-        /*
-        Object o = jvm.getResponse();
-
-        if(o instanceof Exception){
-            Exception e = (Exception) o;
-            System.out.println(Bash.ANSI_RED+" "+e+" "+e.getCause()+Bash.ANSI_RESET);
-            e.printStackTrace();
-        }else{
-            System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
-        }
-        */
 
     }
 
