@@ -7,10 +7,12 @@ import mq.MQ;
 import remote.bench.BenchType;
 import remote.command.*;
 import remote.command.bench.*;
+import vendor.hz.HzXml;
 
 import javax.jms.JMSException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -44,10 +46,16 @@ public abstract class RemoteJvm implements Serializable {
         this.REPLYQ = Q+"reply";
         this.clusterId = clusterId;
         this.dir = Installer.REMOTE_HZCMD_ROOT + "/" + id;
-        box.mkdir(dir);
+
+        //don't make the dir's one by one,
+        //box.mkdir(dir);
     }
 
     public abstract String getClassToRun();
+
+    public abstract List<String> stuffToUpload(ClusterManager myCluster) throws Exception;
+
+    public abstract List<String> stuffToPutInDir(ClusterManager myCluster) throws Exception;
 
     public abstract void beforeJvmStart(ClusterManager myCluster) throws Exception;
 
@@ -80,8 +88,6 @@ public abstract class RemoteJvm implements Serializable {
         jvmArgs += "-XX:HeapDumpPath="+id+".hprof" + " ";
         jvmArgs += "-XX:OnOutOfMemoryError=\" date >> " + id + ".oome" + "\" ";
 
-        //String takipiJavaAgent = "-agentlib:TakipiAgent";    String takipiProp = "\"-Dtakipi.name=\"" + id;
-
         HzCmdProperties properties = new HzCmdProperties();
         if(properties.getBoolean(HzCmdProperties.jhic, "false")) {
             String hz_cmd_src = System.getenv("HZ_CMD_SRC");
@@ -104,8 +110,12 @@ public abstract class RemoteJvm implements Serializable {
             jvmArgs +="-XX:+PrintGCTimeStamps -XX:+PrintGCDetails -XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCApplicationConcurrentTime" + " ";
         }
 
+        String stuffToCpIntoDir = new String();
+        for (String s : stuffToPutInDir(myCluster)) {
+            stuffToCpIntoDir += "cp "+s+" "+dir+" ; ";
+        }
 
-        launchCmd = "cd " + dir + "; nohup java "+jhicAgent+" -cp \"" + Installer.REMOTE_HZCMD_LIB_FULL_PATH+"/*" + ":" +  vendorLibDir+"/*"  + "\" " + jvmArgs + " " + jvmOptions + " " + classToRun + " >> " + outFile + " 2>&1 & echo $! ; cd -";
+        launchCmd = "mkdir -p "+dir+"; "+stuffToCpIntoDir+" cd "+dir+" ; nohup java "+jhicAgent+" -cp \"" + Installer.REMOTE_HZCMD_LIB_FULL_PATH+"/*" + ":" +  vendorLibDir+"/*"  + "\" " + jvmArgs + " " + jvmOptions + " " + classToRun + " >> " + outFile + " 2>&1 & echo $! "+id+" ; cd - > /dev/null";
 
         return launchCmd;
         //launchJvm(launchCmd);

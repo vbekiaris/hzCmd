@@ -81,6 +81,7 @@ public class ClusterManager implements Serializable {
         }
 
 
+
         for (Box box : lauchMap.keySet()) {
             File fout = new File(box.pub+"launch.sh");
             FileOutputStream fos = new FileOutputStream(fout);

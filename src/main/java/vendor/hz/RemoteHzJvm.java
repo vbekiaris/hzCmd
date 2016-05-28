@@ -6,6 +6,8 @@ import local.ClusterManager;
 import local.RemoteJvm;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class RemoteHzJvm extends RemoteJvm {
@@ -21,16 +23,34 @@ public class RemoteHzJvm extends RemoteJvm {
         return HzClient.class.getName();
     }
 
-    public void beforeJvmStart(ClusterManager myCluster) throws Exception{
+    public List<String> stuffToUpload(ClusterManager myCluster) throws Exception{
 
         HzXml.makeMemberXml(myCluster);
         HzXml.makeClientXml(myCluster);
 
+        List<String> upStuff = new ArrayList<String>();
+
+        upStuff.add(HzXml.memberXmlFileForCluster(myCluster));
+        upStuff.add(HzXml.clientXmlFileForCluster(myCluster));
+
+        return upStuff;
+    }
+
+    public List<String> stuffToPutInDir(ClusterManager myCluster) throws Exception{
+
+        List<String> upStuff = new ArrayList<String>();
+
         if ( isMember() ) {
-            box.upload(HzXml.memberXmlFileForCluster(myCluster), dir + "/" + "hazelcast.xml");
+            upStuff.add("hazelcast.xml");
         }else {
-            box.upload(HzXml.clientXmlFileForCluster(myCluster), dir + "/" + "client-hazelcast.xml");
+            upStuff.add("client-hazelcast.xml");
         }
+
+        return upStuff;
+    }
+
+    public void beforeJvmStart(ClusterManager myCluster) throws Exception{
+
     }
 
     public String setJvmStartOptions(Box thisBox, ClusterManager myCluster) throws Exception {
