@@ -36,6 +36,12 @@ public class GgJvmFactory implements JvmFactory, Serializable {
         return jars;
     }
 
+    public List<String> stuffToUpload(ClusterManager myCluster) throws Exception{
+        List<String> upStuff = new ArrayList<String>();
+
+        return upStuff;
+    }
+
     public void clusterInit(BoxManager boxes) {
 
     }

@@ -20,4 +20,7 @@ public interface JvmFactory {
     void clusterInit(BoxManager boxes);
 
     void membersAdded(List<RemoteJvm> memberJvms) throws IOException, InterruptedException;
+
+    List<String> stuffToUpload(ClusterManager myCluster) throws Exception;
+
 }

@@ -8,6 +8,7 @@ import local.ClusterManager;
 import local.RemoteJvm;
 
 import java.io.IOException;
+import java.util.List;
 
 
 public class RemoteRedisMember extends RemoteJvm {
@@ -23,6 +24,11 @@ public class RemoteRedisMember extends RemoteJvm {
             return RedisMember.class.getName();
         }
         return RedisClient.class.getName();
+    }
+
+    @Override
+    public List<String> stuffToPutInDir() throws Exception {
+        return null;
     }
 
     public void beforeJvmStart(ClusterManager myCluster) throws Exception {

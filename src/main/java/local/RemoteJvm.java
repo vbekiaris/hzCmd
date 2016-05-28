@@ -53,9 +53,7 @@ public abstract class RemoteJvm implements Serializable {
 
     public abstract String getClassToRun();
 
-    public abstract List<String> stuffToUpload(ClusterManager myCluster) throws Exception;
-
-    public abstract List<String> stuffToPutInDir(ClusterManager myCluster) throws Exception;
+    public abstract List<String> stuffToPutInDir() throws Exception;
 
     public abstract void beforeJvmStart(ClusterManager myCluster) throws Exception;
 
@@ -111,7 +109,7 @@ public abstract class RemoteJvm implements Serializable {
         }
 
         String stuffToCpIntoDir = new String();
-        for (String s : stuffToPutInDir(myCluster)) {
+        for (String s : stuffToPutInDir()) {
             stuffToCpIntoDir += "cp "+s+" "+dir+" ; ";
         }
 

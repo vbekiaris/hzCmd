@@ -24,6 +24,11 @@ public class RemoteGemJvm extends RemoteJvm {
         return GemClient.class.getName();
     }
 
+    @Override
+    public List<String> stuffToPutInDir() throws Exception {
+        return null;
+    }
+
     public void beforeJvmStart(ClusterManager myCluster) throws Exception{
 
         if(isMember()) {

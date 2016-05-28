@@ -82,8 +82,15 @@ public class ClusterManager implements Serializable {
             addJvm(version, options, cwdFiles, type);
         }
 
+        List<String> files = jvmFactory.stuffToUpload(this);
+
 
         for (Box box : lauchMap.keySet()) {
+
+            for (String file : files) {
+                box.scpUp(file, ".");
+            }
+
             File fout = new File(box.pub + "launch.sh");
             FileOutputStream fos = new FileOutputStream(fout);
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
