@@ -20,17 +20,10 @@ import org.xml.sax.SAXException;
 
 public class HzXml {
 
-    public static final String xmlDir="xml";
-    static {
-        try {
-            Bash.mkdir(xmlDir);
-        } catch (Exception e) {
-           throw new RuntimeException(e);
-        }
-    }
+    public static final String xmlDir="config-hz";
 
-    public static final String memberXml = "config-hz/hazelcast.xml";
-    public static final String clientXml = "config-hz/client-hazelcast.xml";
+    public static final String memberXml = xmlDir+"/hazelcast.xml";
+    public static final String clientXml = xmlDir+"/client-hazelcast.xml";
 
     public static void makeMemberXml(ClusterManager m) throws Exception{
 
@@ -44,6 +37,7 @@ public class HzXml {
             document.getElementsByTagName("tcp-ip").item(0).appendChild(member);
         }
 
+        Bash.mkdir(xmlDir+"/"+m.getClusterId());
         writeXmlFile(document, memberXmlFileForCluster(m));
     }
 
@@ -129,6 +123,7 @@ public class HzXml {
             document.getElementsByTagName("cluster-members").item(0).appendChild(member);
         }
 
+        Bash.mkdir(xmlDir+"/"+m.getClusterId());
         writeXmlFile(document, clientXmlFileForCluster(m));
     }
 
@@ -158,10 +153,10 @@ public class HzXml {
     }
 
     public static String memberXmlFileForCluster(ClusterManager m ){
-        return xmlDir+"/"+m.getClusterId()+"-"+ "hazelcast.xml";
+        return xmlDir+"/"+m.getClusterId()+"/"+ "hazelcast.xml";
     }
 
     public static String clientXmlFileForCluster(ClusterManager m ){
-        return xmlDir+"/"+m.getClusterId()+"-"+ "client-hazelcast.xml";
+        return xmlDir+"/"+m.getClusterId()+"/"+ "client-hazelcast.xml";
     }
 }
