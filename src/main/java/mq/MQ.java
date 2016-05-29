@@ -7,6 +7,7 @@ import javax.jms.*;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public abstract class MQ {
 
@@ -26,6 +27,8 @@ public abstract class MQ {
 
 
     private static void makeMqConnection(){
+
+        Random random = new Random();
 
         System.setProperty("org.apache.activemq.SERIALIZABLE_PACKAGES","*");
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(brokerUri);
@@ -48,7 +51,7 @@ public abstract class MQ {
                 }
                 System.out.println("retry Mq connection");
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(2000 + random.nextInt(3000));
                 } catch (InterruptedException x) {}
             }
         }
