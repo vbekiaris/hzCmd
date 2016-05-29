@@ -112,7 +112,7 @@ public abstract class MQ {
         if ( ! producerMap.containsKey(queueName) ){
 
             long start = System.currentTimeMillis();
-            System.out.println("start create getMessageProducer ");
+            System.out.println("start create getMessageProducer");
 
 
             if (session==null){
