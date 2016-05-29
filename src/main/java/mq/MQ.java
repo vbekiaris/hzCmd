@@ -100,17 +100,14 @@ public abstract class MQ {
 
     public static void drainQ(String queueName) throws JMSException {
 
-
         int count = 0;
         while ( MQ.receiveMsg(queueName, 10) != null) {
             count++;
         }
-        //while( MQ.receiveMsgNoWait(queueName) != null) {
-        //    count++;
-        //}
 
-        System.out.println(count + " msgs removed from queue: " + queueName);
-
+        if(count!=0){
+            System.out.println(count + " msgs removed from queue: " + queueName);
+        }
     }
 
     private static MessageProducer getMessageProducer(String queueName) throws JMSException {
