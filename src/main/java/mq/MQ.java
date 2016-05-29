@@ -26,7 +26,7 @@ public abstract class MQ {
     private static final String brokerUri = "tcp://"+brokerIp+":61616";
 
 
-    private static void makeMqConnection(){
+    private static void makeMqConnection() throws JMSException {
 
         Random random = new Random();
 
@@ -53,6 +53,8 @@ public abstract class MQ {
                 try {
                     Thread.sleep(2000 + random.nextInt(3000));
                 } catch (InterruptedException x) {}
+
+                throw e;
             }
         }
     }

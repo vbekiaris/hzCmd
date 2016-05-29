@@ -177,7 +177,7 @@ public abstract class Controler{
                 if(obj instanceof Cmd){
                     ((Cmd) obj).exicute(this);
                 }
-            } catch (JMSException e) {
+            } catch (Exception e) {
                 recordeException(e);
             }
         }
