@@ -75,7 +75,11 @@ public abstract class MQ {
 
     public static Object receiveObj(String queueName, long time) throws JMSException {
         MessageConsumer consumer = getMessageConsumer(queueName);
-        return  ((ObjectMessage) consumer.receive(time)).getObject();
+        Message received = consumer.receive(time);
+        if(received==null){
+            return null;
+        }
+        return  ((ObjectMessage) received).getObject();
     }
 
     public static Message receiveMsg(String queueName, long time) throws JMSException {
