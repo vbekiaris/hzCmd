@@ -19,8 +19,6 @@ public abstract class MQ {
     private static Map<String, MessageProducer> producerMap = new HashMap();
     private static Map<String, MessageConsumer> consumerMap = new HashMap();
 
-    private static Destination replyDestination;
-
 
     private static final String brokerIp = System.getProperty(Args.MQIP.name(), "localhost");
 
@@ -31,7 +29,7 @@ public abstract class MQ {
 
         System.setProperty("org.apache.activemq.SERIALIZABLE_PACKAGES","*");
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(brokerUri);
-        connectionFactory.setMaxThreadPoolSize(4);
+        connectionFactory.setMaxThreadPoolSize(10);
 
         int count = 0;
         int maxTries = 3;
@@ -42,7 +40,6 @@ public abstract class MQ {
                 }
                 connection.start();
                 session = connection.createSession(transacted, ackMode);
-                replyDestination = session.createTemporaryQueue();
                 break;
             } catch (JMSException e) {
                 if (++count == maxTries){
@@ -67,8 +64,6 @@ public abstract class MQ {
         MessageProducer producer = getMessageProducer(queueName);
         ObjectMessage msg = session.createObjectMessage();
         msg.setObject(obj);
-
-        msg.setJMSReplyTo(replyDestination);
         producer.send(msg);
     }
 
