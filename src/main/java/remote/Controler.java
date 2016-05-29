@@ -15,6 +15,7 @@ import remote.bench.BenchType;
 import remote.command.Cmd;
 
 import static remote.Utils.recordeException;
+import static remote.Utils.recordeExceptionJms;
 
 public abstract class Controler{
 
@@ -172,11 +173,13 @@ public abstract class Controler{
         while (true){
             try {
                 Object obj = MQ.receiveObj(Q);
-                System.out.println("MQ msg in = "+obj);
+                System.out.println("MQ msg in = " + obj);
 
-                if(obj instanceof Cmd){
+                if (obj instanceof Cmd) {
                     ((Cmd) obj).exicute(this);
                 }
+            } catch (JMSException e){
+                recordeExceptionJms(e);
             } catch (Exception e) {
                 recordeException(e);
             }

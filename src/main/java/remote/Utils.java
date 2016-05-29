@@ -40,6 +40,15 @@ public abstract class Utils {
         }
     }
 
+    public static void recordeExceptionJms(Exception e) {
+        e.printStackTrace();
+        try {
+            e.printStackTrace( new PrintStream(new FileOutputStream("jms-exception.txt", true)) );
+        } catch (FileNotFoundException e1) {
+            e1.printStackTrace();
+        }
+    }
+
     public static void recordSendException(Exception e, String queueName) {
         recordeException(e);
         try {
