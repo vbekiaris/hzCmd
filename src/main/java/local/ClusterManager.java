@@ -333,9 +333,7 @@ public class ClusterManager implements Serializable {
                 }
             }
             System.out.println("remaining "+matchingJms.size());
-            for (RemoteJvm matchingJm : matchingJms) {
-                System.out.println(matchingJm);
-            }
+
         }
 
         long end = System.currentTimeMillis();
