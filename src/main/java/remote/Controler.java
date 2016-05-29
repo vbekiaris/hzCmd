@@ -35,10 +35,10 @@ public abstract class Controler{
         try {
             init(type);
             benchManager = new BenchManager(getVendorObject());
-            MQ.sendObj(REPLYQ, ID+" Started");
+            //MQ.sendObj(REPLYQ, ID+" Started");
         }catch (Exception e){
             recordeException(e);
-            MQ.sendObj(REPLYQ, e);
+            //MQ.sendObj(REPLYQ, e);
             throw e;
         }
     }
