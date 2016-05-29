@@ -144,6 +144,7 @@ public class ClusterManager implements Serializable {
                 RemoteJvm jvm = jvms.get(jmvId);
                 jvm.setPid(pid);
 
+                //todo
                 //race condition for the jms connection hear.
                 Object o = jvm.getResponse();
                 if(o instanceof Exception){
