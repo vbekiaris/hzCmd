@@ -381,12 +381,12 @@ public class HzCmd implements Serializable {
                                 long end = System.currentTimeMillis();
                                 System.out.println("bench "+taskId+" "+className+" seconds "+(end-start)/1000);
 
-                                long start = System.currentTimeMillis();
+                                 start = System.currentTimeMillis();
                                 System.out.println("bench "+taskId+" "+className);
 
                                 cluster.setThreadCount(drivers, taskId, threadCount);
 
-                                long end = System.currentTimeMillis();
+                                 end = System.currentTimeMillis();
                                 System.out.println("bench "+taskId+" "+className+" set threads seconds "+(end-start)/1000);
 
 
