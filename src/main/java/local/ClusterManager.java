@@ -316,10 +316,35 @@ public class ClusterManager implements Serializable {
     }
 
     public void getResponse(String jvmId) throws IOException, InterruptedException, JMSException {
+
+        List<RemoteJvm> matchingJms = getMatchingJms(jvmId);
+
+        long start = System.currentTimeMillis();
+        System.out.println("get response for "+matchingJms.size());
+
+
+        while(!matchingJms.isEmpty()){
+            ListIterator<RemoteJvm> iter = matchingJms.listIterator();
+            while(iter.hasNext()){
+                Object o;
+                if(  (o = iter.next().getResponse(10)) != null){
+                    printResponse(o);
+                    iter.remove();
+                }
+            }
+            System.out.println("remaining "+matchingJms.size());
+        }
+
+        long end = System.currentTimeMillis();
+        System.out.println("elapsed seconds "+(end-start)/1000);
+
+
+        /*
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             Object o = jvm.getResponse();
             printResponse(o);
         }
+        */
     }
 
     private void printResponse(Object o){
