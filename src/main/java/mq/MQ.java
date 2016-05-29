@@ -29,10 +29,10 @@ public abstract class MQ {
 
         System.setProperty("org.apache.activemq.SERIALIZABLE_PACKAGES","*");
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(brokerUri);
-        connectionFactory.setMaxThreadPoolSize(10);
+        connectionFactory.setMaxThreadPoolSize(4);
 
         int count = 0;
-        int maxTries = 3;
+        int maxTries = 10;
         while(true) {
             try {
                 if ( connection == null) {
@@ -42,12 +42,13 @@ public abstract class MQ {
                 session = connection.createSession(transacted, ackMode);
                 break;
             } catch (JMSException e) {
+
                 if (++count == maxTries){
                     throw new RuntimeException(e);
                 }
                 System.out.println("retry Mq connection");
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(2000);
                 } catch (InterruptedException x) {}
             }
         }
