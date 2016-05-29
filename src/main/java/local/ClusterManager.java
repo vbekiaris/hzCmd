@@ -320,7 +320,8 @@ public class ClusterManager implements Serializable {
         List<RemoteJvm> matchingJms = getMatchingJms(jvmId);
 
         long start = System.currentTimeMillis();
-        System.out.println("start get response for "+matchingJms.size());
+        int count = matchingJms.size();
+        System.out.println("start get response for "+count);
 
 
         while(!matchingJms.isEmpty()){
@@ -337,7 +338,7 @@ public class ClusterManager implements Serializable {
         }
 
         long end = System.currentTimeMillis();
-        System.out.println("response for "+matchingJms.size()+" seconds "+(end-start)/1000);
+        System.out.println("response for "+count+" seconds "+(end-start)/1000);
 
 
         /*
