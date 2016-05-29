@@ -144,7 +144,7 @@ public class ClusterManager implements Serializable {
                 RemoteJvm jvm = jvms.get(jmvId);
                 jvm.setPid(pid);
 
-                /*
+                //race condition for the jms connection hear.
                 Object o = jvm.getResponse();
                 if(o instanceof Exception){
                     Exception e = (Exception) o;
@@ -153,7 +153,6 @@ public class ClusterManager implements Serializable {
                 }else{
                     System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
                 }
-                */
             }
 
             System.out.println("created");
