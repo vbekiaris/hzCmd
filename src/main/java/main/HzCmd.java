@@ -373,6 +373,7 @@ public class HzCmd implements Serializable {
                                 String fileName = clusterId+"_"+version+"_"+taskId+"_"+className+"_"+benchNumber;
 
 
+                                System.out.println("bench "+taskId+" "+className);
                                 cluster.load(drivers, taskId, className);
                                 cluster.setThreadCount(drivers, taskId, threadCount);
                                 cluster.setBenchType(drivers, taskId, benchType, benchMarkSettings.getIntervalNanos(), benchMarkSettings.getAllowException(), fileName);
