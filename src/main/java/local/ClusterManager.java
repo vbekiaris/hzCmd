@@ -337,7 +337,7 @@ public class ClusterManager implements Serializable {
         }
 
         long end = System.currentTimeMillis();
-        System.out.println("elapsed seconds "+(end-start)/1000);
+        System.out.println("response for "+matchingJms.size()+" seconds "+(end-start)/1000);
 
 
         /*

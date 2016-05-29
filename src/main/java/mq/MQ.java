@@ -113,8 +113,8 @@ public abstract class MQ {
     private static MessageProducer getMessageProducer(String queueName) throws JMSException {
         if ( ! producerMap.containsKey(queueName) ){
 
-            long start = System.currentTimeMillis();
-            System.out.println("start create getMessageProducer");
+            //long start = System.currentTimeMillis();
+            //System.out.println("start create getMessageProducer");
 
 
             if (session==null){
@@ -127,8 +127,8 @@ public abstract class MQ {
 
             producerMap.put(queueName, mp);
 
-            long end = System.currentTimeMillis();
-            System.out.println("end create getMessageProduce seconds "+(end-start)/1000);
+            //long end = System.currentTimeMillis();
+            //System.out.println("end create getMessageProduce seconds "+(end-start)/1000);
 
         }
         return producerMap.get(queueName);
@@ -137,8 +137,8 @@ public abstract class MQ {
     private static MessageConsumer getMessageConsumer(String queueName) throws JMSException {
         if ( ! consumerMap.containsKey(queueName) ){
 
-            long start = System.currentTimeMillis();
-            System.out.println("start create getMessageConsumer");
+            //long start = System.currentTimeMillis();
+            //System.out.println("start create getMessageConsumer");
 
 
             if (session==null){
@@ -149,8 +149,8 @@ public abstract class MQ {
             MessageConsumer consumer = session.createConsumer(q);
             consumerMap.put(queueName, consumer);
 
-            long end = System.currentTimeMillis();
-            System.out.println("end create getMessageConsumer seconds "+(end-start)/1000);
+            //long end = System.currentTimeMillis();
+            //System.out.println("end create getMessageConsumer seconds "+(end-start)/1000);
         }
         return consumerMap.get(queueName);
     }
