@@ -112,7 +112,6 @@ public class ClusterManager implements Serializable {
 
         public Object call() throws IOException, InterruptedException, JMSException {
 
-
             for (String file : files) {
                 box.scpUp(file, ".");
             }
@@ -130,13 +129,12 @@ public class ClusterManager implements Serializable {
             Bash.chmodExe(fout.getName());
             box.scpUp(fout.getName(), ".");
 
-            System.out.println("starting launch");
             String pids = box.ssh("./"+fout.getName());
-            System.out.println("end launch");
 
             String delim = " \n";
             StringTokenizer st = new StringTokenizer(pids,delim);
 
+            List<RemoteJvm> started = new ArrayList<RemoteJvm>();
             while (st.hasMoreTokens()) {
                 String pid = st.nextToken();
                 String jmvId = st.nextToken();
@@ -144,17 +142,20 @@ public class ClusterManager implements Serializable {
                 RemoteJvm jvm = jvms.get(jmvId);
                 jvm.setPid(pid);
 
-                Object o = jvm.getResponse();
-                if(o instanceof Exception){
-                    Exception e = (Exception) o;
-                    System.out.println(Bash.ANSI_RED+" "+e+" "+e.getCause()+Bash.ANSI_RESET);
-                    e.printStackTrace();
-                }else{
-                    System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
+                started.add(jvm);
+            }
+
+            while(!started.isEmpty()){
+                ListIterator<RemoteJvm> iter = started.listIterator();
+                while(iter.hasNext()){
+                    Object o;
+                    if(  (o = iter.next().getResponse(10)) != null){
+                        printResponse(o);
+                        iter.remove();
+                    }
                 }
             }
 
-            System.out.println("created");
             return null;
         }
     }
