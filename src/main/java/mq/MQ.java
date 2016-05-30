@@ -103,7 +103,7 @@ public abstract class MQ {
     public static void drainQ(String queueName) throws JMSException {
 
         int count = 0;
-        while ( MQ.receiveMsg(queueName, 10) != null) {
+        while ( MQ.receiveMsg(queueName, 5) != null) {
             count++;
         }
 
