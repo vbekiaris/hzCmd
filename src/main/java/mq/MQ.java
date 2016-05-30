@@ -42,9 +42,9 @@ public abstract class MQ {
         int maxTries = 20;
         while(true) {
             try {
-                if ( connection == null) {
+                //if ( connection == null) {
                     connection = connectionFactory.createConnection();
-                }
+                //}
                 connection.start();
                 session = connection.createSession(transacted, ackMode);
                 break;
