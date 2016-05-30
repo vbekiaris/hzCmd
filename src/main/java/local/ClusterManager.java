@@ -327,6 +327,7 @@ public class ClusterManager implements Serializable {
         System.out.println("start get response for "+count);
 
 
+        int prevRemaining=0;
         while(!matchingJms.isEmpty()){
             ListIterator<RemoteJvm> iter = matchingJms.listIterator();
             while(iter.hasNext()){
@@ -336,8 +337,10 @@ public class ClusterManager implements Serializable {
                     iter.remove();
                 }
             }
-            System.out.println("remaining "+matchingJms.size());
-
+            if(matchingJms.size()!=prevRemaining) {
+                System.out.println("remaining " + matchingJms.size());
+                prevRemaining=matchingJms.size();
+            }
         }
 
         long end = System.currentTimeMillis();
