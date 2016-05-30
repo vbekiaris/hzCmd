@@ -26,7 +26,11 @@ public abstract class MQ {
     private static final String brokerUri = "tcp://"+brokerIp+":61616";
 
 
-    private static void makeMqConnection() throws JMSException {
+    private static synchronized void makeMqConnection() throws JMSException {
+
+        if (session!=null){
+            return;
+        }
 
         Random random = new Random();
 
@@ -47,14 +51,12 @@ public abstract class MQ {
             } catch (JMSException e) {
 
                 if (++count == maxTries){
-                    throw new RuntimeException(e);
+                    throw  e;
                 }
                 System.out.println("retry Mq connection");
                 try {
                     Thread.sleep(500 + random.nextInt(4000));
                 } catch (InterruptedException x) {}
-
-                throw e;
             }
         }
     }
@@ -141,9 +143,8 @@ public abstract class MQ {
             //System.out.println("start create getMessageConsumer");
 
 
-            if (session==null){
-                makeMqConnection();
-            }
+            makeMqConnection();
+
 
             Destination q = session.createQueue(queueName);
             MessageConsumer consumer = session.createConsumer(q);
