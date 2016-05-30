@@ -152,7 +152,7 @@ public class ClusterManager implements Serializable {
                 int prevRemaining=0;
                 while(iter.hasNext()){
                     Object o;
-                    if(  (o = iter.next().getResponse(10)) != null){
+                    if(  (o = iter.next().getResponse(8)) != null){
                         printResponse(o);
                         iter.remove();
                     }
