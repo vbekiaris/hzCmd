@@ -44,6 +44,9 @@ public abstract class Bash {
         return executeCommand("rm -fr " + dir);
     }
 
+    public static String rm(String file) throws IOException, InterruptedException {
+        return executeCommand("rm " + file);
+    }
 
 
     public static String ssh(String user, String ip, String cmd) throws IOException, InterruptedException {

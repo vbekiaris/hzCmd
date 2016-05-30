@@ -116,8 +116,8 @@ public class ClusterManager implements Serializable {
                 box.scpUp(file, ".");
             }
 
-            File fout = new File(box.pub + "launch.sh");
-            FileOutputStream fos = new FileOutputStream(fout);
+            File launchFile = new File(box.pub + "launch.sh");
+            FileOutputStream fos = new FileOutputStream(launchFile);
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
 
             for (String s : lauchMap.get(box)) {
@@ -126,10 +126,11 @@ public class ClusterManager implements Serializable {
             }
             bw.close();
 
-            Bash.chmodExe(fout.getName());
-            box.scpUp(fout.getName(), ".");
+            Bash.chmodExe(launchFile.getName());
+            box.scpUp(launchFile.getName(), ".");
+            Bash.rm(launchFile.getName());
 
-            String pids = box.ssh("./"+fout.getName());
+            String pids = box.ssh("./" + launchFile.getName());
 
             String delim = " \n";
             StringTokenizer st = new StringTokenizer(pids,delim);

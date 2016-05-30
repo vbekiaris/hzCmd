@@ -68,7 +68,7 @@ public enum ClusterSize {
     }
 
     public static int dedicatedMemberBox(ClusterSize size){
-        return 4;
+        return getMemberCount(size);
     }
 }
 
