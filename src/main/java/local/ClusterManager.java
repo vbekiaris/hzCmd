@@ -459,8 +459,9 @@ public class ClusterManager implements Serializable {
     }
 
     public void downlonad(String jvmId, String destDir) throws IOException, InterruptedException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
-            jvm.downlonad(destDir+"/"+clusterId);
+
+        for (Box box : boxes.getBoxList()) {
+            box.downlonad(Installer.REMOTE_HZCMD_ROOT+"/*", destDir+"/"+clusterId);
         }
     }
 
