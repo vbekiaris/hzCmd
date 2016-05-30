@@ -55,7 +55,7 @@ public abstract class MQ {
                 }
                 System.out.println("retry Mq connection");
                 try {
-                    Thread.sleep(500 + random.nextInt(4000));
+                    Thread.sleep(1000 + random.nextInt(5000));
                 } catch (InterruptedException x) {}
             }
         }
