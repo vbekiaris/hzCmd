@@ -39,7 +39,7 @@ public abstract class MQ {
         connectionFactory.setMaxThreadPoolSize(4);
 
         int count = 0;
-        int maxTries = 20;
+        int maxTries = 60;
         while(true) {
             try {
                 //if ( connection == null) {
@@ -51,9 +51,10 @@ public abstract class MQ {
             } catch (JMSException e) {
 
                 if (++count == maxTries){
+
+                    System.out.println("failed 60 Mq connections");
                     throw  e;
                 }
-                System.out.println("retry Mq connection");
                 try {
                     Thread.sleep(1000 + random.nextInt(5000));
                 } catch (InterruptedException x) {}
