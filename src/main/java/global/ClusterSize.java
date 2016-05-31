@@ -71,7 +71,10 @@ public enum ClusterSize {
     }
 
     public static int dedicatedMemberBox(ClusterSize size){
-        return getMemberCount(size);
+        if ( size.name().contains("D") ){
+            return getMemberCount(size);
+        }
+        return 0;
     }
 }
 
