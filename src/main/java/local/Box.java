@@ -63,6 +63,10 @@ public class Box implements Serializable{
         return ssh("cat " +arg);
     }
 
+    public String jstack(String dir, int pid, String file) throws IOException, InterruptedException {
+        return ssh("cd "+dir+"; nohup jstack "+pid+" >> "+file+" &");
+    }
+
     public String find(String dir, String name) throws IOException, InterruptedException {
         return ssh("find "+dir+" -name " +name);
     }

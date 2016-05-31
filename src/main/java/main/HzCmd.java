@@ -250,6 +250,12 @@ public class HzCmd implements Serializable {
         }
     }
 
+    public void jstack(String jvmId, String file) throws Exception {
+        for (ClusterManager c : clusters.values()) {
+            c.jstack(jvmId, file);
+        }
+    }
+
     public void tail(String jvmId) throws Exception {
         for (ClusterManager c : clusters.values()) {
             c.tail(jvmId);

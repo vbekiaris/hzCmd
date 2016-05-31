@@ -443,6 +443,13 @@ public class ClusterManager implements Serializable {
         }
     }
 
+    public void jstack(String jvmId, String file) throws IOException, InterruptedException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+            jvm.jstack(file);
+        }
+    }
+
+
     public void tail(String jvmId) throws IOException, InterruptedException {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             System.out.println(jvm);

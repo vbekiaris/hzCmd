@@ -242,6 +242,11 @@ public abstract class RemoteJvm implements Serializable {
         return box.cat(dir + "/" + outFile);
     }
 
+    public String jstack(String file) throws IOException, InterruptedException {
+        return box.jstack(dir, pid, file);
+    }
+
+
     public String findException() throws IOException, InterruptedException {
         return box.find(dir, "exception.txt");
     }
