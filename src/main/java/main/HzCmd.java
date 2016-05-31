@@ -20,6 +20,11 @@ import java.util.*;
 
 import static global.Utils.myIp;
 
+//TODO
+//multi files in sequence, multi benchID's in file in parellel,
+//keep bench-run-ID number in state, to count across multi invocations
+//remove auto down load.
+//
 
 public class HzCmd implements Serializable {
 
@@ -336,7 +341,9 @@ public class HzCmd implements Serializable {
     }
 
     public void invokeBenchMark(String clusterId, String benchFile, final boolean warmup) throws Exception {
-        int benchNumber=0;
+
+        HzCmdProperties properties = new HzCmdProperties();
+        int benchNumber = properties.readIntPropertie(HzCmdProperties.BENCH_NUMBER, 0);
 
         ClusterManager cluster = clusters.get(clusterId);
 
@@ -407,8 +414,11 @@ public class HzCmd implements Serializable {
                 }
             }
         }
-        cluster.downlonad(clusterId, "output");
+
+        //cluster.downlonad(clusterId, "output");
         //chartAllJavaMetrics("output/" + clusterId);
+
+        properties.writeIntPropertie(HzCmdProperties.BENCH_NUMBER, benchNumber);
 
         System.out.println(Bash.ANSI_YELLOW + "The End" + Bash.ANSI_RESET);
     }

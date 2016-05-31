@@ -20,12 +20,23 @@ public class HzCmdProperties extends OrderedProperties {
 
     public static final String GCLOG = "gclog";
 
+    public static final String BENCH_NUMBER = "benchNumber";
+
+
     public void writePropertie(String key, String value) throws IOException {
         writePropertie(HzCmd.propertiesFile, key, value);
     }
 
+    public int writeIntPropertie(String key, int defaultValue) throws IOException {
+        return Integer.parseInt( readPropertie(HzCmd.propertiesFile, key, Integer.toString(defaultValue) ));
+    }
+
     public String readPropertie(String key, String defaultValue) throws IOException {
         return readPropertie(HzCmd.propertiesFile, key, defaultValue);
+    }
+
+    public int readIntPropertie(String key, int defaultValue) throws IOException {
+        return Integer.parseInt(readPropertie(HzCmd.propertiesFile, key, "" + defaultValue));
     }
 
     public boolean getBoolean(String key, String defaultValue) throws IOException {
