@@ -24,11 +24,11 @@ public class HzCmdProperties extends OrderedProperties {
 
 
     public void writePropertie(String key, String value) throws IOException {
-        writePropertie(HzCmd.propertiesFile, key, value);
+        writePropertie( HzCmd.propertiesFile, key, value );
     }
 
-    public int writeIntPropertie(String key, int defaultValue) throws IOException {
-        return Integer.parseInt( readPropertie(HzCmd.propertiesFile, key, Integer.toString(defaultValue) ));
+    public void  writeIntPropertie(String key, int defaultValue) throws IOException {
+        writePropertie( HzCmd.propertiesFile, key, Integer.toString(defaultValue) );
     }
 
     public String readPropertie(String key, String defaultValue) throws IOException {
