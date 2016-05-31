@@ -12,16 +12,14 @@ import java.util.List;
 @com.github.rvesse.airline.annotations.Command(name="cluster", description = "init a cluster")
 public  class InitCluster extends Command {
 
-    //hzCmd init cluster -id A -size s -type HZ -boxes agent.txt -uplib ${benchJar} -upcwd ${trust} -version 3.6
-
     @Option(name = "-user", description = "user name to access boxes (default ec2-user)")
     public String user="ec2-user";
 
     @Option(name = "-id", description = "set name of cluster")
     public String id;
 
-    @Option(name = "-size", description = "set size of cluster (default S)")
-    public String size="S";
+    @Option(name = "-size", description = "set size of default  M4C4")
+    public String size="M4C4";
 
     @Option(name = "-boxes", description = "name of boxes file (default agents.txt)")
     public String boxes = "agents.txt";
@@ -47,7 +45,7 @@ public  class InitCluster extends Command {
     public void exe(HzCmd hzCmd) {
         try {
             ClusterType clusterType = ClusterType.valueOf(type);
-            ClusterSize clusterSize = ClusterSize.valueOf(size);
+            ClusterSize clusterSize = new ClusterSize(size);
 
             hzCmd.initCluster(user, boxes, id, clusterType, clusterSize, ee, version, lib_files, cwd_file);
 

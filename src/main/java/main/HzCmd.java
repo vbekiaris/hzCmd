@@ -22,11 +22,10 @@ import static global.Utils.myIp;
 
 //TODO
 //multi files in sequence, multi benchID's in file in parellel,
-//keep bench-run-ID number in state, to count across multi invocations
-//remove auto down load.
 //Interpret cluster size string dm4c3  m1 c3  Dm43c623
 //print cluster layout info
-//this about rm .props and .ser on wipe
+//think about rm .props and .ser on wipe
+//remove bench work from script,
 
 public class HzCmd implements Serializable {
 
@@ -71,9 +70,9 @@ public class HzCmd implements Serializable {
             }
         }
 
-        clusters.get(clusterId).setMembersOnlyCount(ClusterSize.dedicatedMemberBox(size));
+        clusters.get(clusterId).setMembersOnlyCount(size.dedicatedMemberBox());
 
-        int m = ClusterSize.getMemberCount(size);
+        int m = size.getMemberCount();
         String memberJvmOptions = properties.readPropertie(HzCmdProperties.memberOps, "");
         addMembers(clusterId, m, version,  memberJvmOptions, cwdFiles);
 
@@ -83,7 +82,7 @@ public class HzCmd implements Serializable {
 
         Thread.sleep(5000);
 
-        int c = ClusterSize.getClientCount(size);
+        int c = size.getClientCount();
         String clientJvmOption = properties.readPropertie(HzCmdProperties.clientOps, "");
         addClients(clusterId, c, version, clientJvmOption, cwdFiles);
     }

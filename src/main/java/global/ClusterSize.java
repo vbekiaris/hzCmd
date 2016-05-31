@@ -1,82 +1,42 @@
 package global;
 
-public enum ClusterSize {
-    M4C40, M4C80, M4C400, M4C4000, M4C6000, M4C8000, M4C12000, M4C16000, M4, M8, XS, S, M, L, XL, XXL;
+import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-    public static int getMemberCount(ClusterSize size){
-        switch (size){
-            case M4C40:
-            case M4C80:
-            case M4C400:
-            case M4C4000:
-            case M4C6000:
-            case M4C8000:
-            case M4C12000:
-            case M4C16000:
-                return 4;
-            case M4:
-                return 4;
-            case M8:
-                return 8;
-            case XS:
-                return 4;
-            case S:
-                return 6;
-            case M:
-                return 8;
-            case L:
-                return 16;
-            case XL:
-                return 100;
-            case XXL:
-                return 500;
-            default:
-                return 1;
-        }
+public class ClusterSize {
+
+    private String code;
+
+    public ClusterSize(String code){
+        this.code=code;
     }
 
-    public static int getClientCount(ClusterSize size){
-        switch (size){
-            case M4C40:
-                return 40;
-            case M4C80:
-                return 80;
-            case M4C400:
-                return 400;
-            case M4C4000:
-                return 4000;
-            case M4C6000:
-                return 6000;
-            case M4C8000:
-                return 8000;
-            case M4C12000:
-                return 12000;
-            case M4C16000:
-                return 16000;
-            case M4:
-                return 0;
-            case M8:
-                return 0;
-            case XS:
-                return 4;
-            case S:
-                return 6;
-            case M:
-                return 32;
-            case L:
-                return 64;
-            case XL:
-                return 1000;
-            case XXL:
-                return 5000;
-            default:
-                return 1;
+    public int getMemberCount(){
+        Pattern pattern = Pattern.compile("M[0-9]+");
+        Matcher matcher = pattern.matcher(code);
+        if (matcher.find())
+        {
+            String intStr = matcher.group().substring(1);
+            return Integer.parseInt(intStr);
         }
+        return 0;
     }
 
-    public static int dedicatedMemberBox(ClusterSize size){
-        if ( size.name().contains("D") ){
-            return getMemberCount(size);
+    public int getClientCount( ){
+        Pattern pattern = Pattern.compile("C[0-9]+");
+        Matcher matcher = pattern.matcher(code);
+        if (matcher.find())
+        {
+            String intStr = matcher.group().substring(1);
+            return Integer.parseInt(intStr);
+        }
+        return 0;
+    }
+
+    public  int dedicatedMemberBox( ){
+        if ( code.contains("D") ){
+            return getMemberCount();
         }
         return 0;
     }
