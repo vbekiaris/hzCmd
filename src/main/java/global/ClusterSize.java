@@ -1,7 +1,7 @@
 package global;
 
 public enum ClusterSize {
-    M4C40, M4C80, M4C400, M4C4000, M4C6000, M4C8000, M4C12000, M4C16000, M4, XS, S, M, L, XL, XXL;
+    M4C40, M4C80, M4C400, M4C4000, M4C6000, M4C8000, M4C12000, M4C16000, M4, M8, XS, S, M, L, XL, XXL;
 
     public static int getMemberCount(ClusterSize size){
         switch (size){
@@ -16,6 +16,8 @@ public enum ClusterSize {
                 return 4;
             case M4:
                 return 4;
+            case M8:
+                return 8;
             case XS:
                 return 4;
             case S:
@@ -52,6 +54,8 @@ public enum ClusterSize {
             case M4C16000:
                 return 16000;
             case M4:
+                return 0;
+            case M8:
                 return 0;
             case XS:
                 return 4;
