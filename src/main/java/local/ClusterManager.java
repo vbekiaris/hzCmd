@@ -146,16 +146,18 @@ public class ClusterManager implements Serializable {
                 started.add(jvm);
             }
 
+
+            int prevRemaining=0;
             while(!started.isEmpty()){
                 ListIterator<RemoteJvm> iter = started.listIterator();
 
-                int prevRemaining=0;
                 while(iter.hasNext()){
                     Object o;
                     if(  (o = iter.next().getResponse(8)) != null){
                         printResponse(o);
                         iter.remove();
                     }
+
                     if(started.size()!=prevRemaining) {
                         System.out.println("remaining " + started.size());
                         prevRemaining=started.size();
