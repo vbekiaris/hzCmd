@@ -84,6 +84,10 @@ public class ClusterManager implements Serializable {
 
     private void addJvms(int qty, String version, String options, String cwdFiles, NodeType type) throws Exception {
 
+        if(qty==0){
+            return;
+        }
+
         lauchMap = ArrayListMultimap.create();
         for (int i = 0; i < qty; i++) {
             addJvm(version, options, cwdFiles, type);
@@ -147,7 +151,6 @@ public class ClusterManager implements Serializable {
             }
 
 
-            int prevRemaining=0;
             while(!started.isEmpty()){
                 ListIterator<RemoteJvm> iter = started.listIterator();
 
@@ -158,10 +161,8 @@ public class ClusterManager implements Serializable {
                         iter.remove();
                     }
 
-                    if(started.size()!=prevRemaining) {
-                        System.out.println("remaining " + started.size());
-                        prevRemaining=started.size();
-                    }
+                    //System.out.println("remaining " + started.size());
+
                 }
             }
 
@@ -355,7 +356,7 @@ public class ClusterManager implements Serializable {
     private void printResponse(Object o){
         if(o instanceof Exception){
             Exception e = (Exception) o;
-            System.out.println(Bash.ANSI_RED+" "+e+" "+e.getCause()+Bash.ANSI_RESET);
+            System.out.println(Bash.ANSI_RED + e +e.getCause()+Bash.ANSI_RESET);
             e.printStackTrace();
 
         }else{

@@ -26,6 +26,7 @@ import static global.Utils.myIp;
 //remove auto down load.
 //Interpret cluster size string dm4c3  m1 c3  Dm43c623
 //print cluster layout info
+//this about rm .props and .ser on wipe
 
 public class HzCmd implements Serializable {
 
