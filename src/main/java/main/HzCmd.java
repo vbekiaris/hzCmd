@@ -24,7 +24,8 @@ import static global.Utils.myIp;
 //multi files in sequence, multi benchID's in file in parellel,
 //keep bench-run-ID number in state, to count across multi invocations
 //remove auto down load.
-//
+//Interpret cluster size string dm4c3  m1 c3  Dm43c623
+//print cluster layout info
 
 public class HzCmd implements Serializable {
 
