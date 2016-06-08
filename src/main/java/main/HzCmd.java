@@ -20,11 +20,10 @@ import java.util.*;
 import static global.Utils.myIp;
 
 //TODO
-//multi files in sequence, multi benchID's in file in parellel,
+//multi files in sequence needs bench number by cluster, multi benchID's in file in parellel,
 //print cluster layout info
 //look for errors script on download
 //think about rm .props and .ser on wipe
-//remove bench work from script,
 
 public class HzCmd implements Serializable {
 
