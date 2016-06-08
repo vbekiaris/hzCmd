@@ -7,7 +7,6 @@ import local.*;
 import remote.bench.BenchType;
 import vendor.gem.GemJvmFactory;
 import vendor.gg.GgJvmFactory;
-import global.Args;
 import global.Bash;
 import global.ClusterType;
 import vendor.hz.HzJvmFactory;
@@ -22,8 +21,8 @@ import static global.Utils.myIp;
 
 //TODO
 //multi files in sequence, multi benchID's in file in parellel,
-//Interpret cluster size string dm4c3  m1 c3  Dm43c623
 //print cluster layout info
+//look for errors script on download
 //think about rm .props and .ser on wipe
 //remove bench work from script,
 
@@ -416,11 +415,7 @@ public class HzCmd implements Serializable {
             }
         }
 
-        //cluster.downlonad(clusterId, "output");
-        //chartAllJavaMetrics("output/" + clusterId);
-
         properties.writeIntPropertie(HzCmdProperties.BENCH_NUMBER, benchNumber);
-
         System.out.println(Bash.ANSI_YELLOW + "The End" + Bash.ANSI_RESET);
     }
 

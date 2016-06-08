@@ -19,42 +19,40 @@ public class CmdLine {
     @SuppressWarnings("unchecked")
     public static com.github.rvesse.airline.Cli<Runnable> getParser(){
 
-        CliBuilder builder = new CliBuilder("hzCmd");
+
+        CliBuilder builder = new CliBuilder("hz");
 
         builder.withDescription("Hazelcast cluster cmd line control")
                 .withDefaultCommand(Help.class)
-                .withCommands(Help.class, Info.class, Aws.class, Add.class, Set.class, MemberBox.class, Install.class,
-                              Kill.class, Restart.class, Jps.class, Cat.class, Tail.class, Grep.class, Download.class,
-                              Clean.class, Wipe.class, Load.class, Async.class, Sync.class, Exit.class, Listen.class,
-                              Bench.class, Ssh.class, Ping.class, scpUp.class, UploadCwd.class, UploadLib.class, Broker.class,
-                              Ls.class, Chart.class, Redis.class, ProcessJhicOutput.class, Bounce.class, RegressionCheck.class,
-                              Check.class, RestartEmbedded.class, Jstack.class);
+                .withCommands(
+                        Help.class,
+                        Aws.class,
+
+                        SetMemberJvmOps.class, SetClientJvmOps.class, SetJhic.class, SetJhicArgs.class,
+                        InitCluster.class,
+
+                        BenchDriver.class, BenchThreads.class, BenchDuration.class, BenchWarmup.class,
+                        BenchTypes.class, BenchRun.class, BenchInterval.class, BenchRepeat.class, BenchAllowException.class,
+
+                        Check.class, Wipe.class, Clean.class,
+
+                        Ls.class, Cat.class, Tail.class, Grep.class, Ssh.class, Jstack.class, Jps.class,
+                        Kill.class, Exit.class, Restart.class, RestartEmbedded.class, Bounce.class,
+
+                        Download.class, UploadLib.class,
+
+                        Chart.class, ProcessJhicOutput.class, RegressionCheck.class,
+
+                        Broker.class,
+
+                        Redis.class
+                        );
 
         builder.withGroup("aws")
                 .withDescription("aws create ec2 instances needs aws ec2 cmd line tools installed")
                 .withDefaultCommand(Help.class)
                 .withCommands(AwsCreate.class);
 
-        builder.withGroup("init")
-                .withDescription("init a cluster ")
-                .withDefaultCommand(Help.class)
-                .withCommands(InitCluster.class);
-
-        builder.withGroup("set")
-                .withDescription("set properties")
-                .withDefaultCommand(Help.class)
-                .withCommands(SetMemberJvmOps.class, SetClientJvmOps.class, SetJhic.class, SetJhicArgs.class);
-
-        builder.withGroup("add")
-                .withDescription("add boxes, clusters, members clients")
-                .withDefaultCommand(Help.class)
-                .withCommands(AddBox.class, AddCluster.class, AddMember.class, AddClient.class);
-
-        builder.withGroup("bench")
-                .withDescription("benchmarking tools")
-                .withDefaultCommand(Help.class)
-                .withCommands(BenchDriver.class, BenchThreads.class, BenchDuration.class, BenchWarmup.class,
-                              BenchTypes.class, BenchRun.class, BenchInterval.class, BenchRepeat.class, BenchAllowException.class);
 
         builder.withGroup("chart")
                 .withDescription("chart bench data gnuplot install required")

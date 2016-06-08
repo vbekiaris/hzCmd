@@ -4,11 +4,11 @@ import cmdline.base.Command;
 import com.github.rvesse.airline.annotations.Arguments;
 import main.HzCmd;
 
-@com.github.rvesse.airline.annotations.Command(name = "duration", description = "comma delimited list of benchMark thread counts")
+@com.github.rvesse.airline.annotations.Command(name = "bench", description = "benchmark duration seconds")
 public class BenchDuration extends Command {
 
-    @Arguments(description = "e.g. 60 ")
-    public int duration ;
+    @Arguments(description = "default 60")
+    public int duration = 60;
 
 
     public void exe(HzCmd hzCmd) {

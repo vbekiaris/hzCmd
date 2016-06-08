@@ -4,17 +4,17 @@ import cmdline.base.Command;
 import com.github.rvesse.airline.annotations.Option;
 import main.HzCmd;
 
-@com.github.rvesse.airline.annotations.Command(name = "scpUp", description = "file of ip address and ssh login user name")
+@com.github.rvesse.airline.annotations.Command(name = "scpUp", description = "upload src to dest")
 public class scpUp extends Command {
 
-    @Option(name = "-id", description = "jvm id / name")
+    @Option(name = "-id", description = "jvm id")
     public String jvmId=".*";
 
-    @Option(name = "-src", description = "default ec2-user")
-    public String src = "admin";
+    @Option(name = "-src", description = "src file ")
+    public String src;
 
-    @Option(name = "-dst", description = "default agents.txt")
-    public String dst = "agents.txt";
+    @Option(name = "-dst", description = "dest on box")
+    public String dst;
 
     public void exe(HzCmd hzCmd) {
         try {

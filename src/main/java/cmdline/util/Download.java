@@ -5,7 +5,7 @@ import com.github.rvesse.airline.annotations.Arguments;
 import com.github.rvesse.airline.annotations.Option;
 import main.HzCmd;
 
-@com.github.rvesse.airline.annotations.Command(name = "download", description = "download all files from jvm's with name matching id regex")
+@com.github.rvesse.airline.annotations.Command(name = "download", description = "download cwd of jvm's in cluster")
 public class Download extends Command
 {
     @Option(name = "-id", description = "regex to match")

@@ -9,38 +9,35 @@ import main.HzCmd;
 
 import java.util.List;
 
-@com.github.rvesse.airline.annotations.Command(name="cluster", description = "init a cluster")
+@com.github.rvesse.airline.annotations.Command(name="cluster", description = "create/add cluster members")
 public  class InitCluster extends Command {
 
-    @Option(name = "-user", description = "user name to access boxes (default ec2-user)")
+    @Option(name = "-user", description = "user name to access boxes default ec2-user")
     public String user="ec2-user";
 
     @Option(name = "-id", description = "set name of cluster")
     public String id;
 
-    @Option(name = "-size", description = "set size of default  M4C4")
+    @Option(name = "-size", description = "M[0-9]+C[0-9]+  default M4C4")
     public String size="M4C4";
 
-    @Option(name = "-boxes", description = "name of boxes file (default agents.txt)")
+    @Option(name = "-boxes", description = "boxes file default file name agents.txt")
     public String boxes = "agents.txt";
 
-    @Option(name = "-type", description = "(default HZ), type of cluster [ClusterType.HZ | ClusterType.GG | ClusterType.GEM]" )
+    @Option(name = "-type", description = "cluster tye [HZ|GG|GEM] default HZ" )
     public String type = "HZ";
 
-    @Option(name = "-ee", description = "Hazelcast enterprise (default false)")
+    @Option(name = "-ee", description = "enterprise switch default false")
     public boolean ee = false;
 
-    @Option(name = "-v", description = "hazelcast version e.g. 3.6")
-    public String version;
+    @Option(name = "-v", description = "jar version string 3.6")
+    public String version = "3.6";
 
-    @Option(name = "-upcwd", description = "contigues list of file in a comma delimited string to upload to cwd of jvm")
+    @Option(name = "-upcwd", description = "contigues list of file in a comma delimited string, upload to cwd")
     public String cwd_file=null;
 
-    @Option(name = "-uplib", description = "contigues list of file in a comma delimited string to upload to lib of jvm before start")
+    @Option(name = "-uplib", description = "contigues list of file in a comma delimited string, upload to lib dir")
     public String lib_files=null;
-
-    @Arguments(description = "jvm options")
-    public List<String> jvmOptions;
 
     public void exe(HzCmd hzCmd) {
         try {

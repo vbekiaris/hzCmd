@@ -7,7 +7,7 @@ import main.HzCmd;
 
 import java.util.List;
 
-@com.github.rvesse.airline.annotations.Command(name = "ssh", description = "ssh instruction from cwd of each member client")
+@com.github.rvesse.airline.annotations.Command(name = "ssh", description = "ssh cmd in cwd of each jvm in cluster")
 public class Ssh extends Command
 {
     @Option(name = "-id", description = "jvm id / name")

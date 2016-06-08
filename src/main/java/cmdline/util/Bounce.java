@@ -4,7 +4,7 @@ import cmdline.base.Command;
 import com.github.rvesse.airline.annotations.Option;
 import main.HzCmd;
 
-@com.github.rvesse.airline.annotations.Command(name = "bounce", description = "bounce jvm's matching id pattern")
+@com.github.rvesse.airline.annotations.Command(name = "bounce", description = "bounce jvm's in cluster")
 public class Bounce extends Command
 {
     @Option(name = "-id", description = "default .*")

@@ -17,6 +17,6 @@ echo "export HZ_CMD_SRC=$(pwd)" >> ~/.bashrc
 
 mvn clean install dependency:copy-dependencies
 
-echo "export HZ_CMD=$(pwd)/src/main/java/bin" >> ~/.bashrc
+echo "export HZ_CMD=$(pwd)/bin" >> ~/.bashrc
 echo "export HZ_CMD_BIN=$(pwd)/target" >> ~/.bashrc
 echo 'PATH="${HZ_CMD}:${PATH}"' >> ~/.bashrc

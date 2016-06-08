@@ -4,7 +4,7 @@ import cmdline.base.Command;
 import com.github.rvesse.airline.annotations.Option;
 import main.HzCmd;
 
-@com.github.rvesse.airline.annotations.Command(name = "tail", description = "cat cluster/members/clients")
+@com.github.rvesse.airline.annotations.Command(name = "tail", description = "tail std out of jvm in cluster")
 public class Tail extends Command
 {
     @Option(name = "-id", description = "jvm id / name")

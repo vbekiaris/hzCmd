@@ -4,10 +4,10 @@ import cmdline.base.Command;
 import com.github.rvesse.airline.annotations.Arguments;
 import main.HzCmd;
 
-@com.github.rvesse.airline.annotations.Command(name = "repeat", description = "repeat count ")
+@com.github.rvesse.airline.annotations.Command(name = "repeat", description = "benchmark repeat count ")
 public class BenchRepeat extends Command {
 
-    @Arguments(description = "e.g. 60 ")
+    @Arguments(description = "default 1")
     public int repeat=1;
 
 
