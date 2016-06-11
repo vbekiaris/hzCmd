@@ -24,6 +24,14 @@ import static global.Utils.myIp;
 //print cluster layout info
 //look for errors script on download
 //think about rm .props and .ser on wipe
+//better dir for bench results
+
+//for getting the total ops from hdr
+//find . -name *.hgrm | xargs -n1 -I% sh -c 'grep "Total count" % | awk "{print \$7}" | tr -d ] > %.total'
+
+//for auto gcviewer pics
+//find . -name verbosegc.log | xargs -n1 -I% sh -c "java -jar $(find ~/.m2 -name gcviewer-1.34.1.jar) % %.csv %.png"
+
 
 public class HzCmd implements Serializable {
 
@@ -383,6 +391,9 @@ public class HzCmd implements Serializable {
                                 for (FieldValue setting : settings) {
                                     metaData += setting.field +" "+ setting.value + "\n";
                                 }
+
+                                //split up by dir's  even map/struct name
+                                //String fileName = benchType.name()+"/"+drivers+"/"+taskId+"/"+"threads"+threadCount+"/"+clusterId+"_"+version+"_"+taskId+"_"+className+"_"+benchNumber;
 
                                 String fileName = clusterId+"_"+version+"_"+taskId+"_"+className+"_"+benchNumber;
 
