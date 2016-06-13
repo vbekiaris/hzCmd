@@ -6,6 +6,7 @@ import local.ClusterManager;
 import local.RemoteJvm;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static vendor.gg.GgXml.addServerIpsToGgXml;
@@ -27,7 +28,7 @@ public class RemoteGgJvm extends RemoteJvm {
 
     @Override
     public List<String> stuffToPutInDir() throws Exception {
-        return null;
+        return new ArrayList<String>(0);
     }
 
     public void beforeJvmStart(ClusterManager myCluster) throws Exception{
