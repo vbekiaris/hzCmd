@@ -34,6 +34,7 @@ public class RemoteGgJvm extends RemoteJvm {
     public void beforeJvmStart(ClusterManager myCluster) throws Exception{
         addServerIpsToGgXml(myCluster);
 
+        box.mkdir(dir);
         box.upload("config-gg/"+myCluster.getClusterId()+"gg-config.xml", dir+"/"+"gg-config.xml");
         box.mkdir(dir + "/" +"config");
         box.upload("config-gg/java.util.logging.properties", dir+"/"+"config"+"/");
