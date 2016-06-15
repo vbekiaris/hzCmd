@@ -370,11 +370,6 @@ public class ClusterManager implements Serializable {
         }
     }
 
-    public void stop(String jvmId, String taskId) throws IOException, InterruptedException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
-            //jvm.stop();
-        }
-    }
 
     public void restart(String jvmId) throws Exception {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){

@@ -59,23 +59,6 @@ public class HzCmd implements Serializable {
 
     private String brokerIP=null;
 
-    public void listen() throws IOException, InterruptedException{
-        String eventQ = System.getProperty("user.dir")+"/"+"Some Type of Async Q for ERROR EVENTS";
-        while (true){
-            try {
-                Object o = MQ.receiveObj(eventQ);
-                if (o instanceof Exception){
-                    Exception e = (Exception) o;
-                    System.out.println(Bash.ANSI_RED+" "+e+" "+e.getCause()+Bash.ANSI_RESET);
-                    e.printStackTrace();
-                }else{
-                    System.out.println(o);
-                }
-            } catch (JMSException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     public void initCluster(String user, String boxes, String clusterId, ClusterType type, ClusterSize size, boolean ee, String version, String libFiles, String cwdFiles) throws Exception{
 
@@ -168,14 +151,6 @@ public class HzCmd implements Serializable {
         }
     }
 
-    public void dedicatedMembers(String clusterId, int memberBox) {
-        for (ClusterManager c : clusters.values()) {
-            if(c.matchClusterId(clusterId)){
-                c.setMembersOnlyCount(memberBox);
-            }
-        }
-    }
-
     public void addMembers(String clusterId, int qty, String version, String jvmOptions, String cwdfiles) throws Exception {
         for (ClusterManager c : clusters.values()) {
             if(c.matchClusterId(clusterId)){
@@ -197,20 +172,6 @@ public class HzCmd implements Serializable {
         for (ClusterManager c : clusters.values()) {
             c.restart(jvmId, version, options);
         }
-    }
-
-    private void checkAddJvms(RemoteJvm jvm) throws JMSException, IOException, InterruptedException {
-
-            Object o = jvm.getResponse();
-
-            if(o instanceof Exception){
-                Exception e = (Exception) o;
-                System.out.println(Bash.ANSI_RED+" "+e+" "+e.getCause()+Bash.ANSI_RESET);
-                e.printStackTrace();
-            }else{
-                System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
-            }
-
     }
 
     public void exit(String jvmId) throws Exception {
@@ -337,31 +298,6 @@ public class HzCmd implements Serializable {
         boxes.clear();
     }
 
-    public void invokeAsync(String jvmId, int threadCound, String method, String taksId) throws Exception {
-        for (ClusterManager c : clusters.values()) {
-            c.invokeAsync(jvmId, threadCound, method, taksId);
-        }
-    }
-
-    public void ping(String jvmId, long timeout) {
-        for (ClusterManager c : clusters.values()) {
-            for (RemoteJvm jvm : c.getMatchingJms(jvmId) ) {
-                try {
-                    jvm.ping();
-                } catch (Exception e) {
-                    System.out.println(Bash.ANSI_RED+"failed to send ping to "+jvm.getId()+Bash.ANSI_RESET);
-                }
-
-                try {
-                    jvm.getResponse(timeout);
-                    System.out.println(Bash.ANSI_GREEN+jvm.getId()+" ping"+Bash.ANSI_RESET);
-                } catch (Exception e) {
-                    System.out.println(Bash.ANSI_RED+"failed to recive ping from "+jvm.getId()+Bash.ANSI_RESET);
-                }
-            }
-        }
-    }
-
     public void invokeBenchMark(String clusterId, String benchFile, final boolean warmup) throws Exception {
 
         HzCmdProperties properties = new HzCmdProperties();
@@ -455,12 +391,6 @@ public class HzCmd implements Serializable {
     }
 
 
-    public void stop(String jvmId, String taskId) throws Exception {
-        for (ClusterManager c : clusters.values()) {
-            c.stop(jvmId, taskId);
-        }
-    }
-
     public void scpUp(String jvmId, String src, String dst) throws IOException, InterruptedException {
         for (ClusterManager c : clusters.values()) {
             for (RemoteJvm jvm : c.getMatchingJms(jvmId) ) {
@@ -499,7 +429,7 @@ public class HzCmd implements Serializable {
     }
 
     private static HzCmd loadHzCmd(){
-        HzCmd hzCmd = null;
+        HzCmd hzCmd;
         try {
             FileInputStream fileIn = new FileInputStream("HzCmd.ser");
             ObjectInputStream in = new ObjectInputStream(fileIn);

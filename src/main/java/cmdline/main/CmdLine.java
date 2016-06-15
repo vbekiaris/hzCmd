@@ -1,6 +1,5 @@
 package cmdline.main;
 
-import cmdline.add.*;
 import cmdline.aws.Aws;
 import cmdline.aws.AwsCreate;
 import cmdline.bench.*;
@@ -18,7 +17,6 @@ public class CmdLine {
 
     @SuppressWarnings("unchecked")
     public static com.github.rvesse.airline.Cli<Runnable> getParser(){
-
 
         CliBuilder builder = new CliBuilder("hz");
 
@@ -57,7 +55,7 @@ public class CmdLine {
         builder.withGroup("chart")
                 .withDescription("chart bench data gnuplot install required")
                 .withDefaultCommand(Help.class)
-                .withCommands(ChartMetrics.class, ChartCompare.class, ChartMetricsCompair.class, ChartHdrCompair.class);
+                .withCommands(ChartMetrics.class, ChartCompare.class);
 
         builder.withGroup("redis")
                 .withDescription("init redis props")

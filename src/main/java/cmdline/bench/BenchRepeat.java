@@ -10,7 +10,6 @@ public class BenchRepeat extends Command {
     @Arguments(description = "default 1")
     public int repeat=1;
 
-
     public void exe(HzCmd hzCmd) {
         try {
             hzCmd.setRepeatCount(repeat);

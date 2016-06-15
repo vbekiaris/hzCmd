@@ -10,7 +10,7 @@ import java.util.List;
 @com.github.rvesse.airline.annotations.Command(name = "run", description = "run a benchmark")
 public class BenchRun extends Command
 {
-    @Option(name = "-id", description = "cluster to run the benchmark, regx on cluster id ")
+    @Option(name = "-id", description = "cluster to run the benchmark, regex on cluster id ")
     public String clusterId=".*";
 
     @Option(name = "-warmup", description = "run a warmup [true|false] default true")
