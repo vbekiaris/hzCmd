@@ -66,6 +66,11 @@ public abstract class Bash {
         executeCommand("scp -r " + from + " " + user + "@" + ip + ":" + to);
     }
 
+    public static void rsyncUp(String user, String ip, String from, String to) throws IOException, InterruptedException {
+        executeCommand("rsync -avzhe ssh 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' " + from + " " + user + "@" + ip + ":" + to);
+    }
+
+
     public static void scpDown(String user, String ip, String from, String to) throws IOException, InterruptedException {
         mkdir(to);
         executeCommand("scp -r " + user + "@" + ip + ":" + from + " " + to + "/");
