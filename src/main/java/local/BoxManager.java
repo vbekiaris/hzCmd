@@ -11,16 +11,13 @@ public class BoxManager implements Serializable {
     private String id;
     private List<Box> boxes = new ArrayList();
 
-    public BoxManager(String id){
-        this.id=id;
+
+    public BoxManager(String file, String user) throws IOException, InterruptedException {
+        this.id=file;
+        addBoxes(file, user);
     }
 
-    public BoxManager(String id, List<Box> boxes){
-        this.id = id;
-        this.boxes = boxes;
-    }
-
-    public void addBoxes(String user, String file) throws IOException, InterruptedException  {
+    public void addBoxes(String file, String user) throws IOException, InterruptedException  {
         BufferedReader boxFile = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
         String line;
         while( (line=boxFile.readLine()) !=null ){
@@ -32,15 +29,16 @@ public class BoxManager implements Serializable {
         String[] split = ipString.split(",");
         Box box = new Box(user, split[0], split[1]);
 
+        if (boxes.contains(box) ){
+            return;
+        }
+
         if(box.testConnecton()){
             boxes.add(box);
-            //System.out.println(Bash.ANSI_GREEN+box+Bash.ANSI_RESET);
         }else {
             System.out.println(Bash.ANSI_RED+box+Bash.ANSI_RESET);
         }
     }
-
-    public BoxManager getBoxes(int start, int end){ return new BoxManager(id,  new ArrayList( boxes.subList(start-1,  end) ) ); }
 
     public Box get(int i){
         return boxes.get(i);

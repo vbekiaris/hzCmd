@@ -63,113 +63,75 @@ public class HzCmd implements Serializable {
     private String brokerIP=null;
 
 
-    public void initCluster(String user, String boxes, String clusterId, ClusterType type, ClusterSize size, boolean ee, String version, String libFiles, String cwdFiles) throws Exception{
+    public void initCluster(String user, String file, String clusterId, ClusterType type, ClusterSize size, boolean ee, String version, String libFiles, String cwdFiles) throws Exception{
 
         HzCmdProperties properties = new HzCmdProperties();
 
-        addBoxes(user, boxes);
-        addCluster(clusterId, boxes, type);
-        install(clusterId, ee, version);
+        BoxManager bm = getBoxManager(file, user);
+        ClusterManager c = getCluster(clusterId, bm, type);
+
+        Installer.install(c.getBoxManager(), c.getJvmFactory(), ee, version);
 
         if(libFiles!=null) {
             for (String f : libFiles.split(",")) {
-                uploadLib(clusterId, f);
+                c.uploadLib(f);
             }
         }
 
-        clusters.get(clusterId).setMembersOnlyCount(size.dedicatedMemberBox());
+        c.setMembersOnlyCount(size.dedicatedMemberBox());
 
-        int m = size.getMemberCount();
-        String memberJvmOptions = properties.readPropertie(HzCmdProperties.memberOps, "");
-        addMembers(clusterId, m, version,  memberJvmOptions, cwdFiles);
+        int qty = size.getMemberCount();
+        String jvmOptions = properties.readPropertie(HzCmdProperties.memberOps, "");
+        c.addMembers(qty, version, jvmOptions, cwdFiles);
 
-        ClusterManager cm = clusters.get(clusterId);
-        JvmFactory jvmFactory = cm.getJvmFactory();
-        jvmFactory.membersAdded(cm.getMemberBoxes());
+        JvmFactory jvmFactory = c.getJvmFactory();
+        jvmFactory.membersAdded(c.getMemberBoxes());
 
         Thread.sleep(5000);
 
-        int c = size.getClientCount();
-        String clientJvmOption = properties.readPropertie(HzCmdProperties.clientOps, "");
-        addClients(clusterId, c, version, clientJvmOption, cwdFiles);
+        qty = size.getClientCount();
+        jvmOptions = properties.readPropertie(HzCmdProperties.clientOps, "");
+        c.addClients(qty, version, jvmOptions, cwdFiles);
     }
 
-    public void addBoxes(String user, String file) throws IOException, InterruptedException{
-        if (boxes.containsKey(file)){
-            System.out.println(Bash.ANSI_RED+"file "+file + " all ready imported"+Bash.ANSI_RESET);
-            return;
-        }
 
-        BoxManager b = new BoxManager(file);
-        b.addBoxes(user, file);
-        boxes.put(file, b);
+    public BoxManager getBoxManager(String file, String user) throws IOException, InterruptedException{
+        BoxManager b = boxes.get(file);
+        if(b==null) {
+            b = new BoxManager(file, user);
+            boxes.put(file, b);
+        }
+        return b;
     }
 
-    public void addCluster(String clusterId, String boxGroupId, ClusterType type) throws Exception{
-        if (clusters.containsKey(clusterId)){
-            System.out.println(Bash.ANSI_RED+"cluster "+clusterId + " all ready created"+Bash.ANSI_RESET);
-            return;
-        }
+    public ClusterManager getCluster(String clusterId, BoxManager bm, ClusterType type) throws Exception{
 
-        BoxManager boxi = boxes.get(boxGroupId);
-        if(boxi == null){
-            System.out.println(Bash.ANSI_RED+"box group "+boxGroupId + " not found"+Bash.ANSI_RESET);
-            return;
-        }
+        ClusterManager cluster = clusters.get(clusterId);
 
-        if(brokerIP==null){
-            brokerIP = myIp();
-        }
-
-        ClusterManager cluster;
-        switch (type){
-            case HZ:
-                cluster = new ClusterManager(clusterId, boxi, brokerIP, new HzJvmFactory());
-                break;
-            case GG:
-                cluster = new ClusterManager(clusterId, boxi, brokerIP, new GgJvmFactory());
-                break;
-            case GEM:
-                cluster = new ClusterManager(clusterId, boxi, brokerIP, new GemJvmFactory());
-                break;
-            case RED:
-                cluster = new ClusterManager(clusterId, boxi, brokerIP, new RedisJvmFactory());
-                break;
-            default:
-                System.out.println(Bash.ANSI_RED+"box group "+boxGroupId + " not found"+Bash.ANSI_RESET);
-                return;
-        }
-
-        clusters.put(cluster.getClusterId(), cluster);
-        System.out.println(cluster);
-    }
-
-    public void install(String clusterId, boolean ee, String... versions) throws IOException, InterruptedException {
-        for (ClusterManager c : clusters.values()) {
-            if(c.matchClusterId(clusterId)){
-                System.out.println(Bash.ANSI_YELLOW+"Installing cluster "+c.getClusterId()+Bash.ANSI_RESET);
-                Installer.install(c.getBoxManager(), c.getJvmFactory(), ee, versions);
-                c.setVersion(versions);
+        if(cluster==null) {
+            if (brokerIP == null) {
+                brokerIP = myIp();
             }
-        }
-    }
 
-    public void addMembers(String clusterId, int qty, String version, String jvmOptions, String cwdfiles) throws Exception {
-        for (ClusterManager c : clusters.values()) {
-            if(c.matchClusterId(clusterId)){
-                c.addMembers(qty, version, jvmOptions, cwdfiles);
+            switch (type) {
+                case HZ:
+                    cluster = new ClusterManager(clusterId, bm, brokerIP, new HzJvmFactory());
+                    break;
+                case GG:
+                    cluster = new ClusterManager(clusterId, bm, brokerIP, new GgJvmFactory());
+                    break;
+                case GEM:
+                    cluster = new ClusterManager(clusterId, bm, brokerIP, new GemJvmFactory());
+                    break;
+                case RED:
+                    cluster = new ClusterManager(clusterId, bm, brokerIP, new RedisJvmFactory());
+                    break;
             }
+            clusters.put(cluster.getClusterId(), cluster);
         }
-
+        return cluster;
     }
 
-    public void addClients(String clusterId, int qty, String version, String jvmOptions, String cwdfiles) throws Exception {
-        for (ClusterManager c : clusters.values()) {
-            if (c.matchClusterId(clusterId)) {
-                c.addClients(qty, version, jvmOptions, cwdfiles);
-            }
-        }
-    }
 
     public void restart(String jvmId, String version,  String options) throws Exception {
         for (ClusterManager c : clusters.values()) {
@@ -330,7 +292,7 @@ public class HzCmd implements Serializable {
 
                                         for (int repeater = 0; repeater < benchMarkSettings.repeatCount(); repeater++) {
 
-                                            String version = cluster.getVersionString();
+                                            String version = cluster.getVersionsString();
                                             String metaData = "clusterId " + clusterId + "\n" +
                                                     "version " + version + "\n" +
                                                     "Members " + cluster.getMemberCount() + "\n" +
@@ -398,14 +360,6 @@ public class HzCmd implements Serializable {
         for (ClusterManager c : clusters.values()) {
             for (RemoteJvm jvm : c.getMatchingJms(jvmId) ) {
                 jvm.upload(src, dst);
-            }
-        }
-    }
-
-    public void uploadCwd(String jvmId, String src) throws IOException, InterruptedException {
-        for (ClusterManager c : clusters.values()) {
-            for (RemoteJvm jvm : c.getMatchingJms(jvmId) ) {
-                jvm.uploadcwd(src);
             }
         }
     }

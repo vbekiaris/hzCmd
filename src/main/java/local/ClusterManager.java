@@ -22,8 +22,7 @@ import static global.Utils.rangeMap;
 public class ClusterManager implements Serializable {
 
     private final String clusterId;
-
-    private String[] versions;
+    private String versions = new String();
 
     private BoxManager boxes;
     private Map<String, RemoteJvm> jvms = new HashMap();
@@ -44,10 +43,6 @@ public class ClusterManager implements Serializable {
         jvmFactory.clusterInit(boxes);
     }
 
-    public boolean matchClusterId(String clusterId){
-        return this.clusterId.matches(clusterId);
-    }
-
     public String getClusterId() {
         return clusterId;
     }
@@ -65,14 +60,6 @@ public class ClusterManager implements Serializable {
         }
     }
 
-    public void setVersion(String[] versions) {
-      this.versions=versions;
-    }
-
-    public String getVersionString( ) {
-        return Arrays.toString(versions).replace("[", "").replace("]", "");
-    }
-
 
     public void addMembers(int qty, String version, String options, String cwdFiles) throws Exception {
          addJvms(qty, version, options, cwdFiles, NodeType.Member);
@@ -88,6 +75,10 @@ public class ClusterManager implements Serializable {
             return;
         }
 
+        if ( !versions.contains(version) ){
+            versions+="-"+version;
+        }
+
         lauchMap = ArrayListMultimap.create();
         for (int i = 0; i < qty; i++) {
             addJvm(version, options, cwdFiles, type);
@@ -101,6 +92,10 @@ public class ClusterManager implements Serializable {
         }
         executor.shutdown();
         executor.awaitTermination(1, TimeUnit.DAYS);
+    }
+
+    public String getVersionsString() {
+        return versions;
     }
 
 
@@ -311,19 +306,6 @@ public class ClusterManager implements Serializable {
     }
 
 
-    public void invokeAsync(String jvmId, int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
-            jvm.invokeAsync(threadCount, method, taskId);
-        }
-    }
-
-    public void invokeSync(String jvmId, int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
-            jvm.invokeSync(threadCount, method, taskId);
-        }
-        getResponse(jvmId);
-    }
-
     public void getResponse(String jvmId) throws IOException, InterruptedException, JMSException {
 
         List<RemoteJvm> matchingJms = getMatchingJms(jvmId);
@@ -377,11 +359,6 @@ public class ClusterManager implements Serializable {
         }
     }
 
-    public void bounce(String jvmId, int delaySec) throws Exception {
-        kill((jvmId));
-        Thread.sleep(delaySec*1000);
-        restart(jvmId);
-    }
 
     public void restart(String jvmId, String version, String options) throws Exception {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){

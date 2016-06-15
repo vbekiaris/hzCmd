@@ -92,6 +92,19 @@ public class Box implements Serializable{
         Bash.scpDown(user, pub, from, to);
     }
 
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (!Box.class.isAssignableFrom(obj.getClass())) {
+            return false;
+        }
+
+        final Box other = (Box) obj;
+
+        return pub.equals(other.pub);
+    }
+
     public String toString() {
         return "Box{" +
                 "user="+user+
@@ -99,7 +112,6 @@ public class Box implements Serializable{
                 ", pri=" + pri +
                 '}';
     }
-
 
 }
 
