@@ -8,7 +8,7 @@ import main.HzCmd;
 public class BenchInterval extends Command {
 
     @Arguments(description = "default max rate 1 operation per millisecond")
-    public long interval=1;
+    public String interval="1";
 
 
     public void exe(HzCmd hzCmd) {

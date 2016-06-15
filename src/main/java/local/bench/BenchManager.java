@@ -1,7 +1,8 @@
-package local;
+package local.bench;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import local.OrderedProperties;
 
 import java.io.FileInputStream;
 import java.io.IOException;

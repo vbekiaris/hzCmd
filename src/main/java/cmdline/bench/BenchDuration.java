@@ -8,7 +8,7 @@ import main.HzCmd;
 public class BenchDuration extends Command {
 
     @Arguments(description = "default 60")
-    public int duration = 60;
+    public String duration = "60";
 
 
     public void exe(HzCmd hzCmd) {

@@ -4,6 +4,9 @@ import cmdline.main.CmdLine;
 import cmdline.base.Command;
 import global.ClusterSize;
 import local.*;
+import local.bench.BenchManager;
+import local.bench.BenchMarkSettings;
+import local.bench.FieldValue;
 import remote.bench.BenchType;
 import vendor.gem.GemJvmFactory;
 import vendor.gg.GgJvmFactory;
@@ -32,6 +35,14 @@ import static global.Utils.myIp;
 //for auto gcviewer pics
 //find . -name verbosegc.log | xargs -n1 -I% sh -c "java -jar $(find ~/.m2 -name gcviewer-1.34.1.jar) % %.csv %.png"
 
+//add JFR cmd settings
+
+//test calling
+//hz cluster -size M4C4 -id HZ  -v 1.7.0-SNAPSHOT -boxes b.box -user ec2-user
+//multi times to add boxes, add members, clients
+
+
+//MQ Request response, with temp reply Q's for proper com's
 
 public class HzCmd implements Serializable {
 
@@ -367,57 +378,67 @@ public class HzCmd implements Serializable {
                     for (List<FieldValue> settings : bencher.getSettings(taskId)) {
 
                         for (int threadCount : benchMarkSettings.getThreads()) {
-                            for (int repeater=0; repeater<benchMarkSettings.repeatCount(); repeater++) {
 
-                                String version  = cluster.getVersionString();
-                                String metaData = "clusterId " + clusterId + "\n" +
-                                                  "version " + version + "\n" +
-                                                  "Members " + cluster.getMemberCount() + "\n" +
-                                                  "Clients " + cluster.getClientCount() + "\n" +
-                                                  "drivers " + drivers + "\n" +
-                                                  "benchType "+benchType+ "\n" +
-                                                  "interval "+benchMarkSettings.getIntervalNanos()+ "\n" +
-                                                  "taskID " + taskId + "\n" +
-                                                  "class " + className + "\n" +
-                                                  "allowException " + benchMarkSettings.getAllowException() + "\n" +
-                                                  "threads " + threadCount + "\n" +
-                                                  "warmupSec " + benchMarkSettings.getWarmupSec() + "\n" +
-                                                  "benchSec " + benchMarkSettings.getDurationSec() + "\n" +
-                                                  "benchID " + benchNumber + "\n";
+                            for (long interval : benchMarkSettings.getIntervalNanos()) {
 
-                                for (FieldValue field : bencher.getFieldsToSet(taskId)) {
-                                    metaData += field.field +" "+field.value + "\n";
+                                for (int warmupSec : benchMarkSettings.getWarmupSec()) {
+
+                                    for (int durationSec : benchMarkSettings.getDurationSec()) {
+
+                                        for (int repeater = 0; repeater < benchMarkSettings.repeatCount(); repeater++) {
+
+                                            String version = cluster.getVersionString();
+                                            String metaData = "clusterId " + clusterId + "\n" +
+                                                    "version " + version + "\n" +
+                                                    "Members " + cluster.getMemberCount() + "\n" +
+                                                    "Clients " + cluster.getClientCount() + "\n" +
+                                                    "drivers " + drivers + "\n" +
+                                                    "benchType " + benchType + "\n" +
+                                                    "interval " + interval + "\n" +
+                                                    "taskID " + taskId + "\n" +
+                                                    "class " + className + "\n" +
+                                                    "allowException " + benchMarkSettings.getAllowException() + "\n" +
+                                                    "threads " + threadCount + "\n" +
+                                                    "warmupSec " + warmupSec + "\n" +
+                                                    "benchSec " + durationSec + "\n" +
+                                                    "benchNum " + benchNumber + "\n";
+
+                                            for (FieldValue field : bencher.getFieldsToSet(taskId)) {
+                                                metaData += field.field + " " + field.value + "\n";
+                                            }
+                                            for (FieldValue setting : settings) {
+                                                metaData += setting.field + " " + setting.value + "\n";
+                                            }
+
+                                            //split up by dir's  even map/struct name
+                                            //String fileName = benchType.name()+"/"+drivers+"/"+taskId+"/"+"threads"+threadCount+"/"+clusterId+"_"+version+"_"+taskId+"_"+className+"_"+benchNumber;
+
+                                            String fileName = clusterId + "_" + version + "_" + taskId + "_" + className + "_" + benchNumber;
+
+                                            cluster.load(drivers, taskId, className);
+                                            cluster.setThreadCount(drivers, taskId, threadCount);
+                                            cluster.setBenchType(drivers, taskId, benchType, interval, benchMarkSettings.getAllowException(), fileName);
+
+                                            for (FieldValue setting : settings) {
+                                                cluster.setField(drivers, taskId, setting.field, setting.value);
+                                            }
+
+                                            for (FieldValue field : bencher.getFieldsToSet(taskId)) {
+                                                cluster.setField(drivers, taskId, field.field, field.value);
+                                            }
+                                            cluster.initBench(drivers, taskId);
+
+                                            if (warmup) {
+                                                cluster.warmupBench(drivers, taskId, warmupSec);
+                                            }
+                                            cluster.runBench(drivers, taskId, durationSec);
+                                            cluster.cleanupBench(drivers, taskId);
+                                            cluster.writeMetaDataCmd(drivers, taskId, metaData);
+
+                                            benchNumber++;
+                                        }
+                                    }
                                 }
-                                for (FieldValue setting : settings) {
-                                    metaData += setting.field +" "+ setting.value + "\n";
-                                }
-
-                                //split up by dir's  even map/struct name
-                                //String fileName = benchType.name()+"/"+drivers+"/"+taskId+"/"+"threads"+threadCount+"/"+clusterId+"_"+version+"_"+taskId+"_"+className+"_"+benchNumber;
-
-                                String fileName = clusterId+"_"+version+"_"+taskId+"_"+className+"_"+benchNumber;
-
-                                cluster.load(drivers, taskId, className);
-                                cluster.setThreadCount(drivers, taskId, threadCount);
-                                cluster.setBenchType(drivers, taskId, benchType, benchMarkSettings.getIntervalNanos(), benchMarkSettings.getAllowException(), fileName);
-
-                                for (FieldValue setting : settings) {
-                                    cluster.setField(drivers, taskId, setting.field, setting.value);
-                                }
-
-                                for (FieldValue field : bencher.getFieldsToSet(taskId)) {
-                                    cluster.setField(drivers, taskId, field.field, field.value);
-                                }
-                                cluster.initBench(drivers, taskId);
-
-                                if(warmup) {
-                                    cluster.warmupBench(drivers, taskId, benchMarkSettings.getWarmupSec());
-                                }
-                                cluster.runBench(drivers, taskId,  benchMarkSettings.getDurationSec());
-                                cluster.cleanupBench(drivers, taskId);
-                                cluster.writeMetaDataCmd(drivers, taskId, metaData);
-
-                                benchNumber++;
                             }
                         }
                     }
@@ -570,19 +591,19 @@ public class HzCmd implements Serializable {
         benchMarkSettings.setThreads(threadsCount);
     }
 
-    public void setBenchWarmupSec(int warmupSec) {
+    public void setBenchWarmupSec(String warmupSec) {
         benchMarkSettings.setWarmupSec(warmupSec);
     }
 
-    public void setBenchBenchDurationSec(int durationSec) {
-        benchMarkSettings.setDurationSec(durationSec);
+    public void setBenchBenchDurationSec(String durationSec) {
+        benchMarkSettings.setDurationSecs(durationSec);
     }
 
     public void setBenchType(String type) {
         benchMarkSettings.setType(type);
     }
 
-    public void setBenchInterval(long intervalMillis) {
+    public void setBenchInterval(String intervalMillis) {
         benchMarkSettings.setIntervalByMsec(intervalMillis);
     }
 

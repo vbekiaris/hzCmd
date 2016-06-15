@@ -8,7 +8,7 @@ import main.HzCmd;
 public class BenchWarmup extends Command {
 
     @Arguments(description = "default 30")
-    public int warmup=30;
+    public String warmup="30";
 
 
     public void exe(HzCmd hzCmd) {

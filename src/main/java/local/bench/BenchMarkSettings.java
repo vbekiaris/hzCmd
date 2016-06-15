@@ -1,4 +1,4 @@
-package local;
+package local.bench;
 
 import remote.bench.BenchType;
 
@@ -7,18 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by danny on 04/03/2016.
- */
 public class BenchMarkSettings implements Serializable {
 
     private String drivers="Member";
 
     private String threads="1";
 
-    private int warmupSec=30;
+    private String warmupSec="30";
 
-    private int durationSec=60;
+    private String durationSec="60";
 
     private int repeatCount=1;
 
@@ -26,7 +23,7 @@ public class BenchMarkSettings implements Serializable {
 
     private boolean allowException=false;
 
-    private long intervalNanos= TimeUnit.MILLISECONDS.toNanos(0);
+    private String intervalNanos="0";
 
     public BenchMarkSettings(){}
 
@@ -34,19 +31,17 @@ public class BenchMarkSettings implements Serializable {
         this.drivers = drivers;
     }
 
-    public void setDurationSec(int durationSec) {
+    public void setDurationSecs(String durationSec) {
         this.durationSec = durationSec;
     }
 
-    public void setIntervalByMsec(long intervalMillis) {
-
-        intervalNanos=TimeUnit.MILLISECONDS.toNanos(intervalMillis);
-
+    public void setIntervalByMsec(String intervalMillis) {
+        intervalNanos=intervalMillis;
     }
 
     public void setType(String types) { this.types = types; }
 
-    public void setWarmupSec(int warmupSec) {
+    public void setWarmupSec(String warmupSec) {
         this.warmupSec = warmupSec;
     }
 
@@ -80,20 +75,34 @@ public class BenchMarkSettings implements Serializable {
     }
 
 
-    public int getWarmupSec() {
-        return warmupSec;
+    public int[] getWarmupSec() {
+        String[] numberStrs = warmupSec.split(",");
+        int[] numbers = new int[numberStrs.length];
+        for(int i=0; i<numberStrs.length; i++) {
+            numbers[i] = Integer.parseInt(numberStrs[i]);
+        }
+        return numbers;
     }
 
-    public int getDurationSec() {
-        return durationSec;
+    public int[] getDurationSec() {
+        String[] numberStrs = durationSec.split(",");
+        int[] numbers = new int[numberStrs.length];
+        for(int i=0; i<numberStrs.length; i++) {
+            numbers[i] = Integer.parseInt(numberStrs[i]);
+        }
+        return numbers;
     }
 
-    public long getIntervalNanos() {
-        return intervalNanos;
+    public long[] getIntervalNanos() {
+        String[] numberStrs = intervalNanos.split(",");
+        long[] numbers = new long[numberStrs.length];
+        for(int i=0; i<numberStrs.length; i++) {
+            numbers[i] = TimeUnit.MILLISECONDS.toNanos(Long.parseLong(numberStrs[i]));
+        }
+        return numbers;
     }
 
     public int repeatCount(){ return repeatCount; }
-
 
     public boolean getAllowException() {
         return allowException;

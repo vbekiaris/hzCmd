@@ -1,4 +1,4 @@
-package local;
+package local.bench;
 
 import java.util.Arrays;
 import java.util.List;
