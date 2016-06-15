@@ -23,11 +23,16 @@ import java.util.*;
 import static global.Utils.myIp;
 
 //TODO
-//multi files in sequence needs bench number by cluster, multi benchID's in file in parellel,
+//multi files in sequence needs bench number by cluster,
+//multi benchID's in file in parellel,
+
 //print cluster layout info
-//look for errors script on download
+
+//look for errors on download
+
 //think about rm .props and .ser on wipe
-//better dir for bench results
+
+//better dir struct for bench results
 
 //for getting the total ops from hdr
 //find . -name *.hgrm | xargs -n1 -I% sh -c 'grep "Total count" % | awk "{print \$7}" | tr -d ] > %.total'
@@ -40,7 +45,6 @@ import static global.Utils.myIp;
 //test calling
 //hz cluster -size M4C4 -id HZ  -v 1.7.0-SNAPSHOT -boxes b.box -user ec2-user
 //multi times to add boxes, add members, clients
-
 
 //MQ Request response, with temp reply Q's for proper com's
 
