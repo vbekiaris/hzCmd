@@ -9,16 +9,19 @@
     <version>1.0.1</version>
 
     <dependencies>
+
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
             <version>3.7-SNAPSHOT</version>
         </dependency>
+
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-client</artifactId>
             <version>3.7-SNAPSHOT</version>
         </dependency>
+
         <dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>
@@ -32,40 +35,17 @@
         </dependency>
 
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>19.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jfree</groupId>
-            <artifactId>jfreechart</artifactId>
-            <version>1.0.19</version>
-        </dependency>
-
-        <dependency>
-            <groupId>net.openhft</groupId>
-            <artifactId>chronicle</artifactId>
-            <version>3.6.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jdom</groupId>
-            <artifactId>jdom2</artifactId>
-            <version>2.0.5</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.hdrhistogram</groupId>
             <artifactId>HdrHistogram</artifactId>
             <version>2.1.8</version>
         </dependency>
 
         <dependency>
-            <groupId>jdom</groupId>
-            <artifactId>jdom</artifactId>
-            <version>1.1</version>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>19.0</version>
         </dependency>
+
 
         <dependency>
             <groupId>com.github.rvesse</groupId>
@@ -93,27 +73,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.ignite</groupId>
-            <artifactId>ignite-spring</artifactId>
-            <version>1.5.0.final</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.ignite</groupId>
-            <artifactId>ignite-indexing</artifactId>
-            <version>1.5.0.final</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.gemstone.gemfire</groupId>
             <artifactId>gemfire</artifactId>
             <version>8.2.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.kstyrc</groupId>
-            <artifactId>embedded-redis</artifactId>
-            <version>0.6</version>
         </dependency>
 
         <dependency>
