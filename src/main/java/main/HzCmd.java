@@ -48,6 +48,9 @@ import static global.Utils.myIp;
 
 //MQ Request response, with temp reply Q's for proper com's
 
+//bench cleanup from just 1 thread.
+
+
 public class HzCmd implements Serializable {
 
     public static final String propertiesFile = "HzCmd.properties";
