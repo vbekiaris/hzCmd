@@ -55,7 +55,6 @@ public class HzCmd implements Serializable {
 
     public static final String propertiesFile = "HzCmd.properties";
 
-    private Map<String, BoxManager> boxes = new HashMap();
     private Map<String, ClusterManager> clusters = new HashMap();
 
     private BenchMarkSettings benchMarkSettings = new BenchMarkSettings();
@@ -67,44 +66,28 @@ public class HzCmd implements Serializable {
 
         HzCmdProperties properties = new HzCmdProperties();
 
-        BoxManager bm = getBoxManager(file, user);
-        ClusterManager c = getCluster(clusterId, bm, type);
+        BoxManager boxManager = new BoxManager(file, user);
+        ClusterManager cluster = getCluster(clusterId, type);
+        cluster.addUniquBoxes(boxManager);
 
-        Installer.install(c.getBoxManager(), c.getJvmFactory(), ee, version);
+        Installer.install(cluster.getBoxManager(), cluster.getJvmFactory(), ee, version, libFiles);
 
-        if(libFiles!=null) {
-            for (String f : libFiles.split(",")) {
-                c.uploadLib(f);
-            }
-        }
+        cluster.setMembersOnlyCount(size.dedicatedMemberBox());
 
-        c.setMembersOnlyCount(size.dedicatedMemberBox());
+        String memberOps = properties.readPropertie(HzCmdProperties.memberOps, "");
+        cluster.addMembers(size.getMemberCount(), version, memberOps, cwdFiles);
 
-        int qty = size.getMemberCount();
-        String jvmOptions = properties.readPropertie(HzCmdProperties.memberOps, "");
-        c.addMembers(qty, version, jvmOptions, cwdFiles);
-
-        JvmFactory jvmFactory = c.getJvmFactory();
-        jvmFactory.membersAdded(c.getMemberBoxes());
+        JvmFactory jvmFactory = cluster.getJvmFactory();
+        jvmFactory.membersAdded(cluster.getMemberBoxes());
 
         Thread.sleep(5000);
 
-        qty = size.getClientCount();
-        jvmOptions = properties.readPropertie(HzCmdProperties.clientOps, "");
-        c.addClients(qty, version, jvmOptions, cwdFiles);
+        String clientOps = properties.readPropertie(HzCmdProperties.clientOps, "");
+        cluster.addClients(size.getClientCount(), version, clientOps, cwdFiles);
     }
 
 
-    public BoxManager getBoxManager(String file, String user) throws IOException, InterruptedException{
-        BoxManager b = boxes.get(file);
-        if(b==null) {
-            b = new BoxManager(file, user);
-            boxes.put(file, b);
-        }
-        return b;
-    }
-
-    public ClusterManager getCluster(String clusterId, BoxManager bm, ClusterType type) throws Exception{
+    public ClusterManager getCluster(String clusterId, ClusterType type) throws Exception{
 
         ClusterManager cluster = clusters.get(clusterId);
 
@@ -112,19 +95,18 @@ public class HzCmd implements Serializable {
             if (brokerIP == null) {
                 brokerIP = myIp();
             }
-
             switch (type) {
                 case HZ:
-                    cluster = new ClusterManager(clusterId, bm, brokerIP, new HzJvmFactory());
+                    cluster = new ClusterManager(clusterId, brokerIP, new HzJvmFactory());
                     break;
                 case GG:
-                    cluster = new ClusterManager(clusterId, bm, brokerIP, new GgJvmFactory());
+                    cluster = new ClusterManager(clusterId, brokerIP, new GgJvmFactory());
                     break;
                 case GEM:
-                    cluster = new ClusterManager(clusterId, bm, brokerIP, new GemJvmFactory());
+                    cluster = new ClusterManager(clusterId, brokerIP, new GemJvmFactory());
                     break;
                 case RED:
-                    cluster = new ClusterManager(clusterId, bm, brokerIP, new RedisJvmFactory());
+                    cluster = new ClusterManager(clusterId, brokerIP, new RedisJvmFactory());
                     break;
             }
             clusters.put(cluster.getClusterId(), cluster);
@@ -252,15 +234,13 @@ public class HzCmd implements Serializable {
             c.getBoxManager().killAllJava();
         }
         for (ClusterManager c : clusters.values()) {
+            c.getBoxManager().rm(Installer.REMOTE_HZCMD_ROOT);
+        }
+        for (ClusterManager c : clusters.values()) {
             c.drainQ();
         }
 
         clusters.clear();
-
-        for (BoxManager boxManager : boxes.values()) {
-            boxManager.rm(Installer.REMOTE_HZCMD_ROOT);
-        }
-        boxes.clear();
     }
 
     public void invokeBenchMark(String clusterId, String benchFile, final boolean warmup) throws Exception {

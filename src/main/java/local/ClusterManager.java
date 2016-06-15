@@ -24,7 +24,7 @@ public class ClusterManager implements Serializable {
     private final String clusterId;
     private String versions = new String();
 
-    private BoxManager boxes;
+    private BoxManager boxes = new BoxManager();
     private Map<String, RemoteJvm> jvms = new HashMap();
 
     private Multimap<Box, String> lauchMap;
@@ -35,12 +35,10 @@ public class ClusterManager implements Serializable {
 
     private JvmFactory jvmFactory;
 
-    public ClusterManager(String clusterId, BoxManager boxes, String brokerIP, JvmFactory jvmFactory) throws Exception {
+    public ClusterManager(String clusterId, String brokerIP, JvmFactory jvmFactory) throws Exception {
         this.clusterId =clusterId;
-        this.boxes=boxes;
         this.brokerIP =brokerIP;
         this.jvmFactory=jvmFactory;
-        jvmFactory.clusterInit(boxes);
     }
 
     public String getClusterId() {
@@ -96,6 +94,10 @@ public class ClusterManager implements Serializable {
 
     public String getVersionsString() {
         return versions;
+    }
+
+    public void addUniquBoxes(BoxManager bm) {
+        boxes.addBoxes(bm);
     }
 
 

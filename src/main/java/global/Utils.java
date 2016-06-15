@@ -3,8 +3,6 @@ package global;
 import com.google.common.escape.Escaper;
 import com.google.common.escape.Escapers;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 
 import java.net.*;
 import java.io.*;
@@ -43,7 +41,6 @@ public abstract class Utils {
     public static String escapeQuotes(String s) {
         return QUOTES.escape( s );
     }
-
 
 
     public static int rangeMap(int val, int min_inclusive, int max_exclusive) {

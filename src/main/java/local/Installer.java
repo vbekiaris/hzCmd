@@ -17,7 +17,7 @@ public abstract class Installer {
     private static final String M2_DIR = "/.m2/";
     private static final String M2_Repo = System.getenv(HOME)+M2_DIR;
 
-    public static void install(BoxManager boxes, JvmFactory jvmFactory, boolean ee,  String... versions) throws IOException, InterruptedException {
+    public static void install(BoxManager boxes, JvmFactory jvmFactory, boolean ee, String version, String libFiles) throws IOException, InterruptedException {
 
         String mainJars = Bash.find(M2_Repo, "hzCmd-1.0.1.jar");
         String benchJars = Bash.find(M2_Repo, "hzCmd-bench-1.0.0.jar\n");
@@ -30,8 +30,6 @@ public abstract class Installer {
         String slf4j = Bash.find(M2_Repo, "slf4j-api-1.7.7.jar");
         String lang = Bash.find(M2_Repo, "lang-6.7.6.jar");
 
-
-
         boxes.mkdir(REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(mainJars, REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(benchJars, REMOTE_HZCMD_ROOT_LIB);
@@ -42,8 +40,7 @@ public abstract class Installer {
         boxes.upload(slf4j, REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(lang, REMOTE_HZCMD_ROOT_LIB);
 
-        for (String version : versions) {
-
+        if ( version != null) {
             String uploadDir = jvmFactory.getVendorLibDir(version);
             boxes.mkdir(uploadDir);
 
@@ -51,6 +48,12 @@ public abstract class Installer {
             for (String name : names) {
                 String jar = Bash.find(M2_Repo, name);
                 boxes.upload(jar,  uploadDir);
+            }
+        }
+
+        if(libFiles!=null) {
+            for (String file : libFiles.split(",")) {
+                boxes.upload(file, REMOTE_HZCMD_ROOT_LIB);
             }
         }
     }

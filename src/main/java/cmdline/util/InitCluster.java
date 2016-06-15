@@ -30,8 +30,8 @@ public  class InitCluster extends Command {
     @Option(name = "-ee", description = "enterprise switch default false")
     public boolean ee = false;
 
-    @Option(name = "-v", description = "jar version string 3.6")
-    public String version = "3.6";
+    @Option(name = "-v", description = "jar version string")
+    public String version;
 
     @Option(name = "-upcwd", description = "contigues list of file in a comma delimited string, upload to cwd")
     public String cwd_file=null;

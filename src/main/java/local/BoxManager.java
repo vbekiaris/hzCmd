@@ -8,12 +8,13 @@ import java.util.List;
 
 public class BoxManager implements Serializable {
 
-    private String id;
     private List<Box> boxes = new ArrayList();
 
+    public BoxManager(){
+
+    }
 
     public BoxManager(String file, String user) throws IOException, InterruptedException {
-        this.id=file;
         addBoxes(file, user);
     }
 
@@ -39,6 +40,15 @@ public class BoxManager implements Serializable {
             System.out.println(Bash.ANSI_RED+box+Bash.ANSI_RESET);
         }
     }
+
+    public void addBoxes(BoxManager boxManager) {
+        for(Box box : boxManager.boxes) {
+            if ( !this.boxes.contains(box) ){
+                this.boxes.add(box);
+            }
+        }
+    }
+
 
     public Box get(int i){
         return boxes.get(i);
