@@ -30,8 +30,6 @@ import static global.Utils.myIp;
 
 //look for errors on download
 
-//think about rm .props and .ser on wipe
-
 //better dir struct for bench results
 
 //for getting the total ops from hdr
@@ -41,10 +39,6 @@ import static global.Utils.myIp;
 //find . -name verbosegc.log | xargs -n1 -I% sh -c "java -jar $(find ~/.m2 -name gcviewer-1.34.1.jar) % %.csv %.png"
 
 //add JFR cmd settings
-
-//test calling
-//hz cluster -size M4C4 -id HZ  -v 1.7.0-SNAPSHOT -boxes b.box -user ec2-user
-//multi times to add boxes, add members, clients
 
 //MQ Request response, with temp reply Q's for proper com's
 
