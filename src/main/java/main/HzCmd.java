@@ -53,6 +53,7 @@ import static global.Utils.myIp;
 
 public class HzCmd implements Serializable {
 
+    public static final String serFile = "HzCmd.ser";
     public static final String propertiesFile = "HzCmd.properties";
 
     private Map<String, ClusterManager> clusters = new HashMap();
@@ -67,12 +68,15 @@ public class HzCmd implements Serializable {
         HzCmdProperties properties = new HzCmdProperties();
 
         BoxManager boxManager = new BoxManager(file, user);
+        System.out.print(boxManager);
+
         ClusterManager cluster = getCluster(clusterId, type);
         cluster.addUniquBoxes(boxManager);
-
         Installer.install(cluster.getBoxManager(), cluster.getJvmFactory(), ee, version, libFiles);
-
         cluster.setMembersOnlyCount(size.dedicatedMemberBox());
+
+        System.out.print(cluster);
+
 
         String memberOps = properties.readPropertie(HzCmdProperties.memberOps, "");
         cluster.addMembers(size.getMemberCount(), version, memberOps, cwdFiles);
@@ -230,17 +234,25 @@ public class HzCmd implements Serializable {
     }
 
     public void wipe( ) throws IOException, InterruptedException, JMSException {
-        for (ClusterManager c : clusters.values()) {
+
+        Map<String, ClusterManager> clustersTemp = clusters;
+        clusters=null;
+
+        BenchMarkSettings bm = benchMarkSettings;
+        benchMarkSettings=null;
+
+        Bash.rm(serFile);
+        Bash.rm(propertiesFile);
+
+        for (ClusterManager c : clustersTemp.values()) {
             c.getBoxManager().killAllJava();
         }
-        for (ClusterManager c : clusters.values()) {
+        for (ClusterManager c : clustersTemp.values()) {
             c.getBoxManager().rm(Installer.REMOTE_HZCMD_ROOT);
         }
-        for (ClusterManager c : clusters.values()) {
+        for (ClusterManager c : clustersTemp.values()) {
             c.drainQ();
         }
-
-        clusters.clear();
     }
 
     public void invokeBenchMark(String clusterId, String benchFile, final boolean warmup) throws Exception {
@@ -358,17 +370,17 @@ public class HzCmd implements Serializable {
 
     @Override
     public String toString() {
-        String clu="";
+        String s="";
         for(ClusterManager c : clusters.values()) {
-            clu += c.toString() + "\n";
+            s += c.toString() + "\n";
         }
-        return clu ;
+        return s;
     }
 
     private static HzCmd loadHzCmd(){
         HzCmd hzCmd;
         try {
-            FileInputStream fileIn = new FileInputStream("HzCmd.ser");
+            FileInputStream fileIn = new FileInputStream(serFile);
             ObjectInputStream in = new ObjectInputStream(fileIn);
             hzCmd = (HzCmd) in.readObject();
             in.close();
@@ -381,7 +393,7 @@ public class HzCmd implements Serializable {
 
     private static void saveHzCmd(HzCmd hzCmd){
         try {
-            FileOutputStream fileOut = new FileOutputStream("HzCmd.ser");
+            FileOutputStream fileOut = new FileOutputStream(serFile);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(hzCmd);
             out.close();

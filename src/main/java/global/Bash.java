@@ -67,7 +67,7 @@ public abstract class Bash {
     }
 
     public static void rsyncUp(String user, String ip, String from, String to) throws IOException, InterruptedException {
-        executeCommand("rsync -avzhe ssh 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' " + from + " " + user + "@" + ip + ":" + to);
+        executeCommand("rsync " + from + " " + user + "@" + ip + ":" + to);
     }
 
 
