@@ -3,6 +3,7 @@ package local;
 import global.Bash;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Installer {
@@ -20,38 +21,25 @@ public abstract class Installer {
 
     public static void install(BoxManager boxes, JvmFactory jvmFactory, boolean ee, String version, String libFiles) throws IOException, InterruptedException {
 
-        String mainJars = Bash.find(M2_Repo, "hzCmd-1.0.1.jar");
-        String benchJars = Bash.find(M2_Repo, "hzCmd-bench-1.0.0.jar\n");
-
-        String cacheJars = Bash.find(M2_Repo, "cache-api-1.0.0.jar");
-        String hdr = Bash.find(M2_Repo, "HdrHistogram-2.1.8.jar");
-        //String mq = Bash.find(M2_Repo, "activemq-all-5.13.0.jar");
-
-        String mq = Bash.find(M2_Repo, "activemq-client-5.13.3.jar");
-        String log4j = Bash.find(M2_Repo, "log4j-1.2.17.jar");
-
-
-
-        String metrics = Bash.find(M2_Repo, "metrics-core-3.1.1.jar");
-        String slf4j = Bash.find(M2_Repo, "slf4j-api-1.7.7.jar");
-        String lang = Bash.find(M2_Repo, "lang-6.7.6.jar");
-
         boxes.mkdir(REMOTE_HZCMD_ROOT_LIB);
 
-        //boxes.upload(STASH+"/log4j.xml", REMOTE_HZCMD_ROOT_LIB);
-        boxes.upload(STASH+"/log4j.properties", REMOTE_HZCMD_ROOT_LIB);
+        List<String> uploadStuff = new ArrayList<String>();
 
-        boxes.upload(mainJars, REMOTE_HZCMD_ROOT_LIB);
-        boxes.upload(benchJars, REMOTE_HZCMD_ROOT_LIB);
-        boxes.upload(cacheJars, REMOTE_HZCMD_ROOT_LIB);
-        boxes.upload(hdr, REMOTE_HZCMD_ROOT_LIB);
-        boxes.upload(mq, REMOTE_HZCMD_ROOT_LIB);
-        boxes.upload(metrics, REMOTE_HZCMD_ROOT_LIB);
+        uploadStuff.add(STASH + "/log4j.properties");
+        uploadStuff.add(Bash.find(M2_Repo, "hzCmd-1.0.1.jar"));
+        uploadStuff.add(Bash.find(M2_Repo, "hzCmd-bench-1.0.0.jar\n"));
+        uploadStuff.add(Bash.find(M2_Repo, "cache-api-1.0.0.jar"));
+        uploadStuff.add(Bash.find(M2_Repo, "jms-api-1.1-rev-1.jar"));
+        uploadStuff.add(Bash.find(M2_Repo, "activemq-client-5.13.3.jar"));
+        uploadStuff.add(Bash.find(M2_Repo, "metrics-core-3.1.1.jar"));
+        uploadStuff.add(Bash.find(M2_Repo, "HdrHistogram-2.1.8.jar"));
+        uploadStuff.add(Bash.find(M2_Repo, "log4j-1.2.17.jar"));
+        uploadStuff.add(Bash.find(M2_Repo, "slf4j-api-1.7.7.jar"));
+        uploadStuff.add(Bash.find(M2_Repo, "lang-6.7.6.jar"));
 
-        boxes.upload(slf4j, REMOTE_HZCMD_ROOT_LIB);
-        boxes.upload(log4j, REMOTE_HZCMD_ROOT_LIB);
-
-        boxes.upload(lang, REMOTE_HZCMD_ROOT_LIB);
+        for (String up : uploadStuff) {
+            boxes.upload(up, REMOTE_HZCMD_ROOT_LIB);
+        }
 
         if ( version != null) {
             String uploadDir = jvmFactory.getVendorLibDir(version);
