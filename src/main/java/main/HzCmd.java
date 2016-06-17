@@ -229,6 +229,9 @@ public class HzCmd implements Serializable {
 
     public void wipe( ) throws IOException, InterruptedException, JMSException {
 
+        Bash.rm(serFile);
+        Bash.rm(propertiesFile);
+
         if(clusters==null){
             return;
         }
@@ -236,9 +239,6 @@ public class HzCmd implements Serializable {
         Map<String, ClusterManager> clustersTemp = clusters;
         clusters=null;
         benchMarkSettings=null;
-
-        Bash.rm(serFile);
-        Bash.rm(propertiesFile);
 
         for (ClusterManager c : clustersTemp.values()) {
             c.getBoxManager().killAllJava();
