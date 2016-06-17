@@ -1,6 +1,6 @@
 HzCmd
 
-Install steps, you will need git mvn wget, and ~/.bashrc to exist 
+Install steps, you will need git mvn, and ~/.bashrc to exist, this will install activemq-5.1.3.3
 
 
 
