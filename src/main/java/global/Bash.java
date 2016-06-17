@@ -48,6 +48,10 @@ public abstract class Bash {
         return executeCommand("rm " + file);
     }
 
+    public static String rmQuite(String file) throws IOException, InterruptedException {
+        return executeCommand("rm -f" + file +" 2> /dev/null");
+    }
+
 
     public static String ssh(String user, String ip, String cmd) throws IOException, InterruptedException {
         return executeCommand("ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "+user+"@"+ip+" "+cmd);

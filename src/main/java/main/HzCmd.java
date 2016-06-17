@@ -229,17 +229,13 @@ public class HzCmd implements Serializable {
 
     public void wipe( ) throws IOException, InterruptedException, JMSException {
 
-        Bash.rm(serFile);
-        Bash.rm(propertiesFile);
+        try {
+            Bash.rmQuite(serFile);
+            Bash.rmQuite(propertiesFile);
+        }catch (Exception ignore) { }
 
-        if(clusters==null){
-            return;
-        }
 
         Map<String, ClusterManager> clustersTemp = clusters;
-        clusters=null;
-        benchMarkSettings=null;
-
         for (ClusterManager c : clustersTemp.values()) {
             c.getBoxManager().killAllJava();
         }
@@ -249,6 +245,7 @@ public class HzCmd implements Serializable {
         for (ClusterManager c : clustersTemp.values()) {
             c.drainQ();
         }
+        clusters.clear();
     }
 
     public void invokeBenchMark(String clusterId, String benchFile, final boolean warmup) throws Exception {
