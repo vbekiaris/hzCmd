@@ -21,6 +21,7 @@ cd -
 git clone https://github.com/Danny-Hazelcast/hzCmd-bench.git
 
 cd hzCmd-bench
+mvn clean install
 
 echo "export HZ_CMD_BENCH_SRC=$(pwd)" >> ~/.bashrc
 echo "export HZ_CMD_BENCH_BIN=$(pwd)/bin" >> ~/.bashrc
