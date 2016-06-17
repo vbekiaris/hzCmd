@@ -16,7 +16,7 @@ public abstract class Installer {
     private static final String HOME = "HOME";
     private static final String M2_DIR = "/.m2/";
     private static final String M2_Repo = System.getenv(HOME)+M2_DIR;
-    private static final String STASH = System.getenv("HZ_CMD_SRC")+"/lib-jars";
+    private static final String STASH = System.getenv("HZ_CMD_SRC")+"/stash";
 
     public static void install(BoxManager boxes, JvmFactory jvmFactory, boolean ee, String version, String libFiles) throws IOException, InterruptedException {
 
@@ -31,7 +31,7 @@ public abstract class Installer {
         String lang = Bash.find(M2_Repo, "lang-6.7.6.jar");
 
         boxes.mkdir(REMOTE_HZCMD_ROOT_LIB);
-        boxes.upload(STASH+"/log4j2.xml", REMOTE_HZCMD_ROOT_LIB);
+        boxes.upload(STASH+"/log4j.xml", REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(mainJars, REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(benchJars, REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(cacheJars, REMOTE_HZCMD_ROOT_LIB);
