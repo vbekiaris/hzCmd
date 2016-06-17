@@ -27,8 +27,8 @@ public abstract class Installer {
         String hdr = Bash.find(M2_Repo, "HdrHistogram-2.1.8.jar");
         //String mq = Bash.find(M2_Repo, "activemq-all-5.13.0.jar");
 
-        //String mq = Bash.find(M2_Repo, "activemq-client-5.13.3.jar");
-        String mq = Bash.find(M2_Repo, "activemq-core-5.7.0.jar");
+        String mq = Bash.find(M2_Repo, "activemq-client-5.13.3.jar");
+        String log4j = Bash.find(M2_Repo, "log4j-1.2.17.jar");
 
 
 
@@ -47,7 +47,10 @@ public abstract class Installer {
         boxes.upload(hdr, REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(mq, REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(metrics, REMOTE_HZCMD_ROOT_LIB);
+
         boxes.upload(slf4j, REMOTE_HZCMD_ROOT_LIB);
+        boxes.upload(log4j, REMOTE_HZCMD_ROOT_LIB);
+
         boxes.upload(lang, REMOTE_HZCMD_ROOT_LIB);
 
         if ( version != null) {
