@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-#wget http://www.eu.apache.org/dist/activemq/5.13.0/apache-activemq-5.13.0-bin.tar.gz
-
 cp hzCmd/stash/apache-activemq-5.13.3-bin.tar.gz .
 tar xvf ./apache-activemq-5.13.3-bin.tar.gz
 rm apache-activemq-5.13.3-bin.tar.gz
