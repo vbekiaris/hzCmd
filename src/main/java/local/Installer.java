@@ -16,13 +16,13 @@ public abstract class Installer {
     private static final String HOME = "HOME";
     private static final String M2_DIR = "/.m2/";
     private static final String M2_Repo = System.getenv(HOME)+M2_DIR;
+    private static final String STASH = System.getenv("HZ_CMD_SRC")+"/lib-jars";
 
     public static void install(BoxManager boxes, JvmFactory jvmFactory, boolean ee, String version, String libFiles) throws IOException, InterruptedException {
 
         String mainJars = Bash.find(M2_Repo, "hzCmd-1.0.1.jar");
         String benchJars = Bash.find(M2_Repo, "hzCmd-bench-1.0.0.jar\n");
 
-        String logbackJars = Bash.find(M2_Repo, "logback-classic-1.1.7.jar");
         String cacheJars = Bash.find(M2_Repo, "cache-api-1.0.0.jar");
         String hdr = Bash.find(M2_Repo, "HdrHistogram-2.1.8.jar");
         String mq = Bash.find(M2_Repo, "activemq-all-5.13.0.jar");
@@ -31,10 +31,9 @@ public abstract class Installer {
         String lang = Bash.find(M2_Repo, "lang-6.7.6.jar");
 
         boxes.mkdir(REMOTE_HZCMD_ROOT_LIB);
-        boxes.upload("$HZ_CMD_SRC/lib-jars/logback.xml", REMOTE_HZCMD_ROOT_LIB);
+        boxes.upload(STASH+"/log4j2.xml", REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(mainJars, REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(benchJars, REMOTE_HZCMD_ROOT_LIB);
-        boxes.upload(logbackJars, REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(cacheJars, REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(hdr, REMOTE_HZCMD_ROOT_LIB);
         boxes.upload(mq, REMOTE_HZCMD_ROOT_LIB);
