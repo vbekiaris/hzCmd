@@ -27,7 +27,9 @@ public abstract class Installer {
         String hdr = Bash.find(M2_Repo, "HdrHistogram-2.1.8.jar");
         //String mq = Bash.find(M2_Repo, "activemq-all-5.13.0.jar");
 
-        String mq = Bash.find(M2_Repo, "activemq-client-5.13.3.jar");
+        //String mq = Bash.find(M2_Repo, "activemq-client-5.13.3.jar");
+        String mq = Bash.find(M2_Repo, "activemq-core-5.7.0.jar");
+
 
 
         String metrics = Bash.find(M2_Repo, "metrics-core-3.1.1.jar");
