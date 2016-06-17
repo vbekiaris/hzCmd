@@ -3,7 +3,7 @@ Install steps, you will need git mvn, and a ~/.bashrc file, hzCmd will install a
 
 git clone https://github.com/Danny-Hazelcast/hzCmd.git
 
-./hzCmd/bin/install-hzCmd
+./hzCmd/install
 
 source ~/.bashrc
 
