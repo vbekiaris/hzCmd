@@ -26,6 +26,8 @@ public abstract class Installer {
         List<String> uploadStuff = new ArrayList<String>();
 
         uploadStuff.add(STASH + "/log4j.properties");
+        uploadStuff.add(STASH + "/activemq-all-5.13.3.jar");
+
         uploadStuff.add(Bash.find(M2_Repo, "hzCmd-1.0.1.jar"));
         uploadStuff.add(Bash.find(M2_Repo, "hzCmd-bench-1.0.0.jar\n"));
         uploadStuff.add(Bash.find(M2_Repo, "cache-api-1.0.0.jar"));
