@@ -229,6 +229,10 @@ public class HzCmd implements Serializable {
 
     public void wipe( ) throws IOException, InterruptedException, JMSException {
 
+        if(clusters==null){
+            return;
+        }
+
         Map<String, ClusterManager> clustersTemp = clusters;
         clusters=null;
 
