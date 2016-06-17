@@ -48,8 +48,8 @@ public abstract class Bash {
         return executeCommand("rm " + file);
     }
 
-    public static String rmQuite(String file) throws IOException, InterruptedException {
-        return executeCommand("rm -f" + file +" 2> /dev/null");
+    public static void rmQuite(String file) throws IOException, InterruptedException {
+        executeCommandWithExitCode("rm "+file);
     }
 
 
