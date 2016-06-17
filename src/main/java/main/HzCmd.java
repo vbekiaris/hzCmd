@@ -235,8 +235,6 @@ public class HzCmd implements Serializable {
 
         Map<String, ClusterManager> clustersTemp = clusters;
         clusters=null;
-
-        BenchMarkSettings bm = benchMarkSettings;
         benchMarkSettings=null;
 
         Bash.rm(serFile);
