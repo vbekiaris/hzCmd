@@ -13,7 +13,7 @@
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
-            <version>3.7-SNAPSHOT</version>
+            <version>3.7-EA</version>
         </dependency>
 
         <dependency>
