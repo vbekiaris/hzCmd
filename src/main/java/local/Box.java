@@ -18,13 +18,13 @@ public class Box implements Serializable{
         this.pri=pri;
     }
 
-    public void upload(String souce, String dest) throws IOException, InterruptedException {
-        //Bash.scpUp(user, pub, souce, dest);
-        Bash.rsyncUp(user, pub, souce, dest);
+    public void upload(String src, String dest) throws IOException, InterruptedException {
+        //Bash.scpUp(user, pub, src, dest);
+        Bash.rsyncUp(user, pub, src, dest);
     }
 
-    public void downlonad(String souce, String dest) throws IOException, InterruptedException {
-        Bash.scpDown(user, pub, souce, dest);
+    public void downlonad(String src, String dest) throws IOException, InterruptedException {
+        Bash.scpDown(user, pub, src, dest);
     }
 
     public int sshWithExitCode(String cmd) throws IOException, InterruptedException {
