@@ -7,7 +7,7 @@ import java.util.List;
 
 public abstract class Installer {
 
-    public static final String REMOTE_HZCMD_ROOT = "hz-root";
+    public static final String REMOTE_HZCMD_ROOT = "hz";
     public static final String REMOTE_HZCMD_ROOT_LIB = REMOTE_HZCMD_ROOT+"/" + "lib";
 
     public static final String REMOTE_HZCMD_ROOT_FULL_PATH ="$HOME/"+REMOTE_HZCMD_ROOT;
