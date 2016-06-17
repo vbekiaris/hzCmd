@@ -20,7 +20,7 @@ echo 'PATH="${HZ_CMD}:${PATH}"' >> ~/.bashrc
 
 cd -
 
-git clone git@github.com:Danny-Hazelcast/hzCmd-bench.git
+https://github.com/Danny-Hazelcast/hzCmd-bench.git
 
 cd hzCmd-bench
 
