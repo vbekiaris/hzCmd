@@ -25,7 +25,11 @@ public abstract class Installer {
 
         String cacheJars = Bash.find(M2_Repo, "cache-api-1.0.0.jar");
         String hdr = Bash.find(M2_Repo, "HdrHistogram-2.1.8.jar");
-        String mq = Bash.find(M2_Repo, "activemq-all-5.13.0.jar");
+        //String mq = Bash.find(M2_Repo, "activemq-all-5.13.0.jar");
+
+        String mq = Bash.find(M2_Repo, "activemq-client-5.13.3.jar");
+
+
         String metrics = Bash.find(M2_Repo, "metrics-core-3.1.1.jar");
         String slf4j = Bash.find(M2_Repo, "slf4j-api-1.7.7.jar");
         String lang = Bash.find(M2_Repo, "lang-6.7.6.jar");
