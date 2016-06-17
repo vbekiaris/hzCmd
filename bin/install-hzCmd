@@ -9,9 +9,6 @@ mv ./apache-activemq-5.13.0 ~/.
 echo "export ACTIVE_MQ_BIN=~/apache-activemq-5.13.0/bin" >> ~/.bashrc
 echo 'PATH=${PATH}:${ACTIVE_MQ_BIN}' >> ~/.bashrc
 
-
-git clone https://github.com/Danny-Hazelcast/hzCmd.git
-
 cd hzCmd
 echo "export HZ_CMD_SRC=$(pwd)" >> ~/.bashrc
 
@@ -20,3 +17,13 @@ mvn clean install dependency:copy-dependencies
 echo "export HZ_CMD=$(pwd)/bin" >> ~/.bashrc
 echo "export HZ_CMD_BIN=$(pwd)/target" >> ~/.bashrc
 echo 'PATH="${HZ_CMD}:${PATH}"' >> ~/.bashrc
+
+cd -
+
+git clone git@github.com:Danny-Hazelcast/hzCmd-bench.git
+
+cd hzCmd-bench
+
+echo "export HZ_CMD_BENCH_SRC=$(pwd)" >> ~/.bashrc
+echo "export HZ_CMD_BENCH_BIN=$(pwd)/bin" >> ~/.bashrc
+echo 'PATH="${HZ_CMD_BENCH_BIN}:${PATH}"' >> ~/.bashrc
