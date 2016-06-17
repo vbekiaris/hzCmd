@@ -1,7 +1,6 @@
 HzCmd
 
-Install steps, you will need git mvn, and ~/.bashrc to exist, this will install activemq-5.13.3
-
+Install steps, you will need git mvn, and a ~/.bashrc file, hzCmd will install activemq-5.13.3
 
 
 git clone https://github.com/Danny-Hazelcast/hzCmd.git
