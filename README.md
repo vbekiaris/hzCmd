@@ -10,7 +10,9 @@ source ~/.bashrc
 hz help
 
 
-2) Run your first local bench
+
+2) Run your first local bench you will need password less ssh login to the local box from the current user
+
 
 hz-bench-get hz/put
 
