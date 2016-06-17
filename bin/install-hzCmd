@@ -27,3 +27,5 @@ cd hzCmd-bench
 echo "export HZ_CMD_BENCH_SRC=$(pwd)" >> ~/.bashrc
 echo "export HZ_CMD_BENCH_BIN=$(pwd)/bin" >> ~/.bashrc
 echo 'PATH="${HZ_CMD_BENCH_BIN}:${PATH}"' >> ~/.bashrc
+
+source ~/.bashrc
