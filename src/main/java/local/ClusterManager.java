@@ -386,15 +386,15 @@ public class ClusterManager implements Serializable {
     }
 
 
-    public void restart(String jvmId, String version, boolean ee, String options) throws Exception {
+    public void restart(String jvmId, String version, boolean ee) throws Exception {
         if(version!=null && !containsVersion(version)){
             Installer.installVendorLib(boxes, jvmFactory, ee, version);
         }
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
-            if (version==null && options==null ){
+            if (version==null ){
                 jvm.reStartJvm(this);
             }else{
-                jvm.reStartJvm(version, options, this, brokerIP);
+                jvm.reStartJvm(version, this, brokerIP);
             }
         }
     }

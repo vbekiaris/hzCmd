@@ -65,6 +65,10 @@ public abstract class RemoteJvm implements Serializable {
 
         this.vendorLibDir = libDir;
 
+        if(jvmOptions==null){
+            jvmOptions="";
+        }
+
         if (isRunning()) {
             System.out.println(Bash.ANSI_CYAN+"all ready started " + this +Bash.ANSI_RESET);
             return "";
@@ -133,7 +137,17 @@ public abstract class RemoteJvm implements Serializable {
         launchJvm(launchCmd);
     }
 
-    public void reStartJvm(String jvmOptions, String libDir, ClusterManager myCluster, String brokerIP) throws Exception {
+    public void reStartJvm(String libDir, ClusterManager myCluster, String brokerIP) throws Exception {
+
+        HzCmdProperties properties = new HzCmdProperties();
+        String jvmOptions;
+        if (isMember()){
+            jvmOptions = properties.readPropertie(HzCmdProperties.memberOps, "");
+
+        }else {
+            jvmOptions = properties.readPropertie(HzCmdProperties.clientOps, "");
+        }
+
         launchCmd = startJvm(jvmOptions, libDir, myCluster, brokerIP);
         launchJvm(launchCmd);
     }

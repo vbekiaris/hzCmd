@@ -127,9 +127,9 @@ public class HzCmd implements Serializable {
     }
 
 
-    public void restart(String jvmId, String version, boolean ee, String options) throws Exception {
+    public void restart(String jvmId, String version, boolean ee) throws Exception {
         for (ClusterManager c : clusters.values()) {
-            c.restart(jvmId, version, ee, options);
+            c.restart(jvmId, version, ee);
         }
     }
 

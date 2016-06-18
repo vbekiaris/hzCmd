@@ -17,13 +17,9 @@ public class Restart extends Command
     @Option(name = "-ee", description = "ee version")
     public boolean ee=false;
 
-
-    @Arguments(description = "jvm options")
-    public String options;
-
     public void exe(HzCmd hzCmd) {
         try {
-            hzCmd.restart(jvmId, version, ee, options);
+            hzCmd.restart(jvmId, version, ee);
         } catch (Exception e) {
             e.printStackTrace();
         }
