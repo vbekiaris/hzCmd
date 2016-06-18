@@ -19,7 +19,14 @@ public abstract class Installer {
     private static final String M2_Repo = System.getenv(HOME)+M2_DIR;
     private static final String STASH = System.getenv("HZ_CMD_SRC")+"/stash";
 
-    public static void install(BoxManager boxes, JvmFactory jvmFactory, boolean ee, String version, String libFiles) throws IOException, InterruptedException {
+    public static void install(BoxManager boxes, JvmFactory jvmFactory, boolean ee, String[] versions, String libFiles) throws IOException, InterruptedException {
+        installCore(boxes);
+        installVendorLibs(boxes, jvmFactory, ee, versions);
+        installLibFiles(boxes, libFiles);
+    }
+
+
+    public static void installCore(BoxManager boxes) throws IOException, InterruptedException {
 
         boxes.mkdir(REMOTE_HZCMD_ROOT_LIB);
 
@@ -27,7 +34,6 @@ public abstract class Installer {
 
         uploadStuff.add(STASH + "/log4j.properties");
 
-        //uploadStuff.add(Bash.find(M2_Repo, "activemq-all-5.13.3.jar"));
         uploadStuff.add(Bash.find(M2_Repo, "hzCmd-1.0.1.jar"));
         uploadStuff.add(Bash.find(M2_Repo, "hzCmd-bench-1.0.0.jar\n"));
         uploadStuff.add(Bash.find(M2_Repo, "cache-api-1.0.0.jar"));
@@ -51,23 +57,34 @@ public abstract class Installer {
         for (String up : uploadStuff) {
             boxes.upload(up, REMOTE_HZCMD_ROOT_LIB);
         }
+    }
 
-        if ( version != null) {
-            String uploadDir = jvmFactory.getVendorLibDir(version);
-            boxes.mkdir(uploadDir);
 
-            List<String> names = jvmFactory.getVendorLibNames(version, ee);
-            for (String name : names) {
-                String jar = Bash.find(M2_Repo, name);
-                boxes.upload(jar,  uploadDir);
+    public static void installVendorLibs(BoxManager boxes, JvmFactory jvmFactory, boolean ee, String[] versions) throws IOException, InterruptedException {
+        if ( versions != null) {
+
+            for (String version : versions) {
+
+                String uploadDir = jvmFactory.getVendorLibDir(version);
+                boxes.mkdir(uploadDir);
+
+                List<String> names = jvmFactory.getVendorLibNames(version, ee);
+                for (String name : names) {
+                    String jar = Bash.find(M2_Repo, name);
+                    boxes.upload(jar, uploadDir);
+                }
             }
         }
+    }
 
+
+    public static void installLibFiles(BoxManager boxes, String libFiles) throws IOException, InterruptedException {
         if(libFiles!=null) {
+            boxes.mkdir(REMOTE_HZCMD_ROOT_LIB);
+
             for (String file : libFiles.split(",")) {
                 boxes.upload(file, REMOTE_HZCMD_ROOT_LIB);
             }
         }
     }
-
 }

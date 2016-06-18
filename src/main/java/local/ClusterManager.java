@@ -22,7 +22,7 @@ import static global.Utils.rangeMap;
 public class ClusterManager implements Serializable {
 
     private final String clusterId;
-    private String versions = new String();
+    private List<String> versions = new ArrayList<String>();
 
     private BoxManager boxes = new BoxManager();
     private Map<String, RemoteJvm> jvms = new HashMap();
@@ -59,6 +59,29 @@ public class ClusterManager implements Serializable {
     }
 
 
+    public String getLastVersion() {
+        if(versions==null || versions.size()==0){
+            return null;
+        }
+
+        return versions.get(versions.size()-1);
+    }
+
+
+    public void addVersion(String version){
+        if ( version!=null && !versions.contains(version) ){
+            versions.add(version);
+        }
+    }
+
+    public void addVersions(String[] versions){
+        if(versions!=null){
+            for (String version : versions) {
+                addVersion(version);
+            }
+        }
+    }
+
     public void addMembers(int qty, String version, String options, String cwdFiles) throws Exception {
          addJvms(qty, version, options, cwdFiles, NodeType.Member);
     }
@@ -73,9 +96,7 @@ public class ClusterManager implements Serializable {
             return;
         }
 
-        if ( !versions.contains(version) ){
-            versions+="-"+version;
-        }
+        addVersion(version);
 
         lauchMap = ArrayListMultimap.create();
         for (int i = 0; i < qty; i++) {
@@ -93,13 +114,12 @@ public class ClusterManager implements Serializable {
     }
 
     public String getVersionsString() {
-        return versions;
+        return versions.toString();
     }
 
     public void addUniquBoxes(BoxManager bm) {
         boxes.addBoxes(bm);
     }
-
 
     private  class Runner implements Callable<Object> {
 

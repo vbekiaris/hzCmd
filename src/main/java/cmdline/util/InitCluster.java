@@ -21,8 +21,8 @@ public  class InitCluster extends Command {
     @Option(name = "-size", description = "M[0-9]+C[0-9]+  default M4C4")
     public String size="M4C4";
 
-    @Option(name = "-boxes", description = "boxes file default file name agents.txt")
-    public String boxes = "agents.txt";
+    @Option(name = "-boxes", description = "boxes file")
+    public String boxes=null;
 
     @Option(name = "-type", description = "cluster tye [HZ|GG|GEM] default HZ" )
     public String type = "HZ";
@@ -30,8 +30,8 @@ public  class InitCluster extends Command {
     @Option(name = "-ee", description = "enterprise switch default false")
     public boolean ee = false;
 
-    @Option(name = "-v", description = "jar version string")
-    public String version;
+    @Option(name = "-v", description = "jar version's string")
+    public String versions=null;
 
     @Option(name = "-upcwd", description = "contigues list of file in a comma delimited string, upload to cwd")
     public String cwd_file=null;
@@ -44,7 +44,12 @@ public  class InitCluster extends Command {
             ClusterType clusterType = ClusterType.valueOf(type);
             ClusterSize clusterSize = new ClusterSize(size);
 
-            hzCmd.initCluster(user, boxes, id, clusterType, clusterSize, ee, version, lib_files, cwd_file);
+            String[] versionsList = null;
+            if(versions!=null){
+                versionsList = versions.split(",");
+            }
+
+            hzCmd.initCluster(user, boxes, id, clusterType, clusterSize, ee, versionsList, lib_files, cwd_file);
 
         } catch (Exception e) {
             e.printStackTrace();

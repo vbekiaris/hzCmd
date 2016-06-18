@@ -57,7 +57,7 @@ public class HzCmd implements Serializable {
     private String brokerIP=null;
 
 
-    public void initCluster(String user, String file, String clusterId, ClusterType type, ClusterSize size, boolean ee, String version, String libFiles, String cwdFiles) throws Exception{
+    public void initCluster(String user, String file, String clusterId, ClusterType type, ClusterSize size, boolean ee, String[] versions, String libFiles, String cwdFiles) throws Exception{
 
         HzCmdProperties properties = new HzCmdProperties();
 
@@ -66,10 +66,22 @@ public class HzCmd implements Serializable {
 
         ClusterManager cluster = getCluster(clusterId, type);
         cluster.addUniquBoxes(boxManager);
-        Installer.install(cluster.getBoxManager(), cluster.getJvmFactory(), ee, version, libFiles);
+
+        Installer.install(cluster.getBoxManager(), cluster.getJvmFactory(), ee, versions, libFiles);
+        cluster.addVersions(versions);
         cluster.setMembersOnlyCount(size.dedicatedMemberBox());
 
         System.out.print(cluster);
+
+
+        String version=null;
+        if(versions==null || versions.length>1){
+            version = cluster.getLastVersion();
+        }
+        if(version==null){
+            System.out.println(Bash.ANSI_RED + "No version" + Bash.ANSI_RESET);
+            return;
+        }
 
 
         String memberOps = properties.readPropertie(HzCmdProperties.memberOps, "");

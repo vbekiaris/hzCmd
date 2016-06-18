@@ -15,6 +15,9 @@ public class BoxManager implements Serializable {
     }
 
     public BoxManager(String file, String user) throws IOException, InterruptedException {
+        if(file==null || user==null){
+            return;
+        }
         addBoxes(file, user);
     }
 
@@ -104,7 +107,7 @@ public class BoxManager implements Serializable {
     @Override
     public String toString() {
 
-        String str="\n";
+        String str = new String();
         for(Box box : boxes){
             try {
                 if(box.testConnecton()){
