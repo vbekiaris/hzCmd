@@ -510,6 +510,7 @@ public class ClusterManager implements Serializable {
                 ", memberCount=" + memberCount +
                 ", clientCount=" + clientCount +
                 ", boxCount=" + boxes.size() +
+                ", versions=" + versions +
                 ", " + boxes +
                 "" + jvms +
                 Bash.ANSI_RESET;

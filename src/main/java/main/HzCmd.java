@@ -75,8 +75,10 @@ public class HzCmd implements Serializable {
 
 
         String version=null;
-        if(versions==null || versions.length>1){
+        if(versions==null || versions.length==0 || versions.length>1){
             version = cluster.getLastVersion();
+        }else{
+            version = versions[1];
         }
         if(version==null){
             System.out.println(Bash.ANSI_RED + "No version" + Bash.ANSI_RESET);
