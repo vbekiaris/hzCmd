@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import static global.Utils.printStringIfNotEmpty;
 
@@ -116,7 +117,6 @@ public abstract class RemoteJvm implements Serializable {
         launchCmd = "mkdir -p "+dir+"; "+stuffToCpIntoDir+" cd "+dir+" ; nohup java "+jhicAgent+" -cp \"" + Installer.REMOTE_HZCMD_LIB_FULL_PATH+"/*" + ":" +  vendorLibDir+"/*"  + "\" " + jvmArgs + " " + jvmOptions + " " + classToRun + " >> " + outFile + " 2>&1 & echo $! "+id+" ; cd - > /dev/null";
 
         return launchCmd;
-        //launchJvm(launchCmd);
     }
 
 
@@ -134,7 +134,14 @@ public abstract class RemoteJvm implements Serializable {
     }
 
     private void launchJvm(String launch) throws IOException, InterruptedException {
-        String pidStr = box.ssh(launch);
+        String launchRes = box.ssh(launch);
+
+        String delim = " \n";
+        StringTokenizer st = new StringTokenizer(launchRes,delim);
+
+        String pidStr = st.nextToken();
+        String jmvIdStr = st.nextToken();
+
         pid = Integer.parseInt(pidStr.trim());
     }
 
