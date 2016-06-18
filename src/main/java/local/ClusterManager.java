@@ -387,7 +387,7 @@ public class ClusterManager implements Serializable {
             if (version==null && options==null ){
                 jvm.reStartJvm(this);
             }else{
-                jvm.startJvm(version, options, this, brokerIP);
+                jvm.reStartJvm(version, options, this, brokerIP);
             }
         }
     }

@@ -133,6 +133,11 @@ public abstract class RemoteJvm implements Serializable {
         launchJvm(launchCmd);
     }
 
+    public void reStartJvm(String jvmOptions, String libDir, ClusterManager myCluster, String brokerIP) throws Exception {
+        launchCmd = startJvm(jvmOptions, libDir, myCluster, brokerIP);
+        launchJvm(launchCmd);
+    }
+
     private void launchJvm(String launch) throws IOException, InterruptedException {
         String launchRes = box.ssh(launch);
 
