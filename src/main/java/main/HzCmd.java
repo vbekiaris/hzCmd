@@ -151,7 +151,9 @@ public class HzCmd implements Serializable {
                 c.printJvmInfo(jvmId);
             }
 
-            Thread.sleep(restartDelaySec * 1000);
+            if(restartDelaySec!=0) {
+                Thread.sleep(restartDelaySec * 1000);
+            }
 
             for (ClusterManager c : clusters.values()) {
                 c.restart(jvmId);
@@ -159,7 +161,10 @@ public class HzCmd implements Serializable {
             for (ClusterManager c : clusters.values()) {
                 c.getResponses(jvmId);
             }
-            Thread.sleep(iterationDelaySec * 1000);
+
+            if(iterationDelaySec!=0) {
+                Thread.sleep(iterationDelaySec * 1000);
+            }
         }
     }
 
