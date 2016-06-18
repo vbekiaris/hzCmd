@@ -135,6 +135,8 @@ public abstract class RemoteJvm implements Serializable {
         }
         beforeJvmStart(myCluster);
         launchJvm(launchCmd);
+
+        System.out.println(getResponse());
     }
 
     public void reStartJvm(String libDir, ClusterManager myCluster, String brokerIP) throws Exception {
@@ -150,6 +152,9 @@ public abstract class RemoteJvm implements Serializable {
 
         launchCmd = startJvm(jvmOptions, libDir, myCluster, brokerIP);
         launchJvm(launchCmd);
+
+
+        System.out.println(getResponse());
     }
 
     private void launchJvm(String launch) throws IOException, InterruptedException {
