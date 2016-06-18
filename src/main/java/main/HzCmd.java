@@ -44,6 +44,7 @@ import static global.Utils.myIp;
 
 //bench cleanup from just 1 thread.
 
+//read response on restart
 
 public class HzCmd implements Serializable {
 
