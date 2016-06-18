@@ -25,20 +25,23 @@ public abstract class Installer {
 
         List<String> uploadStuff = new ArrayList<String>();
 
-        //uploadStuff.add(STASH + "/log4j.properties");
+        uploadStuff.add(STASH + "/log4j.properties");
 
-        uploadStuff.add(Bash.find(M2_Repo, "activemq-all-5.13.3.jar"));
+        //uploadStuff.add(Bash.find(M2_Repo, "activemq-all-5.13.3.jar"));
         uploadStuff.add(Bash.find(M2_Repo, "hzCmd-1.0.1.jar"));
         uploadStuff.add(Bash.find(M2_Repo, "hzCmd-bench-1.0.0.jar\n"));
         uploadStuff.add(Bash.find(M2_Repo, "cache-api-1.0.0.jar"));
 
-        //uploadStuff.add(Bash.find(M2_Repo, "jms-api-1.1-rev-1.jar"));
-        //uploadStuff.add(Bash.find(M2_Repo, "activemq-client-5.13.3.jar"));
+        uploadStuff.add(Bash.find(M2_Repo, "jms-api-1.1-rev-1.jar"));
+        uploadStuff.add(Bash.find(M2_Repo, "activemq-client-5.13.3.jar"));
+        uploadStuff.add(Bash.find(M2_Repo, "geronimo-j2ee-management_1.1_spec-1.0.1.jar"));
+        uploadStuff.add(Bash.find(M2_Repo, "hawtbuf-1.11.jar"));
+
 
         uploadStuff.add(Bash.find(M2_Repo, "metrics-core-3.1.1.jar"));
         uploadStuff.add(Bash.find(M2_Repo, "HdrHistogram-2.1.8.jar"));
 
-        //uploadStuff.add(Bash.find(M2_Repo, "log4j-1.2.17.jar"));
+        uploadStuff.add(Bash.find(M2_Repo, "log4j-1.2.17.jar"));
 
         uploadStuff.add(Bash.find(M2_Repo, "slf4j-api-1.7.7.jar"));
         uploadStuff.add(Bash.find(M2_Repo, "lang-6.7.6.jar"));
