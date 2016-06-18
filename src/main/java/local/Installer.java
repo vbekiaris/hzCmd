@@ -62,17 +62,21 @@ public abstract class Installer {
 
     public static void installVendorLibs(BoxManager boxes, JvmFactory jvmFactory, boolean ee, String[] versions) throws IOException, InterruptedException {
         if ( versions != null) {
-
             for (String version : versions) {
+                installVendorLib(boxes, jvmFactory, ee, version);
+            }
+        }
+    }
 
-                String uploadDir = jvmFactory.getVendorLibDir(version);
-                boxes.mkdir(uploadDir);
+    public static void installVendorLib(BoxManager boxes, JvmFactory jvmFactory, boolean ee, String version) throws IOException, InterruptedException {
+        if(version!=null){
+            String uploadDir = jvmFactory.getVendorLibDir(version);
+            boxes.mkdir(uploadDir);
 
-                List<String> names = jvmFactory.getVendorLibNames(version, ee);
-                for (String name : names) {
-                    String jar = Bash.find(M2_Repo, name);
-                    boxes.upload(jar, uploadDir);
-                }
+            List<String> names = jvmFactory.getVendorLibNames(version, ee);
+            for (String name : names) {
+                String jar = Bash.find(M2_Repo, name);
+                boxes.upload(jar, uploadDir);
             }
         }
     }

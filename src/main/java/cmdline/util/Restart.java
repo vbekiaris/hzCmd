@@ -14,12 +14,16 @@ public class Restart extends Command
     @Option(name = "-v", description = "hazelcast version e.g. 9.7")
     public String version;
 
+    @Option(name = "-ee", description = "ee version")
+    public boolean ee=false;
+
+
     @Arguments(description = "jvm options")
     public String options;
 
     public void exe(HzCmd hzCmd) {
         try {
-            hzCmd.restart(jvmId, version, options);
+            hzCmd.restart(jvmId, version, ee, options);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -74,6 +74,10 @@ public class ClusterManager implements Serializable {
         }
     }
 
+    public boolean containsVersion(String version){
+        return versions.contains(version);
+    }
+
     public void addVersions(String[] versions){
         if(versions!=null){
             for (String version : versions) {
@@ -382,7 +386,10 @@ public class ClusterManager implements Serializable {
     }
 
 
-    public void restart(String jvmId, String version, String options) throws Exception {
+    public void restart(String jvmId, String version, boolean ee, String options) throws Exception {
+        if(version!=null && !containsVersion(version)){
+            Installer.installVendorLib(boxes, jvmFactory, ee, version);
+        }
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             if (version==null && options==null ){
                 jvm.reStartJvm(this);
