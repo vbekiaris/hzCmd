@@ -137,14 +137,13 @@ public class HzCmd implements Serializable {
         }
     }
 
-    public void bounce(String jvmId, int durationSec, int initialDelaySec, int restartDelaySec, int iterationDelaySec) throws Exception {
+    public void bounce(String jvmId, int iterations, int initialDelaySec, int restartDelaySec, int iterationDelaySec) throws Exception {
 
-        Thread.sleep(initialDelaySec * 1000);
+        if(initialDelaySec!=0) {
+            Thread.sleep(initialDelaySec * 1000);
+        }
 
-        long startTime = System.currentTimeMillis();
-        long endTime = startTime + (durationSec * 1000);
-        while(System.currentTimeMillis() < endTime) {
-
+        for(int i=0; i<iterations; i++){
             for (ClusterManager c : clusters.values()) {
                 c.kill(jvmId);
             }
