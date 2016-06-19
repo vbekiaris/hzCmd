@@ -19,7 +19,7 @@ import static remote.Utils.recordeExceptionJms;
 
 public abstract class Controler{
 
-    private BenchManager benchManager = new BenchManager(getVendorObject());;
+    private BenchManager benchManager;
 
     public static final String ID = System.getProperty(Args.ID.name());
     public static final String Q = System.getProperty(Args.Q.name());
@@ -37,6 +37,7 @@ public abstract class Controler{
     public void startEmbeddedObject() throws Exception{
         try {
             init(type);
+            benchManager = new BenchManager(getVendorObject());
             MQ.sendReply(ID+" Started");
         }catch (Exception e){
             recordeException(e);
