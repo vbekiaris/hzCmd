@@ -60,12 +60,6 @@ public abstract class Installer {
             files += file+" ";
         }
         boxes.upload(files, REMOTE_HZCMD_ROOT_LIB);
-
-        /*
-        for (String up : uploadStuff) {
-            boxes.upload(up, REMOTE_HZCMD_ROOT_LIB);
-        }
-        */
     }
 
 
@@ -79,14 +73,22 @@ public abstract class Installer {
 
     public static void installVendorLib(BoxManager boxes, JvmFactory jvmFactory, boolean ee, String version) throws IOException, InterruptedException {
         if(version!=null){
+            System.out.println(Bash.ANSI_YELLOW + "installing "+version+" jar's"+ Bash.ANSI_RESET);
             String uploadDir = jvmFactory.getVendorLibDir(version);
             boxes.mkdir(uploadDir);
 
             List<String> names = jvmFactory.getVendorLibNames(version, ee);
             for (String name : names) {
                 String jar = Bash.find(M2_Repo, name);
-                boxes.upload(jar, uploadDir);
+
+                if(jar!=null){
+                    boxes.upload(jar, uploadDir);
+                }else{
+                    System.out.println(Bash.ANSI_RED + "can't find "+version+" jars in "+M2_Repo+Bash.ANSI_RESET);
+                }
             }
+        }else{
+            System.out.println(Bash.ANSI_RED + "version for jars is null" + Bash.ANSI_RESET);
         }
     }
 

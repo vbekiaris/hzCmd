@@ -41,8 +41,6 @@ import static global.Utils.myIp;
 
 //add JFR cmd settings
 
-//bench cleanup from just 1 thread.
-
 
 public class HzCmd implements Serializable {
 
