@@ -349,6 +349,7 @@ public class ClusterManager implements Serializable {
     public void restart(String jvmId, String version, boolean ee) throws Exception {
         if (version != null && !containsVersion(version)) {
             Installer.installVendorLib(boxes, jvmFactory, ee, version);
+            addVersion(version);
         }
 
         List<RemoteJvm> members = getMatchingMemberJms(jvmId);
