@@ -20,9 +20,11 @@ public abstract class Installer {
     private static final String STASH = System.getenv("HZ_CMD_SRC")+"/stash";
 
     public static void install(BoxManager boxes, JvmFactory jvmFactory, boolean ee, String[] versions, String libFiles) throws IOException, InterruptedException {
+        System.out.println(Bash.ANSI_YELLOW + "Installing" + Bash.ANSI_RESET);
         installCore(boxes);
         installVendorLibs(boxes, jvmFactory, ee, versions);
         installLibFiles(boxes, libFiles);
+        System.out.println(Bash.ANSI_YELLOW + "Installed" + Bash.ANSI_RESET);
     }
 
 
@@ -51,12 +53,19 @@ public abstract class Installer {
         uploadStuff.add(Bash.find(M2_Repo, "slf4j-api-1.7.5.jar"));
         uploadStuff.add(Bash.find(M2_Repo, "slf4j-log4j12-1.7.5.jar"));
 
-
         uploadStuff.add(Bash.find(M2_Repo, "lang-6.7.6.jar"));
 
+        String files = new String();
+        for (String file : uploadStuff) {
+            files += file+" ";
+        }
+        boxes.upload(files, REMOTE_HZCMD_ROOT_LIB);
+
+        /*
         for (String up : uploadStuff) {
             boxes.upload(up, REMOTE_HZCMD_ROOT_LIB);
         }
+        */
     }
 
 

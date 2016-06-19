@@ -64,7 +64,6 @@ public class HzCmd implements Serializable {
         HzCmdProperties properties = new HzCmdProperties();
 
         BoxManager boxManager = new BoxManager(file, user);
-        System.out.print(boxManager);
 
         ClusterManager cluster = getCluster(clusterId, type);
         cluster.addUniquBoxes(boxManager);

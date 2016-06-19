@@ -19,7 +19,6 @@ public class Box implements Serializable{
     }
 
     public void upload(String src, String dest) throws IOException, InterruptedException {
-        //Bash.scpUp(user, pub, src, dest);
         Bash.rsyncUp(user, pub, src, dest);
     }
 
