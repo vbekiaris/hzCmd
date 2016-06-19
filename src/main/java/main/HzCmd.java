@@ -41,11 +41,8 @@ import static global.Utils.myIp;
 
 //add JFR cmd settings
 
-//MQ Request response, with temp reply Q's for proper com's
-
 //bench cleanup from just 1 thread.
 
-//read response on restart
 
 public class HzCmd implements Serializable {
 
