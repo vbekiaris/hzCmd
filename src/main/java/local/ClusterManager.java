@@ -174,10 +174,7 @@ public class ClusterManager implements Serializable {
 
             while(!started.isEmpty()){
                 ListIterator<RemoteJvm> iter = started.listIterator();
-
                 try {
-
-
                     while (iter.hasNext()) {
                         Object o;
                         if ((o = iter.next().getResponse(8)) != null) {
@@ -189,7 +186,6 @@ public class ClusterManager implements Serializable {
                     e.printStackTrace();
                     throw e;
                 }
-                System.out.println("getting response round");
             }
 
             return null;
