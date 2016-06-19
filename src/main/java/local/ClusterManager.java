@@ -115,7 +115,7 @@ public class ClusterManager implements Serializable {
     }
 
     public String getVersionsString() {
-        return versions.toString();
+        return versions.toString().replace("[", "").replace("]", "").replace(",", "").replace(" ", "-");
     }
 
     public void addUniquBoxes(BoxManager bm) {
