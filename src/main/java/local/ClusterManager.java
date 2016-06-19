@@ -388,18 +388,24 @@ public class ClusterManager implements Serializable {
 
 
     public void restart(String jvmId, String version, boolean ee) throws Exception {
-        if(version!=null && !containsVersion(version)){
+        if (version != null && !containsVersion(version)) {
             Installer.installVendorLib(boxes, jvmFactory, ee, version);
         }
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
-            if (version==null ){
+        for (RemoteJvm jvm : getMatchingJms(jvmId)) {
+            if (version == null) {
                 jvm.reStartJvm(this);
-            }else{
+            } else {
                 jvm.reStartJvm(jvmFactory.getVendorLibDir(version), this, brokerIP);
             }
         }
+        for (RemoteJvm jvm : getMatchingJms(jvmId)) {
+            jvm.startEmbeddedObject();
+        }
+        for (RemoteJvm jvm : getMatchingJms(jvmId)) {
+            Object response = jvm.getResponse();
+            printResponse(response);
+        }
     }
-
     public void clean(String jvmId) throws IOException, InterruptedException {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.clean();
