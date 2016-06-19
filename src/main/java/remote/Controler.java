@@ -38,7 +38,7 @@ public abstract class Controler{
         try {
             init(type);
             benchManager = new BenchManager(getVendorObject());
-            MQ.sendReply(ID + " Re Started Embedded");
+            MQ.sendReply(ID+" Started");
         }catch (Exception e){
             recordeException(e);
             MQ.sendReply(e);
