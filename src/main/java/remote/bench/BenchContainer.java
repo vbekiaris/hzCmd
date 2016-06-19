@@ -1,7 +1,6 @@
 package remote.bench;
 
 import mq.MQ;
-import remote.Controler;
 import remote.Utils;
 import remote.bench.marker.BenchMarker;
 import remote.bench.marker.HdrMarker;
@@ -25,7 +24,7 @@ public class BenchContainer {
     private static String outputFileName;
     private BenchMarker benchMarker;
 
-    private List<Bench> benchs = new ArrayList();
+    private List<Bench> benchThreads = new ArrayList();
 
     public BenchContainer(Object vendorObject, String id, String clazz){
         this.vendorObject=vendorObject;
@@ -41,40 +40,40 @@ public class BenchContainer {
 
     public void setThreadCount(int count) throws Exception {
 
-        count = count - benchs.size();
+        count = count - benchThreads.size();
 
         if(count>0){
             for(int i=0; i<count; i++){
-                benchs.add(instantiate(clazzName, Bench.class));
+                benchThreads.add(instantiate(clazzName, Bench.class));
             }
         }else{
             count = Math.abs(count);
             for(int i=0; i<count; i++){
-                benchs.remove(i);
+                benchThreads.remove(i);
             }
         }
 
-        for (Bench b : benchs) {
+        for (Bench b : benchThreads) {
             b.setVendorObject(vendorObject);
         }
     }
 
 
     public void setField(String field, String value) throws Exception{
-        for (Bench b : benchs) {
+        for (Bench b : benchThreads) {
             Utils.setField(field, value, b);
         }
     }
 
     public void init(){
-        for (Bench b : benchs) {
+        for (Bench b : benchThreads) {
             b.init();
         }
     }
 
     public void cleanUp(){
-        for (Bench b : benchs) {
-            b.cleanup();
+        if ( benchThreads.size() >0 ){
+            benchThreads.get(0).cleanup();
         }
     }
 
@@ -105,9 +104,9 @@ public class BenchContainer {
     private boolean invokeSync(int seconds) throws InterruptedException {
         benchMarker.setDurationSeconds(seconds);
 
-        ExecutorService executor = Executors.newFixedThreadPool(benchs.size());
+        ExecutorService executor = Executors.newFixedThreadPool(benchThreads.size());
 
-        for (Bench b : benchs) {
+        for (Bench b : benchThreads) {
             executor.submit( new Runner( b ) );
         }
         executor.shutdown();

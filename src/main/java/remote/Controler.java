@@ -148,13 +148,6 @@ public abstract class Controler{
         }
     }
 
-    public void ping(){
-        try {
-            MQ.sendReply( ID +" ping");
-        } catch (JMSException jmsError) {
-            recordeException(jmsError);
-        }
-    }
 
     public void run() throws Exception {
         while (true){
