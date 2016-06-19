@@ -417,13 +417,14 @@ public class ClusterManager implements Serializable {
         }
 
         List<RemoteJvm> members = getMatchingMemberJms(jvmId);
+        List<RemoteJvm> clients = getMatchingClientJms(jvmId);
+
         restartJvmList(version, members);
 
-        if(members.size()!=0){
+        if(members.size()!=0 && clients.size()!=0){
             Thread.sleep(5000);
         }
 
-        List<RemoteJvm> clients = getMatchingClientJms(jvmId);
         restartJvmList(version, clients);
     }
 
