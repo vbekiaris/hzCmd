@@ -186,7 +186,7 @@ public class ClusterManager implements Serializable {
                         }
                     }
                 }catch (Exception e){
-                    System.out.println(e);
+                    e.printStackTrace();
                 }
                 System.out.println("getting response round");
             }
