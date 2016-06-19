@@ -102,6 +102,9 @@ public abstract class MQ {
 
     public static Object receivReply(long timeOut) throws JMSException {
         ObjectMessage objMsg = (ObjectMessage) replyConsumer.receive(timeOut);
+        if(objMsg==null) {
+            return null;
+        }
         return objMsg.getObject();
     }
 
