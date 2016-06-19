@@ -256,6 +256,31 @@ public class ClusterManager implements Serializable {
         return matching;
     }
 
+    public List<RemoteJvm> getMatchingMemberJms(String jvmId) {
+        List<RemoteJvm> all = getMatchingJms(jvmId);
+
+        ListIterator<RemoteJvm> iter = all.listIterator();
+        while (iter.hasNext()) {
+            if ( iter.next().getId().matches(".*Client.*") ){
+                iter.remove();
+            }
+        }
+        return all;
+    }
+
+    public List<RemoteJvm> getMatchingClientJms(String jvmId) {
+        List<RemoteJvm> all = getMatchingJms(jvmId);
+
+        ListIterator<RemoteJvm> iter = all.listIterator();
+        while (iter.hasNext()) {
+            if ( iter.next().getId().matches(".*Member.*") ){
+                iter.remove();
+            }
+        }
+        return all;
+    }
+
+
     public void restartEmbeddedObject(String jvmId) throws IOException, InterruptedException, JMSException{
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.startEmbeddedObject();
@@ -386,26 +411,39 @@ public class ClusterManager implements Serializable {
         }
     }
 
-
     public void restart(String jvmId, String version, boolean ee) throws Exception {
         if (version != null && !containsVersion(version)) {
             Installer.installVendorLib(boxes, jvmFactory, ee, version);
         }
-        for (RemoteJvm jvm : getMatchingJms(jvmId)) {
+
+        List<RemoteJvm> members = getMatchingMemberJms(jvmId);
+        restartJvmList(version, members);
+
+        if(members.size()!=0){
+            Thread.sleep(5000);
+        }
+
+        List<RemoteJvm> clients = getMatchingClientJms(jvmId);
+        restartJvmList(version, clients);
+    }
+
+    private void restartJvmList(String version, List<RemoteJvm> jvms) throws Exception{
+        for (RemoteJvm jvm : jvms) {
             if (version == null) {
                 jvm.reStartJvm(this);
             } else {
                 jvm.reStartJvm(jvmFactory.getVendorLibDir(version), this, brokerIP);
             }
         }
-        for (RemoteJvm jvm : getMatchingJms(jvmId)) {
+        for (RemoteJvm jvm : jvms) {
             jvm.startEmbeddedObject();
         }
-        for (RemoteJvm jvm : getMatchingJms(jvmId)) {
+        for (RemoteJvm jvm : jvms) {
             Object response = jvm.getResponse();
             printResponse(response);
         }
     }
+
     public void clean(String jvmId) throws IOException, InterruptedException {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.clean();
