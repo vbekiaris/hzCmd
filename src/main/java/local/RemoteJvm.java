@@ -3,16 +3,15 @@ package local;
 import global.Args;
 import global.Bash;
 import global.NodeType;
+import local.properties.HzCmdProperties;
 import mq.MQ;
 import remote.bench.BenchType;
 import remote.command.*;
 import remote.command.bench.*;
-import vendor.hz.HzXml;
 
 import javax.jms.JMSException;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -45,9 +44,6 @@ public abstract class RemoteJvm implements Serializable {
         this.Q = System.getProperty("user.dir")+"/"+id;
         this.clusterId = clusterId;
         this.dir = Installer.REMOTE_HZCMD_ROOT + "/" + id;
-
-        //don't make the dir's one by one,
-        //box.mkdir(dir);
     }
 
     public abstract String getClassToRun();
@@ -196,7 +192,7 @@ public abstract class RemoteJvm implements Serializable {
     }
 
     public void startEmbeddedObject() throws JMSException {
-        MQ.sendObj(Q, new RestartEmbeddedObjectCmd() );
+        MQ.sendObj(Q, new StartEmbeddedObjectCmd() );
     }
 
     public void load(String taskId, String className) throws IOException, InterruptedException, JMSException {
@@ -235,18 +231,6 @@ public abstract class RemoteJvm implements Serializable {
         MQ.sendObj(Q, new SetFieldCmd(taskId, field, value) );
     }
 
-    public void invokeAsync(int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
-        MQ.sendObj(Q, new InvokeAsyncCmd(threadCount, method, taskId) );
-    }
-
-    public void invokeSync(int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
-        MQ.sendObj(Q, new InvokeSyncCmd(threadCount, method, taskId) );
-    }
-
-    public void ping() throws IOException, InterruptedException, JMSException {
-        MQ.sendObj(Q, new PingCmd() );
-    }
-
     public Object getResponse() throws IOException, InterruptedException, JMSException {
         return MQ.receivReply();
     }
@@ -255,9 +239,6 @@ public abstract class RemoteJvm implements Serializable {
         return MQ.receivReply(timeout);
     }
 
-    public Object getInitialJvmStartedResponse(long timeout) throws IOException, InterruptedException, JMSException {
-        return MQ.receiveObjNoReply(Q, timeout);
-    }
 
     public void drainQ() throws JMSException {
         MQ.drainQ(Q);
@@ -314,10 +295,6 @@ public abstract class RemoteJvm implements Serializable {
 
     public String grep(String args) throws IOException, InterruptedException {
         return box.grep("'"+args+"' "+dir+"/"+outFile);
-    }
-
-    public void downlonad(String destDir) throws IOException, InterruptedException {
-        box.downlonad(dir + "/*", destDir + "/" + id);
     }
 
     public void upload(String src, String dst) throws IOException, InterruptedException {

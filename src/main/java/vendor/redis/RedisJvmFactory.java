@@ -2,6 +2,7 @@ package vendor.redis;
 
 import global.NodeType;
 import local.*;
+import local.properties.HzCmdProperties;
 
 import java.io.IOException;
 import java.io.Serializable;

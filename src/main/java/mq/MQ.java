@@ -121,14 +121,6 @@ public abstract class MQ {
     }
 
 
-    public static Object receiveObjNoReply(String queueName, long timeout) throws JMSException {
-        MessageConsumer consumer = getMessageConsumer(queueName);
-        ObjectMessage objMsg = (ObjectMessage) consumer.receive(timeout);
-        return  objMsg.getObject();
-    }
-
-
-
     public static void drainQ(String queueName) throws JMSException {
 
         int count = 0;

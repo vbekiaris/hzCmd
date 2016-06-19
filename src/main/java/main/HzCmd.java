@@ -7,6 +7,7 @@ import local.*;
 import local.bench.BenchManager;
 import local.bench.BenchMarkSettings;
 import local.bench.FieldValue;
+import local.properties.HzCmdProperties;
 import remote.bench.BenchType;
 import vendor.gem.GemJvmFactory;
 import vendor.gg.GgJvmFactory;

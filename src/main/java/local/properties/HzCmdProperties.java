@@ -1,6 +1,7 @@
-package local;
+package local.properties;
 
 
+import local.properties.OrderedProperties;
 import main.HzCmd;
 import java.io.IOException;
 

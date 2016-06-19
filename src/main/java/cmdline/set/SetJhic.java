@@ -1,7 +1,7 @@
 package cmdline.set;
 
 import cmdline.base.Command;
-import local.HzCmdProperties;
+import local.properties.HzCmdProperties;
 import main.HzCmd;
 
 import java.io.Serializable;
