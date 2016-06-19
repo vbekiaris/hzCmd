@@ -118,7 +118,7 @@ public abstract class RemoteJvm implements Serializable {
     }
 
 
-    public final void reStartJvm(ClusterManager myCluster) throws Exception {
+    public final void reStartJvm() throws Exception {
         if(launchCmd==null){
             System.out.println(Bash.ANSI_RED+"cant restart jvm never started"+this+Bash.ANSI_RESET);
             return;
@@ -127,7 +127,6 @@ public abstract class RemoteJvm implements Serializable {
             System.out.println(Bash.ANSI_RED+"JVM is Running "+this+Bash.ANSI_RESET);
             return;
         }
-        beforeJvmStart(myCluster);
         launchJvm(launchCmd);
     }
 
@@ -152,7 +151,6 @@ public abstract class RemoteJvm implements Serializable {
         StringTokenizer st = new StringTokenizer(launchRes,delim);
 
         String pidStr = st.nextToken();
-        String jmvIdStr = st.nextToken();
 
         pid = Integer.parseInt(pidStr.trim());
     }

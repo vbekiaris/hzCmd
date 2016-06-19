@@ -172,27 +172,14 @@ public class ClusterManager implements Serializable {
                 remoteJvm.startEmbeddedObject();
             }
 
-            while(!started.isEmpty()){
-                ListIterator<RemoteJvm> iter = started.listIterator();
-                try {
-                    while (iter.hasNext()) {
-                        Object o;
-                        if ((o = iter.next().getResponse(8)) != null) {
-                            printResponse(o);
-                            iter.remove();
-                        }
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
-                    throw e;
-                }
+            for (RemoteJvm remoteJvm : started) {
+                Object response = remoteJvm.getResponse();
+                printResponse(response);
             }
 
             return null;
         }
     }
-
-
 
     private void addJvm(String jarVersion, String options, String cwdFiles, NodeType type) throws Exception {
         int idx;
@@ -211,7 +198,6 @@ public class ClusterManager implements Serializable {
         String lauchStr = jvm.startJvm(options, jvmFactory.getVendorLibDir(jarVersion), this, brokerIP);
 
         lauchMap.put(boxes.get(idx), lauchStr);
-
     }
 
     public int getMemberCount( ) {
@@ -350,64 +336,13 @@ public class ClusterManager implements Serializable {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.setField(taskId, field, value);
         }
-
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
-            Object o = jvm.getResponse();
-            printResponse(o);
-        }
-    }
-
-
-    public void getResponse(String jvmId) throws IOException, InterruptedException, JMSException {
-
-        List<RemoteJvm> matchingJms = getMatchingJms(jvmId);
-
-        long start = System.currentTimeMillis();
-        int count = matchingJms.size();
-        System.out.println("start get response for "+count);
-
-
-        //int prevRemaining=0;
-        while(!matchingJms.isEmpty()){
-            ListIterator<RemoteJvm> iter = matchingJms.listIterator();
-            while(iter.hasNext()){
-                Object o;
-                if(  (o = iter.next().getResponse(10)) != null){
-                    printResponse(o);
-                    iter.remove();
-                }
-            }
-            //if(matchingJms.size()!=prevRemaining) {
-            //    System.out.println("remaining " + matchingJms.size());
-            //    prevRemaining=matchingJms.size();
-            //}
-        }
-
-        long end = System.currentTimeMillis();
-        System.out.println("response for "+count+" seconds "+(end-start)/1000);
-    }
-
-    private void printResponse(Object o){
-        if(o instanceof Exception){
-            Exception e = (Exception) o;
-            System.out.println(Bash.ANSI_RED + e +e.getCause()+Bash.ANSI_RESET);
-            e.printStackTrace();
-
-        }else{
-            System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
-        }
-    }
-
-    public void getResponses(String jvmId) throws IOException, InterruptedException, JMSException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
-            printResponse(jvm.getResponse());
-        }
+        getResponse(jvmId);
     }
 
 
     public void restart(String jvmId) throws Exception {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
-            jvm.reStartJvm(this);
+            jvm.reStartJvm();
         }
     }
 
@@ -431,7 +366,7 @@ public class ClusterManager implements Serializable {
     private void restartJvmList(String version, List<RemoteJvm> jvms) throws Exception{
         for (RemoteJvm jvm : jvms) {
             if (version == null) {
-                jvm.reStartJvm(this);
+                jvm.reStartJvm();
             } else {
                 jvm.reStartJvm(jvmFactory.getVendorLibDir(version), this, brokerIP);
             }
@@ -444,6 +379,27 @@ public class ClusterManager implements Serializable {
             printResponse(response);
         }
     }
+
+
+    public void getResponse(String jvmId) throws IOException, InterruptedException, JMSException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+            printResponse(jvm.getResponse());
+        }
+    }
+
+    private void printResponse(Object o){
+        if(o instanceof Exception){
+            Exception e = (Exception) o;
+            System.out.println(Bash.ANSI_RED + e +e.getCause()+Bash.ANSI_RESET);
+            e.printStackTrace();
+
+        }else{
+            System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
+        }
+    }
+
+
+
 
     public void clean(String jvmId) throws IOException, InterruptedException {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
@@ -522,8 +478,7 @@ public class ClusterManager implements Serializable {
         boxes.upload(src, Installer.REMOTE_HZCMD_ROOT_LIB);
     }
 
-    public void downlonad(String jvmId, String destDir) throws IOException, InterruptedException {
-
+    public void downlonad(String destDir) throws IOException, InterruptedException {
         for (Box box : boxes.getBoxList()) {
             box.downlonad(Installer.REMOTE_HZCMD_ROOT+"/*", destDir+"/"+clusterId);
         }
@@ -549,8 +504,6 @@ public class ClusterManager implements Serializable {
         return jvms;
     }
 
-
-
     @Override
     public String toString() {
 
@@ -564,7 +517,7 @@ public class ClusterManager implements Serializable {
                 ", clientCount=" + clientCount +
                 ", boxCount=" + boxes.size() +
                 ", versions=" + versions +
-                ", " + boxes +
+                ", \n" + boxes +
                 "" + jvms +
                 Bash.ANSI_RESET;
     }

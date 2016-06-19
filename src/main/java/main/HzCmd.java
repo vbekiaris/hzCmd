@@ -175,7 +175,7 @@ public class HzCmd implements Serializable {
                 c.restart(jvmId);
             }
             for (ClusterManager c : clusters.values()) {
-                c.getResponses(jvmId);
+                c.getResponse(jvmId);
             }
 
             if(iterationDelaySec!=0) {
@@ -221,9 +221,9 @@ public class HzCmd implements Serializable {
         }
     }
 
-    public void download(String jvmId, String dir) throws Exception {
+    public void download(String dir) throws Exception {
         for (ClusterManager c : clusters.values()) {
-            c.downlonad(jvmId, dir);
+            c.downlonad(dir);
         }
     }
 
