@@ -23,7 +23,6 @@ public abstract class Controler{
 
     public static final String ID = System.getProperty(Args.ID.name());
     public static final String Q = System.getProperty(Args.Q.name());
-    public static final String REPLYQ = Q +"reply";
 
     private static final String jvmPidId = ManagementFactory.getRuntimeMXBean().getName();
 
@@ -33,27 +32,16 @@ public abstract class Controler{
         this.type=type;
         printProperties();
         System.out.println(this);
-        try {
-            init(type);
-            benchManager = new BenchManager(getVendorObject());
-            MQ.sendObj(REPLYQ, ID+" Started");
-        }catch (Exception e){
-            recordeException(e);
-            MQ.sendObj(REPLYQ, e);
-            throw e;
-        }
     }
 
     public void startEmbeddedObject() throws Exception{
-        System.out.println(this);
-        System.err.println("startEmbeddedObject "+this);
         try {
             init(type);
             benchManager = new BenchManager(getVendorObject());
-            MQ.sendObj(REPLYQ, ID+" Re Started Embedded");
+            MQ.sendReply(ID + " Re Started Embedded");
         }catch (Exception e){
             recordeException(e);
-            MQ.sendObj(REPLYQ, e);
+            MQ.sendReply(e);
             throw e;
         }
     }
@@ -65,10 +53,10 @@ public abstract class Controler{
     public void load(String taskId, String clazz){
         try {
             benchManager.loadClass(taskId, clazz);
-            MQ.sendObj(REPLYQ, ID+" loaded "+taskId+" "+clazz);
+            MQ.sendReply(ID+" loaded "+taskId+" "+clazz);
         } catch (Exception e) {
             try {
-                MQ.sendObj(REPLYQ, e);
+                MQ.sendReply(e);
             } catch (JMSException e2) {}
         }
     }
@@ -76,10 +64,10 @@ public abstract class Controler{
     public void setThreadCount(String taskId, int threadCount){
         try {
             benchManager.setThreadCount(taskId, threadCount);
-            MQ.sendObj(REPLYQ, ID+" "+taskId+" threadCount="+threadCount);
+            MQ.sendReply(ID+" "+taskId+" threadCount="+threadCount);
         } catch (Exception e) {
             try {
-                MQ.sendObj(REPLYQ, e);
+                MQ.sendReply(e);
             } catch (JMSException e2) {}
         }
     }
@@ -87,10 +75,10 @@ public abstract class Controler{
     public void setBenchType(String taskId, BenchType type, long intervalNanos, boolean allowException, String outFile) {
         try {
             benchManager.setBenchType(taskId, type, intervalNanos, allowException, outFile);
-            MQ.sendObj(REPLYQ, ID+" "+taskId+" BenchType="+type+" intervalNanos="+intervalNanos+" allowException="+allowException+" outFile="+outFile);
+            MQ.sendReply(ID+" "+taskId+" BenchType="+type+" intervalNanos="+intervalNanos+" allowException="+allowException+" outFile="+outFile);
         } catch (Exception e) {
             try {
-                MQ.sendObj(REPLYQ, e);
+                MQ.sendReply(e);
             } catch (JMSException e2) {}
         }
     }
@@ -98,10 +86,10 @@ public abstract class Controler{
     public void writeMetaData(String taskId, String metaData) {
         try {
             benchManager.writeMetaData(taskId, metaData);
-            MQ.sendObj(REPLYQ, ID+" "+taskId+" metaData="+metaData);
+            MQ.sendReply(ID+" "+taskId+" metaData="+metaData);
         } catch (Exception e) {
             try {
-                MQ.sendObj(REPLYQ, e);
+                MQ.sendReply(e);
             } catch (JMSException e2) {}
         }
     }
@@ -109,10 +97,10 @@ public abstract class Controler{
     public void initBench(String taskId){
         try {
             benchManager.init(taskId);
-            MQ.sendObj(REPLYQ, ID+" "+taskId+" init end");
+            MQ.sendReply(ID+" "+taskId+" init end");
         } catch (Exception e) {
             try {
-                MQ.sendObj(REPLYQ, e);
+                MQ.sendReply(e);
             } catch (JMSException e2) {}
         }
     }
@@ -120,10 +108,10 @@ public abstract class Controler{
     public void warmupBench(String taskId, int seconds){
         try {
             benchManager.warmup(taskId, seconds);
-            MQ.sendObj(REPLYQ, ID+" "+taskId+" warmup end");
+            MQ.sendReply(ID+" "+taskId+" warmup end");
         } catch (Exception e) {
             try {
-                MQ.sendObj(REPLYQ, e);
+                MQ.sendReply(e);
             } catch (JMSException e2) {}
         }
     }
@@ -131,10 +119,10 @@ public abstract class Controler{
     public void runBench(String taskId, int seconds){
         try {
             benchManager.bench(taskId, seconds);
-            MQ.sendObj(REPLYQ, ID+" "+taskId + " bench end");
+            MQ.sendReply(ID+" "+taskId + " bench end");
         } catch (Exception e) {
             try {
-                MQ.sendObj(REPLYQ, e);
+                MQ.sendReply(e);
             } catch (JMSException e2) {}
         }
     }
@@ -142,10 +130,10 @@ public abstract class Controler{
     public void cleanup(String taskId) {
         try {
             benchManager.cleanUp(taskId);
-            MQ.sendObj(REPLYQ, ID+" "+taskId+" cleanUp end");
+            MQ.sendReply(ID+" "+taskId+" cleanUp end");
         } catch (Exception e) {
             try {
-                MQ.sendObj(REPLYQ, e);
+                MQ.sendReply(e);
             } catch (JMSException e2) {}
         }
     }
@@ -153,17 +141,17 @@ public abstract class Controler{
     public void setField(String taskId, String field, String value){
         try {
             benchManager.setField(taskId, field, value);
-            MQ.sendObj(REPLYQ, ID+" set " + taskId + " " + field + " " + value);
+            MQ.sendReply(ID+" set " + taskId + " " + field + " " + value);
         } catch (Exception e) {
             try {
-                MQ.sendObj(REPLYQ, e);
+                MQ.sendReply(e);
             } catch (JMSException e2) {}
         }
     }
 
     public void ping(){
         try {
-            MQ.sendObj(REPLYQ, ID +" ping");
+            MQ.sendReply( ID +" ping");
         } catch (JMSException jmsError) {
             recordeException(jmsError);
         }

@@ -29,7 +29,6 @@ public abstract class RemoteJvm implements Serializable {
     protected final NodeType type;
     protected final String id;
     protected final String Q;
-    protected final String REPLYQ;
     protected final String clusterId;
 
     protected final String dir;
@@ -44,7 +43,6 @@ public abstract class RemoteJvm implements Serializable {
         this.type = type;
         this.id = id;
         this.Q = System.getProperty("user.dir")+"/"+id;
-        this.REPLYQ = Q+"reply";
         this.clusterId = clusterId;
         this.dir = Installer.REMOTE_HZCMD_ROOT + "/" + id;
 
@@ -203,8 +201,7 @@ public abstract class RemoteJvm implements Serializable {
         MQ.sendObj(Q, new ExitCmd());
     }
 
-    public void restartEmbeddedObject() throws JMSException {
-        System.out.println("restart embedded "+id);
+    public void startEmbeddedObject() throws JMSException {
         MQ.sendObj(Q, new RestartEmbeddedObjectCmd() );
     }
 
@@ -257,16 +254,19 @@ public abstract class RemoteJvm implements Serializable {
     }
 
     public Object getResponse() throws IOException, InterruptedException, JMSException {
-        return MQ.receiveObj(REPLYQ);
+        return MQ.receivReply();
     }
 
     public Object getResponse(long timeout) throws IOException, InterruptedException, JMSException {
-        return MQ.receiveObj(REPLYQ, timeout);
+        return MQ.receivReply(timeout);
+    }
+
+    public Object getInitialJvmStartedResponse(long timeout) throws IOException, InterruptedException, JMSException {
+        return MQ.receiveObjNoReply(Q, timeout);
     }
 
     public void drainQ() throws JMSException {
         MQ.drainQ(Q);
-        MQ.drainQ(REPLYQ);
     }
 
     public String cat() throws IOException, InterruptedException {

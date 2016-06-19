@@ -137,14 +137,14 @@ public class BenchContainer {
             }catch (Exception e) {
                 e.printStackTrace();
                 try {
-                    MQ.sendObj(Controler.REPLYQ, e);
+                    MQ.sendReply(e);
                 } catch (JMSException jmsError) {
                     jmsError.printStackTrace();
                 }
             }catch (OutOfMemoryError e){
                 e.printStackTrace();
                 try {
-                    MQ.sendObj(Controler.REPLYQ, e);
+                    MQ.sendReply(e);
                 } catch (JMSException jmsError) {
                     jmsError.printStackTrace();
                 }

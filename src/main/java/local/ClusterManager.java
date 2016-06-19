@@ -4,9 +4,6 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import global.Bash;
 import global.NodeType;
-import mq.MQ;
-import remote.Controler;
-import remote.bench.Bench;
 import remote.bench.BenchType;
 
 import javax.jms.JMSException;
@@ -171,6 +168,9 @@ public class ClusterManager implements Serializable {
                 started.add(jvm);
             }
 
+            for (RemoteJvm remoteJvm : started) {
+                remoteJvm.startEmbeddedObject();
+            }
 
             while(!started.isEmpty()){
                 ListIterator<RemoteJvm> iter = started.listIterator();
@@ -181,10 +181,9 @@ public class ClusterManager implements Serializable {
                         printResponse(o);
                         iter.remove();
                     }
-
-                    //System.out.println("remaining " + started.size());
-
                 }
+
+                System.out.println("getting response round");
             }
 
             return null;
@@ -257,7 +256,7 @@ public class ClusterManager implements Serializable {
 
     public void restartEmbeddedObject(String jvmId) throws IOException, InterruptedException, JMSException{
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
-            jvm.restartEmbeddedObject();
+            jvm.startEmbeddedObject();
         }
         getResponse(jvmId);
     }
