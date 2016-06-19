@@ -96,11 +96,13 @@ public abstract class MQ {
     }
 
     public static Object receivReply( ) throws JMSException {
-        return ((ObjectMessage) replyConsumer.receive()).getObject();
+        ObjectMessage objMsg = (ObjectMessage) replyConsumer.receive();
+        return objMsg.getObject();
     }
 
     public static Object receivReply(long timeOut) throws JMSException {
-        return ((ObjectMessage) replyConsumer.receive(timeOut)).getObject();
+        ObjectMessage objMsg = (ObjectMessage) replyConsumer.receive(timeOut);
+        return objMsg.getObject();
     }
 
 

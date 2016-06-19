@@ -132,7 +132,7 @@ public class ClusterManager implements Serializable {
             this.files=files;
         }
 
-        public Object call() throws IOException, InterruptedException, JMSException {
+        public Object call() throws Exception{
 
             for (String file : files) {
                 box.scpUp(file, ".");
@@ -187,6 +187,7 @@ public class ClusterManager implements Serializable {
                     }
                 }catch (Exception e){
                     e.printStackTrace();
+                    throw e;
                 }
                 System.out.println("getting response round");
             }
