@@ -175,14 +175,19 @@ public class ClusterManager implements Serializable {
             while(!started.isEmpty()){
                 ListIterator<RemoteJvm> iter = started.listIterator();
 
-                while(iter.hasNext()){
-                    Object o;
-                    if(  (o = iter.next().getResponse(8)) != null){
-                        printResponse(o);
-                        iter.remove();
-                    }
-                }
+                try {
 
+
+                    while (iter.hasNext()) {
+                        Object o;
+                        if ((o = iter.next().getResponse(8)) != null) {
+                            printResponse(o);
+                            iter.remove();
+                        }
+                    }
+                }catch (Exception e){
+                    System.out.println(e);
+                }
                 System.out.println("getting response round");
             }
 
