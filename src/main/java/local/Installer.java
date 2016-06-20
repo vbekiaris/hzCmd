@@ -18,17 +18,17 @@ public abstract class Installer {
     private static final String M2_DIR = "/.m2/";
     private static final String M2_Repo = System.getenv(HOME)+M2_DIR;
     private static final String STASH = System.getenv("HZ_CMD_SRC")+"/stash";
+    private static final String CWD = System.getProperty("user.dir");
 
     public static void install(BoxManager boxes, JvmFactory jvmFactory, boolean ee, String[] versions, String libFiles) throws IOException, InterruptedException {
-        System.out.println(Bash.ANSI_YELLOW + "Installing" + Bash.ANSI_RESET);
         installCore(boxes);
         installVendorLibs(boxes, jvmFactory, ee, versions);
         installLibFiles(boxes, libFiles);
-        System.out.println(Bash.ANSI_YELLOW + "Installed" + Bash.ANSI_RESET);
     }
 
 
     public static void installCore(BoxManager boxes) throws IOException, InterruptedException {
+        System.out.println(Bash.ANSI_YELLOW + "Installing core" + Bash.ANSI_RESET);
 
         boxes.mkdir(REMOTE_HZCMD_ROOT_LIB);
 
@@ -73,18 +73,22 @@ public abstract class Installer {
 
     public static void installVendorLib(BoxManager boxes, JvmFactory jvmFactory, boolean ee, String version) throws IOException, InterruptedException {
         if(version!=null){
-            System.out.println(Bash.ANSI_YELLOW + "installing "+version+" jar's"+ Bash.ANSI_RESET);
             String uploadDir = jvmFactory.getVendorLibDir(version);
             boxes.mkdir(uploadDir);
 
             List<String> names = jvmFactory.getVendorLibNames(version, ee);
             for (String name : names) {
-                String jar = Bash.find(M2_Repo, name);
 
-                if(jar!=null){
-                    boxes.upload(jar, uploadDir);
-                }else{
+                String jar = Bash.find(CWD, name);
+                if(jar==null) {
+                    jar = Bash.find(M2_Repo, name);
+                }
+
+                if(jar==null){
                     System.out.println(Bash.ANSI_RED + "can't find "+version+" jars in "+M2_Repo+Bash.ANSI_RESET);
+                }else{
+                    System.out.println(Bash.ANSI_YELLOW + "installing "+jar+ Bash.ANSI_RESET);
+                    boxes.upload(jar, uploadDir);
                 }
             }
         }else{
