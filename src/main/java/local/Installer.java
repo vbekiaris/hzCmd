@@ -80,11 +80,11 @@ public abstract class Installer {
             for (String name : names) {
 
                 String jar = Bash.find(CWD, name);
-                if(jar==null) {
+                if(jar==null || jar.length()==0) {
                     jar = Bash.find(M2_Repo, name);
                 }
 
-                if(jar==null){
+                if(jar==null || jar.length()==0){
                     System.out.println(Bash.ANSI_RED + "can't find "+version+" jars in "+M2_Repo+Bash.ANSI_RESET);
                 }else{
                     System.out.println(Bash.ANSI_YELLOW + "installing "+jar+ Bash.ANSI_RESET);
