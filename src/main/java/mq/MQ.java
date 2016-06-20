@@ -44,7 +44,7 @@ public abstract class MQ {
         connectionFactory.setMaxThreadPoolSize(4);
 
         int count = 0;
-        int maxTries = 3;
+        int maxTries = 60;
         while(true) {
             try {
                 connection = connectionFactory.createConnection();
