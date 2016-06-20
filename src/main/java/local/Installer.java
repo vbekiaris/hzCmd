@@ -79,7 +79,7 @@ public abstract class Installer {
             List<String> names = jvmFactory.getVendorLibNames(version, ee);
             for (String name : names) {
 
-                String jar = Bash.find(CWD, name);
+                String jar = Bash.findShallow(CWD, name);
                 if(jar==null || jar.length()==0) {
                     jar = Bash.find(M2_Repo, name);
                 }
