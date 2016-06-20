@@ -44,6 +44,7 @@ import static global.Utils.myIp;
 
 public class HzCmd implements Serializable {
 
+    public static volatile boolean saveHzCmd=true;
     public static final String serFile = "HzCmd.ser";
     public static final String propertiesFile = "HzCmd.properties";
 
@@ -260,7 +261,7 @@ public class HzCmd implements Serializable {
     }
 
     public void wipeLocal( ) throws IOException, InterruptedException, JMSException {
-
+        saveHzCmd=false;
         Bash.rmQuite(serFile);
         Bash.rmQuite(propertiesFile);
 
@@ -414,14 +415,16 @@ public class HzCmd implements Serializable {
     }
 
     private static void saveHzCmd(HzCmd hzCmd){
-        try {
-            FileOutputStream fileOut = new FileOutputStream(serFile);
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(hzCmd);
-            out.close();
-            fileOut.close();
-        }catch(IOException e) {
-            e.printStackTrace();
+        if(saveHzCmd){
+            try {
+                FileOutputStream fileOut = new FileOutputStream(serFile);
+                ObjectOutputStream out = new ObjectOutputStream(fileOut);
+                out.writeObject(hzCmd);
+                out.close();
+                fileOut.close();
+            }catch(IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

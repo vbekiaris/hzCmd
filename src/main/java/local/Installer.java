@@ -93,6 +93,7 @@ public abstract class Installer {
             }
         }else{
             System.out.println(Bash.ANSI_RED + "version for jars is null" + Bash.ANSI_RESET);
+            System.exit(1);
         }
     }
 

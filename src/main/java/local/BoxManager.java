@@ -41,6 +41,7 @@ public class BoxManager implements Serializable {
             boxes.add(box);
         }else {
             System.out.println(Bash.ANSI_RED+box+Bash.ANSI_RESET);
+            System.exit(1);
         }
     }
 

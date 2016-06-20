@@ -71,6 +71,10 @@ public class Box implements Serializable{
         return ssh("find "+dir+" -name " +name);
     }
 
+    public String findArgs(String dir, String args) throws IOException, InterruptedException {
+        return ssh("find "+dir+" "+args);
+    }
+
     public void tail(String arg) throws IOException, InterruptedException {
          streamSsh("tail -f "+arg);
     }
