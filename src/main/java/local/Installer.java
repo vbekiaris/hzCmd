@@ -99,10 +99,10 @@ public abstract class Installer {
 
     public static void installLibFiles(BoxManager boxes, String libFiles) throws IOException, InterruptedException {
         if(libFiles!=null) {
-            boxes.mkdir(REMOTE_HZCMD_ROOT_LIB);
-
             for (String file : libFiles.split(",")) {
-                boxes.upload(file, REMOTE_HZCMD_ROOT_LIB);
+                if(file!=null && file.length()!=0){
+                    boxes.upload(file, REMOTE_HZCMD_ROOT_LIB);
+                }
             }
         }
     }
