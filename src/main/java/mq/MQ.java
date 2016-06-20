@@ -58,8 +58,7 @@ public abstract class MQ {
             } catch (JMSException e) {
 
                 if (++count == maxTries){
-
-                    System.out.println("failed 60 Mq connections");
+                    System.out.println("failed "+maxTries+" Mq connections");
                     throw  e;
                 }
                 try {
