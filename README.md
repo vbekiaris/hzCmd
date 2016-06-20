@@ -11,7 +11,7 @@ git clone https://github.com/Danny-Hazelcast/hzCmd.git
 
 source ~/.bashrc
 
-hz help
+hz
 ```
   
 2) Run your first local bench, you will need password less ssh access onto the local box from the current user
