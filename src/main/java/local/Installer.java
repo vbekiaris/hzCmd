@@ -15,7 +15,7 @@ public abstract class Installer {
     public static final String REMOTE_HZCMD_LIB_FULL_PATH = "$HOME/"+ REMOTE_HZCMD_ROOT_LIB;
 
     private static final String HOME = "HOME";
-    private static final String M2_DIR = "/.m2/";
+    private static final String M2_DIR = "/.m2";
     private static final String M2_Repo = System.getenv(HOME)+M2_DIR;
     private static final String STASH = System.getenv("HZ_CMD_SRC")+"/stash";
     private static final String CWD = System.getProperty("user.dir");
