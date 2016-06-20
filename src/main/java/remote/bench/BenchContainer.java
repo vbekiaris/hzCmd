@@ -106,42 +106,36 @@ public class BenchContainer {
 
         ExecutorService executor = Executors.newFixedThreadPool(benchThreads.size());
 
+        int number=0;
         for (Bench b : benchThreads) {
-            executor.submit( new Runner( b ) );
+            executor.submit( new BenchRunner(b, ++number) );
         }
         executor.shutdown();
         return executor.awaitTermination(seconds+300, TimeUnit.SECONDS);
     }
 
 
-    private class Runner implements Callable<Object>{
+    private class BenchRunner implements Callable<Object>{
 
         private Bench mark;
+        private int threadNumber;
 
-        public Runner(Bench bench){
+        public BenchRunner(Bench bench, int threadNumber){
             mark=bench;
+            this.threadNumber=threadNumber;
         }
 
         public Object call() {
             try {
                 long start = System.currentTimeMillis();
-                System.out.println("start "+start);
+                System.out.println("thread "+threadNumber+" "+id+" "+clazzName+" started");
 
                 benchMarker.bench(mark);
 
-                long end = System.currentTimeMillis();
-                long elapsed = end - start;
-                System.out.println("elapsed " + elapsed);
+                long sec = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - start);
+                System.out.println("thread "+threadNumber+" "+id+" "+clazzName+" end "+sec);
 
             }catch (Exception e) {
-                e.printStackTrace();
-                try {
-                    MQ.sendReply(e);
-                } catch (JMSException jmsError) {
-                    jmsError.printStackTrace();
-                }
-            }catch (OutOfMemoryError e){
-                e.printStackTrace();
                 try {
                     MQ.sendReply(e);
                 } catch (JMSException jmsError) {

@@ -23,10 +23,6 @@ public abstract class BenchMarker {
         durationSeconds=seconds;
     }
 
-    public void setStopAtException(boolean allowException){
-        BenchMarker.allowException = allowException;
-    }
-
     public void preBench(String fileName){ }
 
     public void postBench(){ }
