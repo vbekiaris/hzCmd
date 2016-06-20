@@ -79,10 +79,10 @@ public abstract class Installer {
             List<String> names = jvmFactory.getVendorLibNames(version, ee);
             for (String name : names) {
 
-                String jar = Bash.findShallow(CWD, name);
-                if(jar==null || jar.length()==0) {
-                    jar = Bash.find(M2_Repo, name);
-                }
+                //String jar = Bash.findShallow(CWD, name);
+                //if(jar==null || jar.length()==0) {
+                String jar = Bash.find(M2_Repo, name);
+                //}
 
                 if(jar==null || jar.length()==0){
                     System.out.println(Bash.ANSI_RED + "can't find "+version+" jars in "+M2_Repo+Bash.ANSI_RESET);
