@@ -28,7 +28,7 @@ public abstract class Bash {
     }
 
     public static String findShallow(String path, String file) throws IOException, InterruptedException {
-        return executeCommand("find " + path + "-maxdepth 1 -name " +"'"+file+"'");
+        return executeCommand("find " + path + "-maxdepth 1 -name " +file);
     }
 
 
