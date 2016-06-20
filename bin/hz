@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-if [ -z "${HZ_CMD_BIN}" ] ; then
-    export HZ_CMD_BIN=~/hzCmd/target
-fi
-
 activemq start > /dev/null
 
 ops="-Xms1g -Xmx4g"

@@ -3,6 +3,7 @@
 cp hzCmd/stash/apache-activemq-5.13.3-bin.tar.gz .
 tar xvf ./apache-activemq-5.13.3-bin.tar.gz
 rm apache-activemq-5.13.3-bin.tar.gz
+cp hzCmd/stash/activemq.xml apache-activemq-5.13.3/conf
 
 echo "export ACTIVE_MQ_BIN=$(pwd)/apache-activemq-5.13.3/bin" >> ~/.bashrc
 echo 'PATH=${PATH}:${ACTIVE_MQ_BIN}' >> ~/.bashrc
