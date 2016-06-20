@@ -3,6 +3,7 @@ package remote.command.bench;
 import remote.Controler;
 import remote.command.Cmd;
 
+import javax.jms.MessageProducer;
 import java.io.Serializable;
 
 /**
@@ -18,8 +19,8 @@ public class RunBenchCmd implements Cmd, Serializable{
         this.seconds = seconds;
     }
 
-    public void exicute(Controler c){
-        c.runBench(taskId, seconds);
+    public void exicute(Controler c, MessageProducer replyProducer){
+        c.runBench(taskId, seconds, replyProducer);
     }
 
     @Override

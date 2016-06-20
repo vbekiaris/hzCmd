@@ -4,10 +4,15 @@ import global.Args;
 import global.NodeType;
 import mq.MQ;
 import javax.jms.JMSException;
+import javax.jms.MessageProducer;
 
 import java.lang.management.ManagementFactory;
 import java.util.Enumeration;
 import java.util.Properties;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import remote.bench.BenchManager;
 import remote.bench.BenchType;
@@ -26,6 +31,9 @@ public abstract class Controler{
     private static final String jvmPidId = ManagementFactory.getRuntimeMXBean().getName();
 
     public final NodeType type;
+
+    private ExecutorService executor = Executors.newFixedThreadPool(5);
+
 
     public Controler(NodeType type) throws Exception {
         this.type=type;
@@ -52,7 +60,7 @@ public abstract class Controler{
     public void load(String taskId, String clazz){
         try {
             benchManager.loadClass(taskId, clazz);
-            MQ.sendReply(ID+" loaded "+taskId+" "+clazz);
+            MQ.sendReply(ID+" "+taskId+" "+clazz+" loaded");
         } catch (Exception e) {
             try {
                 MQ.sendReply(e);
@@ -115,16 +123,48 @@ public abstract class Controler{
         }
     }
 
-    public void runBench(String taskId, int seconds){
-        try {
-            benchManager.bench(taskId, seconds);
-            MQ.sendReply(ID+" "+taskId + " bench end");
-        } catch (Exception e) {
+    public void runBench(String taskId, int seconds, MessageProducer replyProducer){
+
+        executor.submit( new BenchRunner(taskId, seconds, replyProducer)
+        );
+    }
+
+    private class BenchRunner implements Callable<Object> {
+        String taskId;
+        int seconds;
+        MessageProducer replyProducer;
+
+        public BenchRunner(String taskId, int seconds, MessageProducer replyProducer){
+            this.taskId=taskId;
+            this.seconds=seconds;
+            this.replyProducer=replyProducer;
+        }
+
+        public Object call() {
+
             try {
-                MQ.sendReply(e);
-            } catch (JMSException e2) {}
+                long start = System.currentTimeMillis();
+                System.out.println("taskId "+taskId+" started");
+
+                benchManager.bench(taskId, seconds);
+
+                long sec = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - start);
+                System.out.println("taskId "+taskId+" end "+sec);
+
+                MQ.sendReply(replyProducer, ID+" "+taskId + " bench end");
+            } catch (Exception e) {
+                try {
+                    MQ.sendReply(e);
+                } catch (JMSException e2) {}
+            }
+
+            return null;
         }
     }
+
+
+
+
 
     public void cleanup(String taskId) {
         try {
@@ -140,7 +180,7 @@ public abstract class Controler{
     public void setField(String taskId, String field, String value){
         try {
             benchManager.setField(taskId, field, value);
-            MQ.sendReply(ID+" set " + taskId + " " + field + " " + value);
+            MQ.sendReply(ID+" " + taskId + " " + field + " " + value);
         } catch (Exception e) {
             try {
                 MQ.sendReply(e);
@@ -153,10 +193,13 @@ public abstract class Controler{
         while (true){
             try {
                 Object obj = MQ.receiveObj(Q);
+                MessageProducer replyProducer = MQ.getReplyProducer();
+
                 System.out.println("MQ msg in = " + obj);
+                System.out.println("MQ msg reply = " + replyProducer);
 
                 if (obj instanceof Cmd) {
-                    ((Cmd) obj).exicute(this);
+                    ((Cmd) obj).exicute(this, replyProducer);
                 }
             } catch (JMSException e){
                 recordeExceptionJms(e);

@@ -21,7 +21,7 @@ public class BenchContainer {
     private String id;
     private String clazzName;
     private Object vendorObject;
-    private static String outputFileName;
+    private String outputFileName;
     private BenchMarker benchMarker;
 
     private List<Bench> benchThreads = new ArrayList();

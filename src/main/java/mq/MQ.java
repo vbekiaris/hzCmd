@@ -92,6 +92,13 @@ public abstract class MQ {
         replyProducer.send(msg);
     }
 
+    public static void sendReply(MessageProducer replyProducer, Serializable obj) throws JMSException {
+        ObjectMessage msg = session.createObjectMessage();
+        msg.setObject(obj);
+        replyProducer.send(msg);
+    }
+
+
     public static Object receivReply( ) throws JMSException {
         ObjectMessage objMsg = (ObjectMessage) replyConsumer.receive();
         return objMsg.getObject();
@@ -115,6 +122,10 @@ public abstract class MQ {
         replyProducer = session.createProducer(replyToDestination);
 
         return  objMsg.getObject();
+    }
+
+    public static MessageProducer getReplyProducer(){
+        return replyProducer;
     }
 
 

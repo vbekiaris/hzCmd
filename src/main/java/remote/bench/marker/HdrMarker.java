@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 public class HdrMarker extends BenchMarker {
 
-    private static Histogram histogram = new ConcurrentHistogram(TimeUnit.SECONDS.toNanos(30), 3);
+    private Histogram histogram = new ConcurrentHistogram(TimeUnit.SECONDS.toNanos(30), 3);
 
     public HdrMarker(long expectedIntervalNanos, boolean stop){
         super(expectedIntervalNanos, stop);
@@ -19,6 +19,7 @@ public class HdrMarker extends BenchMarker {
 
     public void preBench(String fileName){
         outputFileName = fileName;
+        System.out.println("preBench "+outputFileName);
         histogram.reset();
         histogram.setStartTimeStamp(System.nanoTime());
     }

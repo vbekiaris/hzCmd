@@ -4,6 +4,7 @@ import remote.Controler;
 import remote.bench.BenchType;
 import remote.command.Cmd;
 
+import javax.jms.MessageProducer;
 import java.io.Serializable;
 
 /**
@@ -25,7 +26,7 @@ public class SetBenchTypeCmd implements Cmd, Serializable{
         this.outFile = outFile;
     }
 
-    public void exicute(Controler c){
+    public void exicute(Controler c, MessageProducer replyProducer){
         c.setBenchType(taskId, type, intervalNanos, allowException, outFile);
     }
 

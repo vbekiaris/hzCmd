@@ -3,6 +3,7 @@ package remote.command.bench;
 import remote.Controler;
 import remote.command.Cmd;
 
+import javax.jms.MessageProducer;
 import java.io.Serializable;
 
 /**
@@ -18,7 +19,7 @@ public class LoadCmd implements Cmd, Serializable{
         this.className = className;
     }
 
-    public void exicute(Controler c){
+    public void exicute(Controler c, MessageProducer replyProducer){
         c.load(taskId, className);
     }
 

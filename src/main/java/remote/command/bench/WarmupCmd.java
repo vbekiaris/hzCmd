@@ -3,6 +3,7 @@ package remote.command.bench;
 import remote.Controler;
 import remote.command.Cmd;
 
+import javax.jms.MessageProducer;
 import java.io.Serializable;
 
 /**
@@ -18,7 +19,7 @@ public class WarmupCmd implements Cmd, Serializable{
         this.seconds = seconds;
     }
 
-    public void exicute(Controler c){
+    public void exicute(Controler c, MessageProducer replyProducer){
         c.warmupBench(taskId, seconds);
     }
 

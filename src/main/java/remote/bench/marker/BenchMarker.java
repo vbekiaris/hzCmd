@@ -9,10 +9,10 @@ import java.io.IOException;
 
 public abstract class BenchMarker {
 
-    protected static boolean allowException=false;
-    protected static long expectedIntervalNanos=0;
-    protected static String outputFileName;
-    protected static int durationSeconds;
+    protected boolean allowException=false;
+    protected long expectedIntervalNanos=0;
+    protected String outputFileName;
+    protected int durationSeconds;
 
     public BenchMarker(long expectedIntervalNanos, boolean allowException){
         this.expectedIntervalNanos = expectedIntervalNanos;

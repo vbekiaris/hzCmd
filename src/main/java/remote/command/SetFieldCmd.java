@@ -2,6 +2,7 @@ package remote.command;
 
 import remote.Controler;
 
+import javax.jms.MessageProducer;
 import java.io.Serializable;
 
 /**
@@ -19,7 +20,7 @@ public class SetFieldCmd implements Cmd, Serializable{
         this.value = value;
     }
 
-    public void exicute(Controler c){
+    public void exicute(Controler c, MessageProducer replyProducer){
         c.setField(taskId, field, value);
     }
 
