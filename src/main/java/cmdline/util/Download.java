@@ -8,15 +8,12 @@ import main.HzCmd;
 @com.github.rvesse.airline.annotations.Command(name = "download", description = "download cwd of jvm's in cluster")
 public class Download extends Command
 {
-    @Option(name = "-id", description = "regex to match")
-    public String id=".*";
-
     @Arguments( description = "dest dir default ./output/" )
     public String dir = "output";
 
     public void exe(HzCmd hzCmd) {
         try {
-            hzCmd.download(id, dir);
+            hzCmd.download(dir);
         } catch (Exception e) {
             e.printStackTrace();
         }

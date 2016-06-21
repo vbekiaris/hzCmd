@@ -18,6 +18,11 @@ public abstract class MQ {
     private static Session session;
 
     private static Map<String, MessageProducer> producerMap = new HashMap();
+
+    private static Destination replyToDestination;
+    private static MessageProducer replyProducer;
+    private static MessageConsumer replyConsumer;
+
     private static Map<String, MessageConsumer> consumerMap = new HashMap();
 
 
@@ -42,17 +47,18 @@ public abstract class MQ {
         int maxTries = 60;
         while(true) {
             try {
-                //if ( connection == null) {
-                    connection = connectionFactory.createConnection();
-                //}
+                connection = connectionFactory.createConnection();
+
                 connection.start();
                 session = connection.createSession(transacted, ackMode);
+                replyToDestination = session.createTemporaryQueue();
+                replyConsumer = session.createConsumer(replyToDestination);
+
                 break;
             } catch (JMSException e) {
 
                 if (++count == maxTries){
-
-                    System.out.println("failed 60 Mq connections");
+                    System.out.println("failed "+maxTries+" Mq connections");
                     throw  e;
                 }
                 try {
@@ -69,37 +75,58 @@ public abstract class MQ {
         }
     }
 
+
     public static void sendObj(String queueName, Serializable obj) throws JMSException {
         MessageProducer producer = getMessageProducer(queueName);
         ObjectMessage msg = session.createObjectMessage();
+        msg.setJMSReplyTo(replyToDestination);
         msg.setObject(obj);
         producer.send(msg);
     }
 
 
-    public static Object receiveObj(String queueName) throws JMSException {
-        MessageConsumer consumer = getMessageConsumer(queueName);
-        return  ((ObjectMessage) consumer.receive()).getObject();
+    public static void sendReply(Serializable obj) throws JMSException {
+        ObjectMessage msg = session.createObjectMessage();
+        msg.setObject(obj);
+        replyProducer.send(msg);
     }
 
-    public static Object receiveObj(String queueName, long time) throws JMSException {
-        MessageConsumer consumer = getMessageConsumer(queueName);
-        Message received = consumer.receive(time);
-        if(received==null){
+    public static void sendReply(MessageProducer replyProducer, Serializable obj) throws JMSException {
+        ObjectMessage msg = session.createObjectMessage();
+        msg.setObject(obj);
+        replyProducer.send(msg);
+    }
+
+
+    public static Object receivReply( ) throws JMSException {
+        ObjectMessage objMsg = (ObjectMessage) replyConsumer.receive();
+        return objMsg.getObject();
+    }
+
+    public static Object receivReply(long timeOut) throws JMSException {
+        ObjectMessage objMsg = (ObjectMessage) replyConsumer.receive(timeOut);
+        if(objMsg==null) {
             return null;
         }
-        return  ((ObjectMessage) received).getObject();
+        return objMsg.getObject();
     }
 
-    public static Message receiveMsg(String queueName, long time) throws JMSException {
+
+    public static Object receiveObj(String queueName) throws JMSException {
         MessageConsumer consumer = getMessageConsumer(queueName);
-        return consumer.receive(time);
+
+        ObjectMessage objMsg = (ObjectMessage) consumer.receive();
+        Destination replyToDestination = objMsg.getJMSReplyTo();
+
+        replyProducer = session.createProducer(replyToDestination);
+
+        return  objMsg.getObject();
     }
 
-    public static Message receiveMsgNoWait(String queueName) throws JMSException {
-        MessageConsumer consumer = getMessageConsumer(queueName);
-        return consumer.receiveNoWait();
+    public static MessageProducer getReplyProducer(){
+        return replyProducer;
     }
+
 
     public static void drainQ(String queueName) throws JMSException {
 
@@ -113,12 +140,14 @@ public abstract class MQ {
         }
     }
 
+    private static Message receiveMsg(String queueName, long time) throws JMSException {
+        MessageConsumer consumer = getMessageConsumer(queueName);
+        return consumer.receive(time);
+    }
+
+
     private static MessageProducer getMessageProducer(String queueName) throws JMSException {
         if ( ! producerMap.containsKey(queueName) ){
-
-            //long start = System.currentTimeMillis();
-            //System.out.println("start create getMessageProducer");
-
 
             if (session==null){
                 makeMqConnection();
@@ -130,19 +159,12 @@ public abstract class MQ {
 
             producerMap.put(queueName, mp);
 
-            //long end = System.currentTimeMillis();
-            //System.out.println("end create getMessageProduce seconds "+(end-start)/1000);
-
         }
         return producerMap.get(queueName);
     }
 
     private static MessageConsumer getMessageConsumer(String queueName) throws JMSException {
         if ( ! consumerMap.containsKey(queueName) ){
-
-            //long start = System.currentTimeMillis();
-            //System.out.println("start create getMessageConsumer");
-
 
             makeMqConnection();
 
@@ -151,8 +173,6 @@ public abstract class MQ {
             MessageConsumer consumer = session.createConsumer(q);
             consumerMap.put(queueName, consumer);
 
-            //long end = System.currentTimeMillis();
-            //System.out.println("end create getMessageConsumer seconds "+(end-start)/1000);
         }
         return consumerMap.get(queueName);
     }

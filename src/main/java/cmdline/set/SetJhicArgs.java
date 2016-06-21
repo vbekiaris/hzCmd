@@ -2,7 +2,7 @@ package cmdline.set;
 
 import cmdline.base.Command;
 import com.github.rvesse.airline.annotations.Arguments;
-import local.HzCmdProperties;
+import local.properties.HzCmdProperties;
 import main.HzCmd;
 
 import java.io.Serializable;

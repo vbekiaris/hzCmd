@@ -3,16 +3,15 @@ package local;
 import global.Args;
 import global.Bash;
 import global.NodeType;
+import local.properties.HzCmdProperties;
 import mq.MQ;
 import remote.bench.BenchType;
 import remote.command.*;
 import remote.command.bench.*;
-import vendor.hz.HzXml;
 
 import javax.jms.JMSException;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -29,7 +28,6 @@ public abstract class RemoteJvm implements Serializable {
     protected final NodeType type;
     protected final String id;
     protected final String Q;
-    protected final String REPLYQ;
     protected final String clusterId;
 
     protected final String dir;
@@ -44,12 +42,8 @@ public abstract class RemoteJvm implements Serializable {
         this.type = type;
         this.id = id;
         this.Q = System.getProperty("user.dir")+"/"+id;
-        this.REPLYQ = Q+"reply";
         this.clusterId = clusterId;
         this.dir = Installer.REMOTE_HZCMD_ROOT + "/" + id;
-
-        //don't make the dir's one by one,
-        //box.mkdir(dir);
     }
 
     public abstract String getClassToRun();
@@ -118,13 +112,13 @@ public abstract class RemoteJvm implements Serializable {
             stuffToCpIntoDir += "cp "+s+" "+dir+" ; ";
         }
 
-        launchCmd = "mkdir -p "+dir+"; "+stuffToCpIntoDir+" cd "+dir+" ; nohup java "+jhicAgent+" -cp \"" + Installer.REMOTE_HZCMD_LIB_FULL_PATH+"/*" + ":" +  vendorLibDir+"/*"  + "\" " + jvmArgs + " " + jvmOptions + " " + classToRun + " >> " + outFile + " 2>&1 & echo $! "+id+" ; cd - > /dev/null";
+        launchCmd = "mkdir -p "+dir+"; "+stuffToCpIntoDir+" cd "+dir+" ; nohup java "+jhicAgent+" -cp \"" + Installer.REMOTE_HZCMD_LIB_FULL_PATH+"/*" + ":" +vendorLibDir+"/*"+":"+Installer.REMOTE_HZCMD_LIB_FULL_PATH+"/" + "\" " + jvmArgs + " " + jvmOptions + " " + classToRun + " >> " + outFile + " 2>&1 & echo $! "+id+" ; cd - > /dev/null";
 
         return launchCmd;
     }
 
 
-    public final void reStartJvm(ClusterManager myCluster) throws Exception {
+    public final void reStartJvm() throws Exception {
         if(launchCmd==null){
             System.out.println(Bash.ANSI_RED+"cant restart jvm never started"+this+Bash.ANSI_RESET);
             return;
@@ -133,12 +127,10 @@ public abstract class RemoteJvm implements Serializable {
             System.out.println(Bash.ANSI_RED+"JVM is Running "+this+Bash.ANSI_RESET);
             return;
         }
-        beforeJvmStart(myCluster);
         launchJvm(launchCmd);
     }
 
     public void reStartJvm(String libDir, ClusterManager myCluster, String brokerIP) throws Exception {
-
         HzCmdProperties properties = new HzCmdProperties();
         String jvmOptions;
         if (isMember()){
@@ -159,7 +151,6 @@ public abstract class RemoteJvm implements Serializable {
         StringTokenizer st = new StringTokenizer(launchRes,delim);
 
         String pidStr = st.nextToken();
-        String jmvIdStr = st.nextToken();
 
         pid = Integer.parseInt(pidStr.trim());
     }
@@ -198,9 +189,8 @@ public abstract class RemoteJvm implements Serializable {
         MQ.sendObj(Q, new ExitCmd());
     }
 
-    public void restartEmbeddedObject() throws JMSException {
-        System.out.println("restart embedded "+id);
-        MQ.sendObj(Q, new RestartEmbeddedObjectCmd() );
+    public void startEmbeddedObject() throws JMSException {
+        MQ.sendObj(Q, new StartEmbeddedObjectCmd() );
     }
 
     public void load(String taskId, String className) throws IOException, InterruptedException, JMSException {
@@ -239,29 +229,17 @@ public abstract class RemoteJvm implements Serializable {
         MQ.sendObj(Q, new SetFieldCmd(taskId, field, value) );
     }
 
-    public void invokeAsync(int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
-        MQ.sendObj(Q, new InvokeAsyncCmd(threadCount, method, taskId) );
-    }
-
-    public void invokeSync(int threadCount, String method, String taskId) throws IOException, InterruptedException, JMSException {
-        MQ.sendObj(Q, new InvokeSyncCmd(threadCount, method, taskId) );
-    }
-
-    public void ping() throws IOException, InterruptedException, JMSException {
-        MQ.sendObj(Q, new PingCmd() );
-    }
-
     public Object getResponse() throws IOException, InterruptedException, JMSException {
-        return MQ.receiveObj(REPLYQ);
+        return MQ.receivReply();
     }
 
     public Object getResponse(long timeout) throws IOException, InterruptedException, JMSException {
-        return MQ.receiveObj(REPLYQ, timeout);
+        return MQ.receivReply(timeout);
     }
+
 
     public void drainQ() throws JMSException {
         MQ.drainQ(Q);
-        MQ.drainQ(REPLYQ);
     }
 
     public String cat() throws IOException, InterruptedException {
@@ -289,7 +267,13 @@ public abstract class RemoteJvm implements Serializable {
         return box.find(dir, "hs_err_pid*");
     }
 
+    public String findError() throws IOException, InterruptedException {
+        return box.findArgs(dir, "-name exception.txt -o -name *.hprof -o -name *.oome -o -name hs_err_pid*");
+    }
+
+
     public boolean printErrors() throws IOException, InterruptedException {
+        /*
         String e = findException();
         String oom = findOOME();
         String hprof = findHprof();
@@ -298,6 +282,17 @@ public abstract class RemoteJvm implements Serializable {
         System.out.println(this);
         return printStringIfNotEmpty(e, Bash.ANSI_RED) | printStringIfNotEmpty(oom, Bash.ANSI_RED) |
                printStringIfNotEmpty(hprof, Bash.ANSI_RED) | printStringIfNotEmpty(hs, Bash.ANSI_RED);
+        */
+
+        String err = findError();
+
+        if(err != null && !err.isEmpty()){
+            System.out.println(this);
+            System.out.println(Bash.ANSI_RED+err+Bash.ANSI_RESET);
+            return true;
+        }
+
+        return false;
     }
 
 
@@ -315,10 +310,6 @@ public abstract class RemoteJvm implements Serializable {
 
     public String grep(String args) throws IOException, InterruptedException {
         return box.grep("'"+args+"' "+dir+"/"+outFile);
-    }
-
-    public void downlonad(String destDir) throws IOException, InterruptedException {
-        box.downlonad(dir + "/*", destDir + "/" + id);
     }
 
     public void upload(String src, String dst) throws IOException, InterruptedException {

@@ -15,9 +15,10 @@ public abstract class Installer {
     public static final String REMOTE_HZCMD_LIB_FULL_PATH = "$HOME/"+ REMOTE_HZCMD_ROOT_LIB;
 
     private static final String HOME = "HOME";
-    private static final String M2_DIR = "/.m2/";
+    private static final String M2_DIR = "/.m2";
     private static final String M2_Repo = System.getenv(HOME)+M2_DIR;
     private static final String STASH = System.getenv("HZ_CMD_SRC")+"/stash";
+    private static final String CWD = System.getProperty("user.dir");
 
     public static void install(BoxManager boxes, JvmFactory jvmFactory, boolean ee, String[] versions, String libFiles) throws IOException, InterruptedException {
         installCore(boxes);
@@ -27,6 +28,7 @@ public abstract class Installer {
 
 
     public static void installCore(BoxManager boxes) throws IOException, InterruptedException {
+        System.out.println(Bash.ANSI_YELLOW + "Installing core" + Bash.ANSI_RESET);
 
         boxes.mkdir(REMOTE_HZCMD_ROOT_LIB);
 
@@ -51,12 +53,13 @@ public abstract class Installer {
         uploadStuff.add(Bash.find(M2_Repo, "slf4j-api-1.7.5.jar"));
         uploadStuff.add(Bash.find(M2_Repo, "slf4j-log4j12-1.7.5.jar"));
 
-
         uploadStuff.add(Bash.find(M2_Repo, "lang-6.7.6.jar"));
 
-        for (String up : uploadStuff) {
-            boxes.upload(up, REMOTE_HZCMD_ROOT_LIB);
+        String files = new String();
+        for (String file : uploadStuff) {
+            files += file+" ";
         }
+        boxes.upload(files, REMOTE_HZCMD_ROOT_LIB);
     }
 
 
@@ -75,19 +78,32 @@ public abstract class Installer {
 
             List<String> names = jvmFactory.getVendorLibNames(version, ee);
             for (String name : names) {
+
+                //String jar = Bash.findShallow(CWD, name);
+                //if(jar==null || jar.length()==0) {
                 String jar = Bash.find(M2_Repo, name);
-                boxes.upload(jar, uploadDir);
+                //}
+
+                if(jar==null || jar.length()==0){
+                    System.out.println(Bash.ANSI_RED + "can't find "+version+" jars in "+M2_Repo+Bash.ANSI_RESET);
+                }else{
+                    System.out.println(Bash.ANSI_YELLOW + "installing "+jar.trim()+ Bash.ANSI_RESET);
+                    boxes.upload(jar, uploadDir);
+                }
             }
+        }else{
+            System.out.println(Bash.ANSI_RED + "version for jars is null" + Bash.ANSI_RESET);
+            System.exit(1);
         }
     }
 
 
     public static void installLibFiles(BoxManager boxes, String libFiles) throws IOException, InterruptedException {
         if(libFiles!=null) {
-            boxes.mkdir(REMOTE_HZCMD_ROOT_LIB);
-
             for (String file : libFiles.split(",")) {
-                boxes.upload(file, REMOTE_HZCMD_ROOT_LIB);
+                if(file!=null && file.length()!=0){
+                    boxes.upload(file, REMOTE_HZCMD_ROOT_LIB);
+                }
             }
         }
     }

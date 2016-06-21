@@ -27,6 +27,11 @@ public abstract class Bash {
         return executeCommand("find " + path + " -name " + file);
     }
 
+    public static String findShallow(String path, String file) throws IOException, InterruptedException {
+        return executeCommand("find " + path + "-maxdepth 1 -name " +file);
+    }
+
+
     public static String cp(String src, String dst) throws IOException, InterruptedException {
         return executeCommand("cp " + src + " " + dst);
     }

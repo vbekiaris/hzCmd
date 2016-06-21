@@ -19,7 +19,6 @@ public class Box implements Serializable{
     }
 
     public void upload(String src, String dest) throws IOException, InterruptedException {
-        //Bash.scpUp(user, pub, src, dest);
         Bash.rsyncUp(user, pub, src, dest);
     }
 
@@ -70,6 +69,10 @@ public class Box implements Serializable{
 
     public String find(String dir, String name) throws IOException, InterruptedException {
         return ssh("find "+dir+" -name " +name);
+    }
+
+    public String findArgs(String dir, String args) throws IOException, InterruptedException {
+        return ssh("find "+dir+" "+args);
     }
 
     public void tail(String arg) throws IOException, InterruptedException {

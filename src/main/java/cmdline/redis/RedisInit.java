@@ -2,7 +2,7 @@ package cmdline.redis;
 
 import cmdline.base.Command;
 import com.github.rvesse.airline.annotations.Option;
-import local.HzCmdProperties;
+import local.properties.HzCmdProperties;
 import main.HzCmd;
 
 import java.io.IOException;

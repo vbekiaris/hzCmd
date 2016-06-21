@@ -7,6 +7,7 @@ import local.*;
 import local.bench.BenchManager;
 import local.bench.BenchMarkSettings;
 import local.bench.FieldValue;
+import local.properties.HzCmdProperties;
 import remote.bench.BenchType;
 import vendor.gem.GemJvmFactory;
 import vendor.gg.GgJvmFactory;
@@ -40,14 +41,10 @@ import static global.Utils.myIp;
 
 //add JFR cmd settings
 
-//MQ Request response, with temp reply Q's for proper com's
-
-//bench cleanup from just 1 thread.
-
-//read response on restart
 
 public class HzCmd implements Serializable {
 
+    public static volatile boolean saveHzCmd=true;
     public static final String serFile = "HzCmd.ser";
     public static final String propertiesFile = "HzCmd.properties";
 
@@ -63,7 +60,6 @@ public class HzCmd implements Serializable {
         HzCmdProperties properties = new HzCmdProperties();
 
         BoxManager boxManager = new BoxManager(file, user);
-        System.out.print(boxManager);
 
         ClusterManager cluster = getCluster(clusterId, type);
         cluster.addUniquBoxes(boxManager);
@@ -174,7 +170,7 @@ public class HzCmd implements Serializable {
                 c.restart(jvmId);
             }
             for (ClusterManager c : clusters.values()) {
-                c.getResponses(jvmId);
+                c.getResponse(jvmId);
             }
 
             if(iterationDelaySec!=0) {
@@ -220,9 +216,9 @@ public class HzCmd implements Serializable {
         }
     }
 
-    public void download(String jvmId, String dir) throws Exception {
+    public void download(String dir) throws Exception {
         for (ClusterManager c : clusters.values()) {
-            c.downlonad(jvmId, dir);
+            c.downlonad(dir);
         }
     }
 
@@ -248,6 +244,8 @@ public class HzCmd implements Serializable {
 
     public void wipe( ) throws IOException, InterruptedException, JMSException {
 
+        saveHzCmd=false;
+
         Bash.rmQuite(serFile);
         Bash.rmQuite(propertiesFile);
 
@@ -265,7 +263,7 @@ public class HzCmd implements Serializable {
     }
 
     public void wipeLocal( ) throws IOException, InterruptedException, JMSException {
-
+        saveHzCmd=false;
         Bash.rmQuite(serFile);
         Bash.rmQuite(propertiesFile);
 
@@ -419,14 +417,16 @@ public class HzCmd implements Serializable {
     }
 
     private static void saveHzCmd(HzCmd hzCmd){
-        try {
-            FileOutputStream fileOut = new FileOutputStream(serFile);
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(hzCmd);
-            out.close();
-            fileOut.close();
-        }catch(IOException e) {
-            e.printStackTrace();
+        if(saveHzCmd){
+            try {
+                FileOutputStream fileOut = new FileOutputStream(serFile);
+                ObjectOutputStream out = new ObjectOutputStream(fileOut);
+                out.writeObject(hzCmd);
+                out.close();
+                fileOut.close();
+            }catch(IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -27,7 +27,6 @@ public class MetricsMarker extends BenchMarker {
     }
 
     public void postBench(){
-        System.out.println("postBench");
         csvReporter.stop();
     }
 
