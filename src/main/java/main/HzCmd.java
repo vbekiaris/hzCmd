@@ -244,6 +244,8 @@ public class HzCmd implements Serializable {
 
     public void wipe( ) throws IOException, InterruptedException, JMSException {
 
+        saveHzCmd=false;
+
         Bash.rmQuite(serFile);
         Bash.rmQuite(propertiesFile);
 
