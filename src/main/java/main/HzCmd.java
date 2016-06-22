@@ -286,6 +286,10 @@ public class HzCmd implements Serializable {
         int benchNumber = properties.readIntPropertie(HzCmdProperties.BENCH_NUMBER, 0);
 
         ClusterManager cluster = clusters.get(clusterId);
+        if(cluster==null){
+            System.out.println(Bash.ANSI_RED + "No Cluster for -id "+clusterId + Bash.ANSI_RESET);
+            return;
+        }
 
         BenchManager bencher = new BenchManager(benchFile);
 
