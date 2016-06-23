@@ -15,9 +15,12 @@ while read -r f; do
  chart-JavaMetrics ${f} ${f}
  mv *.png ${f}-charts
 
- meta=$(basename ${f})
- meta=${meta%.csv}"meta.txt"
- meta=$(find . -name ${meta} -print -quit)
+ meta=${${f}}
+ meta=${meta%bench.csv}
+ meta=${meta%warmup.csv}
+ meta=${meta}"meta.txt"
+ meta=$(find . -type f -name ${meta} -print -quit)
+ echo ${meta}
  cp ${meta} ${f}-charts
 
 done <<< "$files"
