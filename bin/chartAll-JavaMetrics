@@ -15,7 +15,7 @@ while read -r f; do
  chart-JavaMetrics ${f} ${f}
  mv *.png ${f}-charts
 
- meta=${${f}}
+ meta=${f}
  meta=${meta%bench.csv}
  meta=${meta%warmup.csv}
  meta=${meta}"meta.txt"
