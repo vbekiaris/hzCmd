@@ -16,7 +16,7 @@ while read -r f; do
  mv *.png ${f}-charts
 
  meta=$(basename ${f})
- meta=${meta%.csv}".meta.txt"
+ meta=${meta%.csv}"meta.txt"
  meta=$(find . -name ${meta} -print -quit)
  cp ${meta} ${f}-charts
 
