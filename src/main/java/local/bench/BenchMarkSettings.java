@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class BenchMarkSettings implements Serializable {
 
@@ -97,7 +99,43 @@ public class BenchMarkSettings implements Serializable {
         String[] numberStrs = intervalNanos.split(",");
         long[] numbers = new long[numberStrs.length];
         for(int i=0; i<numberStrs.length; i++) {
-            numbers[i] = TimeUnit.MILLISECONDS.toNanos(Long.parseLong(numberStrs[i]));
+
+            String interval = numberStrs[i];
+
+            Pattern sec = Pattern.compile("[0-9]+s");
+            Pattern mil = Pattern.compile("[0-9]+m");
+            Pattern mic = Pattern.compile("[0-9]+u");
+            Pattern nan = Pattern.compile("[0-9]+n");
+
+            Matcher matcher = sec.matcher(interval);
+            if (matcher.find()) {
+                interval = interval.replaceAll("s|m|u|n", "");
+                numbers[i] = TimeUnit.SECONDS.toNanos(Long.parseLong(interval));
+                continue;
+            }
+
+            matcher = mil.matcher(interval);
+            if (matcher.find()) {
+                interval = interval.replaceAll("s|m|u|n", "");
+                numbers[i] = TimeUnit.MILLISECONDS.toNanos(Long.parseLong(interval));
+                continue;
+            }
+
+            matcher = mic.matcher(interval);
+            if (matcher.find()) {
+                interval = interval.replaceAll("s|m|u|n", "");
+                numbers[i] = TimeUnit.MICROSECONDS.toNanos(Long.parseLong(interval));
+                continue;
+            }
+
+            matcher = nan.matcher(interval);
+            if (matcher.find()) {
+                interval = interval.replaceAll("s|m|u|n", "");
+                numbers[i] = Long.parseLong(interval);
+                continue;
+            }
+
+            numbers[i] = TimeUnit.MILLISECONDS.toNanos(Long.parseLong(interval));
         }
         return numbers;
     }

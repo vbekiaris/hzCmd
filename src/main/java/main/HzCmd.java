@@ -283,7 +283,7 @@ public class HzCmd implements Serializable {
     public void invokeBenchMark(String clusterId, String benchFile, final boolean warmup) throws Exception {
 
         HzCmdProperties properties = new HzCmdProperties();
-        int benchNumber = properties.readIntPropertie(HzCmdProperties.BENCH_NUMBER, 0);
+        int benchNumber = properties.readIntPropertie(HzCmdProperties.BENCH_NUMBER, 1);
 
         ClusterManager cluster = clusters.get(clusterId);
         if(cluster==null){
@@ -314,20 +314,20 @@ public class HzCmd implements Serializable {
                                         for (int repeater = 0; repeater < benchMarkSettings.repeatCount(); repeater++) {
 
                                             String version = cluster.getVersionsString();
-                                            String metaData = "clusterId " + clusterId + "\n" +
-                                                    "version " + version + "\n" +
-                                                    "Members " + cluster.getMemberCount() + "\n" +
-                                                    "Clients " + cluster.getClientCount() + "\n" +
-                                                    "drivers " + drivers + "\n" +
-                                                    "benchType " + benchType + "\n" +
-                                                    "interval " + interval + "\n" +
-                                                    "taskID " + taskId + "\n" +
-                                                    "class " + className + "\n" +
-                                                    "allowException " + benchMarkSettings.getAllowException() + "\n" +
-                                                    "threads " + threadCount + "\n" +
-                                                    "warmupSec " + warmupSec + "\n" +
-                                                    "benchSec " + durationSec + "\n" +
-                                                    "benchNum " + benchNumber + "\n";
+                                            String metaData = "clusterId " + clusterId + " " +
+                                                    "version " + version + " " +
+                                                    "Members " + cluster.getMemberCount() + " " +
+                                                    "Clients " + cluster.getClientCount() + " " +
+                                                    "drivers " + drivers + " " +
+                                                    "benchType " + benchType + " " +
+                                                    "interval " + interval + " " +
+                                                    "taskID " + taskId + " " +
+                                                    "class " + className + " " +
+                                                    "allowException " + benchMarkSettings.getAllowException() + " " +
+                                                    "threads " + threadCount + " " +
+                                                    "warmupSec " + warmupSec + " " +
+                                                    "benchSec " + durationSec + " " +
+                                                    "benchNum " + benchNumber + " ";
 
                                             for (FieldValue field : bencher.getFieldsToSet(taskId)) {
                                                 metaData += field.field + " " + field.value + "\n";
@@ -478,6 +478,10 @@ public class HzCmd implements Serializable {
 
     public void chartComparisonHdr(String dir, String red, String blue) throws IOException, InterruptedException {
         Bash.executeCommand("chart-allComparisonHdr "+dir+" "+red+" "+blue);
+    }
+
+    public void chartHdr(String dir, String red) throws IOException, InterruptedException {
+        Bash.executeCommand("chart-Hdr "+dir+" "+red);
     }
 
     public void processJhicOutput(String dir) throws IOException, InterruptedException {
