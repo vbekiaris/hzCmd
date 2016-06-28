@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-agentsFile=${1:-agents.txt}
+agentsFile=${1:-a.box}
 
 lines=($(cat ${agentsFile}))
 
