@@ -86,6 +86,7 @@ public abstract class Installer {
 
                 if(jar==null || jar.length()==0){
                     System.out.println(Bash.ANSI_RED + "can't find "+version+" jars in "+M2_Repo+Bash.ANSI_RESET);
+                    System.exit(1);
                 }else{
                     System.out.println(Bash.ANSI_YELLOW + "installing "+jar.trim()+ Bash.ANSI_RESET);
                     boxes.upload(jar, uploadDir);

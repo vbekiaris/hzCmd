@@ -10,10 +10,29 @@ import java.io.*;
 
 public abstract class Utils {
 
-    public static String myIp() throws Exception{
-        URL whatismyip = new URL("http://checkip.amazonaws.com");
-        BufferedReader in = new BufferedReader(new InputStreamReader( whatismyip.openStream() ));
-        return in.readLine();
+    public static String myIp() {
+
+        URL whatismyip = null;
+        try {
+            whatismyip = new URL("http://checkip.amazonaws.com");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        BufferedReader in = null;
+        try {
+            in = new BufferedReader(new InputStreamReader( whatismyip.openStream() ));
+        } catch (IOException e) {
+            System.out.println(Bash.ANSI_RED+"error connecting to http://checkip.amazonaws.com 'hz help broker' "+Bash.ANSI_RESET);
+            System.exit(1);
+        }
+        try {
+            return in.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        return null;
     }
 
 

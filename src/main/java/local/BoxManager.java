@@ -21,12 +21,25 @@ public class BoxManager implements Serializable {
         addBoxes(file, user);
     }
 
-    public void addBoxes(String file, String user) throws IOException, InterruptedException  {
-        BufferedReader boxFile = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-        String line;
-        while( (line=boxFile.readLine()) !=null ){
-            addBox(user, line);
+    public void addBoxes(String file, String user) {
+        BufferedReader boxFile = null;
+        try {
+            boxFile = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+        } catch (FileNotFoundException e) {
+            System.out.println(Bash.ANSI_RED+file+" not Found"+Bash.ANSI_RESET);
+            System.exit(1);
         }
+
+        try {
+            String line;
+            while( (line=boxFile.readLine()) !=null ){
+                addBox(user, line);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
     }
 
     public void addBox(String user, String ipString) throws IOException, InterruptedException  {

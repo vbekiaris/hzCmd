@@ -288,6 +288,7 @@ public class HzCmd implements Serializable {
         ClusterManager cluster = clusters.get(clusterId);
         if(cluster==null){
             System.out.println(Bash.ANSI_RED + "No Cluster for -id "+clusterId + Bash.ANSI_RESET);
+            System.exit(1);
             return;
         }
 
@@ -330,10 +331,10 @@ public class HzCmd implements Serializable {
                                                     "benchNum " + benchNumber + " ";
 
                                             for (FieldValue field : bencher.getFieldsToSet(taskId)) {
-                                                metaData += field.field + " " + field.value + "\n";
+                                                metaData += field.field + " " + field.value + " ";
                                             }
                                             for (FieldValue setting : settings) {
-                                                metaData += setting.field + " " + setting.value + "\n";
+                                                metaData += setting.field + " " + setting.value + " ";
                                             }
 
                                             //split up by dir's  even map/struct name
