@@ -169,9 +169,18 @@ public class HzCmd implements Serializable {
             for (ClusterManager c : clusters.values()) {
                 c.restart(jvmId);
             }
+            //for (ClusterManager c : clusters.values()) {
+            //    c.getResponseExitOnException(jvmId);
+            //}
             for (ClusterManager c : clusters.values()) {
-                c.getResponse(jvmId);
+                c.restartEmbeddedObject(jvmId);
             }
+
+            //System.out.println("HI A");
+            //for (ClusterManager c : clusters.values()) {
+            //    c.getResponseExitOnException(jvmId);
+            //}
+            //System.out.println("HI B");
 
             if(iterationDelaySec!=0) {
                 Thread.sleep(iterationDelaySec * 1000);

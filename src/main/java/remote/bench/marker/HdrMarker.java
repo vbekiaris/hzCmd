@@ -1,5 +1,6 @@
 package remote.bench.marker;
 
+import global.AssertionException;
 import org.HdrHistogram.ConcurrentHistogram;
 import org.HdrHistogram.Histogram;
 import remote.Utils;
@@ -87,6 +88,9 @@ public class HdrMarker extends BenchMarker {
             if(!allowException){
                 throw e;
             }
+            if(e instanceof AssertionException){
+                throw e;
+            }
         }
         long end = System.nanoTime();
         histogram.recordValue(end-start);
@@ -99,6 +103,9 @@ public class HdrMarker extends BenchMarker {
         }catch (Exception e){
             Utils.recordeException(e);
             if(!allowException){
+                throw e;
+            }
+            if(e instanceof AssertionException){
                 throw e;
             }
         }

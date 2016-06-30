@@ -59,7 +59,7 @@ public abstract class MQ {
 
                 if (++count == maxTries){
                     System.out.println("failed "+maxTries+" Mq connections");
-                    throw  e;
+                    System.exit(1);
                 }
                 try {
                     Thread.sleep(1000 + random.nextInt(5000));

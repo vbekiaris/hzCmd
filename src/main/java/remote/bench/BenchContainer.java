@@ -133,7 +133,7 @@ public class BenchContainer {
                 benchMarker.bench(mark);
 
                 long sec = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - start);
-                System.out.println("thread "+threadNumber+" "+id+" "+clazzName+" end "+sec);
+                System.out.println("thread "+threadNumber+" "+id+" "+clazzName+" finished duration "+sec+" seconds");
 
             }catch (Exception e) {
                 try {

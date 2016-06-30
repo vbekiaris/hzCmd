@@ -34,7 +34,9 @@ public abstract class Utils {
     public static void recordeException(Exception e) {
         e.printStackTrace();
         try {
-            e.printStackTrace( new PrintStream(new FileOutputStream("exception.txt", true)) );
+            PrintStream ps = new PrintStream(new FileOutputStream("exception.txt", true));
+            e.printStackTrace(ps);
+            ps.close();
         } catch (FileNotFoundException e1) {
             e1.printStackTrace();
         }

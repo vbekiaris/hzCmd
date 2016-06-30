@@ -27,8 +27,8 @@ public class SetFieldCmd implements Cmd, Serializable{
     @Override
     public String toString() {
         return "SetFieldCmd{" +
-                "field='" + field + '\'' +
-                ", taskId='" + taskId + '\'' +
+                "taskId='" + taskId + '\'' +
+                ", field='" + field + '\'' +
                 ", value='" + value + '\'' +
                 '}';
     }

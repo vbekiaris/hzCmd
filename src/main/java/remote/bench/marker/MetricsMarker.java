@@ -2,6 +2,7 @@ package remote.bench.marker;
 
 import com.codahale.metrics.CsvReporter;
 import com.codahale.metrics.MetricRegistry;
+import global.AssertionException;
 import remote.Utils;
 import remote.bench.Bench;
 
@@ -92,6 +93,9 @@ public class MetricsMarker extends BenchMarker {
             if(!allowException){
                 throw e;
             }
+            if(e instanceof AssertionException){
+                throw e;
+            }
         }
         context.stop();
     }
@@ -104,6 +108,9 @@ public class MetricsMarker extends BenchMarker {
         }catch (Exception e){
             Utils.recordeException(e);
             if(!allowException){
+                throw e;
+            }
+            if(e instanceof AssertionException){
                 throw e;
             }
         }

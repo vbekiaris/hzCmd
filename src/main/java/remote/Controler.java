@@ -149,9 +149,9 @@ public abstract class Controler{
                 benchManager.bench(taskId, seconds);
 
                 long sec = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - start);
-                System.out.println("taskId "+taskId+" end "+sec);
+                System.out.println("taskId "+taskId+" finished duration "+sec+" seconds");
 
-                MQ.sendReply(replyProducer, ID+" "+taskId + " bench end");
+                MQ.sendReply(replyProducer, ID+" "+taskId + " bench finished duration "+sec+" seconds");
             } catch (Exception e) {
                 try {
                     MQ.sendReply(e);
@@ -196,7 +196,7 @@ public abstract class Controler{
                 MessageProducer replyProducer = MQ.getReplyProducer();
 
                 System.out.println("MQ msg in = " + obj);
-                System.out.println("MQ msg reply = " + replyProducer);
+                //System.out.println("MQ msg reply = " + replyProducer);
 
                 if (obj instanceof Cmd) {
                     ((Cmd) obj).exicute(this, replyProducer);
