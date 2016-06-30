@@ -19,6 +19,8 @@ import static global.Utils.rangeMap;
 public class ClusterManager implements Serializable {
 
     private final long JVM_STARTUP_TIMEOUT=TimeUnit.SECONDS.toMillis(600);
+    private final long TIMEOUT_2MIN=TimeUnit.SECONDS.toMillis(120);
+    private final long TIMEOUT_10MIN=TimeUnit.SECONDS.toMillis(600);
 
     private final String clusterId;
     private List<String> versions = new ArrayList<String>();
@@ -277,21 +279,21 @@ public class ClusterManager implements Serializable {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.startEmbeddedObject();
         }
-        getResponseExitOnException(jvmId);
+        getResponseExitOnException(jvmId, JVM_STARTUP_TIMEOUT);
     }
 
     public void load(String jvmId, String taskId, String className) throws IOException, InterruptedException, JMSException{
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.load(taskId, className);
         }
-        getResponseExitOnException(jvmId);
+        getResponseExitOnException(jvmId, TIMEOUT_2MIN);
     }
 
     public void setThreadCount(String jvmId, String taskId, int threadCount) throws IOException, InterruptedException, JMSException{
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.setThreadCount(taskId, threadCount);
         }
-        getResponseExitOnException(jvmId);
+        getResponseExitOnException(jvmId, TIMEOUT_2MIN);
     }
 
 
@@ -299,50 +301,49 @@ public class ClusterManager implements Serializable {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.setBenchType(taskId, type, intervalNanos, allowException, outFile);
         }
-        getResponseExitOnException(jvmId);
+        getResponseExitOnException(jvmId, TIMEOUT_2MIN);
     }
-
 
     public void writeMetaDataCmd(String jvmId, String taskId, String metaData) throws IOException, InterruptedException, JMSException {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.writeMetaDataCmd(taskId, metaData);
         }
-        getResponseExitOnException(jvmId);
-    }
-
-    public void initBench(String jvmId,  String taskId) throws IOException, InterruptedException, JMSException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
-            jvm.initBench(taskId);
-        }
-        getResponseExitOnException(jvmId);
-    }
-
-    public void warmupBench(String jvmId,  String taskId, int seconds) throws IOException, InterruptedException, JMSException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
-            jvm.warmupBench(taskId, seconds);
-        }
-        getResponseExitOnException(jvmId);
-    }
-
-    public void runBench(String jvmId,  String taskId, int seconds) throws IOException, InterruptedException, JMSException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
-            jvm.runBench(taskId, seconds);
-        }
-        getResponseExitOnException(jvmId);
-    }
-
-    public void cleanupBench(String jvmId,  String taskId) throws IOException, InterruptedException, JMSException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
-            jvm.cleanupBench(taskId);
-        }
-        getResponseExitOnException(jvmId);
+        getResponseExitOnException(jvmId, TIMEOUT_2MIN);
     }
 
     public void setField(String jvmId, String taskId, String field, String value) throws Exception {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.setField(taskId, field, value);
         }
-        getResponseExitOnException(jvmId);
+        getResponseExitOnException(jvmId, TIMEOUT_2MIN);
+    }
+
+    public void initBench(String jvmId,  String taskId) throws IOException, InterruptedException, JMSException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+            jvm.initBench(taskId);
+        }
+        getResponseExitOnException(jvmId, TIMEOUT_10MIN);
+    }
+
+    public void warmupBench(String jvmId,  String taskId, int seconds) throws IOException, InterruptedException, JMSException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+            jvm.warmupBench(taskId, seconds);
+        }
+        getResponseExitOnException(jvmId, TimeUnit.SECONDS.toMillis(seconds+600));
+    }
+
+    public void runBench(String jvmId,  String taskId, int seconds) throws IOException, InterruptedException, JMSException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+            jvm.runBench(taskId, seconds);
+        }
+        getResponseExitOnException(jvmId, TimeUnit.SECONDS.toMillis(seconds+600));
+    }
+
+    public void cleanupBench(String jvmId,  String taskId) throws IOException, InterruptedException, JMSException {
+        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+            jvm.cleanupBench(taskId);
+        }
+        getResponseExitOnException(jvmId, TIMEOUT_10MIN);
     }
 
 
@@ -388,10 +389,14 @@ public class ClusterManager implements Serializable {
     }
 
 
-    public void getResponseExitOnException(String jvmId) throws IOException, InterruptedException, JMSException {
+    public void getResponseExitOnException(String jvmId, long timeOut) throws IOException, InterruptedException, JMSException {
         boolean exit=false;
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
-            Object o = jvm.getResponse();
+            Object o = jvm.getResponse(timeOut);
+
+            if(o==null){
+                System.out.println(Bash.ANSI_RED +"TimeOut"+Bash.ANSI_RESET);
+            }
 
             if(o instanceof Exception){
                 Exception e = (Exception) o;
