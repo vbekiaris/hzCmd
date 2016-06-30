@@ -10,18 +10,17 @@ placement=${7}
 outputFile=${8}
 
 
-if [ ! -f "${outputFile}" ]; then
+if [ -f "${outputFile}" ]; then
 
  currentBoxCount=$(cat ${outputFile} 2>/dev/null | wc -l)
  count=$(( ${count} - ${currentBoxCount} ))
 
 fi
 
-
-
+echo "creating ${count} aws instances"
 
 tryCount=0
-while (( ${count} != 0 )) ; do
+while (( ${count} > 0 )) ; do
 
  aws-getBox ${count} ${imageId} ${region} ${instanceType} ${key} ${subnetId} ${placement} ${outputFile}
  sleep 30
