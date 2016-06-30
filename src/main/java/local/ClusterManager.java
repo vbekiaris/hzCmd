@@ -396,9 +396,8 @@ public class ClusterManager implements Serializable {
 
             if(o==null){
                 System.out.println(Bash.ANSI_RED +"TimeOut"+Bash.ANSI_RESET);
-            }
-
-            if(o instanceof Exception){
+                exit=true;
+            } else if(o instanceof Exception){
                 Exception e = (Exception) o;
                 System.out.println(Bash.ANSI_RED + e +e.getCause()+Bash.ANSI_RESET);
                 exit=true;
