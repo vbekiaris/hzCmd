@@ -7,6 +7,7 @@ import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 
 import java.lang.management.ManagementFactory;
+import java.net.InetAddress;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.concurrent.Callable;
@@ -45,7 +46,7 @@ public abstract class Controler{
         try {
             init(type);
             benchManager = new BenchManager(getVendorObject());
-            MQ.sendReply(ID+" Started");
+            MQ.sendReply(ID + " Started on " + InetAddress.getLocalHost().getHostAddress());
         }catch (Exception e){
             recordeException(e);
             MQ.sendReply(e);
