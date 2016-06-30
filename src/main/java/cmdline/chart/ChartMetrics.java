@@ -8,7 +8,7 @@ import main.HzCmd;
 public class ChartMetrics extends Command {
 
     @Option(name = "-dir", description = "path to download data")
-    public String dir;
+    public String dir="output";
 
 
     public void exe(HzCmd hzCmd) {
