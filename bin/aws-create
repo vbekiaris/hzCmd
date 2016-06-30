@@ -9,6 +9,8 @@ subnetId=${6}
 placement=${7}
 outputFile=${8}
 
+currentBoxCount=$(cat ${outputFile} 2>/dev/null | wc -l)
+count=$(( ${count} - ${currentBoxCount} ))
 
 tryCount=0
 while (( ${count} != 0 )) ; do
