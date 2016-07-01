@@ -89,8 +89,8 @@ public class MetricsMarker extends BenchMarker {
         try {
             bench.timeStep();
         }catch (Exception e){
-            Utils.recordeException(e);
             if(!allowException){
+                Utils.recordeException(e);
                 throw e;
             }
             if(e instanceof AssertionException){
@@ -106,8 +106,8 @@ public class MetricsMarker extends BenchMarker {
         try {
             bench.timeStep();
         }catch (Exception e){
-            Utils.recordeException(e);
             if(!allowException){
+                Utils.recordeException(e);
                 throw e;
             }
             if(e instanceof AssertionException){
