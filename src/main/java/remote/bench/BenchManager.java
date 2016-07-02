@@ -123,34 +123,30 @@ public class BenchManager {
     }
 
     private void run(MessageProducer replyProducer, String id, int sec, String fileNamePostFix){
-        List<BenchRunThread> threads = new ArrayList();
+        List<BenchThread> threads = new ArrayList();
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
             benchContainer.preBench(fileNamePostFix);
             benchContainer.setDuration(sec);
             threads.addAll( benchContainer.getThreads() );
         }
 
-        for (BenchRunThread thread : threads) {
+        for (BenchThread thread : threads) {
             thread.setReplyProducer(replyProducer);
         }
-
-        //ExecutorService exe = Executors.newFixedThreadPool(threads.size());
-        //service.invokeAll(threads, sec + 600, TimeUnit.SECONDS);
 
         ExecutorService threadPool = Executors.newFixedThreadPool(threads.size());
         CompletionService<Object> service = new ExecutorCompletionService(threadPool);
 
-
-        for (BenchRunThread thread : threads) {
+        for (BenchThread thread : threads) {
             service.submit(thread);
         }
         threadPool.shutdown();
-        for (BenchRunThread thread : threads) {
+
+        for (BenchThread thread : threads) {
             try {
                 Future<Object> future = service.take();
                 Object result = future.get();
 
-                System.out.println("HI got one+ " + result);
                 if (result instanceof Exception) {
                     try {
                         MQ.sendReply(replyProducer, (Exception) result);
@@ -158,7 +154,7 @@ public class BenchManager {
                         e1.printStackTrace();
                     }
                 }
-                if (result instanceof BenchRunThread) {
+                if (result instanceof BenchThread) {
                     MQ.sendReply(replyProducer, Controler.ID+" "+result.toString());
                 }
 
@@ -171,7 +167,6 @@ public class BenchManager {
             benchContainer.postBench();
         }
     }
-
 
     private List<BenchContainer> getMatchingBenchContainers(String id) {
         List<BenchContainer> matching = new ArrayList();

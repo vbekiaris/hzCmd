@@ -47,15 +47,15 @@ public class BenchContainer {
     public int getThreadCount(){
         return benchObjs.size();
     }
-    public List<BenchRunThread> getThreads( ) {
-        List<BenchRunThread> threads = new ArrayList();
+
+    public List<BenchThread> getThreads( ) {
+        List<BenchThread> threads = new ArrayList();
         for (int i = 0; i < benchObjs.size(); i++) {
             Bench bench = benchObjs.get(i);
-            threads.add(new BenchRunThread(benchMarker, bench, id, clazzName, i) );
+            threads.add(new BenchThread(benchMarker, bench, id, clazzName, i) );
         }
         return threads;
     }
-
 
     public void setField(String field, String value) throws Exception{
         for (Bench bench : benchObjs) {
@@ -86,7 +86,7 @@ public class BenchContainer {
     }
 
     public void preBench(String fileNamePostFix) {
-        benchMarker.preBench(outputFileName+"-"+fileNamePostFix);
+        benchMarker.preBench(outputFileName + "-" + fileNamePostFix);
     }
 
     public void postBench() {
@@ -96,5 +96,4 @@ public class BenchContainer {
     public void setDuration(int seconds){
         benchMarker.setDurationSeconds(seconds);
     }
-
 }

@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-class BenchRunThread implements Callable<Object>, Serializable {
+class BenchThread implements Callable<Object>, Serializable {
 
     private BenchMarker benchMarker;
     private Bench bench;
@@ -16,7 +16,7 @@ class BenchRunThread implements Callable<Object>, Serializable {
     private int threadNumber;
     private MessageProducer replyProducer;
 
-    public BenchRunThread(BenchMarker benchMarker, Bench bench, String id, String clazzName, int threadNumber){
+    public BenchThread(BenchMarker benchMarker, Bench bench, String id, String clazzName, int threadNumber){
         this.benchMarker=benchMarker;
         this.bench=bench;
         this.id=id;
@@ -46,7 +46,7 @@ class BenchRunThread implements Callable<Object>, Serializable {
 
     @Override
     public String toString() {
-        return "BenchRunThread{" +
+        return "BenchThread{" +
                 "bench=" + bench +
                 ", benchMarker=" + benchMarker +
                 ", id='" + id + '\'' +
