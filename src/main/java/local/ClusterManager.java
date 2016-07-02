@@ -339,11 +339,10 @@ public class ClusterManager implements Serializable {
         getResponseExitOnException(jvmId, TimeUnit.SECONDS.toMillis(seconds+600));
     }
 
-    public void cleanupBench(String jvmId,  String taskId) throws IOException, InterruptedException, JMSException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
-            jvm.cleanupBench(taskId);
-        }
-        getResponseExitOnException(jvmId, TIMEOUT_10MIN);
+    public void cleanupBench(String taskId) throws IOException, InterruptedException, JMSException {
+        RemoteJvm jvm = getMatchingMemberJms("Member1").get(0);
+        jvm.cleanupBench(taskId);
+        getResponseExitOnException(jvm.getId(), TIMEOUT_10MIN);
     }
 
 
