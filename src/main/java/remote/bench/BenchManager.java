@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class BenchManager {
 
@@ -116,16 +117,29 @@ public class BenchManager {
     }
 
     public void warmup(MessageProducer replyProducer, String id, int sec) {
+        run(replyProducer, id, sec, "warmup");
+    }
+
+    public void bench(MessageProducer replyProducer, String id, int sec)   {
+        run(replyProducer, id, sec, "bench");
+    }
+
+
+    private void run(MessageProducer replyProducer, String id, int sec, String fileNamePostFix){
         List<BenchRunThread> threads = new ArrayList();
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
-            benchContainer.preBench("warmup");
+            benchContainer.preBench(fileNamePostFix);
             benchContainer.setDuration(sec);
             threads.addAll( benchContainer.getThreads() );
         }
 
+        for (BenchRunThread thread : threads) {
+            thread.setReplyProducer(replyProducer);
+        }
+
         ExecutorService exe = Executors.newFixedThreadPool(threads.size());
         try {
-            exe.invokeAll(threads);
+            exe.invokeAll(threads, sec + 600, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -133,26 +147,7 @@ public class BenchManager {
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
             benchContainer.postBench();
         }
-
-
     }
-
-    public void bench(MessageProducer replyProducer, String id, int sec) throws InterruptedException {
-        List<BenchRunThread> threads = new ArrayList();
-        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
-            benchContainer.preBench("bench");
-            benchContainer.setDuration(sec);
-            threads.addAll( benchContainer.getThreads() );
-        }
-
-        ExecutorService exe = Executors.newFixedThreadPool(threads.size());
-        exe.invokeAll(threads);
-
-        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
-            benchContainer.postBench();
-        }
-    }
-
 
 
     private List<BenchContainer> getMatchingBenchContainers(String id) {
