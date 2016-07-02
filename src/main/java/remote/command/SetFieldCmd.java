@@ -21,7 +21,8 @@ public class SetFieldCmd implements Cmd, Serializable{
     }
 
     public void exicute(Controler c, MessageProducer replyProducer){
-        c.setField(taskId, field, value);
+
+        c.setField(replyProducer, taskId, field, value);
     }
 
     @Override

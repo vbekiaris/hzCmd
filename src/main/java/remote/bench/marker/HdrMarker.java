@@ -80,9 +80,13 @@ public class HdrMarker extends BenchMarker {
 
 
     private void flatOut(Bench bench) throws Exception{
-        long start = System.nanoTime();
         try {
+
+            long start = System.nanoTime();
             bench.timeStep();
+            long end = System.nanoTime();
+            histogram.recordValue(end-start);
+
         }catch (Exception e){
             Utils.recordeException(e);
             if(!allowException){
@@ -92,14 +96,20 @@ public class HdrMarker extends BenchMarker {
                 throw e;
             }
         }
-        long end = System.nanoTime();
-        histogram.recordValue(end-start);
     }
 
     private void interval(Bench bench) throws Exception{
-        long start = System.nanoTime();
         try {
+            long start = System.nanoTime();
             bench.timeStep();
+            long end = System.nanoTime();
+            histogram.recordValueWithExpectedInterval(end-start, expectedIntervalNanos);
+
+            long nextStart = start + expectedIntervalNanos;
+            while( System.nanoTime() < nextStart ) {
+                //busy-waiting until the next expected interval
+            }
+
         }catch (Exception e){
             Utils.recordeException(e);
             if(!allowException){
@@ -109,12 +119,6 @@ public class HdrMarker extends BenchMarker {
                 throw e;
             }
         }
-        long end = System.nanoTime();
-        histogram.recordValueWithExpectedInterval(end-start, expectedIntervalNanos);
 
-        long nextStart = start + expectedIntervalNanos;
-        while( System.nanoTime() < nextStart ) {
-            //busy-waiting until the next expected interval
-        }
     }
 }

@@ -18,7 +18,8 @@ public class CleanUpCmd implements Cmd, Serializable{
     }
 
     public void exicute(Controler c, MessageProducer replyProducer){
-        c.cleanup(taskId);
+
+        c.cleanup(replyProducer, taskId);
     }
 
     @Override

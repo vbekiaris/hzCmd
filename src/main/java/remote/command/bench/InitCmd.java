@@ -18,7 +18,8 @@ public class InitCmd implements Cmd, Serializable{
     }
 
     public void exicute(Controler c, MessageProducer replyProducer){
-        c.initBench(taskId);
+
+        c.initBench(replyProducer, taskId);
     }
 
     @Override

@@ -20,7 +20,8 @@ public class LoadCmd implements Cmd, Serializable{
     }
 
     public void exicute(Controler c, MessageProducer replyProducer){
-        c.load(taskId, className);
+
+        c.load(replyProducer, taskId, className);
     }
 
     @Override

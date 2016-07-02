@@ -5,7 +5,7 @@ import global.Bash;
 import global.NodeType;
 import local.properties.HzCmdProperties;
 import mq.MQ;
-import remote.bench.BenchType;
+import global.BenchType;
 import remote.command.*;
 import remote.command.bench.*;
 
@@ -15,8 +15,6 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
-
-import static global.Utils.printStringIfNotEmpty;
 
 public abstract class RemoteJvm implements Serializable {
 

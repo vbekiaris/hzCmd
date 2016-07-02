@@ -85,12 +85,6 @@ public abstract class MQ {
     }
 
 
-    public static void sendReply(Serializable obj) throws JMSException {
-        ObjectMessage msg = session.createObjectMessage();
-        msg.setObject(obj);
-        replyProducer.send(msg);
-    }
-
     public static void sendReply(MessageProducer replyProducer, Serializable obj) throws JMSException {
         ObjectMessage msg = session.createObjectMessage();
         msg.setObject(obj);

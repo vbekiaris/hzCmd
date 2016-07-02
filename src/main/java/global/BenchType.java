@@ -1,4 +1,4 @@
-package remote.bench;
+package global;
 
 public enum BenchType {
     Hdr, Metrics

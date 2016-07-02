@@ -1,7 +1,7 @@
 package remote.command.bench;
 
 import remote.Controler;
-import remote.bench.BenchType;
+import global.BenchType;
 import remote.command.Cmd;
 
 import javax.jms.MessageProducer;
@@ -27,7 +27,7 @@ public class SetBenchTypeCmd implements Cmd, Serializable{
     }
 
     public void exicute(Controler c, MessageProducer replyProducer){
-        c.setBenchType(taskId, type, intervalNanos, allowException, outFile);
+        c.setBenchType(replyProducer, taskId, type, intervalNanos, allowException, outFile);
     }
 
     @Override

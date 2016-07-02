@@ -1,18 +1,159 @@
 package remote.bench;
 
+import global.BenchType;
+import mq.MQ;
+import remote.Controler;
+
+import javax.jms.JMSException;
+import javax.jms.MessageProducer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class BenchManager {
 
     private Object vendorObject;
     private Map<String, BenchContainer> benchs = new HashMap();
+    //private Map<String, ExecutorService> benchExecutors = new HashMap();
+
 
     public BenchManager(Object vendorObject){
         this.vendorObject=vendorObject;
     }
+
+
+    public void loadClass(MessageProducer replyProducer, String benchId, String clazz) {
+        try {
+            BenchContainer benchContainer = new BenchContainer(vendorObject, benchId, clazz);
+            benchs.put(benchId, benchContainer);
+            MQ.sendReply(replyProducer, Controler.ID+" "+benchContainer.getId()+" "+clazz+" loaded");
+        } catch (Exception e) {
+            try {
+                MQ.sendReply(replyProducer, e);
+            } catch (JMSException e2) {}
+        }
+    }
+
+    public void setThreadCount(MessageProducer replyProducer, String id, int threadCount) {
+        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            try {
+                benchContainer.createBenchObjects(threadCount);
+                MQ.sendReply(replyProducer, Controler.ID+" "+benchContainer.getId()+" threadCount="+threadCount);
+            } catch (Exception e) {
+                try {
+                    MQ.sendReply(replyProducer, e);
+                } catch (JMSException e2) {}
+            }
+        }
+    }
+
+    public void writeMetaData(MessageProducer replyProducer, String id, String metaData) {
+        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            try {
+                benchContainer.writeMetaData(metaData);
+                MQ.sendReply(replyProducer, Controler.ID+" "+benchContainer.getId()+" metaData="+metaData);
+            } catch (Exception e) {
+                try {
+                    MQ.sendReply(replyProducer, e);
+                } catch (JMSException e2) {}
+            }
+        }
+    }
+
+    public void setField(MessageProducer replyProducer, String id, String field, String value) {
+        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            try {
+                benchContainer.setField(field, value);
+                MQ.sendReply(replyProducer, Controler.ID+" " + benchContainer.getId() + " " + field + " " + value);
+            } catch (Exception e) {
+                try {
+                    MQ.sendReply(replyProducer, e);
+                } catch (JMSException e2) {}
+            }
+        }
+    }
+
+    public void init(MessageProducer replyProducer, String id){
+        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            try {
+                benchContainer.init();
+                MQ.sendReply(replyProducer, Controler.ID+ " " + benchContainer.getId() + " init end");
+            } catch (Exception e) {
+                try {
+                    MQ.sendReply(replyProducer, e);
+                } catch (JMSException e2) {}
+            }
+        }
+    }
+
+    public void cleanUp(MessageProducer replyProducer, String id){
+        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            try {
+                benchContainer.cleanUp();
+                MQ.sendReply(replyProducer, Controler.ID+" "+benchContainer.getId()+" cleanUp end");
+            } catch (Exception e) {
+                try {
+                    MQ.sendReply(replyProducer, e);
+                } catch (JMSException e2) {}
+            }
+        }
+    }
+
+    public void setBenchType(MessageProducer replyProducer, String id, BenchType type, long expectedIntervalNanos, boolean allowException, String outFile){
+        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            try {
+                benchContainer.setBenchType(type, expectedIntervalNanos, allowException, outFile);
+                MQ.sendReply(replyProducer, Controler.ID+" "+benchContainer.getId()+" BenchType="+type+" intervalNanos="+expectedIntervalNanos+" allowException="+allowException+" outFile="+outFile);
+            } catch (Exception e) {
+                try {
+                    MQ.sendReply(replyProducer, e);
+                } catch (JMSException e2) {}
+            }
+        }
+    }
+
+    public void warmup(MessageProducer replyProducer, String id, int sec) {
+        List<BenchRunThread> threads = new ArrayList();
+        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            benchContainer.preBench("warmup");
+            benchContainer.setDuration(sec);
+            threads.addAll( benchContainer.getThreads() );
+        }
+
+        ExecutorService exe = Executors.newFixedThreadPool(threads.size());
+        try {
+            exe.invokeAll(threads);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            benchContainer.postBench();
+        }
+
+
+    }
+
+    public void bench(MessageProducer replyProducer, String id, int sec) throws InterruptedException {
+        List<BenchRunThread> threads = new ArrayList();
+        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            benchContainer.preBench("bench");
+            benchContainer.setDuration(sec);
+            threads.addAll( benchContainer.getThreads() );
+        }
+
+        ExecutorService exe = Executors.newFixedThreadPool(threads.size());
+        exe.invokeAll(threads);
+
+        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            benchContainer.postBench();
+        }
+    }
+
+
 
     private List<BenchContainer> getMatchingBenchContainers(String id) {
         List<BenchContainer> matching = new ArrayList();
@@ -24,59 +165,4 @@ public class BenchManager {
         }
         return matching;
     }
-
-
-    public void loadClass(String id, String clazz) throws Exception{
-        BenchContainer bc = new BenchContainer(vendorObject, id, clazz);
-        benchs.put(id, bc);
-    }
-
-    public void setThreadCount(String id, int threadCount) throws Exception {
-        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
-            benchContainer.setThreadCount(threadCount);
-        }
-    }
-
-    public void writeMetaData(String id, String metaData) {
-        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
-            benchContainer.writeMetaData(metaData);
-        }
-    }
-
-    public void setField(String id, String field, String value) throws Exception{
-        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
-            benchContainer.setField(field, value);
-        }
-    }
-
-    public void init(String id){
-        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
-            benchContainer.init();
-        }
-    }
-
-    public void cleanUp(String id){
-        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
-            benchContainer.cleanUp();
-        }
-    }
-
-    public void setBenchType(String id, BenchType type, long expectedIntervalNanos, boolean allowException, String outFile){
-        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
-            benchContainer.setBenchType(type, expectedIntervalNanos, allowException, outFile);
-        }
-    }
-
-    public void warmup(String id, int sec) throws InterruptedException {
-        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
-            benchContainer.warmup(sec);
-        }
-    }
-
-    public void bench(String id, int sec) throws InterruptedException {
-        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
-            benchContainer.bench(sec);
-        }
-    }
-
 }

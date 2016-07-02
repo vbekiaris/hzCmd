@@ -11,12 +11,10 @@ import java.net.InetAddress;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import remote.bench.BenchManager;
-import remote.bench.BenchType;
+import global.BenchType;
 import remote.command.Cmd;
 
 import static remote.Utils.recordeException;
@@ -33,7 +31,7 @@ public abstract class Controler{
 
     public final NodeType type;
 
-    private ExecutorService executor = Executors.newFixedThreadPool(5);
+    //private ExecutorService executor = Executors.newFixedThreadPool(5);
 
 
     public Controler(NodeType type) throws Exception {
@@ -42,14 +40,14 @@ public abstract class Controler{
         System.out.println(this);
     }
 
-    public void startEmbeddedObject() throws Exception{
+    public void startEmbeddedObject(MessageProducer replyProducer) throws Exception{
         try {
             init(type);
             benchManager = new BenchManager(getVendorObject());
-            MQ.sendReply(ID + " Started on " + InetAddress.getLocalHost().getHostAddress());
+            MQ.sendReply(replyProducer, ID + " Started on " + InetAddress.getLocalHost().getHostAddress());
         }catch (Exception e){
             recordeException(e);
-            MQ.sendReply(e);
+            MQ.sendReply(replyProducer, e);
             throw e;
         }
     }
@@ -58,135 +56,42 @@ public abstract class Controler{
 
     public abstract Object getVendorObject();
 
-    public void load(String taskId, String clazz){
-        try {
-            benchManager.loadClass(taskId, clazz);
-            MQ.sendReply(ID+" "+taskId+" "+clazz+" loaded");
-        } catch (Exception e) {
-            try {
-                MQ.sendReply(e);
-            } catch (JMSException e2) {}
-        }
+    public void load(MessageProducer replyProducer, String taskId, String clazz){
+        benchManager.loadClass(replyProducer, taskId, clazz);
     }
 
-    public void setThreadCount(String taskId, int threadCount){
-        try {
-            benchManager.setThreadCount(taskId, threadCount);
-            MQ.sendReply(ID+" "+taskId+" threadCount="+threadCount);
-        } catch (Exception e) {
-            try {
-                MQ.sendReply(e);
-            } catch (JMSException e2) {}
-        }
+    public void setThreadCount(MessageProducer replyProducer, String taskId, int threadCount){
+        benchManager.setThreadCount(replyProducer, taskId, threadCount);
     }
 
-    public void setBenchType(String taskId, BenchType type, long intervalNanos, boolean allowException, String outFile) {
-        try {
-            benchManager.setBenchType(taskId, type, intervalNanos, allowException, outFile);
-            MQ.sendReply(ID+" "+taskId+" BenchType="+type+" intervalNanos="+intervalNanos+" allowException="+allowException+" outFile="+outFile);
-        } catch (Exception e) {
-            try {
-                MQ.sendReply(e);
-            } catch (JMSException e2) {}
-        }
+    public void setBenchType(MessageProducer replyProducer, String taskId, BenchType type, long intervalNanos, boolean allowException, String outFile) {
+        benchManager.setBenchType(replyProducer, taskId, type, intervalNanos, allowException, outFile);
     }
 
-    public void writeMetaData(String taskId, String metaData) {
-        try {
-            benchManager.writeMetaData(taskId, metaData);
-            MQ.sendReply(ID+" "+taskId+" metaData="+metaData);
-        } catch (Exception e) {
-            try {
-                MQ.sendReply(e);
-            } catch (JMSException e2) {}
-        }
+    public void setField(MessageProducer replyProducer, String taskId, String field, String value){
+        benchManager.setField(replyProducer, taskId, field, value);
     }
 
-    public void initBench(String taskId){
-        try {
-            benchManager.init(taskId);
-            MQ.sendReply(ID+" "+taskId+" init end");
-        } catch (Exception e) {
-            try {
-                MQ.sendReply(e);
-            } catch (JMSException e2) {}
-        }
+    public void writeMetaData(MessageProducer replyProducer, String taskId, String metaData) {
+        benchManager.writeMetaData(replyProducer, taskId, metaData);
     }
 
-    public void warmupBench(String taskId, int seconds){
-        try {
-            benchManager.warmup(taskId, seconds);
-            MQ.sendReply(ID+" "+taskId+" warmup end");
-        } catch (Exception e) {
-            try {
-                MQ.sendReply(e);
-            } catch (JMSException e2) {}
-        }
+    public void initBench(MessageProducer replyProducer, String taskId){
+        benchManager.init(replyProducer, taskId);
+    }
+
+    public void warmupBench(MessageProducer replyProducer, String taskId, int seconds){
+        benchManager.warmup(replyProducer, taskId, seconds);
     }
 
     public void runBench(String taskId, int seconds, MessageProducer replyProducer){
 
-        executor.submit( new BenchRunner(taskId, seconds, replyProducer)
-        );
-    }
-
-    private class BenchRunner implements Callable<Object> {
-        String taskId;
-        int seconds;
-        MessageProducer replyProducer;
-
-        public BenchRunner(String taskId, int seconds, MessageProducer replyProducer){
-            this.taskId=taskId;
-            this.seconds=seconds;
-            this.replyProducer=replyProducer;
-        }
-
-        public Object call() {
-
-            try {
-                long start = System.currentTimeMillis();
-                System.out.println("taskId "+taskId+" started");
-
-                benchManager.bench(taskId, seconds);
-
-                long sec = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - start);
-                System.out.println("taskId "+taskId+" finished duration "+sec+" seconds");
-
-                MQ.sendReply(replyProducer, ID+" "+taskId + " bench finished duration "+sec+" seconds");
-            } catch (Exception e) {
-                try {
-                    MQ.sendReply(e);
-                } catch (JMSException e2) {}
-            }
-
-            return null;
-        }
+//        executor.submit(new BenchRunner(taskId, seconds, replyProducer));
     }
 
 
-
-
-
-    public void cleanup(String taskId) {
-        try {
-            benchManager.cleanUp(taskId);
-            MQ.sendReply(ID+" "+taskId+" cleanUp end");
-        } catch (Exception e) {
-            try {
-                MQ.sendReply(e);
-            } catch (JMSException e2) {}
-        }
-    }
-
-    public void setField(String taskId, String field, String value){
-        try {
-            benchManager.setField(taskId, field, value);
-            MQ.sendReply(ID+" " + taskId + " " + field + " " + value);
-        } catch (Exception e) {
-            try {
-                MQ.sendReply(e);
-            } catch (JMSException e2) {}
-        }
+    public void cleanup(MessageProducer replyProducer, String taskId) {
+        benchManager.cleanUp(replyProducer, taskId);
     }
 
 

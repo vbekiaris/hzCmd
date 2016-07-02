@@ -20,7 +20,8 @@ public class ThreadCountCmd implements Cmd, Serializable{
     }
 
     public void exicute(Controler c, MessageProducer replyProducer){
-        c.setThreadCount(taskId, threadCount);
+
+        c.setThreadCount(replyProducer, taskId, threadCount);
     }
 
     @Override

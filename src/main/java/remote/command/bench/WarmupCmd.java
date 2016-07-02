@@ -20,7 +20,8 @@ public class WarmupCmd implements Cmd, Serializable{
     }
 
     public void exicute(Controler c, MessageProducer replyProducer){
-        c.warmupBench(taskId, seconds);
+
+        c.warmupBench(replyProducer, taskId, seconds);
     }
 
     @Override

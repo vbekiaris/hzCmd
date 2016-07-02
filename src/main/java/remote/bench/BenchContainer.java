@@ -1,18 +1,13 @@
 package remote.bench;
 
-import mq.MQ;
+import global.BenchType;
 import remote.Utils;
 import remote.bench.marker.BenchMarker;
 import remote.bench.marker.HdrMarker;
 import remote.bench.marker.MetricsMarker;
 
-import javax.jms.JMSException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import static remote.Utils.instantiate;
 
@@ -23,8 +18,7 @@ public class BenchContainer {
     private Object vendorObject;
     private String outputFileName;
     private BenchMarker benchMarker;
-
-    private List<Bench> benchThreads = new ArrayList();
+    private List<Bench> benchObjs = new ArrayList();
 
     public BenchContainer(Object vendorObject, String id, String clazz){
         this.vendorObject=vendorObject;
@@ -38,43 +32,45 @@ public class BenchContainer {
         benchMarker.writeMeataDataFile(outputFileName, metaData);
     }
 
-    public void setThreadCount(int count) throws Exception {
+    public void createBenchObjects(int count) throws Exception {
 
-        count = count - benchThreads.size();
-
-        if(count>0){
-            for(int i=0; i<count; i++){
-                benchThreads.add(instantiate(clazzName, Bench.class));
-            }
-        }else{
-            count = Math.abs(count);
-            for(int i=0; i<count; i++){
-                benchThreads.remove(i);
-            }
+        for(int i=0; i<count; i++){
+            Bench benchObj = instantiate(clazzName, Bench.class);
+            benchObjs.add(benchObj);
         }
 
-        for (Bench b : benchThreads) {
-            b.setVendorObject(vendorObject);
+        for (Bench bench : benchObjs) {
+            bench.setVendorObject(vendorObject);
         }
+    }
+
+    public int getThreadCount(){
+        return benchObjs.size();
+    }
+    public List<BenchRunThread> getThreads( ) {
+        List<BenchRunThread> threads = new ArrayList();
+        for (int i = 0; i < benchObjs.size(); i++) {
+            Bench bench = benchObjs.get(i);
+            threads.add(new BenchRunThread(benchMarker, bench, id, clazzName, i) );
+        }
+        return threads;
     }
 
 
     public void setField(String field, String value) throws Exception{
-        for (Bench b : benchThreads) {
-            Utils.setField(field, value, b);
+        for (Bench bench : benchObjs) {
+            Utils.setField(field, value, bench);
         }
     }
 
     public void init(){
-        for (Bench b : benchThreads) {
-            b.init();
+        for (Bench bench : benchObjs) {
+            bench.init();
         }
     }
 
     public void cleanUp(){
-        if ( benchThreads.size() >0 ){
-            benchThreads.get(0).cleanup();
-        }
+        benchObjs.get(0).cleanup();
     }
 
     public void setBenchType(BenchType type, long expectedIntervalNanos, boolean allowException, String outFile){
@@ -89,60 +85,16 @@ public class BenchContainer {
         }
     }
 
-    public void warmup(int sec) throws InterruptedException {
-        benchMarker.preBench(outputFileName+"-warmup");
-        invokeSync(sec);
+    public void preBench(String fileNamePostFix) {
+        benchMarker.preBench(outputFileName+"-"+fileNamePostFix);
+    }
+
+    public void postBench() {
         benchMarker.postBench();
     }
 
-    public void bench(int sec) throws InterruptedException {
-        benchMarker.preBench(outputFileName+"-bench");
-        invokeSync(sec);
-        benchMarker.postBench();
-    }
-
-    private boolean invokeSync(int seconds) throws InterruptedException {
+    public void setDuration(int seconds){
         benchMarker.setDurationSeconds(seconds);
-
-        ExecutorService executor = Executors.newFixedThreadPool(benchThreads.size());
-
-        int number=0;
-        for (Bench b : benchThreads) {
-            executor.submit( new BenchRunner(b, ++number) );
-        }
-        executor.shutdown();
-        return executor.awaitTermination(seconds+300, TimeUnit.SECONDS);
     }
 
-
-    private class BenchRunner implements Callable<Object>{
-
-        private Bench mark;
-        private int threadNumber;
-
-        public BenchRunner(Bench bench, int threadNumber){
-            mark=bench;
-            this.threadNumber=threadNumber;
-        }
-
-        public Object call() {
-            try {
-                long start = System.currentTimeMillis();
-                System.out.println("thread "+threadNumber+" "+id+" "+clazzName+" started");
-
-                benchMarker.bench(mark);
-
-                long sec = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - start);
-                System.out.println("thread "+threadNumber+" "+id+" "+clazzName+" finished duration "+sec+" seconds");
-
-            }catch (Exception e) {
-                try {
-                    MQ.sendReply(e);
-                } catch (JMSException jmsError) {
-                    jmsError.printStackTrace();
-                }
-            }
-            return null;
-        }
-    }
 }

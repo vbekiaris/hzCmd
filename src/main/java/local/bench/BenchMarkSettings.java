@@ -1,6 +1,6 @@
 package local.bench;
 
-import remote.bench.BenchType;
+import global.BenchType;
 
 import java.io.Serializable;
 import java.util.ArrayList;

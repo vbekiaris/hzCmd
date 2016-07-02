@@ -20,7 +20,8 @@ public class MetaDataCmd implements Cmd, Serializable{
     }
 
     public void exicute(Controler c, MessageProducer replyProducer){
-        c.writeMetaData(taskId, metaData);
+
+        c.writeMetaData(replyProducer, taskId, metaData);
     }
 
     @Override

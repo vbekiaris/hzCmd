@@ -10,6 +10,6 @@ import java.io.Serializable;
  */
 public class StartEmbeddedObjectCmd implements Cmd, Serializable{
     public void exicute(Controler c, MessageProducer replyProducer) throws Exception {
-        c.startEmbeddedObject();
+        c.startEmbeddedObject(replyProducer);
     }
 }

@@ -85,9 +85,10 @@ public class MetricsMarker extends BenchMarker {
 
 
     private void flatOut(Bench bench, com.codahale.metrics.Timer timer) throws Exception{
-        com.codahale.metrics.Timer.Context context = timer.time();
         try {
+            com.codahale.metrics.Timer.Context context = timer.time();
             bench.timeStep();
+            context.stop();
         }catch (Exception e){
             if(!allowException){
                 Utils.recordeException(e);
@@ -97,14 +98,20 @@ public class MetricsMarker extends BenchMarker {
                 throw e;
             }
         }
-        context.stop();
     }
 
     private void interval(Bench bench, com.codahale.metrics.Timer timer) throws Exception{
-        com.codahale.metrics.Timer.Context context = timer.time();
-        long start = System.nanoTime();
         try {
+            com.codahale.metrics.Timer.Context context = timer.time();
+            long start = System.nanoTime();
             bench.timeStep();
+            context.stop();
+
+            long nextStart = start + expectedIntervalNanos;
+            while( System.nanoTime() < nextStart ) {
+                //busy-waiting until the next expected interval
+            }
+
         }catch (Exception e){
             if(!allowException){
                 Utils.recordeException(e);
@@ -114,11 +121,6 @@ public class MetricsMarker extends BenchMarker {
                 throw e;
             }
         }
-        context.stop();
 
-        long nextStart = start + expectedIntervalNanos;
-        while( System.nanoTime() < nextStart ) {
-            //busy-waiting until the next expected interval
-        }
     }
 }

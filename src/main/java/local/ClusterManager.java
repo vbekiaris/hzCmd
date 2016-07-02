@@ -4,7 +4,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import global.Bash;
 import global.NodeType;
-import remote.bench.BenchType;
+import global.BenchType;
 
 import javax.jms.JMSException;
 import java.io.*;
