@@ -159,7 +159,7 @@ public class BenchManager {
                     }
                 }
                 if (result instanceof BenchRunThread) {
-                    MQ.sendReply(replyProducer, result.toString());
+                    MQ.sendReply(replyProducer, Controler.ID+" "+result.toString());
                 }
 
             } catch (Exception e) {

@@ -20,7 +20,7 @@ public class RunBenchCmd implements Cmd, Serializable{
     }
 
     public void exicute(Controler c, MessageProducer replyProducer){
-        c.runBench(taskId, seconds, replyProducer);
+        c.runBench(replyProducer, taskId, seconds);
     }
 
     @Override

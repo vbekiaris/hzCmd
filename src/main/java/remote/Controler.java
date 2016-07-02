@@ -84,8 +84,9 @@ public abstract class Controler{
         benchManager.warmup(replyProducer, taskId, seconds);
     }
 
-    public void runBench(String taskId, int seconds, MessageProducer replyProducer){
+    public void runBench(MessageProducer replyProducer, String taskId, int seconds){
 
+        benchManager.bench(replyProducer, taskId, seconds);
 //        executor.submit(new BenchRunner(taskId, seconds, replyProducer));
     }
 
