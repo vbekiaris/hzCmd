@@ -10,9 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class BenchManager {
 
@@ -124,7 +122,6 @@ public class BenchManager {
         run(replyProducer, id, sec, "bench");
     }
 
-
     private void run(MessageProducer replyProducer, String id, int sec, String fileNamePostFix){
         List<BenchRunThread> threads = new ArrayList();
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
@@ -137,11 +134,37 @@ public class BenchManager {
             thread.setReplyProducer(replyProducer);
         }
 
-        ExecutorService exe = Executors.newFixedThreadPool(threads.size());
-        try {
-            exe.invokeAll(threads, sec + 600, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        //ExecutorService exe = Executors.newFixedThreadPool(threads.size());
+        //service.invokeAll(threads, sec + 600, TimeUnit.SECONDS);
+
+        ExecutorService threadPool = Executors.newFixedThreadPool(threads.size());
+        CompletionService<Object> service = new ExecutorCompletionService(threadPool);
+
+
+        for (BenchRunThread thread : threads) {
+            service.submit(thread);
+        }
+        threadPool.shutdown();
+        for (BenchRunThread thread : threads) {
+            try {
+                Future<Object> future = service.take();
+                Object result = future.get();
+
+                System.out.println("HI got one+ " + result);
+                if (result instanceof Exception) {
+                    try {
+                        MQ.sendReply(replyProducer, (Exception) result);
+                    } catch (JMSException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                if (result instanceof BenchRunThread) {
+                    MQ.sendReply(replyProducer, result.toString());
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {

@@ -1,14 +1,13 @@
 package remote.bench;
 
-import mq.MQ;
 import remote.bench.marker.BenchMarker;
 
-import javax.jms.JMSException;
 import javax.jms.MessageProducer;
+import java.io.Serializable;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-class BenchRunThread implements Callable<Object> {
+class BenchRunThread implements Callable<Object>, Serializable {
 
     private BenchMarker benchMarker;
     private Bench bench;
@@ -36,17 +35,25 @@ class BenchRunThread implements Callable<Object> {
             System.out.println("thread "+threadNumber+" "+id+" "+clazzName+" finished duration "+sec+" seconds");
 
         }catch (Exception e) {
-            try {
-                MQ.sendReply(replyProducer, e);
-            } catch (JMSException e1) {
-                e1.printStackTrace();
-            }
             return e;
         }
-        return null;
+        return this;
     }
 
     public void setReplyProducer(MessageProducer replyProducer) {
         this.replyProducer = replyProducer;
     }
+
+    @Override
+    public String toString() {
+        return "BenchRunThread{" +
+                "bench=" + bench +
+                ", benchMarker=" + benchMarker +
+                ", id='" + id + '\'' +
+                ", clazzName='" + clazzName + '\'' +
+                ", threadNumber=" + threadNumber +
+                ", replyProducer=" + replyProducer +
+                '}';
+    }
+
 }
