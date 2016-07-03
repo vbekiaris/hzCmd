@@ -239,7 +239,7 @@ public class ClusterManager implements Serializable {
         return matching;
     }
 
-    public List<RemoteJvm> getMatchingJms(String jvmId) {
+    public List<RemoteJvm> getMatchingJvms(String jvmId) {
         List<RemoteJvm> matching = new ArrayList<RemoteJvm>();
 
         for(RemoteJvm jvm : jvms.values()){
@@ -250,8 +250,8 @@ public class ClusterManager implements Serializable {
         return matching;
     }
 
-    public List<RemoteJvm> getMatchingMemberJms(String jvmId) {
-        List<RemoteJvm> all = getMatchingJms(jvmId);
+    public List<RemoteJvm> getMatchingMemberJvms(String jvmId) {
+        List<RemoteJvm> all = getMatchingJvms(jvmId);
 
         ListIterator<RemoteJvm> iter = all.listIterator();
         while (iter.hasNext()) {
@@ -262,8 +262,8 @@ public class ClusterManager implements Serializable {
         return all;
     }
 
-    public List<RemoteJvm> getMatchingClientJms(String jvmId) {
-        List<RemoteJvm> all = getMatchingJms(jvmId);
+    public List<RemoteJvm> getMatchingClientJvms(String jvmId) {
+        List<RemoteJvm> all = getMatchingJvms(jvmId);
 
         ListIterator<RemoteJvm> iter = all.listIterator();
         while (iter.hasNext()) {
@@ -276,21 +276,21 @@ public class ClusterManager implements Serializable {
 
 
     public void restartEmbeddedObject(String jvmId) throws IOException, InterruptedException, JMSException{
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             jvm.startEmbeddedObject();
         }
         getResponseExitOnException(jvmId, TIMEOUT_10MIN);
     }
 
     public void load(String jvmId, String taskId, String className) throws IOException, InterruptedException, JMSException{
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             jvm.load(taskId, className);
         }
         getResponseExitOnException(jvmId, TIMEOUT_2MIN);
     }
 
     public void setThreadCount(String jvmId, String taskId, int threadCount) throws IOException, InterruptedException, JMSException{
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             jvm.setThreadCount(taskId, threadCount);
         }
         getResponseExitOnException(jvmId, TIMEOUT_2MIN);
@@ -298,56 +298,56 @@ public class ClusterManager implements Serializable {
 
 
     public void setBenchType(String jvmId, String taskId, BenchType type, long intervalNanos, boolean allowException, String outFile) throws IOException, InterruptedException, JMSException{
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             jvm.setBenchType(taskId, type, intervalNanos, allowException, outFile);
         }
         getResponseExitOnException(jvmId, TIMEOUT_2MIN);
     }
 
     public void writeMetaDataCmd(String jvmId, String taskId, String metaData) throws IOException, InterruptedException, JMSException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             jvm.writeMetaDataCmd(taskId, metaData);
         }
         getResponseExitOnException(jvmId, TIMEOUT_2MIN);
     }
 
     public void setField(String jvmId, String taskId, String field, String value) throws Exception {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             jvm.setField(taskId, field, value);
         }
         getResponseExitOnException(jvmId, TIMEOUT_2MIN);
     }
 
     public void initBench(String jvmId,  String taskId) throws IOException, InterruptedException, JMSException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             jvm.initBench(taskId);
         }
         getResponseExitOnException(jvmId, TIMEOUT_10MIN);
     }
 
     public void warmupBench(String jvmId,  String taskId, int seconds) throws IOException, InterruptedException, JMSException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             jvm.warmupBench(taskId, seconds);
         }
         getResponseExitOnException(jvmId, TimeUnit.SECONDS.toMillis(seconds+600));
     }
 
     public void runBench(String jvmId,  String taskId, int seconds) throws IOException, InterruptedException, JMSException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             jvm.runBench(taskId, seconds);
         }
         getResponseExitOnException(jvmId, TimeUnit.SECONDS.toMillis(seconds+600));
     }
 
     public void cleanupBench(String jvmId, String taskId) throws IOException, InterruptedException, JMSException {
-        RemoteJvm jvm = getMatchingMemberJms(jvmId).get(0);
+        RemoteJvm jvm = getMatchingJvms(jvmId).get(0);
         jvm.cleanupBench(taskId);
         getResponseExitOnException(jvm.getId(), TIMEOUT_5MIN);
     }
 
 
     public void restart(String jvmId) throws Exception {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             jvm.reStartJvm();
         }
     }
@@ -358,8 +358,8 @@ public class ClusterManager implements Serializable {
             addVersion(version);
         }
 
-        List<RemoteJvm> members = getMatchingMemberJms(jvmId);
-        List<RemoteJvm> clients = getMatchingClientJms(jvmId);
+        List<RemoteJvm> members = getMatchingMemberJvms(jvmId);
+        List<RemoteJvm> clients = getMatchingClientJvms(jvmId);
 
         restartJvmList(version, members);
 
@@ -390,7 +390,7 @@ public class ClusterManager implements Serializable {
 
     public void getResponseExitOnException(String jvmId, long timeOut) throws IOException, InterruptedException, JMSException {
         boolean exit=false;
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             Object o = jvm.getResponse(timeOut);
 
             if(o==null){
@@ -426,74 +426,74 @@ public class ClusterManager implements Serializable {
 
 
     public void clean(String jvmId) throws IOException, InterruptedException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             jvm.clean();
         }
     }
 
     public void exit(String jvmId) throws JMSException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             jvm.exit();
         }
     }
 
     public void kill(String jvmId) throws IOException, InterruptedException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             jvm.kill();
         }
     }
 
     public void printJvmInfo(String jvmId) throws IOException, InterruptedException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             System.out.println(jvm);
         }
     }
 
     public boolean printErrors(String jvmId) throws IOException, InterruptedException {
         boolean error=false;
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             error |= jvm.printErrors();
         }
         return error;
     }
 
     public void ls(String jvmId) throws IOException, InterruptedException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             System.out.println(jvm);
             System.out.println(jvm.ls());
         }
     }
 
     public void cat(String jvmId) throws IOException, InterruptedException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             System.out.println(jvm);
             System.out.println(jvm.cat());
         }
     }
 
     public void jstack(String jvmId, String file) throws IOException, InterruptedException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             jvm.jstack(file);
         }
     }
 
 
     public void tail(String jvmId) throws IOException, InterruptedException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             System.out.println(jvm);
             jvm.tail();
         }
     }
 
     public void grep(String jvmId, String args) throws IOException, InterruptedException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             System.out.println(jvm);
             System.out.println(jvm.grep(args));
         }
     }
 
     public void ssh(String jvmId, String cmd) throws IOException, InterruptedException {
-        for(RemoteJvm jvm : getMatchingJms(jvmId)){
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             System.out.println(jvm.ssh(cmd));
         }
     }

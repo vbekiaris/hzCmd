@@ -389,7 +389,7 @@ public class HzCmd implements Serializable {
 
     public void scpUp(String jvmId, String src, String dst) throws IOException, InterruptedException {
         for (ClusterManager c : clusters.values()) {
-            for (RemoteJvm jvm : c.getMatchingJms(jvmId) ) {
+            for (RemoteJvm jvm : c.getMatchingJvms(jvmId) ) {
                 jvm.upload(src, dst);
             }
         }
