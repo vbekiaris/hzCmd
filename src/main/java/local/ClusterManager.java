@@ -13,12 +13,11 @@ import static global.Utils.myIp;
 
 public class ClusterManager implements Serializable {
 
-    private String brokerIP;
     private Map<String, ClusterContainer> clusters = new HashMap();
 
     public ClusterManager() { }
 
-    public ClusterContainer initCluster(String id, ClusterType type) throws Exception{
+    public ClusterContainer initCluster(String id, ClusterType type, String brokerIP) throws Exception{
 
         ClusterContainer cluster = clusters.get(id);
 

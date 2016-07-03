@@ -60,7 +60,7 @@ public class HzCmd implements Serializable {
 
         BoxManager boxManager = new BoxManager(file, user);
 
-        ClusterContainer cluster = clusterManager.initCluster(clusterId, type);
+        ClusterContainer cluster = clusterManager.initCluster(clusterId, type, brokerIP);
         cluster.addUniquBoxes(boxManager);
 
         Installer.install(cluster.getBoxManager(), cluster.getJvmFactory(), ee, versions, libFiles);

@@ -54,8 +54,12 @@ public abstract class MQ {
                 replyToDestination = session.createTemporaryQueue();
                 replyConsumer = session.createConsumer(replyToDestination);
 
+                System.out.println("Mq connection OK");
                 break;
             } catch (JMSException e) {
+
+
+                System.out.println("Mq connection failed");
 
                 if (++count == maxTries){
                     System.out.println("failed "+maxTries+" Mq connections");
