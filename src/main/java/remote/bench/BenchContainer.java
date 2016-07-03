@@ -1,6 +1,7 @@
 package remote.bench;
 
 import global.BenchType;
+import remote.Controler;
 import remote.Utils;
 import remote.bench.marker.BenchMarker;
 import remote.bench.marker.HdrMarker;
@@ -32,6 +33,10 @@ public class BenchContainer {
         benchMarker.writeMeataDataFile(outputFileName, metaData);
     }
 
+    public int getThreadCount() {
+        return benchObjs.size();
+    }
+
     public void createBenchObjects(int count) throws Exception {
 
         for(int i=0; i<count; i++){
@@ -42,10 +47,6 @@ public class BenchContainer {
         for (Bench bench : benchObjs) {
             bench.setVendorObject(vendorObject);
         }
-    }
-
-    public int getThreadCount(){
-        return benchObjs.size();
     }
 
     public List<BenchThread> getThreads( ) {
@@ -70,6 +71,8 @@ public class BenchContainer {
     }
 
     public void cleanUp(){
+        System.out.println(Controler.ID+" "+" cleanUp "+this);
+
         benchObjs.get(0).cleanup();
     }
 
@@ -95,5 +98,17 @@ public class BenchContainer {
 
     public void setDuration(int seconds){
         benchMarker.setDurationSeconds(seconds);
+    }
+
+    @Override
+    public String toString() {
+        return "BenchContainer{" +
+                "benchMarker=" + benchMarker +
+                ", id='" + id + '\'' +
+                ", clazzName='" + clazzName + '\'' +
+                ", vendorObject=" + vendorObject +
+                ", outputFileName='" + outputFileName + '\'' +
+                ", benchObjs=" + benchObjs +
+                '}';
     }
 }

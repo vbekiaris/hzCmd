@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-class BenchThread implements Callable<Object>, Serializable {
+class BenchThread implements Callable<BenchThreadResult>, Serializable {
 
     private BenchMarker benchMarker;
     private Bench bench;
@@ -24,7 +24,7 @@ class BenchThread implements Callable<Object>, Serializable {
         this.threadNumber=threadNumber;
     }
 
-    public Object call() {
+    public BenchThreadResult call() {
         try {
             long start = System.currentTimeMillis();
             System.out.println("thread "+threadNumber+" "+id+" "+clazzName+" started");
@@ -35,13 +35,17 @@ class BenchThread implements Callable<Object>, Serializable {
             System.out.println("thread "+threadNumber+" "+id+" "+clazzName+" finished duration "+sec+" seconds");
 
         }catch (Exception e) {
-            return e;
+            return new BenchThreadResult(this, e);
         }
-        return this;
+        return new BenchThreadResult(this);
     }
 
     public void setReplyProducer(MessageProducer replyProducer) {
         this.replyProducer = replyProducer;
+    }
+
+    public String getId(){
+        return id;
     }
 
     @Override

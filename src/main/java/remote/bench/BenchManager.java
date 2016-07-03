@@ -16,19 +16,27 @@ public class BenchManager {
 
     private Object vendorObject;
     private Map<String, BenchContainer> benchs = new HashMap();
-    //private Map<String, ExecutorService> benchExecutors = new HashMap();
-
 
     public BenchManager(Object vendorObject){
         this.vendorObject=vendorObject;
     }
-
 
     public void loadClass(MessageProducer replyProducer, String benchId, String clazz) {
         try {
             BenchContainer benchContainer = new BenchContainer(vendorObject, benchId, clazz);
             benchs.put(benchId, benchContainer);
             MQ.sendReply(replyProducer, Controler.ID+" "+benchContainer.getId()+" "+clazz+" loaded");
+        } catch (Exception e) {
+            try {
+                MQ.sendReply(replyProducer, e);
+            } catch (JMSException e2) {}
+        }
+    }
+
+    public void removeBench(MessageProducer replyProducer, String id) {
+        try {
+            benchs.remove(id);
+            MQ.sendReply(replyProducer, Controler.ID+" removed "+id);
         } catch (Exception e) {
             try {
                 MQ.sendReply(replyProducer, e);
@@ -89,10 +97,12 @@ public class BenchManager {
     }
 
     public void cleanUp(MessageProducer replyProducer, String id){
+        System.out.println(Controler.ID+" "+" cleanUp "+id);
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
             try {
                 benchContainer.cleanUp();
-                MQ.sendReply(replyProducer, Controler.ID+" "+benchContainer.getId()+" cleanUp end");
+                System.out.println(Controler.ID+" "+benchContainer.getId()+" cleanUp end");
+                MQ.sendReply(replyProducer, Controler.ID + " " + benchContainer.getId() + " cleanUp end");
             } catch (Exception e) {
                 try {
                     MQ.sendReply(replyProducer, e);
@@ -123,11 +133,15 @@ public class BenchManager {
     }
 
     private void run(MessageProducer replyProducer, String id, int sec, String fileNamePostFix){
+
         List<BenchThread> threads = new ArrayList();
+        Map<String, Integer> benchResults = new HashMap();
+
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
             benchContainer.preBench(fileNamePostFix);
             benchContainer.setDuration(sec);
             threads.addAll( benchContainer.getThreads() );
+            benchResults.put(benchContainer.getId(), benchContainer.getThreadCount());
         }
 
         for (BenchThread thread : threads) {
@@ -135,27 +149,33 @@ public class BenchManager {
         }
 
         ExecutorService threadPool = Executors.newFixedThreadPool(threads.size());
-        CompletionService<Object> service = new ExecutorCompletionService(threadPool);
+        CompletionService<BenchThreadResult> service = new ExecutorCompletionService(threadPool);
 
         for (BenchThread thread : threads) {
             service.submit(thread);
         }
         threadPool.shutdown();
 
-        for (BenchThread thread : threads) {
-            try {
-                Future<Object> future = service.take();
-                Object result = future.get();
 
-                if (result instanceof Exception) {
+
+        for (int i = 0; i < threads.size(); i++) {
+            try {
+                Future<BenchThreadResult> future = service.take();
+                BenchThreadResult result = future.get();
+
+                if (result.exception != null) {
                     try {
-                        MQ.sendReply(replyProducer, (Exception) result);
+                        MQ.sendReply(replyProducer, result.exception);
                     } catch (JMSException e1) {
                         e1.printStackTrace();
                     }
                 }
-                if (result instanceof BenchThread) {
-                    MQ.sendReply(replyProducer, Controler.ID+" "+result.toString());
+                else {
+                    int count = benchResults.get(result.benchThread.getId()) - 1;
+                    benchResults.put(result.benchThread.getId(), count);
+                    if (count==0){
+                        MQ.sendReply(replyProducer, Controler.ID+" "+result.benchThread.toString());
+                    }
                 }
 
             } catch (Exception e) {

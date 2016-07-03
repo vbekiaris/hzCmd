@@ -6,6 +6,9 @@ import mq.MQ;
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
 import java.util.Enumeration;
@@ -56,43 +59,41 @@ public abstract class Controler{
 
     public abstract Object getVendorObject();
 
-    public void load(MessageProducer replyProducer, String taskId, String clazz){
-        benchManager.loadClass(replyProducer, taskId, clazz);
+    public void load(MessageProducer replyProducer, String id, String clazz){
+        benchManager.loadClass(replyProducer, id, clazz);
     }
 
-    public void setThreadCount(MessageProducer replyProducer, String taskId, int threadCount){
-        benchManager.setThreadCount(replyProducer, taskId, threadCount);
+    public void setThreadCount(MessageProducer replyProducer, String id, int threadCount){
+        benchManager.setThreadCount(replyProducer, id, threadCount);
     }
 
-    public void setBenchType(MessageProducer replyProducer, String taskId, BenchType type, long intervalNanos, boolean allowException, String outFile) {
-        benchManager.setBenchType(replyProducer, taskId, type, intervalNanos, allowException, outFile);
+    public void setBenchType(MessageProducer replyProducer, String id, BenchType type, long intervalNanos, boolean allowException, String outFile) {
+        benchManager.setBenchType(replyProducer, id, type, intervalNanos, allowException, outFile);
     }
 
-    public void setField(MessageProducer replyProducer, String taskId, String field, String value){
-        benchManager.setField(replyProducer, taskId, field, value);
+    public void setField(MessageProducer replyProducer, String id, String field, String value){
+        benchManager.setField(replyProducer, id, field, value);
     }
 
-    public void writeMetaData(MessageProducer replyProducer, String taskId, String metaData) {
-        benchManager.writeMetaData(replyProducer, taskId, metaData);
+    public void writeMetaData(MessageProducer replyProducer, String id, String metaData) {
+        benchManager.writeMetaData(replyProducer, id, metaData);
     }
 
-    public void initBench(MessageProducer replyProducer, String taskId){
-        benchManager.init(replyProducer, taskId);
+    public void initBench(MessageProducer replyProducer, String id){
+        benchManager.init(replyProducer, id);
     }
 
-    public void warmupBench(MessageProducer replyProducer, String taskId, int seconds){
-        benchManager.warmup(replyProducer, taskId, seconds);
+    public void warmupBench(MessageProducer replyProducer, String id, int seconds){
+        benchManager.warmup(replyProducer, id, seconds);
     }
 
-    public void runBench(MessageProducer replyProducer, String taskId, int seconds){
-
-        benchManager.bench(replyProducer, taskId, seconds);
+    public void runBench(MessageProducer replyProducer, String id, int seconds){
+        benchManager.bench(replyProducer, id, seconds);
 //        executor.submit(new BenchRunner(taskId, seconds, replyProducer));
     }
 
-
-    public void cleanup(MessageProducer replyProducer, String taskId) {
-        benchManager.cleanUp(replyProducer, taskId);
+    public void cleanup(MessageProducer replyProducer, String id) {
+        benchManager.cleanUp(replyProducer, id);
     }
 
 
@@ -103,7 +104,6 @@ public abstract class Controler{
                 MessageProducer replyProducer = MQ.getReplyProducer();
 
                 System.out.println("MQ msg in = " + obj);
-                //System.out.println("MQ msg reply = " + replyProducer);
 
                 if (obj instanceof Cmd) {
                     ((Cmd) obj).exicute(this, replyProducer);
@@ -117,12 +117,20 @@ public abstract class Controler{
     }
 
     private static void printProperties(){
-        Properties p = System.getProperties();
-        Enumeration keys = p.keys();
-        while (keys.hasMoreElements()) {
-            String key = (String)keys.nextElement();
-            String value = (String)p.get(key);
-            System.out.println(key + ": " + value);
+        try {
+            PrintStream ps = new PrintStream(new FileOutputStream(ID+".properties", true));
+
+            Properties p = System.getProperties();
+            Enumeration keys = p.keys();
+            while (keys.hasMoreElements()) {
+                String key = (String)keys.nextElement();
+                String value = (String)p.get(key);
+                ps.println(key + ": " + value);
+            }
+
+            ps.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
