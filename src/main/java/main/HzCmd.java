@@ -29,7 +29,6 @@ import static global.Utils.myIp;
 
 //print cluster layout info
 
-//look for errors on download
 
 //better dir struct for bench results
 
@@ -48,7 +47,7 @@ public class HzCmd implements Serializable {
     public static final String serFile = "HzCmd.ser";
     public static final String propertiesFile = "HzCmd.properties";
 
-    private Map<String, ClusterManager> clusters = new HashMap();
+    private ClusterManager clusterManager = new ClusterManager();
 
     private BenchMarkSettings benchMarkSettings = new BenchMarkSettings();
 
@@ -61,7 +60,7 @@ public class HzCmd implements Serializable {
 
         BoxManager boxManager = new BoxManager(file, user);
 
-        ClusterManager cluster = getCluster(clusterId, type);
+        ClusterContainer cluster = clusterManager.initCluster(clusterId, type);
         cluster.addUniquBoxes(boxManager);
 
         Installer.install(cluster.getBoxManager(), cluster.getJvmFactory(), ee, versions, libFiles);
@@ -96,55 +95,33 @@ public class HzCmd implements Serializable {
     }
 
 
-    public ClusterManager getCluster(String clusterId, ClusterType type) throws Exception{
 
-        ClusterManager cluster = clusters.get(clusterId);
-
-        if(cluster==null) {
-            if (brokerIP == null) {
-                brokerIP = myIp();
-            }
-            switch (type) {
-                case HZ:
-                    cluster = new ClusterManager(clusterId, brokerIP, new HzJvmFactory());
-                    break;
-                case GG:
-                    cluster = new ClusterManager(clusterId, brokerIP, new GgJvmFactory());
-                    break;
-                case GEM:
-                    cluster = new ClusterManager(clusterId, brokerIP, new GemJvmFactory());
-                    break;
-                case RED:
-                    cluster = new ClusterManager(clusterId, brokerIP, new RedisJvmFactory());
-                    break;
-            }
-            clusters.put(cluster.getClusterId(), cluster);
-        }
-        return cluster;
-    }
 
 
     public void restart(String jvmId, String version, boolean ee) throws Exception {
-        for (ClusterManager c : clusters.values()) {
+        for (ClusterContainer c : clusterManager.getClusters(jvmId)) {
             c.restart(jvmId, version, ee);
         }
     }
 
     public void exit(String jvmId) throws Exception {
-        for (ClusterManager c : clusters.values()) {
+        for (ClusterContainer c : clusterManager.values()) {
             c.exit(jvmId);
         }
     }
 
     public void kill(String jvmId) throws Exception {
-        for (ClusterManager c : clusters.values()) {
+        for (ClusterContainer c : clusterManager.values()) {
             c.kill(jvmId);
         }
     }
 
-    public void restartEmbeddedObject(String jvmId) throws Exception {
-        for (ClusterManager c : clusters.values()) {
-            c.restartEmbeddedObject(jvmId);
+    public void restartEmbeddedObject(String id) throws Exception {
+        for (ClusterContainer c : clusterManager.getClusters(id)) {
+            c.restartEmbeddedObject(id);
+        }
+        for (ClusterContainer c : clusterManager.getClusters(id)) {
+            c.getRe(id);
         }
     }
 
@@ -155,10 +132,10 @@ public class HzCmd implements Serializable {
         }
 
         for(int i=0; i<iterations; i++){
-            for (ClusterManager c : clusters.values()) {
+            for (ClusterContainer c : clusterManager.values()) {
                 c.kill(jvmId);
             }
-            for (ClusterManager c : clusters.values()) {
+            for (ClusterContainer c : clusterManager.values()) {
                 c.printJvmInfo(jvmId);
             }
 
@@ -166,18 +143,18 @@ public class HzCmd implements Serializable {
                 Thread.sleep(restartDelaySec * 1000);
             }
 
-            for (ClusterManager c : clusters.values()) {
+            for (ClusterContainer c : clusterManager.values()) {
                 c.restart(jvmId);
             }
-            //for (ClusterManager c : clusters.values()) {
+            //for (ClusterContainer c : clusterManager.values()) {
             //    c.getResponseExitOnException(jvmId);
             //}
-            for (ClusterManager c : clusters.values()) {
+            for (ClusterContainer c : clusterManager.values()) {
                 c.restartEmbeddedObject(jvmId);
             }
 
             //System.out.println("HI A");
-            //for (ClusterManager c : clusters.values()) {
+            //for (ClusterContainer c : clusterManager.values()) {
             //    c.getResponseExitOnException(jvmId);
             //}
             //System.out.println("HI B");
@@ -190,63 +167,63 @@ public class HzCmd implements Serializable {
 
 
     public void jps( ) throws IOException, InterruptedException {
-        for (ClusterManager c : clusters.values()) {
+        for (ClusterContainer c : clusterManager.values()) {
             c.getBoxManager().jps();
         }
     }
 
     public void ls(String jvmId) throws Exception {
-        for (ClusterManager c : clusters.values()) {
+        for (ClusterContainer c : clusterManager.values()) {
             c.ls(jvmId);
         }
     }
 
     public void cat(String jvmId) throws Exception {
-        for (ClusterManager c : clusters.values()) {
+        for (ClusterContainer c : clusterManager.values()) {
             c.cat(jvmId);
         }
     }
 
     public void jstack(String jvmId, String file) throws Exception {
-        for (ClusterManager c : clusters.values()) {
+        for (ClusterContainer c : clusterManager.values()) {
             c.jstack(jvmId, file);
         }
     }
 
     public void tail(String jvmId) throws Exception {
-        for (ClusterManager c : clusters.values()) {
+        for (ClusterContainer c : clusterManager.values()) {
             c.tail(jvmId);
         }
     }
 
     public void grep(String jvmId, String grepArgs) throws Exception {
-        for (ClusterManager c : clusters.values()) {
+        for (ClusterContainer c : clusterManager.values()) {
             c.grep(jvmId, grepArgs);
         }
     }
 
     public void download(String dir) throws Exception {
-        for (ClusterManager c : clusters.values()) {
+        for (ClusterContainer c : clusterManager.values()) {
             c.downlonad(dir);
         }
     }
 
     public boolean printErrors(String jvmId) throws IOException, InterruptedException {
         boolean error=false;
-        for (ClusterManager c : clusters.values()) {
+        for (ClusterContainer c : clusterManager.values()) {
             error |= c.printErrors(jvmId);
         }
         return error;
     }
 
     public void clean(String jvmId) throws Exception {
-        for (ClusterManager c : clusters.values()) {
+        for (ClusterContainer c : clusterManager.values()) {
             c.clean(jvmId);
         }
     }
 
     public void ssh(String jvmId, String cmd) throws Exception {
-        for (ClusterManager c : clusters.values()) {
+        for (ClusterContainer c : clusterManager.values()) {
             c.ssh(jvmId, cmd);
         }
     }
@@ -258,17 +235,17 @@ public class HzCmd implements Serializable {
         Bash.rmQuite(serFile);
         Bash.rmQuite(propertiesFile);
 
-        Map<String, ClusterManager> clustersTemp = clusters;
-        for (ClusterManager c : clustersTemp.values()) {
+        Map<String, ClusterContainer> clustersTemp = clusterManager;
+        for (ClusterContainer c : clustersTemp.values()) {
             c.getBoxManager().killAllJava();
         }
-        for (ClusterManager c : clustersTemp.values()) {
+        for (ClusterContainer c : clustersTemp.values()) {
             c.getBoxManager().rm(Installer.REMOTE_HZCMD_ROOT);
         }
-        for (ClusterManager c : clustersTemp.values()) {
+        for (ClusterContainer c : clustersTemp.values()) {
             c.drainQ();
         }
-        clusters.clear();
+        clusterManager.clear();
     }
 
     public void wipeLocal( ) throws IOException, InterruptedException, JMSException {
@@ -276,14 +253,14 @@ public class HzCmd implements Serializable {
         Bash.rmQuite(serFile);
         Bash.rmQuite(propertiesFile);
 
-        for (ClusterManager c : clusters.values()) {
+        for (ClusterContainer c : clusterManager.values()) {
             c.drainQ();
         }
 
-        for (ClusterManager c : clusters.values()) {
+        for (ClusterContainer c : clusterManager.values()) {
             c.getBoxManager().rm(Installer.REMOTE_HZCMD_ROOT);
         }
-        clusters.clear();
+        clusterManager.clear();
 
         Bash.killAllJava();
     }
@@ -294,7 +271,105 @@ public class HzCmd implements Serializable {
         HzCmdProperties properties = new HzCmdProperties();
         int benchNumber = properties.readIntPropertie(HzCmdProperties.BENCH_NUMBER, 1);
 
-        ClusterManager cluster = clusters.get(clusterId);
+        ClusterContainer cluster = clusterManager.get(clusterId);
+        if(cluster==null){
+            System.out.println(Bash.ANSI_RED + "No Cluster for -id "+clusterId + Bash.ANSI_RESET);
+            System.exit(1);
+            return;
+        }
+
+        BenchManager bencher = new BenchManager(benchFile);
+
+        for (String drivers : benchMarkSettings.getDrivers()) {
+
+            for (String taskId : bencher.getTaskIds()) {
+
+                String className = bencher.getClassName(taskId);
+
+                for (BenchType benchType : benchMarkSettings.getTypes()) {
+
+                    for (List<FieldValue> settings : bencher.getSettings(taskId)) {
+
+                        for (int threadCount : benchMarkSettings.getThreads()) {
+
+                            for (long interval : benchMarkSettings.getIntervalNanos()) {
+
+                                for (int warmupSec : benchMarkSettings.getWarmupSec()) {
+
+                                    for (int durationSec : benchMarkSettings.getDurationSec()) {
+
+                                        for (int repeater = 0; repeater < benchMarkSettings.repeatCount(); repeater++) {
+
+                                            String version = cluster.getVersionsString();
+                                            String metaData = "clusterId " + clusterId + " " +
+                                                    "version " + version + " " +
+                                                    "Members " + cluster.getMemberCount() + " " +
+                                                    "Clients " + cluster.getClientCount() + " " +
+                                                    "drivers " + drivers + " " +
+                                                    "benchType " + benchType + " " +
+                                                    "interval " + interval + " " +
+                                                    "taskID " + taskId + " " +
+                                                    "class " + className + " " +
+                                                    "allowException " + benchMarkSettings.getAllowException() + " " +
+                                                    "threads " + threadCount + " " +
+                                                    "warmupSec " + warmupSec + " " +
+                                                    "benchSec " + durationSec + " " +
+                                                    "benchNum " + benchNumber + " ";
+
+                                            for (FieldValue field : bencher.getFieldsToSet(taskId)) {
+                                                metaData += field.field + " " + field.value + " ";
+                                            }
+                                            for (FieldValue setting : settings) {
+                                                metaData += setting.field + " " + setting.value + " ";
+                                            }
+
+                                            //split up by dir's  even map/struct name
+                                            //String fileName = benchType.name()+"/"+drivers+"/"+taskId+"/"+"threads"+threadCount+"/"+clusterId+"_"+version+"_"+taskId+"_"+className+"_"+benchNumber;
+
+                                            String fileName = clusterId + "_" + version + "_" + taskId + "_" + className + "_" + benchNumber;
+
+                                            cluster.load(drivers, taskId, className);
+                                            cluster.setThreadCount(drivers, taskId, threadCount);
+                                            cluster.setBenchType(drivers, taskId, benchType, interval, benchMarkSettings.getAllowException(), fileName);
+
+                                            for (FieldValue setting : settings) {
+                                                cluster.setField(drivers, taskId, setting.field, setting.value);
+                                            }
+
+                                            for (FieldValue field : bencher.getFieldsToSet(taskId)) {
+                                                cluster.setField(drivers, taskId, field.field, field.value);
+                                            }
+                                            cluster.initBench(drivers, taskId);
+
+                                            if (warmup) {
+                                                cluster.warmupBench(drivers, taskId, warmupSec);
+                                            }
+                                            cluster.runBench(drivers, taskId, durationSec);
+                                            cluster.cleanupBench(drivers, taskId);
+                                            cluster.writeMetaDataCmd(drivers, taskId, metaData);
+
+                                            benchNumber++;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        properties.writeIntPropertie(HzCmdProperties.BENCH_NUMBER, benchNumber);
+        System.out.println(Bash.ANSI_YELLOW + "The End" + Bash.ANSI_RESET);
+    }
+
+
+    public void invokeBenchMark2(String clusterId, String benchFile, final boolean warmup) throws Exception {
+
+        HzCmdProperties properties = new HzCmdProperties();
+        int benchNumber = properties.readIntPropertie(HzCmdProperties.BENCH_NUMBER, 1);
+
+        List<ClusterContainer> cluster = clusterManager.getMatchingClusters(clusterId);
         if(cluster==null){
             System.out.println(Bash.ANSI_RED + "No Cluster for -id "+clusterId + Bash.ANSI_RESET);
             System.exit(1);
@@ -388,7 +463,7 @@ public class HzCmd implements Serializable {
 
 
     public void scpUp(String jvmId, String src, String dst) throws IOException, InterruptedException {
-        for (ClusterManager c : clusters.values()) {
+        for (ClusterContainer c : clusterManager.values()) {
             for (RemoteJvm jvm : c.getMatchingJvms(jvmId) ) {
                 jvm.upload(src, dst);
             }
@@ -396,7 +471,7 @@ public class HzCmd implements Serializable {
     }
 
     public void uploadLib(String clusterId, String src) throws IOException, InterruptedException {
-        ClusterManager c = clusters.get(clusterId);
+        ClusterContainer c = clusterManager.get(clusterId);
         if(c != null){
             System.out.println(Bash.ANSI_YELLOW+"Installing "+src+" for cluster "+c.getClusterId()+Bash.ANSI_RESET);
             c.uploadLib(src);
@@ -410,7 +485,7 @@ public class HzCmd implements Serializable {
     @Override
     public String toString() {
         String s="";
-        for(ClusterManager c : clusters.values()) {
+        for(ClusterContainer c : clusterManager.values()) {
             s += c.toString() + "\n";
         }
         return s;
@@ -538,5 +613,16 @@ public class HzCmd implements Serializable {
     public void setRepeatCount(int repeatCount) {
         benchMarkSettings.setRepeatCount(repeatCount);
     }
+
+
+
+
+    public void getResponseExitOnException(String id, long timeOut) throws IOException, InterruptedException, JMSException {
+        boolean exit=false;
+        for(ClusterContainer cluster : clusterManager.getClusters(id)){
+            cluster.getResponseExitOnException();
+        }
+    }
+
 
 }

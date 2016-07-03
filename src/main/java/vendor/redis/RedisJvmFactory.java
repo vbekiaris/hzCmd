@@ -32,7 +32,7 @@ public class RedisJvmFactory implements JvmFactory, Serializable {
         return jars;
     }
 
-    public List<String> stuffToUpload(ClusterManager myCluster) throws Exception{
+    public List<String> stuffToUpload(ClusterContainer myCluster) throws Exception{
 
         List<String> upStuff = new ArrayList<String>();
 

@@ -48,12 +48,12 @@ public abstract class RemoteJvm implements Serializable {
 
     public abstract List<String> stuffToPutInDir() throws Exception;
 
-    public abstract void beforeJvmStart(ClusterManager myCluster) throws Exception;
+    public abstract void beforeJvmStart(ClusterContainer myCluster) throws Exception;
 
-    public abstract String setJvmStartOptions(Box thisBox, ClusterManager myCluster) throws Exception;
+    public abstract String setJvmStartOptions(Box thisBox, ClusterContainer myCluster) throws Exception;
 
 
-    public String startJvm(String jvmOptions, String libDir, ClusterManager myCluster, String brokerIP) throws Exception {
+    public String startJvm(String jvmOptions, String libDir, ClusterContainer myCluster, String brokerIP) throws Exception {
 
         this.vendorLibDir = libDir;
 
@@ -128,7 +128,7 @@ public abstract class RemoteJvm implements Serializable {
         launchJvm(launchCmd);
     }
 
-    public void reStartJvm(String libDir, ClusterManager myCluster, String brokerIP) throws Exception {
+    public void reStartJvm(String libDir, ClusterContainer myCluster, String brokerIP) throws Exception {
         HzCmdProperties properties = new HzCmdProperties();
         String jvmOptions;
         if (isMember()){

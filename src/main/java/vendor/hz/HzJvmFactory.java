@@ -40,7 +40,7 @@ public class HzJvmFactory implements JvmFactory, Serializable {
         return jars;
     }
 
-    public List<String> stuffToUpload(ClusterManager myCluster) throws Exception{
+    public List<String> stuffToUpload(ClusterContainer myCluster) throws Exception{
 
         HzXml.makeMemberXml(myCluster);
         HzXml.makeClientXml(myCluster);

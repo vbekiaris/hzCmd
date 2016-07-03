@@ -2,7 +2,7 @@ package vendor.redis;
 
 import global.NodeType;
 import local.Box;
-import local.ClusterManager;
+import local.ClusterContainer;
 import local.RemoteJvm;
 
 import java.io.IOException;
@@ -27,12 +27,12 @@ public class RemoteJedisJvm extends RemoteJvm {
         return null;
     }
 
-    public void beforeJvmStart(ClusterManager myCluster) throws Exception {
+    public void beforeJvmStart(ClusterContainer myCluster) throws Exception {
 
     }
 
     @Override
-    public String setJvmStartOptions(Box thisBox, ClusterManager myCluster) throws Exception {
+    public String setJvmStartOptions(Box thisBox, ClusterContainer myCluster) throws Exception {
 
        return null;
     }

@@ -2,9 +2,6 @@ package vendor.gg;
 
 import global.NodeType;
 import local.*;
-import vendor.hz.HzClient;
-import vendor.hz.HzMember;
-import vendor.hz.RemoteHzJvm;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -36,7 +33,7 @@ public class GgJvmFactory implements JvmFactory, Serializable {
         return jars;
     }
 
-    public List<String> stuffToUpload(ClusterManager myCluster) throws Exception{
+    public List<String> stuffToUpload(ClusterContainer myCluster) throws Exception{
         List<String> upStuff = new ArrayList<String>();
 
         return upStuff;

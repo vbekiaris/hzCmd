@@ -1,7 +1,6 @@
 package local;
 
 import global.NodeType;
-import vendor.hz.HzJvmFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,6 +20,6 @@ public interface JvmFactory {
 
     void membersAdded(List<RemoteJvm> memberJvms) throws IOException, InterruptedException;
 
-    List<String> stuffToUpload(ClusterManager myCluster) throws Exception;
+    List<String> stuffToUpload(ClusterContainer myCluster) throws Exception;
 
 }

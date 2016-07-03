@@ -2,7 +2,7 @@ package vendor.gem;
 
 import global.NodeType;
 import local.Box;
-import local.ClusterManager;
+import local.ClusterContainer;
 import local.RemoteJvm;
 
 import java.io.IOException;
@@ -29,7 +29,7 @@ public class RemoteGemJvm extends RemoteJvm {
         return null;
     }
 
-    public void beforeJvmStart(ClusterManager myCluster) throws Exception{
+    public void beforeJvmStart(ClusterContainer myCluster) throws Exception{
 
         if(isMember()) {
             box.upload("config-gem/server-cache.xml", dir + "/");
@@ -39,7 +39,7 @@ public class RemoteGemJvm extends RemoteJvm {
     }
 
     @Override
-    public String setJvmStartOptions(Box thisBox, ClusterManager myCluster) throws Exception {
+    public String setJvmStartOptions(Box thisBox, ClusterContainer myCluster) throws Exception {
 
         StringBuilder jvmArgs = new StringBuilder();
         jvmArgs.append("-D" +"MY_PUB_IP=" + box.pub + " ");

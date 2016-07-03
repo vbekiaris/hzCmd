@@ -13,7 +13,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import global.Bash;
 import local.Box;
-import local.ClusterManager;
+import local.ClusterContainer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -25,7 +25,7 @@ public class HzXml {
     public static final String memberXml = xmlDir+"/hazelcast.xml";
     public static final String clientXml = xmlDir+"/client-hazelcast.xml";
 
-    public static void makeMemberXml(ClusterManager m) throws Exception{
+    public static void makeMemberXml(ClusterContainer m) throws Exception{
 
         Document document = getDocument(memberXml);
 
@@ -56,7 +56,7 @@ public class HzXml {
     }
 
 
-    public static void wanReplication(ClusterManager a,  ClusterManager b, String name, String repImpl) throws Exception{
+    public static void wanReplication(ClusterContainer a,  ClusterContainer b, String name, String repImpl) throws Exception{
 
         Document document = getDocument(memberXmlFileForCluster(a));
 
@@ -111,7 +111,7 @@ public class HzXml {
     </wan-replication>
     */
 
-    public static void makeClientXml(ClusterManager m) throws Exception{
+    public static void makeClientXml(ClusterContainer m) throws Exception{
 
         Document document = getDocument(clientXml);
 
@@ -128,7 +128,7 @@ public class HzXml {
     }
 
 
-    private static void addGroupElement(ClusterManager m, Document document) {
+    private static void addGroupElement(ClusterContainer m, Document document) {
         document.getElementsByTagName("name").item(0).setTextContent(m.getClusterId());
         Element pass = document.createElement("password");
         pass.setTextContent(m.getClusterId());
@@ -152,11 +152,11 @@ public class HzXml {
         transformer.transform(domSource, streamResult);
     }
 
-    public static String memberXmlFileForCluster(ClusterManager m ){
+    public static String memberXmlFileForCluster(ClusterContainer m ){
         return xmlDir+"/"+m.getClusterId()+"/"+ "hazelcast.xml";
     }
 
-    public static String clientXmlFileForCluster(ClusterManager m ){
+    public static String clientXmlFileForCluster(ClusterContainer m ){
         return xmlDir+"/"+m.getClusterId()+"/"+ "client-hazelcast.xml";
     }
 }

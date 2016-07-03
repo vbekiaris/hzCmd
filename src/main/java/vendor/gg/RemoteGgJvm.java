@@ -2,7 +2,7 @@ package vendor.gg;
 
 import global.NodeType;
 import local.Box;
-import local.ClusterManager;
+import local.ClusterContainer;
 import local.RemoteJvm;
 
 import java.io.IOException;
@@ -31,7 +31,7 @@ public class RemoteGgJvm extends RemoteJvm {
         return new ArrayList<String>(0);
     }
 
-    public void beforeJvmStart(ClusterManager myCluster) throws Exception{
+    public void beforeJvmStart(ClusterContainer myCluster) throws Exception{
         addServerIpsToGgXml(myCluster);
 
         box.mkdir(dir);
@@ -40,7 +40,7 @@ public class RemoteGgJvm extends RemoteJvm {
         box.upload("config-gg/java.util.logging.properties", dir+"/"+"config"+"/");
     }
 
-    public String setJvmStartOptions(Box thisBox, ClusterManager myCluster) throws Exception {
+    public String setJvmStartOptions(Box thisBox, ClusterContainer myCluster) throws Exception {
         return null;
     }
 }

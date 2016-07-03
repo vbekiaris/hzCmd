@@ -1,8 +1,7 @@
 package vendor.gg;
 
-import global.Bash;
 import local.Box;
-import local.ClusterManager;
+import local.ClusterContainer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -27,7 +26,7 @@ public class GgXml {
 
     public static final String ggXml = "config-gg/gg-config.xml";
 
-    public static void addServerIpsToGgXml(ClusterManager m) throws Exception{
+    public static void addServerIpsToGgXml(ClusterContainer m) throws Exception{
 
         String addressPath = "//property[@name='addresses']/list";
 

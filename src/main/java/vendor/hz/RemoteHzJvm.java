@@ -2,7 +2,7 @@ package vendor.hz;
 
 import global.NodeType;
 import local.Box;
-import local.ClusterManager;
+import local.ClusterContainer;
 import local.RemoteJvm;
 
 import java.io.IOException;
@@ -37,11 +37,11 @@ public class RemoteHzJvm extends RemoteJvm {
         return upStuff;
     }
 
-    public void beforeJvmStart(ClusterManager myCluster) throws Exception{
+    public void beforeJvmStart(ClusterContainer myCluster) throws Exception{
 
     }
 
-    public String setJvmStartOptions(Box thisBox, ClusterManager myCluster) throws Exception {
+    public String setJvmStartOptions(Box thisBox, ClusterContainer myCluster) throws Exception {
         return null;
     }
 }

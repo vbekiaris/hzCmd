@@ -2,9 +2,9 @@ package vendor.redis;
 
 import global.Bash;
 import global.NodeType;
+import local.ClusterContainer;
 import mq.MQ;
 import local.Box;
-import local.ClusterManager;
 import local.RemoteJvm;
 
 import java.io.IOException;
@@ -31,7 +31,7 @@ public class RemoteRedisMember extends RemoteJvm {
         return null;
     }
 
-    public void beforeJvmStart(ClusterManager myCluster) throws Exception {
+    public void beforeJvmStart(ClusterContainer myCluster) throws Exception {
 
         if(isMember()) {
             box.upload("config-redis/redis.conf", dir + "/");
@@ -41,7 +41,7 @@ public class RemoteRedisMember extends RemoteJvm {
     }
 
 
-    public final String startJvm(String jvmOptions, String vendorLibDir, ClusterManager myCluster, String brokerIP) throws Exception {
+    public final String startJvm(String jvmOptions, String vendorLibDir, ClusterContainer myCluster, String brokerIP) throws Exception {
 
         if (isRunning()) {
             System.out.println(Bash.ANSI_CYAN+"all ready started " + this +Bash.ANSI_RESET);
@@ -80,7 +80,7 @@ public class RemoteRedisMember extends RemoteJvm {
 
 
     @Override
-    public String setJvmStartOptions(Box thisBox, ClusterManager myCluster) throws Exception {
+    public String setJvmStartOptions(Box thisBox, ClusterContainer myCluster) throws Exception {
 
        return null;
     }
