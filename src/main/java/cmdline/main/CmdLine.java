@@ -27,7 +27,7 @@ public class CmdLine {
                         Aws.class,
 
                         SetMemberJvmOps.class, SetClientJvmOps.class, SetJhic.class, SetJhicArgs.class,
-                        InitCluster.class,
+                        ClusterInit.class,
 
                         BenchDriver.class, BenchThreads.class, BenchDuration.class, BenchWarmup.class,
                         BenchTypes.class, BenchRun.class, BenchInterval.class, BenchRepeat.class, BenchAllowException.class,

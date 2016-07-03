@@ -45,6 +45,7 @@ public abstract class Controler{
 
     public void startEmbeddedObject(MessageProducer replyProducer) throws Exception{
         try {
+            System.out.println("startEmbeddedObject "+replyProducer);
             init(type);
             benchManager = new BenchManager(getVendorObject());
             MQ.sendReply(replyProducer, ID + " Started on " + InetAddress.getLocalHost().getHostAddress());
@@ -100,6 +101,7 @@ public abstract class Controler{
     public void run() throws Exception {
         while (true){
             try {
+                System.out.println("run");
                 Object obj = MQ.receiveObj(Q);
                 MessageProducer replyProducer = MQ.getReplyProducer();
 

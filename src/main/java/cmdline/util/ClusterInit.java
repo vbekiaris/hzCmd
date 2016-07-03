@@ -10,7 +10,7 @@ import main.HzCmd;
 import java.util.List;
 
 @com.github.rvesse.airline.annotations.Command(name="cluster", description = "create/add cluster members")
-public  class InitCluster extends Command {
+public  class ClusterInit extends Command {
 
     @Option(name = "-user", description = "user name to access boxes default ec2-user")
     public String user="ec2-user";
@@ -22,7 +22,7 @@ public  class InitCluster extends Command {
     public String size="M4C4";
 
     @Option(name = "-boxes", description = "boxes file")
-    public String boxes=null;
+    public String boxes="a.box";
 
     @Option(name = "-type", description = "cluster tye [HZ|GG|GEM] default HZ" )
     public String type = "HZ";
