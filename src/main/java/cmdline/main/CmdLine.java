@@ -34,7 +34,7 @@ public class CmdLine {
 
                         Check.class, Wipe.class, Clean.class,
 
-                        Ls.class, Cat.class, Tail.class, Grep.class, Ssh.class, Jstack.class, Jps.class,
+                        Ls.class, Tail.class,
                         Kill.class, Exit.class, Restart.class, RestartEmbedded.class, Bounce.class,
 
                         Download.class, UploadLib.class,

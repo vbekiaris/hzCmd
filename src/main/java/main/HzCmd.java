@@ -98,21 +98,22 @@ public class HzCmd implements Serializable {
 
 
 
+    //getting reply
     public void restart(String jvmId, String version, boolean ee) throws Exception {
         for (ClusterContainer c : clusterManager.getClusters(jvmId)) {
             c.restart(jvmId, version, ee);
         }
     }
 
-    public void exit(String jvmId) throws Exception {
-        for (ClusterContainer c : clusterManager.values()) {
-            c.exit(jvmId);
+    public void exit(String id) throws Exception {
+        for (ClusterContainer c : clusterManager.getClusters(id)) {
+            c.exit(id);
         }
     }
 
-    public void kill(String jvmId) throws Exception {
-        for (ClusterContainer c : clusterManager.values()) {
-            c.kill(jvmId);
+    public void kill(String id) throws Exception {
+        for (ClusterContainer c : clusterManager.getClusters(id)) {
+            c.kill(id);
         }
     }
 
@@ -121,43 +122,33 @@ public class HzCmd implements Serializable {
             c.restartEmbeddedObject(id);
         }
         for (ClusterContainer c : clusterManager.getClusters(id)) {
-            c.getRe(id);
+            c.getResponseExitOnException(id);
         }
     }
 
-    public void bounce(String jvmId, int iterations, int initialDelaySec, int restartDelaySec, int iterationDelaySec) throws Exception {
+    public void bounce(String id, int iterations, int initialDelaySec, int restartDelaySec, int iterationDelaySec) throws Exception {
 
         if(initialDelaySec!=0) {
             Thread.sleep(initialDelaySec * 1000);
         }
 
         for(int i=0; i<iterations; i++){
-            for (ClusterContainer c : clusterManager.values()) {
-                c.kill(jvmId);
+            for (ClusterContainer c : clusterManager.getClusters(id)) {
+                c.kill(id);
             }
-            for (ClusterContainer c : clusterManager.values()) {
-                c.printJvmInfo(jvmId);
+            for (ClusterContainer c : clusterManager.getClusters(id)) {
+                c.printJvmInfo(id);
             }
 
             if(restartDelaySec!=0) {
                 Thread.sleep(restartDelaySec * 1000);
             }
 
-            for (ClusterContainer c : clusterManager.values()) {
-                c.restart(jvmId);
-            }
-            //for (ClusterContainer c : clusterManager.values()) {
-            //    c.getResponseExitOnException(jvmId);
-            //}
-            for (ClusterContainer c : clusterManager.values()) {
-                c.restartEmbeddedObject(jvmId);
+            for (ClusterContainer c : clusterManager.getClusters(id)) {
+                c.restart(id);
             }
 
-            //System.out.println("HI A");
-            //for (ClusterContainer c : clusterManager.values()) {
-            //    c.getResponseExitOnException(jvmId);
-            //}
-            //System.out.println("HI B");
+            restartEmbeddedObject(id);
 
             if(iterationDelaySec!=0) {
                 Thread.sleep(iterationDelaySec * 1000);
@@ -166,86 +157,53 @@ public class HzCmd implements Serializable {
     }
 
 
-    public void jps( ) throws IOException, InterruptedException {
-        for (ClusterContainer c : clusterManager.values()) {
-            c.getBoxManager().jps();
+    public void ls(String id) throws Exception {
+        for (ClusterContainer c : clusterManager.getClusters(id)) {
+            c.ls(id);
         }
     }
 
-    public void ls(String jvmId) throws Exception {
-        for (ClusterContainer c : clusterManager.values()) {
-            c.ls(jvmId);
-        }
-    }
-
-    public void cat(String jvmId) throws Exception {
-        for (ClusterContainer c : clusterManager.values()) {
-            c.cat(jvmId);
-        }
-    }
-
-    public void jstack(String jvmId, String file) throws Exception {
-        for (ClusterContainer c : clusterManager.values()) {
-            c.jstack(jvmId, file);
-        }
-    }
-
-    public void tail(String jvmId) throws Exception {
-        for (ClusterContainer c : clusterManager.values()) {
-            c.tail(jvmId);
-        }
-    }
-
-    public void grep(String jvmId, String grepArgs) throws Exception {
-        for (ClusterContainer c : clusterManager.values()) {
-            c.grep(jvmId, grepArgs);
+    public void tail(String id) throws Exception {
+        for (ClusterContainer c : clusterManager.getClusters(id)) {
+            c.tail(id);
         }
     }
 
     public void download(String dir) throws Exception {
-        for (ClusterContainer c : clusterManager.values()) {
+        for (ClusterContainer c : clusterManager.getClusters()) {
             c.downlonad(dir);
         }
     }
 
-    public boolean printErrors(String jvmId) throws IOException, InterruptedException {
+    public boolean printErrors(String id) throws IOException, InterruptedException {
         boolean error=false;
-        for (ClusterContainer c : clusterManager.values()) {
-            error |= c.printErrors(jvmId);
+        for (ClusterContainer c : clusterManager.getClusters(id)) {
+            error |= c.printErrors(id);
         }
         return error;
     }
 
-    public void clean(String jvmId) throws Exception {
-        for (ClusterContainer c : clusterManager.values()) {
-            c.clean(jvmId);
-        }
-    }
-
-    public void ssh(String jvmId, String cmd) throws Exception {
-        for (ClusterContainer c : clusterManager.values()) {
-            c.ssh(jvmId, cmd);
+    public void clean(String id) throws Exception {
+        for (ClusterContainer c : clusterManager.getClusters(id)) {
+            c.clean(id);
         }
     }
 
     public void wipe( ) throws IOException, InterruptedException, JMSException {
-
         saveHzCmd=false;
 
         Bash.rmQuite(serFile);
         Bash.rmQuite(propertiesFile);
 
-        Map<String, ClusterContainer> clustersTemp = clusterManager;
-        for (ClusterContainer c : clustersTemp.values()) {
+        for (ClusterContainer c : clusterManager.getClusters()) {
             c.getBoxManager().killAllJava();
         }
-        for (ClusterContainer c : clustersTemp.values()) {
+        for (ClusterContainer c : clusterManager.getClusters()) {
             c.getBoxManager().rm(Installer.REMOTE_HZCMD_ROOT);
         }
-        for (ClusterContainer c : clustersTemp.values()) {
+        for (ClusterContainer c : clusterManager.getClusters()) {
             c.drainQ();
         }
-        clusterManager.clear();
     }
 
     public void wipeLocal( ) throws IOException, InterruptedException, JMSException {
@@ -253,19 +211,23 @@ public class HzCmd implements Serializable {
         Bash.rmQuite(serFile);
         Bash.rmQuite(propertiesFile);
 
-        for (ClusterContainer c : clusterManager.values()) {
+        for (ClusterContainer c : clusterManager.getClusters()) {
             c.drainQ();
         }
 
-        for (ClusterContainer c : clusterManager.values()) {
+        for (ClusterContainer c : clusterManager.getClusters()) {
             c.getBoxManager().rm(Installer.REMOTE_HZCMD_ROOT);
         }
-        clusterManager.clear();
 
         Bash.killAllJava();
     }
 
 
+    public void invokeBenchMark(String clusterId, String benchFile, final boolean warmup) throws Exception {
+        System.out.println(Bash.ANSI_YELLOW + "Stub" + Bash.ANSI_RESET);
+    }
+
+    /*
     public void invokeBenchMark(String clusterId, String benchFile, final boolean warmup) throws Exception {
 
         HzCmdProperties properties = new HzCmdProperties();
@@ -362,118 +324,22 @@ public class HzCmd implements Serializable {
         properties.writeIntPropertie(HzCmdProperties.BENCH_NUMBER, benchNumber);
         System.out.println(Bash.ANSI_YELLOW + "The End" + Bash.ANSI_RESET);
     }
+    */
 
 
-    public void invokeBenchMark2(String clusterId, String benchFile, final boolean warmup) throws Exception {
-
-        HzCmdProperties properties = new HzCmdProperties();
-        int benchNumber = properties.readIntPropertie(HzCmdProperties.BENCH_NUMBER, 1);
-
-        List<ClusterContainer> cluster = clusterManager.getMatchingClusters(clusterId);
-        if(cluster==null){
-            System.out.println(Bash.ANSI_RED + "No Cluster for -id "+clusterId + Bash.ANSI_RESET);
-            System.exit(1);
-            return;
-        }
-
-        BenchManager bencher = new BenchManager(benchFile);
-
-        for (String drivers : benchMarkSettings.getDrivers()) {
-
-            for (String taskId : bencher.getTaskIds()) {
-
-                String className = bencher.getClassName(taskId);
-
-                for (BenchType benchType : benchMarkSettings.getTypes()) {
-
-                    for (List<FieldValue> settings : bencher.getSettings(taskId)) {
-
-                        for (int threadCount : benchMarkSettings.getThreads()) {
-
-                            for (long interval : benchMarkSettings.getIntervalNanos()) {
-
-                                for (int warmupSec : benchMarkSettings.getWarmupSec()) {
-
-                                    for (int durationSec : benchMarkSettings.getDurationSec()) {
-
-                                        for (int repeater = 0; repeater < benchMarkSettings.repeatCount(); repeater++) {
-
-                                            String version = cluster.getVersionsString();
-                                            String metaData = "clusterId " + clusterId + " " +
-                                                    "version " + version + " " +
-                                                    "Members " + cluster.getMemberCount() + " " +
-                                                    "Clients " + cluster.getClientCount() + " " +
-                                                    "drivers " + drivers + " " +
-                                                    "benchType " + benchType + " " +
-                                                    "interval " + interval + " " +
-                                                    "taskID " + taskId + " " +
-                                                    "class " + className + " " +
-                                                    "allowException " + benchMarkSettings.getAllowException() + " " +
-                                                    "threads " + threadCount + " " +
-                                                    "warmupSec " + warmupSec + " " +
-                                                    "benchSec " + durationSec + " " +
-                                                    "benchNum " + benchNumber + " ";
-
-                                            for (FieldValue field : bencher.getFieldsToSet(taskId)) {
-                                                metaData += field.field + " " + field.value + " ";
-                                            }
-                                            for (FieldValue setting : settings) {
-                                                metaData += setting.field + " " + setting.value + " ";
-                                            }
-
-                                            //split up by dir's  even map/struct name
-                                            //String fileName = benchType.name()+"/"+drivers+"/"+taskId+"/"+"threads"+threadCount+"/"+clusterId+"_"+version+"_"+taskId+"_"+className+"_"+benchNumber;
-
-                                            String fileName = clusterId + "_" + version + "_" + taskId + "_" + className + "_" + benchNumber;
-
-                                            cluster.load(drivers, taskId, className);
-                                            cluster.setThreadCount(drivers, taskId, threadCount);
-                                            cluster.setBenchType(drivers, taskId, benchType, interval, benchMarkSettings.getAllowException(), fileName);
-
-                                            for (FieldValue setting : settings) {
-                                                cluster.setField(drivers, taskId, setting.field, setting.value);
-                                            }
-
-                                            for (FieldValue field : bencher.getFieldsToSet(taskId)) {
-                                                cluster.setField(drivers, taskId, field.field, field.value);
-                                            }
-                                            cluster.initBench(drivers, taskId);
-
-                                            if (warmup) {
-                                                cluster.warmupBench(drivers, taskId, warmupSec);
-                                            }
-                                            cluster.runBench(drivers, taskId, durationSec);
-                                            cluster.cleanupBench(drivers, taskId);
-                                            cluster.writeMetaDataCmd(drivers, taskId, metaData);
-
-                                            benchNumber++;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        properties.writeIntPropertie(HzCmdProperties.BENCH_NUMBER, benchNumber);
-        System.out.println(Bash.ANSI_YELLOW + "The End" + Bash.ANSI_RESET);
-    }
 
 
-    public void scpUp(String jvmId, String src, String dst) throws IOException, InterruptedException {
-        for (ClusterContainer c : clusterManager.values()) {
-            for (RemoteJvm jvm : c.getMatchingJvms(jvmId) ) {
+    public void scpUp(String id, String src, String dst) throws IOException, InterruptedException {
+        for (ClusterContainer c : clusterManager.getClusters(id)) {
+            for (RemoteJvm jvm : c.getMatchingJvms(id) ) {
                 jvm.upload(src, dst);
             }
         }
     }
 
-    public void uploadLib(String clusterId, String src) throws IOException, InterruptedException {
-        ClusterContainer c = clusterManager.get(clusterId);
-        if(c != null){
-            System.out.println(Bash.ANSI_YELLOW+"Installing "+src+" for cluster "+c.getClusterId()+Bash.ANSI_RESET);
+    public void uploadLib(String id, String src) throws IOException, InterruptedException {
+        for (ClusterContainer c : clusterManager.getClusters(id)) {
+            System.out.println(Bash.ANSI_YELLOW + "Installing " + src + " for cluster " + c.getClusterId() + Bash.ANSI_RESET);
             c.uploadLib(src);
         }
     }
@@ -482,14 +348,7 @@ public class HzCmd implements Serializable {
         this.brokerIP = brokerIP;
     }
 
-    @Override
-    public String toString() {
-        String s="";
-        for(ClusterContainer c : clusterManager.values()) {
-            s += c.toString() + "\n";
-        }
-        return s;
-    }
+
 
     private static HzCmd loadHzCmd(){
         HzCmd hzCmd;
@@ -613,16 +472,5 @@ public class HzCmd implements Serializable {
     public void setRepeatCount(int repeatCount) {
         benchMarkSettings.setRepeatCount(repeatCount);
     }
-
-
-
-
-    public void getResponseExitOnException(String id, long timeOut) throws IOException, InterruptedException, JMSException {
-        boolean exit=false;
-        for(ClusterContainer cluster : clusterManager.getClusters(id)){
-            cluster.getResponseExitOnException();
-        }
-    }
-
 
 }

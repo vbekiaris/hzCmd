@@ -6,7 +6,6 @@ import vendor.gg.GgJvmFactory;
 import vendor.hz.HzJvmFactory;
 import vendor.redis.RedisJvmFactory;
 
-import javax.jms.JMSException;
 import java.io.*;
 import java.util.*;
 import static global.Utils.myIp;
@@ -59,5 +58,7 @@ public class ClusterManager implements Serializable {
     }
 
 
-
+    public Collection<ClusterContainer> getClusters() {
+        return clusters.values();
+    }
 }

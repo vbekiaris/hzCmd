@@ -118,7 +118,7 @@ public abstract class Controler{
 
     private static void printProperties(){
         try {
-            PrintStream ps = new PrintStream(new FileOutputStream(ID+".properties", true));
+            PrintStream ps = new PrintStream(new FileOutputStream("jvm.properties", true));
 
             Properties p = System.getProperties();
             Enumeration keys = p.keys();

@@ -93,7 +93,6 @@ public class ClusterContainer implements Serializable {
     }
 
     private void addJvms(int qty, String version, String options, String cwdFiles, NodeType type) throws Exception {
-
         if(qty==0){
             return;
         }
@@ -112,7 +111,8 @@ public class ClusterContainer implements Serializable {
             executor.submit( new Runner( box, files ) );
         }
         executor.shutdown();
-        executor.awaitTermination(1, TimeUnit.DAYS);
+        executor.awaitTermination(3, TimeUnit.HOURS);
+
     }
 
     public String getVersionsString() {
@@ -123,7 +123,7 @@ public class ClusterContainer implements Serializable {
         boxes.addBoxes(bm);
     }
 
-    private  class Runner implements Callable<Object> {
+    private class Runner implements Callable<Object> {
 
         private Box box;
         private List<String> files;
@@ -133,7 +133,7 @@ public class ClusterContainer implements Serializable {
             this.files=files;
         }
 
-        public Object call() throws Exception{
+        public List<RemoteJvm> call() throws Exception{
 
             for (String file : files) {
                 box.scpUp(file, ".");
@@ -174,15 +174,14 @@ public class ClusterContainer implements Serializable {
             }
 
             for (RemoteJvm remoteJvm : started) {
-                Object response = remoteJvm.getResponse(TIMEOUT_5MIN);
+                Object response = remoteJvm.getResponse(30000);
                 if(response==null){
-                    System.out.println(Bash.ANSI_RED+"TimeOut waiting for Jvm response"+Bash.ANSI_RESET);
+                    System.out.println(Bash.ANSI_RED+"Timeout waiting for Jvm response"+Bash.ANSI_RESET);
                     System.exit(1);
                 }
                 printResponse(response);
             }
-
-            return null;
+            return started;
         }
     }
 
@@ -384,6 +383,24 @@ public class ClusterContainer implements Serializable {
     }
 
 
+
+    public void getResponseExitOnException(String jvmId) throws IOException, InterruptedException, JMSException {
+        boolean exit=false;
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
+            Object o = jvm.getResponse();
+
+            if(o instanceof Exception){
+                Exception e = (Exception) o;
+                System.out.println(Bash.ANSI_RED + e +e.getCause()+Bash.ANSI_RESET);
+                exit=true;
+            }else{
+                System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
+            }
+        }
+        if(exit){
+            System.exit(1);
+        }
+    }
 
 
 
