@@ -109,6 +109,8 @@ public class BenchManager {
                 } catch (JMSException e2) {}
             }
         }
+        System.out.println(Controler.ID+" "+" cleanUp end");
+        System.out.println(Controler.ID+" "+" cleanUp "+getMatchingBenchContainers(id));
     }
 
     public void setBenchType(MessageProducer replyProducer, String id, BenchType type, long expectedIntervalNanos, boolean allowException, String outFile){
@@ -156,8 +158,6 @@ public class BenchManager {
         }
         threadPool.shutdown();
 
-
-
         for (int i = 0; i < threads.size(); i++) {
             try {
                 Future<BenchThreadResult> future = service.take();
@@ -185,6 +185,7 @@ public class BenchManager {
 
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
             benchContainer.postBench();
+            System.out.println("post "+benchContainer);
         }
     }
 

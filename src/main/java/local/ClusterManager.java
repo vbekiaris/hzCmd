@@ -18,8 +18,8 @@ import static global.Utils.rangeMap;
 
 public class ClusterManager implements Serializable {
 
-    private final long JVM_STARTUP_TIMEOUT=TimeUnit.SECONDS.toMillis(600);
     private final long TIMEOUT_2MIN=TimeUnit.SECONDS.toMillis(120);
+    private final long TIMEOUT_5MIN=TimeUnit.SECONDS.toMillis(300);
     private final long TIMEOUT_10MIN=TimeUnit.SECONDS.toMillis(600);
 
     private final String clusterId;
@@ -177,7 +177,7 @@ public class ClusterManager implements Serializable {
             }
 
             for (RemoteJvm remoteJvm : started) {
-                Object response = remoteJvm.getResponse(JVM_STARTUP_TIMEOUT);
+                Object response = remoteJvm.getResponse(TIMEOUT_5MIN);
                 if(response==null){
                     System.out.println(Bash.ANSI_RED+"TimeOut waiting for Jvm response"+Bash.ANSI_RESET);
                     System.exit(1);
@@ -279,7 +279,7 @@ public class ClusterManager implements Serializable {
         for(RemoteJvm jvm : getMatchingJms(jvmId)){
             jvm.startEmbeddedObject();
         }
-        getResponseExitOnException(jvmId, JVM_STARTUP_TIMEOUT);
+        getResponseExitOnException(jvmId, TIMEOUT_10MIN);
     }
 
     public void load(String jvmId, String taskId, String className) throws IOException, InterruptedException, JMSException{
@@ -339,10 +339,10 @@ public class ClusterManager implements Serializable {
         getResponseExitOnException(jvmId, TimeUnit.SECONDS.toMillis(seconds+600));
     }
 
-    public void cleanupBench(String taskId) throws IOException, InterruptedException, JMSException {
-        RemoteJvm jvm = getMatchingMemberJms("Member1").get(0);
+    public void cleanupBench(String jvmId, String taskId) throws IOException, InterruptedException, JMSException {
+        RemoteJvm jvm = getMatchingMemberJms(jvmId).get(0);
         jvm.cleanupBench(taskId);
-        getResponseExitOnException(jvm.getId(), TIMEOUT_10MIN);
+        getResponseExitOnException(jvm.getId(), TIMEOUT_5MIN);
     }
 
 

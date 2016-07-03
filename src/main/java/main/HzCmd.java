@@ -368,7 +368,7 @@ public class HzCmd implements Serializable {
                                                 cluster.warmupBench(drivers, taskId, warmupSec);
                                             }
                                             cluster.runBench(drivers, taskId, durationSec);
-                                            cluster.cleanupBench(taskId);
+                                            cluster.cleanupBench(drivers, taskId);
                                             cluster.writeMetaDataCmd(drivers, taskId, metaData);
 
                                             benchNumber++;
