@@ -12,11 +12,6 @@ import mq.MQ;
 
 import javax.jms.JMSException;
 import java.io.*;
-import java.util.*;
-
-//TODO
-//multi files in sequence needs bench number by cluster,
-//multi benchID's in file in parellel,
 
 //print cluster layout info
 
@@ -214,12 +209,10 @@ public class HzCmd implements Serializable {
     public void invokeBenchMark(String id, String benchFile) throws Exception {
 
         BenchManager benchManager = new BenchManager(benchFile);
-
         System.out.println(benchManager);
 
         while( benchManager.hasBench() ){
             benchManager.popBenchMarks();
-
             clusterManager.loadBench(id, benchManager);
             clusterManager.setAttributes(id, benchManager);
             clusterManager.initBench(id, benchManager);
@@ -229,36 +222,6 @@ public class HzCmd implements Serializable {
             clusterManager.writeMetaDataCmd(id, benchManager);
         }
     }
-
-
-
-    /*
-    public void invokeBenchMark(String clusterId, String benchFile, final boolean warmup) throws Exception {
-
-        String version = cluster.getVersionsString();
-        String metaData = "clusterId " + clusterId + " " +
-                "version " + version + " " +
-                "Members " + cluster.getMemberCount() + " " +
-                "Clients " + cluster.getClientCount() + " " +
-                "drivers " + drivers + " " +
-                "benchType " + benchType + " " +
-                "interval " + interval + " " +
-                "taskID " + taskId + " " +
-                "class " + className + " " +
-                "throwException " + benchMarkSettings.getThrowException() + " " +
-                "threads " + threadCount + " " +
-                "warmupSec " + warmupSec + " " +
-                "benchSec " + durationSec + " " +
-                "benchNum " + benchNumber + " ";
-
-        String fileName = clusterId + "_" + version + "_" + taskId + "_" + className + "_" + benchNumber;
-
-
-        properties.writeIntPropertie(HzCmdProperties.BENCH_NUMBER, benchNumber);
-        System.out.println(Bash.ANSI_YELLOW + "The End" + Bash.ANSI_RESET);
-    }
-    */
-
 
 
 
@@ -280,7 +243,6 @@ public class HzCmd implements Serializable {
     public void setBrokerIP(String brokerIP) {
         this.brokerIP = brokerIP;
     }
-
 
 
     private static HzCmd loadHzCmd(){
@@ -372,6 +334,4 @@ public class HzCmd implements Serializable {
     public void hdrRegresionCheck(String dir, String red, String blue) throws IOException, InterruptedException {
         Bash.executeCommand("driver-wideHdr "+dir+" "+red+" "+blue);
     }
-
-
 }
