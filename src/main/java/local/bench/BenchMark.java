@@ -19,7 +19,7 @@ public class BenchMark implements Serializable {
     private Stack<List<FieldValue>> benchStack = new Stack<List<FieldValue>>();
     private List<FieldValue> currentBench;
 
-    private int number=1;
+    private int number=0;
 
     private String id;
 

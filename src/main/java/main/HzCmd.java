@@ -3,6 +3,7 @@ package main;
 import cmdline.main.CmdLine;
 import cmdline.base.Command;
 import global.ClusterSize;
+import global.Utils;
 import local.*;
 import local.bench.BenchManager;
 import local.properties.HzCmdProperties;
@@ -12,6 +13,7 @@ import mq.MQ;
 
 import javax.jms.JMSException;
 import java.io.*;
+import java.util.concurrent.TimeUnit;
 
 //print cluster layout info
 
@@ -105,7 +107,7 @@ public class HzCmd implements Serializable {
             c.restartEmbeddedObject(id);
         }
         for (ClusterContainer c : clusterManager.getClusters(id)) {
-            c.getResponseExitOnException(id);
+            c.getResponseExitOnException(id, Utils.TIMEOUT_10MIN);
         }
     }
 

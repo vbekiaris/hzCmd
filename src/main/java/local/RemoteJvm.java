@@ -227,14 +227,9 @@ public abstract class RemoteJvm implements Serializable {
         MQ.sendObj(Q, new SetFieldCmd(taskId, field, value) );
     }
 
-    public Object getResponse() throws IOException, InterruptedException, JMSException {
-        return MQ.receivReply();
-    }
-
     public Object getResponse(long timeout) throws IOException, InterruptedException, JMSException {
         return MQ.receivReply(timeout);
     }
-
 
     public void drainQ() throws JMSException {
         MQ.drainQ(Q);

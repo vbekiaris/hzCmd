@@ -16,6 +16,10 @@ import java.util.regex.Pattern;
 
 public abstract class Utils {
 
+    public static final long TIMEOUT_2MIN = TimeUnit.SECONDS.toMillis(120);
+    public static final long TIMEOUT_5MIN = TimeUnit.SECONDS.toMillis(300);
+    public static final long TIMEOUT_10MIN = TimeUnit.SECONDS.toMillis(600);
+
     public static String myIp() {
 
         URL whatismyip = null;

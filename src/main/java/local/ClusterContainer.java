@@ -5,6 +5,7 @@ import com.google.common.collect.Multimap;
 import global.Bash;
 import global.NodeType;
 import global.BenchType;
+import global.Utils;
 
 import javax.jms.JMSException;
 import java.io.*;
@@ -377,18 +378,22 @@ public class ClusterContainer implements Serializable {
             jvm.startEmbeddedObject();
         }
         for (RemoteJvm jvm : jvms) {
-            Object response = jvm.getResponse();
+            Object response = jvm.getResponse(Utils.TIMEOUT_10MIN);
             printResponse(response);
         }
     }
 
 
 
-    public void getResponseExitOnException(String jvmId) throws IOException, InterruptedException, JMSException {
+    public void getResponseExitOnException(String jvmId, long timeOut) throws IOException, InterruptedException, JMSException {
         boolean exit=false;
         for(RemoteJvm jvm : getMatchingJvms(jvmId)){
-            Object o = jvm.getResponse();
+            Object o = jvm.getResponse(timeOut);
 
+            if(o==null){
+                System.out.println(Bash.ANSI_RED+"Timeout!"+Bash.ANSI_RESET);
+                System.exit(1);
+            }
             if(o instanceof Exception){
                 Exception e = (Exception) o;
                 System.out.println(Bash.ANSI_RED + e +e.getCause()+Bash.ANSI_RESET);
@@ -399,6 +404,24 @@ public class ClusterContainer implements Serializable {
         }
         if(exit){
             System.exit(1);
+        }
+    }
+
+    public void getResponseExitOnExceptionFrom1(String jvmId, long timeOut) throws IOException, InterruptedException, JMSException {
+
+        RemoteJvm jvm = getMatchingJvms(jvmId).get(0);
+        Object o = jvm.getResponse(timeOut);
+
+        if(o==null){
+            System.out.println(Bash.ANSI_RED+"Timeout!"+Bash.ANSI_RESET);
+            System.exit(1);
+        }
+        if (o instanceof Exception) {
+            Exception e = (Exception) o;
+            System.out.println(Bash.ANSI_RED + e + e.getCause() + Bash.ANSI_RESET);
+            System.exit(1);
+        } else {
+            System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
         }
     }
 

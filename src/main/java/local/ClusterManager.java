@@ -2,6 +2,7 @@ package local;
 
 import global.Bash;
 import global.ClusterType;
+import global.Utils;
 import local.bench.BenchManager;
 import local.bench.BenchMark;
 import local.bench.FieldValue;
@@ -49,10 +50,10 @@ public class ClusterManager implements Serializable {
         return cluster;
     }
 
-    private void getClusterResponses(List<ClusterContainer> clusters, BenchManager benchManager) throws InterruptedException, JMSException, IOException{
+    private void getClusterResponses(List<ClusterContainer> clusters, BenchManager benchManager, long timeOut) throws InterruptedException, JMSException, IOException{
         for (ClusterContainer cluster : clusters) {
             for (BenchMark benchMark : benchManager.getBenchMarks()) {
-                cluster.getResponseExitOnException(benchMark.getDriver());
+                cluster.getResponseExitOnException(benchMark.getDriver(), timeOut);
             }
         }
     }
@@ -71,7 +72,7 @@ public class ClusterManager implements Serializable {
             }
         }
 
-        getClusterResponses(clusters, benchManager);
+        getClusterResponses(clusters, benchManager, Utils.TIMEOUT_2MIN);
     }
 
     public void setAttributes(String id, BenchManager benchManager) throws InterruptedException, JMSException, IOException {
@@ -82,7 +83,7 @@ public class ClusterManager implements Serializable {
                 cluster.setThreadCount(benchMark.getDriver(), benchMark.getId(), benchMark.getThreads());
             }
         }
-        getClusterResponses(clusters, benchManager);
+        getClusterResponses(clusters, benchManager, Utils.TIMEOUT_2MIN);
 
 
         for (ClusterContainer cluster : clusters) {
@@ -91,7 +92,7 @@ public class ClusterManager implements Serializable {
                 cluster.setBenchType(benchMark.getDriver(), benchMark.getId(), benchMark.getBenchType(), benchMark.getInterval(), benchMark.getThrowException(), fileName);
             }
         }
-        getClusterResponses(clusters, benchManager);
+        getClusterResponses(clusters, benchManager, Utils.TIMEOUT_2MIN);
 
 
         for (ClusterContainer cluster : clusters) {
@@ -104,7 +105,7 @@ public class ClusterManager implements Serializable {
         for (ClusterContainer cluster : clusters) {
             for (BenchMark benchMark : benchManager.getBenchMarks()) {
                 for (FieldValue fieldValue : benchMark.getAttributes()) {
-                    cluster.getResponseExitOnException(benchMark.getDriver());
+                    cluster.getResponseExitOnException(benchMark.getDriver(), Utils.TIMEOUT_2MIN);
                 }
             }
         }
@@ -118,7 +119,7 @@ public class ClusterManager implements Serializable {
                 cluster.initBench(benchMark.getDriver(), benchMark.getId());
             }
         }
-        getClusterResponses(clusters, benchManager);
+        getClusterResponses(clusters, benchManager, Utils.TIMEOUT_10MIN);
     }
 
     public void warmupBench(String id, BenchManager benchManager) throws InterruptedException, JMSException, IOException {
@@ -134,7 +135,7 @@ public class ClusterManager implements Serializable {
         for (ClusterContainer cluster : clusters) {
             for (BenchMark benchMark : benchManager.getBenchMarks()) {
                 if(benchMark.getWarmup()!=0){
-                    cluster.getResponseExitOnException(benchMark.getDriver());
+                    cluster.getResponseExitOnException(benchMark.getDriver(), benchMark.getWarmup()+120);
                 }
             }
         }
@@ -143,12 +144,18 @@ public class ClusterManager implements Serializable {
     public void runBench(String id, BenchManager benchManager) throws InterruptedException, JMSException, IOException {
         List<ClusterContainer> clusters = getClusters(id);
 
+
+        int maxDuration = 0;
         for (ClusterContainer cluster : clusters) {
             for (BenchMark benchMark : benchManager.getBenchMarks()) {
+
+                if(maxDuration < benchMark.getDuration()){
+                    maxDuration = benchMark.getDuration();
+                }
                 cluster.runBench(benchMark.getDriver(), benchMark.getId(), benchMark.getDuration());
             }
         }
-        getClusterResponses(clusters, benchManager);
+        getClusterResponses(clusters, benchManager, maxDuration);
     }
 
     public void cleanupBench(String id, BenchManager benchManager) throws InterruptedException, JMSException, IOException {
@@ -159,7 +166,11 @@ public class ClusterManager implements Serializable {
                 cluster.cleanupBench(benchMark.getDriver(), benchMark.getId());
             }
         }
-        getClusterResponses(clusters, benchManager);
+        for (ClusterContainer cluster : clusters) {
+            for (BenchMark benchMark : benchManager.getBenchMarks()) {
+                cluster.getResponseExitOnExceptionFrom1(benchMark.getDriver(), Utils.TIMEOUT_5MIN);
+            }
+        }
     }
 
     public void writeMetaDataCmd(String id, BenchManager benchManager) throws InterruptedException, JMSException, IOException {
@@ -168,7 +179,7 @@ public class ClusterManager implements Serializable {
         for (ClusterContainer cluster : clusters) {
             for (BenchMark benchMark : benchManager.getBenchMarks()) {
 
-                String info = benchManager.getBenchFileName()+" "+cluster.getClusterId() +"M"+cluster.getMemberCount()+"C"+cluster.getClientCount()+" "+cluster.getVersionsString()+" "+benchMark.getId()+" "+benchMark.getClazz()+" "+benchMark.getNumber();
+                String info = cluster.getClusterId()+" "+"M"+cluster.getMemberCount()+"C"+cluster.getClientCount()+" "+cluster.getVersionsString()+" "+benchMark.getId()+" "+benchMark.getClazz()+" "+benchMark.getNumber();
                 String meta = benchMark.getMetaData();
 
                 System.out.println(info+" "+meta);
@@ -176,7 +187,7 @@ public class ClusterManager implements Serializable {
                 cluster.writeMetaDataCmd(benchMark.getDriver(), benchMark.getId(), info+" "+meta);
             }
         }
-        getClusterResponses(clusters, benchManager);
+        getClusterResponses(clusters, benchManager, Utils.TIMEOUT_2MIN);
     }
 
 
