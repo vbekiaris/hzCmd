@@ -3,7 +3,7 @@ package remote.bench.marker;
 import com.codahale.metrics.CsvReporter;
 import com.codahale.metrics.MetricRegistry;
 import global.AssertionException;
-import remote.Utils;
+import remote.main.Utils;
 import remote.bench.Bench;
 
 import java.io.File;
@@ -32,7 +32,6 @@ public class MetricsMarker extends BenchMarker {
     }
 
     public void bench(Bench bench) throws Exception{
-
         long startTime = System.currentTimeMillis();
         long endTime = startTime + (durationSeconds * 1000);
         if(expectedIntervalNanos==0){
@@ -82,15 +81,13 @@ public class MetricsMarker extends BenchMarker {
         metrics.remove(outputFileName);
     }
 
-
-
     private void flatOut(Bench bench, com.codahale.metrics.Timer timer) throws Exception{
         try {
             com.codahale.metrics.Timer.Context context = timer.time();
             bench.timeStep();
             context.stop();
         }catch (Exception e){
-            if(!allowException){
+            if(throwException){
                 Utils.recordeException(e);
                 throw e;
             }
@@ -113,7 +110,7 @@ public class MetricsMarker extends BenchMarker {
             }
 
         }catch (Exception e){
-            if(!allowException){
+            if(throwException){
                 Utils.recordeException(e);
                 throw e;
             }

@@ -8,10 +8,10 @@ import main.HzCmd;
 import java.io.Serializable;
 import java.util.List;
 
-@com.github.rvesse.airline.annotations.Command(name = "jhicArgs", description = "Set jhic args only -d -i args expected ")
+@com.github.rvesse.airline.annotations.Command(name = "JHIC_ARGS", description = "Set JHIC args only -d -i args expected ")
 public class SetJhicArgs extends Command implements Serializable{
 
-    @Arguments(description = "jhic args default -d 0 -i 1000")
+    @Arguments(description = "JHIC args default -d 0 -i 1000")
     public List<String> jhicArgs;
 
 
@@ -23,7 +23,7 @@ public class SetJhicArgs extends Command implements Serializable{
             }
 
             HzCmdProperties props = new HzCmdProperties();
-            props.writePropertie(HzCmdProperties.jhicArgs, ops.toString());
+            props.writePropertie(HzCmdProperties.JHIC_ARGS, ops.toString());
 
         } catch (Exception e) {
             e.printStackTrace();

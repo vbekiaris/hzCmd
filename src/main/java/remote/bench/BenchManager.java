@@ -2,7 +2,7 @@ package remote.bench;
 
 import global.BenchType;
 import mq.MQ;
-import remote.Controler;
+import remote.main.Controler;
 
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
@@ -117,7 +117,7 @@ public class BenchManager {
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
             try {
                 benchContainer.setBenchType(type, expectedIntervalNanos, allowException, outFile);
-                MQ.sendReply(replyProducer, Controler.ID+" "+benchContainer.getId()+" BenchType="+type+" intervalNanos="+expectedIntervalNanos+" allowException="+allowException+" outFile="+outFile);
+                MQ.sendReply(replyProducer, Controler.ID+" "+benchContainer.getId()+" BenchType="+type+" intervalNanos="+expectedIntervalNanos+" throwException="+allowException+" outFile="+outFile);
             } catch (Exception e) {
                 try {
                     MQ.sendReply(replyProducer, e);

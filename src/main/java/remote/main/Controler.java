@@ -1,4 +1,4 @@
-package remote;
+package remote.main;
 
 import global.Args;
 import global.NodeType;
@@ -13,15 +13,10 @@ import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
 import java.util.Enumeration;
 import java.util.Properties;
-import java.util.concurrent.Callable;
-import java.util.concurrent.TimeUnit;
 
 import remote.bench.BenchManager;
 import global.BenchType;
 import remote.command.Cmd;
-
-import static remote.Utils.recordeException;
-import static remote.Utils.recordeExceptionJms;
 
 public abstract class Controler{
 
@@ -50,7 +45,7 @@ public abstract class Controler{
             benchManager = new BenchManager(getVendorObject());
             MQ.sendReply(replyProducer, ID + " Started on " + InetAddress.getLocalHost().getHostAddress());
         }catch (Exception e){
-            recordeException(e);
+            Utils.recordeException(e);
             MQ.sendReply(replyProducer, e);
             throw e;
         }
@@ -111,9 +106,9 @@ public abstract class Controler{
                     ((Cmd) obj).exicute(this, replyProducer);
                 }
             } catch (JMSException e){
-                recordeExceptionJms(e);
+                Utils.recordeExceptionJms(e);
             } catch (Exception e) {
-                recordeException(e);
+                Utils.recordeException(e);
             }
         }
     }

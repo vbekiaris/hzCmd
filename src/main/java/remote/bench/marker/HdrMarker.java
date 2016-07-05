@@ -3,7 +3,7 @@ package remote.bench.marker;
 import global.AssertionException;
 import org.HdrHistogram.ConcurrentHistogram;
 import org.HdrHistogram.Histogram;
-import remote.Utils;
+import remote.main.Utils;
 import remote.bench.Bench;
 
 import java.io.*;
@@ -78,7 +78,6 @@ public class HdrMarker extends BenchMarker {
     }
 
 
-
     private void flatOut(Bench bench) throws Exception{
         try {
 
@@ -88,8 +87,8 @@ public class HdrMarker extends BenchMarker {
             histogram.recordValue(end-start);
 
         }catch (Exception e){
-            Utils.recordeException(e);
-            if(!allowException){
+            if(throwException){
+                Utils.recordeException(e);
                 throw e;
             }
             if(e instanceof AssertionException){
@@ -111,14 +110,13 @@ public class HdrMarker extends BenchMarker {
             }
 
         }catch (Exception e){
-            Utils.recordeException(e);
-            if(!allowException){
+            if(throwException){
+                Utils.recordeException(e);
                 throw e;
             }
             if(e instanceof AssertionException){
                 throw e;
             }
         }
-
     }
 }

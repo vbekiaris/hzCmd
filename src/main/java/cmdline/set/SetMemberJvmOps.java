@@ -23,7 +23,7 @@ public class SetMemberJvmOps extends Command implements Serializable{
             }
 
             HzCmdProperties props = new HzCmdProperties();
-            props.writePropertie(HzCmdProperties.memberOps, ops.toString());
+            props.writePropertie(HzCmdProperties.MEMBER_OPS, ops.toString());
 
         } catch (Exception e) {
             e.printStackTrace();

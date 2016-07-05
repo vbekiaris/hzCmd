@@ -23,7 +23,7 @@ public class SetClientJvmOps extends Command implements Serializable{
             }
 
             HzCmdProperties props = new HzCmdProperties();
-            props.writePropertie(HzCmdProperties.clientOps, ops.toString());
+            props.writePropertie(HzCmdProperties.CLIENT_OPS, ops.toString());
 
         } catch (Exception e) {
             e.printStackTrace();

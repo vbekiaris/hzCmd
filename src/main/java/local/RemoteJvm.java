@@ -84,23 +84,23 @@ public abstract class RemoteJvm implements Serializable {
         jvmArgs += "-XX:OnOutOfMemoryError=\" date >> " + id + ".oome" + "\" ";
 
         HzCmdProperties properties = new HzCmdProperties();
-        if(properties.getBoolean(HzCmdProperties.jhic, "false")) {
+        if(properties.getBoolean(HzCmdProperties.JHIC, "false")) {
             String hz_cmd_src = System.getenv("HZ_CMD_SRC");
             this.uploadcwd(hz_cmd_src+"/lib-jars/jHiccup.jar");
 
-            String jhicArgs = properties.readPropertie(HzCmdProperties.jhicArgs, "-d 0 -i 1000");
+            String jhicArgs = properties.readPropertie(HzCmdProperties.JHIC_ARGS, "-d 0 -i 1000");
             jhicAgent = "-javaagent:jHiccup.jar=\""+jhicArgs+" -l "+clusterId+"-hiccuplog -c\"";
         }
 
         if(properties.getBoolean(HzCmdProperties.JFR, "false") && type == NodeType.Member) {
 
-            String jfrArgs = properties.readPropertie(HzCmdProperties.JFRARGS, "-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=delay=1m,duration=1m,dumponexit=true,settings=debug.jfc");
+            String jfrArgs = properties.readPropertie(HzCmdProperties.JFR_ARGS, "-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=delay=1m,duration=1m,dumponexit=true,settings=debug.jfc");
 
             jvmArgs += jfrArgs+",filename="+id+".jfr" + " ";
             //jvmArgs += "-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=name="+id+".jfr,settings=debug.jfc -XX:FlightRecorderOptions=defaultrecording=true,disk=true,maxsize=1g,maxage=1h,dumponexit=true,dumponexitpath=./"+id+".jfr" + " ";
         }
 
-        if(properties.getBoolean(HzCmdProperties.GCLOG, "true")) {
+        if(properties.getBoolean(HzCmdProperties.GC_LOG, "true")) {
             jvmArgs +="-verbose:gc -Xloggc:verbosegc.log" + " ";
             jvmArgs +="-XX:+PrintGCTimeStamps -XX:+PrintGCDetails -XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCApplicationConcurrentTime" + " ";
         }
@@ -132,10 +132,10 @@ public abstract class RemoteJvm implements Serializable {
         HzCmdProperties properties = new HzCmdProperties();
         String jvmOptions;
         if (isMember()){
-            jvmOptions = properties.readPropertie(HzCmdProperties.memberOps, "");
+            jvmOptions = properties.readPropertie(HzCmdProperties.MEMBER_OPS, "");
 
         }else {
-            jvmOptions = properties.readPropertie(HzCmdProperties.clientOps, "");
+            jvmOptions = properties.readPropertie(HzCmdProperties.CLIENT_OPS, "");
         }
 
         launchCmd = startJvm(jvmOptions, libDir, myCluster, brokerIP);
@@ -223,7 +223,7 @@ public abstract class RemoteJvm implements Serializable {
         MQ.sendObj(Q, new CleanUpCmd(taskId) );
     }
 
-    public void setField(String taskId, String field, String value) throws Exception {
+    public void setField(String taskId, String field, String value) throws IOException, InterruptedException, JMSException {
         MQ.sendObj(Q, new SetFieldCmd(taskId, field, value) );
     }
 

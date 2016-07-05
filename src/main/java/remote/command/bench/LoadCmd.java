@@ -1,6 +1,6 @@
 package remote.command.bench;
 
-import remote.Controler;
+import remote.main.Controler;
 import remote.command.Cmd;
 
 import javax.jms.MessageProducer;

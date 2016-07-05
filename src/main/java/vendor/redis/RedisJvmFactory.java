@@ -53,7 +53,7 @@ public class RedisJvmFactory implements JvmFactory, Serializable {
 
         HzCmdProperties p = new HzCmdProperties();
 
-        String replicasCount=p.readPropertie(HzCmdProperties.redisReplicas, "1");
+        String replicasCount=p.readPropertie(HzCmdProperties.REDIS_REPLICAS, "1");
         String res = remoteJvm.getBox().ssh("echo yes | " + red + "/src/redis-trib.rb create --replicas "+replicasCount+" "+boxs );
         System.out.println(res);
 

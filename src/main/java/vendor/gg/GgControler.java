@@ -3,7 +3,7 @@ package vendor.gg;
 import global.NodeType;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.Ignition;
-import remote.Controler;
+import remote.main.Controler;
 
 public class GgControler extends Controler {
 

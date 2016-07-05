@@ -1,7 +1,7 @@
 package vendor.gem;
 
 import global.NodeType;
-import remote.Controler;
+import remote.main.Controler;
 
 public class GemClient {
     public static void main(String[] args) throws Throwable {

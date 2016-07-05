@@ -1,4 +1,4 @@
-package remote;
+package remote.main;
 
 import mq.MQ;
 

@@ -1,8 +1,8 @@
 package remote.bench;
 
 import global.BenchType;
-import remote.Controler;
-import remote.Utils;
+import remote.main.Controler;
+import remote.main.Utils;
 import remote.bench.marker.BenchMarker;
 import remote.bench.marker.HdrMarker;
 import remote.bench.marker.MetricsMarker;
@@ -10,7 +10,7 @@ import remote.bench.marker.MetricsMarker;
 import java.util.ArrayList;
 import java.util.List;
 
-import static remote.Utils.instantiate;
+import static remote.main.Utils.instantiate;
 
 public class BenchContainer {
 

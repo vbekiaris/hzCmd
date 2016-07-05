@@ -9,14 +9,14 @@ import java.io.IOException;
 
 public abstract class BenchMarker {
 
-    protected boolean allowException=false;
+    protected boolean throwException =false;
     protected long expectedIntervalNanos=0;
     protected String outputFileName;
     protected int durationSeconds;
 
-    public BenchMarker(long expectedIntervalNanos, boolean allowException){
+    public BenchMarker(long expectedIntervalNanos, boolean throwException){
         this.expectedIntervalNanos = expectedIntervalNanos;
-        this.allowException = allowException;
+        this.throwException = throwException;
     }
 
     public void setDurationSeconds(int seconds){

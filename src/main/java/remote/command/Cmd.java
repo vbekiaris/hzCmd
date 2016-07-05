@@ -1,6 +1,6 @@
 package remote.command;
 
-import remote.Controler;
+import remote.main.Controler;
 
 import javax.jms.MessageProducer;
 

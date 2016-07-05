@@ -1,6 +1,6 @@
 package remote.command.bench;
 
-import remote.Controler;
+import remote.main.Controler;
 import global.BenchType;
 import remote.command.Cmd;
 
@@ -36,7 +36,7 @@ public class SetBenchTypeCmd implements Cmd, Serializable{
                 "intervalNanos=" + intervalNanos +
                 ", taskId='" + taskId + '\'' +
                 ", type=" + type +
-                ", allowException=" + allowException +
+                ", throwException=" + allowException +
                 ", outFile='" + outFile + '\'' +
                 '}';
     }

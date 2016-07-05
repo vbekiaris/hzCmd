@@ -54,7 +54,6 @@ public abstract class MQ {
                 replyToDestination = session.createTemporaryQueue();
                 replyConsumer = session.createConsumer(replyToDestination);
 
-                System.out.println("Mq connection OK");
                 break;
             } catch (JMSException e) {
 

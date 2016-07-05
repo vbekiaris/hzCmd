@@ -6,7 +6,7 @@ import main.HzCmd;
 
 import java.io.Serializable;
 
-@com.github.rvesse.airline.annotations.Command(name = "jhic", description = "enable jhic")
+@com.github.rvesse.airline.annotations.Command(name = "JHIC", description = "enable JHIC")
 public class SetJhic extends Command implements Serializable{
 
 
@@ -14,7 +14,7 @@ public class SetJhic extends Command implements Serializable{
         try {
 
             HzCmdProperties props = new HzCmdProperties();
-            props.writePropertie(HzCmdProperties.jhic, "true");
+            props.writePropertie(HzCmdProperties.JHIC, "true");
 
         } catch (Exception e) {
             e.printStackTrace();

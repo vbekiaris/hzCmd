@@ -1,11 +1,16 @@
 package local;
 
+import global.Bash;
 import global.ClusterType;
+import local.bench.BenchManager;
+import local.bench.BenchMark;
+import local.bench.FieldValue;
 import vendor.gem.GemJvmFactory;
 import vendor.gg.GgJvmFactory;
 import vendor.hz.HzJvmFactory;
 import vendor.redis.RedisJvmFactory;
 
+import javax.jms.JMSException;
 import java.io.*;
 import java.util.*;
 import static global.Utils.myIp;
@@ -44,6 +49,137 @@ public class ClusterManager implements Serializable {
         return cluster;
     }
 
+    private void getClusterResponses(List<ClusterContainer> clusters, BenchManager benchManager) throws InterruptedException, JMSException, IOException{
+        for (ClusterContainer cluster : clusters) {
+            for (BenchMark benchMark : benchManager.getBenchMarks()) {
+                cluster.getResponseExitOnException(benchMark.getDriver());
+            }
+        }
+    }
+
+    public void loadBench(String id, BenchManager benchManager) throws InterruptedException, JMSException, IOException {
+        List<ClusterContainer> clusters = getClusters(id);
+
+        if(clusters.size()==0){
+            System.out.println(Bash.ANSI_RED + "No Cluster selected "+id + Bash.ANSI_RESET);
+            System.exit(1);
+        }
+
+        for (ClusterContainer cluster : clusters) {
+            for (BenchMark benchMark : benchManager.getBenchMarks()) {
+                cluster.load(benchMark.getDriver(), benchMark.getId(), benchMark.getClazz());
+            }
+        }
+
+        getClusterResponses(clusters, benchManager);
+    }
+
+    public void setAttributes(String id, BenchManager benchManager) throws InterruptedException, JMSException, IOException {
+        List<ClusterContainer> clusters = getClusters(id);
+
+        for (ClusterContainer cluster : clusters) {
+            for (BenchMark benchMark : benchManager.getBenchMarks()) {
+                cluster.setThreadCount(benchMark.getDriver(), benchMark.getId(), benchMark.getThreads());
+            }
+        }
+        getClusterResponses(clusters, benchManager);
+
+
+        for (ClusterContainer cluster : clusters) {
+            for (BenchMark benchMark : benchManager.getBenchMarks()) {
+                String fileName = cluster.getClusterId() + "_" + cluster.getVersionsString() + "_" + benchMark.getId() + "_" + benchMark.getClazz() + "_" + benchMark.getNumber();
+                cluster.setBenchType(benchMark.getDriver(), benchMark.getId(), benchMark.getBenchType(), benchMark.getInterval(), benchMark.getThrowException(), fileName);
+            }
+        }
+        getClusterResponses(clusters, benchManager);
+
+
+        for (ClusterContainer cluster : clusters) {
+            for (BenchMark benchMark : benchManager.getBenchMarks()) {
+                for (FieldValue fieldValue : benchMark.getAttributes()) {
+                    cluster.setField(benchMark.getDriver(), benchMark.getId(), fieldValue.field, fieldValue.values.get(0));
+                }
+            }
+        }
+        for (ClusterContainer cluster : clusters) {
+            for (BenchMark benchMark : benchManager.getBenchMarks()) {
+                for (FieldValue fieldValue : benchMark.getAttributes()) {
+                    cluster.getResponseExitOnException(benchMark.getDriver());
+                }
+            }
+        }
+    }
+
+    public void initBench(String id, BenchManager benchManager) throws InterruptedException, JMSException, IOException {
+        List<ClusterContainer> clusters = getClusters(id);
+
+        for (ClusterContainer cluster : clusters) {
+            for (BenchMark benchMark : benchManager.getBenchMarks()) {
+                cluster.initBench(benchMark.getDriver(), benchMark.getId());
+            }
+        }
+        getClusterResponses(clusters, benchManager);
+    }
+
+    public void warmupBench(String id, BenchManager benchManager) throws InterruptedException, JMSException, IOException {
+        List<ClusterContainer> clusters = getClusters(id);
+
+        for (ClusterContainer cluster : clusters) {
+            for (BenchMark benchMark : benchManager.getBenchMarks()) {
+                if(benchMark.getWarmup()!=0){
+                    cluster.warmupBench(benchMark.getDriver(), benchMark.getId(), benchMark.getWarmup());
+                }
+            }
+        }
+        for (ClusterContainer cluster : clusters) {
+            for (BenchMark benchMark : benchManager.getBenchMarks()) {
+                if(benchMark.getWarmup()!=0){
+                    cluster.getResponseExitOnException(benchMark.getDriver());
+                }
+            }
+        }
+    }
+
+    public void runBench(String id, BenchManager benchManager) throws InterruptedException, JMSException, IOException {
+        List<ClusterContainer> clusters = getClusters(id);
+
+        for (ClusterContainer cluster : clusters) {
+            for (BenchMark benchMark : benchManager.getBenchMarks()) {
+                cluster.runBench(benchMark.getDriver(), benchMark.getId(), benchMark.getDuration());
+            }
+        }
+        getClusterResponses(clusters, benchManager);
+    }
+
+    public void cleanupBench(String id, BenchManager benchManager) throws InterruptedException, JMSException, IOException {
+        List<ClusterContainer> clusters = getClusters(id);
+
+        for (ClusterContainer cluster : clusters) {
+            for (BenchMark benchMark : benchManager.getBenchMarks()) {
+                cluster.cleanupBench(benchMark.getDriver(), benchMark.getId());
+            }
+        }
+        getClusterResponses(clusters, benchManager);
+    }
+
+    public void writeMetaDataCmd(String id, BenchManager benchManager) throws InterruptedException, JMSException, IOException {
+        List<ClusterContainer> clusters = getClusters(id);
+
+        for (ClusterContainer cluster : clusters) {
+            for (BenchMark benchMark : benchManager.getBenchMarks()) {
+
+                String info = benchManager.getBenchFileName()+" "+cluster.getClusterId() +"M"+cluster.getMemberCount()+"C"+cluster.getClientCount()+" "+cluster.getVersionsString()+" "+benchMark.getId()+" "+benchMark.getClazz()+" "+benchMark.getNumber();
+                String meta = benchMark.getMetaData();
+
+                System.out.println(info+" "+meta);
+
+                cluster.writeMetaDataCmd(benchMark.getDriver(), benchMark.getId(), info+" "+meta);
+            }
+        }
+        getClusterResponses(clusters, benchManager);
+    }
+
+
 
     public List<ClusterContainer> getClusters(String id) {
         List<ClusterContainer> matching = new ArrayList();
@@ -55,7 +191,6 @@ public class ClusterManager implements Serializable {
         }
         return matching;
     }
-
 
     public Collection<ClusterContainer> getClusters() {
         return clusters.values();

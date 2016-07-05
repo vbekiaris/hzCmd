@@ -6,19 +6,20 @@ import local.properties.HzCmdProperties;
 import main.HzCmd;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 import static global.Utils.commarDilinate;
 
-@com.github.rvesse.airline.annotations.Command(name = "type", description = "type of benchmark tool used to measure")
-public class BenchTypes extends Command {
+@com.github.rvesse.airline.annotations.Command(name = "throw", description = "[true|false] default true")
+public class BenchThrow extends Command implements Serializable{
 
-    @Arguments(description = "[Metrics|Hdr] default Metrics")
-    public List<String> types;
+    @Arguments(description = "throw Exception")
+    public List<String> throwException;
 
 
     public void exe(HzCmd hzCmd) throws IOException {
         HzCmdProperties props = new HzCmdProperties();
-        props.writePropertie(HzCmdProperties.BENCH_TYPE, commarDilinate(types));
+        props.writePropertie(HzCmdProperties.BENCH_THROW, commarDilinate(throwException));
     }
 }

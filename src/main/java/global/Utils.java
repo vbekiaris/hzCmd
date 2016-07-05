@@ -6,6 +6,12 @@ import com.google.common.escape.Escapers;
 
 import java.net.*;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public abstract class Utils {
@@ -70,13 +76,87 @@ public abstract class Utils {
         return min_inclusive+mod;
     }
 
-    public static boolean printStringIfNotEmpty(String str, String color){
-        if(str != null && !str.isEmpty()){
-            System.out.println(color+str+Bash.ANSI_RESET);
-            return true;
+    public static List<Integer> getIntList(List<String> numberStrings){
+        List<Integer> numbers = new ArrayList();
+        for (String numberString : numberStrings) {
+            numbers.add(Integer.parseInt(numberString));
         }
-        return false;
+        return numbers;
+    }
+
+    public static List<BenchType> getBenchTypeList(List<String> benchTypes){
+        List<BenchType> list = new ArrayList();
+        for (String t : benchTypes) {
+            list.add(BenchType.valueOf(t));
+        }
+        return list;
+    }
+
+    public static <T> List<List<T>> cartesianProduct(List<List<T>> lists) {
+        List<List<T>> resultLists = new ArrayList<List<T>>();
+        if (lists.size() == 0) {
+            resultLists.add(new ArrayList<T>());
+            return resultLists;
+        } else {
+            List<T> firstList = lists.get(0);
+            List<List<T>> remainingLists = cartesianProduct(lists.subList(1, lists.size()));
+            for (T condition : firstList) {
+                for (List<T> remainingList : remainingLists) {
+                    ArrayList<T> resultList = new ArrayList<T>();
+                    resultList.add(condition);
+                    resultList.addAll(remainingList);
+                    resultLists.add(resultList);
+                }
+            }
+        }
+        return resultLists;
+    }
+
+    public static long someTypeofStringTimeUtilMethod(String timeString) {
+
+            Pattern sec = Pattern.compile("[0-9]+s");
+            Pattern mil = Pattern.compile("[0-9]+m");
+            Pattern mic = Pattern.compile("[0-9]+u");
+            Pattern nan = Pattern.compile("[0-9]+n");
+
+            Matcher matcher = sec.matcher(timeString);
+            if (matcher.find()) {
+                timeString = timeString.replaceAll("s|m|u|n", "");
+                return TimeUnit.SECONDS.toNanos(Long.parseLong(timeString));
+            }
+
+            matcher = mil.matcher(timeString);
+            if (matcher.find()) {
+                timeString = timeString.replaceAll("s|m|u|n", "");
+                return TimeUnit.MILLISECONDS.toNanos(Long.parseLong(timeString));
+            }
+
+            matcher = mic.matcher(timeString);
+            if (matcher.find()) {
+                timeString = timeString.replaceAll("s|m|u|n", "");
+                return TimeUnit.MICROSECONDS.toNanos(Long.parseLong(timeString));
+            }
+
+            matcher = nan.matcher(timeString);
+            if (matcher.find()) {
+                timeString = timeString.replaceAll("s|m|u|n", "");
+                return Long.parseLong(timeString);
+
+            }
+
+            return TimeUnit.MILLISECONDS.toNanos(Long.parseLong(timeString));
     }
 
 
+    public static String removeLastChar(String str) {
+        return str.substring(0,str.length()-1);
+    }
+
+    public static String commarDilinate(List<String> strings){
+        String res = new String();
+        for (String s : strings) {
+            res += s + ",";
+        }
+        return removeLastChar(res);
+    }
 }

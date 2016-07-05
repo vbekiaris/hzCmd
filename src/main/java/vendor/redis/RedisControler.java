@@ -4,7 +4,7 @@ import global.NodeType;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
-import remote.Controler;
+import remote.main.Controler;
 
 import java.util.HashSet;
 

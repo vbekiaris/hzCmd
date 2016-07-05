@@ -16,6 +16,6 @@ public class RedisInit extends Command {
     public void exe(HzCmd hzCmd) throws IOException {
 
         HzCmdProperties p = new HzCmdProperties();
-        p.writePropertie(HzCmdProperties.redisReplicas, replicasCount);
+        p.writePropertie(HzCmdProperties.REDIS_REPLICAS, replicasCount);
     }
 }

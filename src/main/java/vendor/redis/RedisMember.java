@@ -1,7 +1,7 @@
 package vendor.redis;
 
 import global.NodeType;
-import remote.Controler;
+import remote.main.Controler;
 
 public class RedisMember {
     public static void main(String[] args) throws Throwable {

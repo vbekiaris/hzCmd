@@ -306,7 +306,7 @@ public class ClusterContainer implements Serializable {
         //getResponseExitOnException(jvmId, TIMEOUT_2MIN);
     }
 
-    public void setField(String jvmId, String taskId, String field, String value) throws Exception {
+    public void setField(String jvmId, String taskId, String field, String value) throws IOException, InterruptedException, JMSException {
         for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             jvm.setField(taskId, field, value);
         }
