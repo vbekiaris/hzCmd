@@ -57,9 +57,6 @@ public abstract class MQ {
                 break;
             } catch (JMSException e) {
 
-
-                System.out.println("Mq connection failed");
-
                 if (++count == maxTries){
                     System.out.println("failed "+maxTries+" Mq connections");
                     System.exit(1);
@@ -80,7 +77,7 @@ public abstract class MQ {
 
 
     public static void sendObj(String queueName, Serializable obj) throws JMSException {
-        System.out.println("SendObj"+" "+queueName+" "+obj);
+        //System.out.println("SendObj"+" "+queueName+" "+obj);
         MessageProducer producer = getMessageProducer(queueName);
         ObjectMessage msg = session.createObjectMessage();
         msg.setJMSReplyTo(replyToDestination);

@@ -211,7 +211,7 @@ public class HzCmd implements Serializable {
     public void invokeBenchMark(String id, String benchFile) throws Exception {
 
         BenchManager benchManager = new BenchManager(benchFile);
-        System.out.println(benchManager);
+        System.out.println(Bash.ANSI_PURPLE+benchManager+Bash.ANSI_RESET);
 
         while( benchManager.hasBench() ){
             benchManager.popBenchMarks();

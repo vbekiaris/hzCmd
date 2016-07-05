@@ -385,10 +385,10 @@ public class ClusterContainer implements Serializable {
 
 
 
-    public void getResponseExitOnException(String jvmId, long timeOut) throws IOException, InterruptedException, JMSException {
+    public void getResponseExitOnException(String jvmId, long timeOutMillis) throws IOException, InterruptedException, JMSException {
         boolean exit=false;
         for(RemoteJvm jvm : getMatchingJvms(jvmId)){
-            Object o = jvm.getResponse(timeOut);
+            Object o = jvm.getResponse(timeOutMillis);
 
             if(o==null){
                 System.out.println(Bash.ANSI_RED+"Timeout!"+Bash.ANSI_RESET);

@@ -14,6 +14,8 @@ import vendor.redis.RedisJvmFactory;
 import javax.jms.JMSException;
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+
 import static global.Utils.myIp;
 
 
@@ -135,7 +137,8 @@ public class ClusterManager implements Serializable {
         for (ClusterContainer cluster : clusters) {
             for (BenchMark benchMark : benchManager.getBenchMarks()) {
                 if(benchMark.getWarmup()!=0){
-                    cluster.getResponseExitOnException(benchMark.getDriver(), benchMark.getWarmup()+120);
+                    long timout = TimeUnit.SECONDS.toMillis(benchMark.getWarmup()+120);
+                    cluster.getResponseExitOnException(benchMark.getDriver(), timout);
                 }
             }
         }
@@ -155,7 +158,8 @@ public class ClusterManager implements Serializable {
                 cluster.runBench(benchMark.getDriver(), benchMark.getId(), benchMark.getDuration());
             }
         }
-        getClusterResponses(clusters, benchManager, maxDuration);
+        long timout = TimeUnit.SECONDS.toMillis(maxDuration+120);
+        getClusterResponses(clusters, benchManager, timout);
     }
 
     public void cleanupBench(String id, BenchManager benchManager) throws InterruptedException, JMSException, IOException {
@@ -181,8 +185,6 @@ public class ClusterManager implements Serializable {
 
                 String info = cluster.getClusterId()+" "+"M"+cluster.getMemberCount()+"C"+cluster.getClientCount()+" "+cluster.getVersionsString()+" "+benchMark.getId()+" "+benchMark.getClazz()+" "+benchMark.getNumber();
                 String meta = benchMark.getMetaData();
-
-                System.out.println(info+" "+meta);
 
                 cluster.writeMetaDataCmd(benchMark.getDriver(), benchMark.getId(), info+" "+meta);
             }

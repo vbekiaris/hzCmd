@@ -1,5 +1,6 @@
 package local.bench;
 
+import global.Utils;
 import local.properties.OrderedProperties;
 
 import java.io.FileInputStream;
@@ -94,6 +95,7 @@ public class BenchManager {
         for (BenchMark benchMark : benchMarks.values()) {
             str+=benchMark+"\n";
         }
+        str = Utils.removeLastChar(str);
         return str;
     }
 
