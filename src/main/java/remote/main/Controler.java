@@ -13,6 +13,10 @@ import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
 import java.util.Enumeration;
 import java.util.Properties;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import remote.bench.BenchManager;
 import global.BenchType;
@@ -29,7 +33,7 @@ public abstract class Controler{
 
     public final NodeType type;
 
-    //private ExecutorService executor = Executors.newFixedThreadPool(5);
+    private ExecutorService executor = Executors.newFixedThreadPool(3);
 
 
     public Controler(NodeType type) throws Exception {
@@ -80,12 +84,13 @@ public abstract class Controler{
     }
 
     public void warmupBench(MessageProducer replyProducer, String id, int seconds){
-        benchManager.warmup(replyProducer, id, seconds);
+        //benchManager.warmup(replyProducer, id, seconds);
+        executor.submit(new WarmupRunner(replyProducer, id, seconds));
     }
 
     public void runBench(MessageProducer replyProducer, String id, int seconds){
-        benchManager.bench(replyProducer, id, seconds);
-        //executor.submit(new BenchRunner(taskId, seconds, replyProducer));
+        //benchManager.bench(replyProducer, id, seconds);
+        executor.submit(new BenchRunner(replyProducer, id, seconds));
     }
 
     public void cleanup(MessageProducer replyProducer, String id) {
@@ -110,6 +115,40 @@ public abstract class Controler{
             } catch (Exception e) {
                 Utils.recordeException(e);
             }
+        }
+    }
+
+    private class WarmupRunner implements Callable<Object> {
+        private MessageProducer replyProducer;
+        private String id;
+        private int seconds;
+
+        public WarmupRunner(MessageProducer replyProducer, String id, int seconds){
+            this.replyProducer=replyProducer;
+            this.id=id;
+            this.seconds=seconds;
+        }
+
+        public Object call() {
+            benchManager.warmup(replyProducer, id, seconds);
+            return null;
+        }
+    }
+
+    private class BenchRunner implements Callable<Object> {
+        private MessageProducer replyProducer;
+        private String id;
+        private int seconds;
+
+        public BenchRunner(MessageProducer replyProducer, String id, int seconds){
+            this.replyProducer=replyProducer;
+            this.id=id;
+            this.seconds=seconds;
+        }
+
+        public Object call() {
+            benchManager.bench(replyProducer, id, seconds);
+            return null;
         }
     }
 
