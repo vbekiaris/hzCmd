@@ -101,7 +101,6 @@ public abstract class Controler{
     public void run() throws Exception {
         while (true){
             try {
-                System.out.println("run");
                 Object obj = MQ.receiveObj(Q);
                 MessageProducer replyProducer = MQ.getReplyProducer();
 
