@@ -243,40 +243,12 @@ public abstract class RemoteJvm implements Serializable {
         return box.jstack(dir, pid, file);
     }
 
-
-    public String findException() throws IOException, InterruptedException {
-        return box.find(dir, "exception.txt");
-    }
-
-    public String findHprof() throws IOException, InterruptedException {
-        return box.find(dir, "*.hprof");
-    }
-
-    public String findOOME() throws IOException, InterruptedException {
-        return box.find(dir, "*.oome");
-    }
-
-    public String findHsError() throws IOException, InterruptedException {
-        return box.find(dir, "hs_err_pid*");
-    }
-
     public String findError() throws IOException, InterruptedException {
         return box.findArgs(dir, "-name exception.txt -o -name *.hprof -o -name *.oome -o -name hs_err_pid*");
     }
 
 
     public boolean printErrors() throws IOException, InterruptedException {
-        /*
-        String e = findException();
-        String oom = findOOME();
-        String hprof = findHprof();
-        String hs = findHsError();
-
-        System.out.println(this);
-        return printStringIfNotEmpty(e, Bash.ANSI_RED) | printStringIfNotEmpty(oom, Bash.ANSI_RED) |
-               printStringIfNotEmpty(hprof, Bash.ANSI_RED) | printStringIfNotEmpty(hs, Bash.ANSI_RED);
-        */
-
         String err = findError();
 
         if(err != null && !err.isEmpty()){

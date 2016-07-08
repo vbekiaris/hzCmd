@@ -202,6 +202,12 @@ public class ClusterManager implements Serializable {
                 matching.add(c);
             }
         }
+
+        if(matching.size()==0){
+            System.out.println(Bash.ANSI_RED+"Zero clusters matching regex "+".*"+id+".*" +Bash.ANSI_RESET);
+            System.exit(1);
+        }
+
         return matching;
     }
 

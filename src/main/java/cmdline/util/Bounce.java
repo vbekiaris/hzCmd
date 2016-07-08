@@ -20,11 +20,18 @@ public class Bounce extends Command
     public int restartDelay=10;
 
     @Option(name = "-iterationDelay", description = "next iteration delay second default 30")
-    public int iterationDelay=30;
+    public int iterationDelay=0;
+
+    @Option(name = "-version", description = "new vendor object version to start jvm at, default same version")
+    public String version;
+
+    @Option(name = "-ee", description = "start ee version, default false")
+    public boolean ee=false;
+
 
     public void exe(HzCmd hzCmd) {
         try {
-            hzCmd.bounce(jvmId, iterations, initalDelay, restartDelay, iterationDelay);
+            hzCmd.bounce(jvmId, iterations, initalDelay, restartDelay, iterationDelay, version, ee);
         } catch (Exception e) {
             e.printStackTrace();
         }

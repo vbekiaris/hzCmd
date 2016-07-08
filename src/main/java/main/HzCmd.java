@@ -56,7 +56,7 @@ public class HzCmd implements Serializable {
 
 
         String version=null;
-        if(versions==null || versions.length==0 || versions.length>1){
+        if(versions==null || versions.length==0 ){
             version = cluster.getLastVersion();
         }else{
             version = versions[0];
@@ -84,9 +84,9 @@ public class HzCmd implements Serializable {
 
 
     //getting reply
-    public void restart(String jvmId, String version, boolean ee) throws Exception {
-        for (ClusterContainer c : clusterManager.getClusters(jvmId)) {
-            c.restart(jvmId, version, ee);
+    public void restart(String id, String version, boolean ee) throws Exception {
+        for (ClusterContainer c : clusterManager.getClusters(id)) {
+            c.restart(id, version, ee);
         }
     }
 
@@ -111,7 +111,7 @@ public class HzCmd implements Serializable {
         }
     }
 
-    public void bounce(String id, int iterations, int initialDelaySec, int restartDelaySec, int iterationDelaySec) throws Exception {
+    public void bounce(String id, int iterations, int initialDelaySec, int restartDelaySec, int iterationDelaySec, String version, boolean ee) throws Exception {
 
         if(initialDelaySec!=0) {
             Thread.sleep(initialDelaySec * 1000);
@@ -130,7 +130,11 @@ public class HzCmd implements Serializable {
             }
 
             for (ClusterContainer c : clusterManager.getClusters(id)) {
-                c.restart(id);
+                if(version==null){
+                    c.restart(id);
+                } else {
+                    c.restart(id, version, ee);
+                }
             }
 
             restartEmbeddedObject(id);

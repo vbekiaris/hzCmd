@@ -244,6 +244,12 @@ public class ClusterContainer implements Serializable {
                 matching.add(jvm);
             }
         }
+
+        if(matching.size()==0){
+            System.out.println(Bash.ANSI_RED+"Zero jvm's matching regex "+".*"+jvmId+".*" +Bash.ANSI_RESET);
+            System.exit(1);
+        }
+
         return matching;
     }
 
@@ -338,7 +344,6 @@ public class ClusterContainer implements Serializable {
     public void cleanupBench(String jvmId, String taskId) throws IOException, InterruptedException, JMSException {
         RemoteJvm jvm = getMatchingJvms(jvmId).get(0);
         jvm.cleanupBench(taskId);
-        //getResponseExitOnException(jvm.getId(), TIMEOUT_5MIN);
     }
 
 
