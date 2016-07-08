@@ -130,7 +130,7 @@ public class BenchManager {
         run(replyProducer, id, sec, "warmup");
     }
 
-    public void bench(MessageProducer replyProducer, String id, int sec)   {
+    public void bench(MessageProducer replyProducer, String id, int sec) {
         run(replyProducer, id, sec, "bench");
     }
 
