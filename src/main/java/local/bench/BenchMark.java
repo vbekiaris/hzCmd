@@ -259,12 +259,11 @@ public class BenchMark implements Serializable {
     @Override
     public String toString() {
 
-        String stack = new String();
+        String stack = id+"@class="+clazz +"\n";
         for (List<FieldValue> strings : benchStack) {
             stack+= strings+"\n";
         }
-        return id+"@class="+clazz +"\n"+
-                stack;
+        return stack.trim();
     }
 
 }

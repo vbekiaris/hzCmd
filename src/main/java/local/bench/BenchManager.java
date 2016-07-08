@@ -95,7 +95,8 @@ public class BenchManager {
         for (BenchMark benchMark : benchMarks.values()) {
             str+=benchMark+"\n";
         }
-        str = Utils.removeLastChar(str);
+        //str = Utils.removeLastChar(str);
+        str = str.trim();
         return str;
     }
 
