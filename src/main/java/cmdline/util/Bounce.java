@@ -28,7 +28,7 @@ public class Bounce extends Command
     @Option(name = "-iterationDelay", description = "next iteration delay second default 30")
     public int iterationDelay=0;
 
-    @Option(name = "-version", description = "new vendor object version to start jvm at, default same version")
+    @Option(name = "-v", description = "new vendor object version to start jvm at, default same version")
     public String version;
 
     @Option(name = "-ee", description = "start ee version, default false")
