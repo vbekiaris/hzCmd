@@ -174,7 +174,7 @@ public class BenchManager {
                     int count = benchResults.get(result.benchThread.getId()) - 1;
                     benchResults.put(result.benchThread.getId(), count);
                     if (count==0){
-                        MQ.sendReply(replyProducer, Controler.ID+" "+result.benchThread.toString());
+                        MQ.sendReply(replyProducer, Controler.ID+" "+result.benchThread.getId()+" "+result.benchThread.getClazzName()+" End");
                     }
                 }
 

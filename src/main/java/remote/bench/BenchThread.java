@@ -48,6 +48,10 @@ class BenchThread implements Callable<BenchThreadResult>, Serializable {
         return id;
     }
 
+    public String getClazzName() {
+        return clazzName;
+    }
+
     @Override
     public String toString() {
         return "BenchThread{" +

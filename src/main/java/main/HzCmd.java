@@ -102,42 +102,42 @@ public class HzCmd implements Serializable {
         }
     }
 
-    public void restartEmbeddedObject(String id) throws Exception {
-        for (ClusterContainer c : clusterManager.getClusters(id)) {
-            c.restartEmbeddedObject(id);
+    public void restartEmbeddedObject(String clusterId, String jvmId) throws Exception {
+        for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
+            c.restartEmbeddedObject(jvmId);
         }
-        for (ClusterContainer c : clusterManager.getClusters(id)) {
-            c.getResponseExitOnException(id, Utils.TIMEOUT_10MIN);
+        for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
+            c.getResponseExitOnException(jvmId, Utils.TIMEOUT_10MIN);
         }
     }
 
-    public void bounce(String id, int iterations, int initialDelaySec, int restartDelaySec, int iterationDelaySec, String version, boolean ee) throws Exception {
+    public void bounce(String clusterId, String jvmId,  int iterations, int initialDelaySec, int restartDelaySec, int iterationDelaySec, String version, boolean ee) throws Exception {
 
         if(initialDelaySec!=0) {
             Thread.sleep(initialDelaySec * 1000);
         }
 
         for(int i=0; i<iterations; i++){
-            for (ClusterContainer c : clusterManager.getClusters(id)) {
-                c.kill(id);
+            for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
+                c.kill(jvmId);
             }
-            for (ClusterContainer c : clusterManager.getClusters(id)) {
-                c.printJvmInfo(id);
+            for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
+                c.printJvmInfo(jvmId);
             }
 
             if(restartDelaySec!=0) {
                 Thread.sleep(restartDelaySec * 1000);
             }
 
-            for (ClusterContainer c : clusterManager.getClusters(id)) {
+            for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
                 if(version==null){
-                    c.restart(id);
+                    c.restart(jvmId);
                 } else {
-                    c.restart(id, version, ee);
+                    c.restart(jvmId, version, ee);
                 }
             }
 
-            restartEmbeddedObject(id);
+            restartEmbeddedObject(clusterId, jvmId);
 
             if(iterationDelaySec!=0) {
                 Thread.sleep(iterationDelaySec * 1000);

@@ -1,14 +1,20 @@
 package cmdline.util;
 
 import cmdline.base.Command;
+import com.github.rvesse.airline.annotations.Arguments;
 import com.github.rvesse.airline.annotations.Option;
 import main.HzCmd;
+
+import java.util.List;
 
 @com.github.rvesse.airline.annotations.Command(name = "bounce", description = "bounce jvm's in cluster")
 public class Bounce extends Command
 {
+    @Arguments(description = "jvm id default .*")
+    public List<String> ids;
+
     @Option(name = "-id", description = "default .*")
-    public String jvmId=".*";
+    public String clusterId=".*";
 
     @Option(name = "-iterations", description = "number of iteration default 1")
     public int iterations=1;
@@ -31,7 +37,13 @@ public class Bounce extends Command
 
     public void exe(HzCmd hzCmd) {
         try {
-            hzCmd.bounce(jvmId, iterations, initalDelay, restartDelay, iterationDelay, version, ee);
+            if(ids==null){
+                hzCmd.bounce(clusterId, ".*", iterations, initalDelay, restartDelay, iterationDelay, version, ee);
+            }else{
+                for (String id : ids) {
+                    hzCmd.bounce(clusterId, id, iterations, initalDelay, restartDelay, iterationDelay, version, ee);
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
