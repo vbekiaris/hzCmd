@@ -5,15 +5,23 @@ import com.github.rvesse.airline.annotations.Arguments;
 import com.github.rvesse.airline.annotations.Option;
 import main.HzCmd;
 
+import java.util.List;
+
 @com.github.rvesse.airline.annotations.Command(name = "embeddedRestart", description = "restart embedded vendor object")
 public class RestartEmbedded extends Command
 {
-    @Option(name = "-id", description = "jvm id")
-    public String jvmId=".*";
+    @Arguments(description = "jvm id default .*")
+    public List<String> ids;
 
     public void exe(HzCmd hzCmd) {
         try {
-            hzCmd.restartEmbeddedObject(jvmId);
+            if(ids==null){
+                hzCmd.restartEmbeddedObject(".*");
+            }else{
+                for (String id : ids) {
+                    hzCmd.restartEmbeddedObject(id);
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

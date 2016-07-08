@@ -15,14 +15,14 @@ public  class ClusterInit extends Command {
     @Option(name = "-user", description = "user name to access boxes default ec2-user")
     public String user="ec2-user";
 
-    @Option(name = "-id", description = "set name of cluster")
-    public String id;
-
     @Option(name = "-size", description = "M[0-9]+C[0-9]+  default M4C4")
     public String size="M4C4";
 
     @Option(name = "-boxes", description = "boxes file")
     public String boxes="a.box";
+
+    @Option(name = "-id", description = "set name of cluster")
+    public String id = "HZ";
 
     @Option(name = "-type", description = "cluster tye [HZ|GG|GEM] default HZ" )
     public String type = "HZ";
