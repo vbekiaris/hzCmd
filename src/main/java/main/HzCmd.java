@@ -137,7 +137,7 @@ public class HzCmd implements Serializable {
                 }
             }
 
-            restartEmbeddedObject(clusterId, jvmId);
+            //restartEmbeddedObject(clusterId, jvmId);
 
             if(iterationDelaySec!=0) {
                 Thread.sleep(iterationDelaySec * 1000);
