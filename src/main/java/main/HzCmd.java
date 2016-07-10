@@ -15,6 +15,9 @@ import javax.jms.JMSException;
 import java.io.*;
 import java.util.concurrent.TimeUnit;
 
+//if a newer serilization file exists,  dont write a serlization file,  as the state of the world has moved on.
+//needs time stamp in serlization file.
+
 //print cluster layout info
 
 //better dir struct for bench results
@@ -52,9 +55,6 @@ public class HzCmd implements Serializable {
         cluster.addVersions(versions);
         cluster.setMembersOnlyCount(size.dedicatedMemberBox());
 
-        System.out.print(cluster);
-
-
         String version=null;
         if(versions==null || versions.length==0 ){
             version = cluster.getLastVersion();
@@ -77,6 +77,8 @@ public class HzCmd implements Serializable {
 
         String clientOps = properties.readPropertie(HzCmdProperties.CLIENT_OPS, "");
         cluster.addClients(size.getClientCount(), version, clientOps, cwdFiles);
+
+        System.out.print(cluster);
     }
 
 

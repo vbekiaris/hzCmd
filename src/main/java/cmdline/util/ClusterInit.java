@@ -19,7 +19,7 @@ public  class ClusterInit extends Command {
     public String size="M4C4";
 
     @Option(name = "-boxes", description = "boxes file")
-    public String boxes="a.box";
+    public String boxes;
 
     @Option(name = "-id", description = "set name of cluster")
     public String id = "HZ";

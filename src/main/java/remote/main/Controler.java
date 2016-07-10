@@ -28,6 +28,7 @@ public abstract class Controler{
 
     public static final String ID = System.getProperty(Args.ID.name());
     public static final String Q = System.getProperty(Args.Q.name());
+    public static final String LIB = System.getProperty(Args.VENDOR_LIB.name());
 
     private static final String jvmPidId = ManagementFactory.getRuntimeMXBean().getName();
 
@@ -47,7 +48,7 @@ public abstract class Controler{
             System.out.println("startEmbeddedObject "+replyProducer);
             init(type);
             benchManager = new BenchManager(getVendorObject());
-            MQ.sendReply(replyProducer, ID + " Started on " + InetAddress.getLocalHost().getHostAddress());
+            MQ.sendReply(replyProducer, ID + " Started on " + InetAddress.getLocalHost().getHostAddress() + " " + jvmPidId + " "+LIB);
         }catch (Exception e){
             Utils.recordeException(e);
             MQ.sendReply(replyProducer, e);
@@ -174,6 +175,7 @@ public abstract class Controler{
                 " ID=" + ID +
                 " Q=" + Q +
                 " jvmPidId=" + jvmPidId +
+                " lib=" + LIB +
                 "}";
     }
 }

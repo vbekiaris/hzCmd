@@ -61,7 +61,7 @@ public class BenchManager {
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
             try {
                 benchContainer.writeMetaData(metaData);
-                MQ.sendReply(replyProducer, Controler.ID+" "+benchContainer.getId()+" set");
+                MQ.sendReply(replyProducer, Controler.ID+" "+benchContainer.getId()+" meta data set");
             } catch (Exception e) {
                 try {
                     MQ.sendReply(replyProducer, e);

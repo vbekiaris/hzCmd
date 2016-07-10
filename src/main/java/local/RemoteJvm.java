@@ -79,6 +79,7 @@ public abstract class RemoteJvm implements Serializable {
         jvmArgs += "-D"+Args.MQIP+"="+brokerIP+" ";
         jvmArgs += "-D"+Args.Q+"="+Q+" ";
         jvmArgs += "-D"+Args.ID+"="+id+" ";
+        jvmArgs += "-D"+Args.VENDOR_LIB+"="+vendorLibDir+" ";
         jvmArgs += "-XX:+HeapDumpOnOutOfMemoryError" + " ";
         jvmArgs += "-XX:HeapDumpPath="+id+".hprof" + " ";
         jvmArgs += "-XX:OnOutOfMemoryError=\" date >> " + id + ".oome" + "\" ";
@@ -296,7 +297,7 @@ public abstract class RemoteJvm implements Serializable {
 
     public String toString() {
         boolean running = isRunning();
-        String color = running ? Bash.ANSI_GREEN : Bash.ANSI_RED;
+        String color = running ? Bash.ANSI_GREEN : Bash.ANSI_BLUE;
         return color + "jvm{" +
                 "id=" + id +
                 " running=" + running +
