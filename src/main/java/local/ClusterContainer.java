@@ -392,8 +392,8 @@ public class ClusterContainer implements Serializable {
                 Thread.dumpStack();
                 System.exit(1);
             }
-            if(o instanceof Exception){
-                Exception e = (Exception) o;
+            if(o instanceof Throwable){
+                Throwable e = (Throwable) o;
                 System.out.println(Bash.ANSI_RED + e +e.getCause()+Bash.ANSI_RESET);
                 exit=true;
             }else{

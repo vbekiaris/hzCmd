@@ -34,7 +34,7 @@ class BenchThread implements Callable<BenchThreadResult>, Serializable {
             long sec = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - start);
             System.out.println("thread "+threadNumber+" "+id+" "+clazzName+" finished duration "+sec+" seconds");
 
-        }catch (Exception e) {
+        }catch (Throwable e) {
             return new BenchThreadResult(this, e);
         }
         return new BenchThreadResult(this);
