@@ -20,7 +20,6 @@ import java.util.concurrent.TimeUnit;
 
 //print cluster layout info
 
-//better dir struct for bench results
 
 //for getting the total ops from hdr
 //find . -name *.hgrm | xargs -n1 -I% sh -c 'grep "Total count" % | awk "{print \$7}" | tr -d ] > %.total'
