@@ -35,7 +35,7 @@ public abstract class Bash {
 
     public static boolean findLocalError(String dir) throws IOException, InterruptedException {
 
-        String err =  findArgs(dir, "-name exception.txt -o -name *.hprof -o -name *.oome -o -name hs_err_pid*");
+        String err = findArgs(dir, "-name exception.txt -o -name *.hprof -o -name *.oome -o -name hs_err_pid*");
 
         if (err != null && !err.isEmpty()) {
             System.out.println(Bash.ANSI_RED + err + Bash.ANSI_RESET);
