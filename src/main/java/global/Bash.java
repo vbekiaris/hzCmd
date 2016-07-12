@@ -17,6 +17,8 @@ public abstract class Bash {
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String li_magenta = esc + "[1;35m";
 
+    public static final String gcViewer = "gcviewer-1.34.1.jar";
+
     public static boolean showSSH=false;
 
     public static String killAllJava() throws IOException, InterruptedException {
@@ -101,6 +103,9 @@ public abstract class Bash {
         executeCommand("scp -r " + user + "@" + ip + ":" + from + " " + to + "/");
     }
 
+    public static void chartGcLogs(String dir) throws IOException, InterruptedException{
+        executeCommand("find "+dir+" -name verbosegc.log | xargs -n1 -I% sh -c \"java -jar $(find ~/.m2 -name "+gcViewer+") % %.csv %.png\" ");
+    }
 
 
     public static String executeCommand(String command) throws IOException, InterruptedException {
