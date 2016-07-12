@@ -27,6 +27,22 @@ public abstract class Bash {
         return executeCommand("find " + path + " -name " + file);
     }
 
+    public static String findArgs(String path, String args) throws IOException, InterruptedException {
+        return executeCommand("find " + path + " " + args);
+    }
+
+    public static boolean findLocalError(String dir) throws IOException, InterruptedException {
+
+        String err =  findArgs(dir, "-name exception.txt -o -name *.hprof -o -name *.oome -o -name hs_err_pid*");
+
+        if (err != null && !err.isEmpty()) {
+            System.out.println(Bash.ANSI_RED + err + Bash.ANSI_RESET);
+            return true;
+        }
+        return false;
+    }
+
+
     public static String findShallow(String path, String file) throws IOException, InterruptedException {
         return executeCommand("find " + path + "-maxdepth 1 -name " +file);
     }

@@ -160,8 +160,12 @@ public class HzCmd implements Serializable {
     }
 
     public void download(String dir) throws Exception {
+        boolean errorFound=false;
         for (ClusterContainer c : clusterManager.getClusters()) {
-            c.downlonad(dir);
+            errorFound = errorFound | c.downlonad(dir);
+        }
+        if(errorFound){
+            System.exit(1);
         }
     }
 

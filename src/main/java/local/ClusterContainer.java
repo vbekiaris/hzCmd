@@ -517,10 +517,11 @@ public class ClusterContainer implements Serializable {
         boxes.upload(src, Installer.REMOTE_HZCMD_ROOT_LIB);
     }
 
-    public void downlonad(String destDir) throws IOException, InterruptedException {
+    public boolean downlonad(String destDir) throws IOException, InterruptedException {
         for (Box box : boxes.getBoxList()) {
             box.downlonad(Installer.REMOTE_HZCMD_ROOT+"/*", destDir+"/"+clusterId);
         }
+        return Bash.findLocalError(destDir+"/"+clusterId);
     }
 
     private String toString_memberJvms(){
