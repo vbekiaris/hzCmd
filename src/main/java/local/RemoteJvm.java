@@ -95,7 +95,7 @@ public abstract class RemoteJvm implements Serializable {
 
         if(properties.getBoolean(HzCmdProperties.JFR, "false") && type == NodeType.Member) {
 
-            String jfrArgs = properties.readPropertie(HzCmdProperties.JFR_ARGS, "-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=delay=1m,duration=15m,dumponexit=true");
+            String jfrArgs = properties.readPropertie(HzCmdProperties.JFR_ARGS, "-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=duration=15m,dumponexit=true");
 
             jvmArgs += jfrArgs+",filename="+id+".jfr" + " ";
             //jvmArgs += "-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=name="+id+".jfr,settings=debug.jfc -XX:FlightRecorderOptions=defaultrecording=true,disk=true,maxsize=1g,maxage=1h,dumponexit=true,dumponexitpath=./"+id+".jfr" + " ";
