@@ -55,7 +55,7 @@ public abstract class Controler{
             init(type);
             benchManager = new BenchManager(getVendorObject());
 
-            msg.msg = "Started on " + InetAddress.getLocalHost().getHostAddress() + " " + jvmPidId + " "+LIB;
+            msg.msg = "Started on " + InetAddress.getLocalHost().getHostAddress() +" "+ jvmPidId +" "+ LIB;
             MQ.sendReply(replyProducer, gson.toJson(msg));
         }catch (Exception e){
             Utils.recordeException(e);
