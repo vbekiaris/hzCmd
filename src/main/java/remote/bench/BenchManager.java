@@ -217,7 +217,7 @@ public class BenchManager {
                     int count = benchResults.get(result.benchId) - 1;
                     benchResults.put(result.benchId, count);
                     if (count==0){
-                        result.msg=" End";
+                        result.msg=fileNamePostFix+" End";
                         MQ.sendReply(replyProducer, gson.toJson(result));
                     }
                 }
