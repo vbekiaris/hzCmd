@@ -18,7 +18,6 @@ import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import remote.bench.BenchManager;
 import global.BenchType;
@@ -27,7 +26,7 @@ import remote.command.Cmd;
 public abstract class Controler{
 
     private BenchManager benchManager;
-    private Gson gson = new Gson();
+    private static final Gson GSON = new Gson();
 
     public static final String ID = System.getProperty(Args.ID.name());
     public static final String Q = System.getProperty(Args.Q.name());
@@ -54,14 +53,14 @@ public abstract class Controler{
             System.out.println("startEmbeddedObject "+replyProducer);
             init(type);
             benchManager = new BenchManager(getVendorObject());
-
             msg.msg = "Started on " + InetAddress.getLocalHost().getHostAddress() +" "+ jvmPidId +" "+ LIB;
-            MQ.sendReply(replyProducer, gson.toJson(msg));
+
+            MQ.sendReply(replyProducer, GSON.toJson(msg));
         }catch (Exception e){
             Utils.recordeException(e);
             msg.error=true;
             msg.msg = e.toString();
-            MQ.sendReply(replyProducer, gson.toJson(msg));
+            MQ.sendReply(replyProducer, GSON.toJson(msg));
             throw e;
         }
     }

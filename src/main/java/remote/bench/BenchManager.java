@@ -16,7 +16,7 @@ import java.util.concurrent.*;
 
 public class BenchManager {
 
-    private Gson gson = new Gson();
+    private static final Gson gson = new Gson();
     private Object vendorObject;
     private Map<String, BenchContainer> benchs = new HashMap();
 
@@ -38,7 +38,7 @@ public class BenchManager {
             try {
                 msg.error=true;
                 msg.msg=e.toString();
-                MQ.sendReply(replyProducer, e);
+                MQ.sendReply(replyProducer, gson.toJson(msg));
             } catch (JMSException e2) {}
         }
     }
