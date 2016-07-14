@@ -50,7 +50,6 @@ public abstract class Controler{
         msg.id=ID;
 
         try {
-            System.out.println("startEmbeddedObject "+replyProducer);
             init(type);
             benchManager = new BenchManager(getVendorObject());
             msg.msg = "Started on " + InetAddress.getLocalHost().getHostAddress() +" "+ jvmPidId +" "+ LIB;
