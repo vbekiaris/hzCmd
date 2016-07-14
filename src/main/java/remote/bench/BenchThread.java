@@ -1,13 +1,15 @@
 package remote.bench;
 
+import global.ReplyMsg;
 import remote.bench.marker.BenchMarker;
+import remote.main.Controler;
 
 import javax.jms.MessageProducer;
 import java.io.Serializable;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-class BenchThread implements Callable<BenchThreadResult>, Serializable {
+class BenchThread implements Callable<ReplyMsg>, Serializable {
 
     private BenchMarker benchMarker;
     private Bench bench;
@@ -24,20 +26,27 @@ class BenchThread implements Callable<BenchThreadResult>, Serializable {
         this.threadNumber=threadNumber;
     }
 
-    public BenchThreadResult call() {
+    public ReplyMsg call() {
+        ReplyMsg msg = new ReplyMsg();
+        msg.id=Controler.ID;
+        msg.benchId=id;
+        msg.benchClazz=clazzName;
+        msg.threadId=threadNumber+"";
         try {
             long start = System.currentTimeMillis();
-            System.out.println("thread "+threadNumber+" "+id+" "+clazzName+" started");
+            System.out.println(msg+" started");
 
             benchMarker.bench(bench);
 
             long sec = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - start);
-            System.out.println("thread "+threadNumber+" "+id+" "+clazzName+" finished duration "+sec+" seconds");
+            System.out.println(msg+" finished duration "+sec+" seconds");
 
         }catch (Throwable e) {
-            return new BenchThreadResult(this, e);
+            msg.error=true;
+            msg.msg=e.toString();
+            return  msg;
         }
-        return new BenchThreadResult(this);
+        return msg;
     }
 
     public void setReplyProducer(MessageProducer replyProducer) {
@@ -46,10 +55,6 @@ class BenchThread implements Callable<BenchThreadResult>, Serializable {
 
     public String getId(){
         return id;
-    }
-
-    public String getClazzName() {
-        return clazzName;
     }
 
     @Override

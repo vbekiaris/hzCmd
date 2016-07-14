@@ -55,82 +55,114 @@ public class BenchManager {
     }
 
     public void setThreadCount(MessageProducer replyProducer, String id, int threadCount) {
+        ReplyMsg msg = new ReplyMsg();
+        msg.id=Controler.ID;
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            msg.benchId=benchContainer.getId();
+            msg.msg="threadCount="+threadCount;
             try {
                 benchContainer.createBenchObjects(threadCount);
-                MQ.sendReply(replyProducer, Controler.ID+" "+benchContainer.getId()+" threadCount="+threadCount);
+                MQ.sendReply(replyProducer, gson.toJson(msg));
             } catch (Exception e) {
                 try {
-                    MQ.sendReply(replyProducer, e);
+                    msg.error=true;
+                    msg.msg=e.toString();
+                    MQ.sendReply(replyProducer, gson.toJson(msg));
                 } catch (JMSException e2) {}
             }
         }
     }
 
     public void writeMetaData(MessageProducer replyProducer, String id, String metaData) {
+        ReplyMsg msg = new ReplyMsg();
+        msg.id=Controler.ID;
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            msg.benchId=benchContainer.getId();
+            msg.msg="meta data set";
             try {
                 benchContainer.writeMetaData(metaData);
-                MQ.sendReply(replyProducer, Controler.ID+" "+benchContainer.getId()+" meta data set");
+                MQ.sendReply(replyProducer, gson.toJson(msg));
             } catch (Exception e) {
                 try {
-                    MQ.sendReply(replyProducer, e);
+                    msg.error=true;
+                    msg.msg=e.toString();
+                    MQ.sendReply(replyProducer, gson.toJson(msg));
                 } catch (JMSException e2) {}
             }
         }
     }
 
     public void setField(MessageProducer replyProducer, String id, String field, String value) {
+        ReplyMsg msg = new ReplyMsg();
+        msg.id=Controler.ID;
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            msg.benchId=benchContainer.getId();
+            msg.msg=field + " " + value;
             try {
                 benchContainer.setField(field, value);
-                MQ.sendReply(replyProducer, Controler.ID+" " + benchContainer.getId() + " " + field + " " + value);
+                MQ.sendReply(replyProducer, gson.toJson(msg));
             } catch (Exception e) {
                 try {
-                    MQ.sendReply(replyProducer, e);
+                    msg.error=true;
+                    msg.msg=e.toString();
+                    MQ.sendReply(replyProducer, gson.toJson(msg));
                 } catch (JMSException e2) {}
             }
         }
     }
 
     public void init(MessageProducer replyProducer, String id){
+        ReplyMsg msg = new ReplyMsg();
+        msg.id=Controler.ID;
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            msg.benchId=benchContainer.getId();
+            msg.msg="init end";
             try {
                 benchContainer.init();
-                MQ.sendReply(replyProducer, Controler.ID+ " " + benchContainer.getId() + " init end");
+                MQ.sendReply(replyProducer, gson.toJson(msg));
             } catch (Exception e) {
                 try {
-                    MQ.sendReply(replyProducer, e);
+                    msg.error=true;
+                    msg.msg=e.toString();
+                    MQ.sendReply(replyProducer, gson.toJson(msg));
                 } catch (JMSException e2) {}
             }
         }
     }
 
     public void cleanUp(MessageProducer replyProducer, String id){
-        System.out.println(Controler.ID+" "+" cleanUp "+id);
+        ReplyMsg msg = new ReplyMsg();
+        msg.id=Controler.ID;
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            msg.benchId=benchContainer.getId();
+            msg.msg="cleanUp end";
             try {
                 benchContainer.cleanUp();
-                System.out.println(Controler.ID+" "+benchContainer.getId()+" cleanUp end");
-                MQ.sendReply(replyProducer, Controler.ID + " " + benchContainer.getId() + " cleanUp end");
+                MQ.sendReply(replyProducer, gson.toJson(msg));
             } catch (Exception e) {
                 try {
-                    MQ.sendReply(replyProducer, e);
+                    msg.error=true;
+                    msg.msg=e.toString();
+                    MQ.sendReply(replyProducer, gson.toJson(msg));
                 } catch (JMSException e2) {}
             }
         }
-        System.out.println(Controler.ID+" "+" cleanUp end");
-        System.out.println(Controler.ID+" "+" cleanUp "+getMatchingBenchContainers(id));
     }
 
     public void setBenchType(MessageProducer replyProducer, String id, BenchType type, long expectedIntervalNanos, boolean allowException, String outFile){
+        ReplyMsg msg = new ReplyMsg();
+        msg.id=Controler.ID;
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            msg.benchId=benchContainer.getId();
+            msg.msg="BenchType="+type+" intervalNanos="+expectedIntervalNanos+" throwException="+allowException+" outFile="+outFile;
             try {
                 benchContainer.setBenchType(type, expectedIntervalNanos, allowException, outFile);
-                MQ.sendReply(replyProducer, Controler.ID+" "+benchContainer.getId()+" BenchType="+type+" intervalNanos="+expectedIntervalNanos+" throwException="+allowException+" outFile="+outFile);
+                MQ.sendReply(replyProducer, gson.toJson(msg));
             } catch (Exception e) {
                 try {
-                    MQ.sendReply(replyProducer, e);
+                    msg.error=true;
+                    msg.msg=e.toString();
+                    MQ.sendReply(replyProducer, gson.toJson(msg));
                 } catch (JMSException e2) {}
             }
         }
@@ -161,7 +193,7 @@ public class BenchManager {
         }
 
         ExecutorService threadPool = Executors.newFixedThreadPool(threads.size());
-        CompletionService<BenchThreadResult> service = new ExecutorCompletionService(threadPool);
+        CompletionService<ReplyMsg> service = new ExecutorCompletionService(threadPool);
 
         for (BenchThread thread : threads) {
             service.submit(thread);
@@ -170,21 +202,22 @@ public class BenchManager {
 
         for (int i = 0; i < threads.size(); i++) {
             try {
-                Future<BenchThreadResult> future = service.take();
-                BenchThreadResult result = future.get();
+                Future<ReplyMsg> future = service.take();
+                ReplyMsg result = future.get();
 
-                if (result.exception != null) {
+                if (result.error) {
                     try {
-                        MQ.sendReply(replyProducer, result.exception);
+                        MQ.sendReply(replyProducer, gson.toJson(result));
                     } catch (JMSException e1) {
                         e1.printStackTrace();
                     }
                 }
                 else {
-                    int count = benchResults.get(result.benchThread.getId()) - 1;
-                    benchResults.put(result.benchThread.getId(), count);
+                    int count = benchResults.get(result.benchId) - 1;
+                    benchResults.put(result.benchId, count);
                     if (count==0){
-                        MQ.sendReply(replyProducer, Controler.ID+" "+result.benchThread.getId()+" "+result.benchThread.getClazzName()+" End");
+                        result.msg=" End";
+                        MQ.sendReply(replyProducer, gson.toJson(result));
                     }
                 }
 
