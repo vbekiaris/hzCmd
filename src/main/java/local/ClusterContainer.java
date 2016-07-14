@@ -399,6 +399,7 @@ public class ClusterContainer implements Serializable {
             }
         }
         if(exit){
+            System.out.println(Bash.ANSI_RED+"EXIT 1"+Bash.ANSI_RESET);
             System.exit(1);
         }
     }
