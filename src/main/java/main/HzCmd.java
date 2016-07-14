@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 //JSON msg format,
 //Logging System / std Out put to file
+//https://github.com/fusesource/jansi  terminal colors
 
 //for getting the total ops from hdr
 //find . -name *.hgrm | xargs -n1 -I% sh -c 'grep "Total count" % | awk "{print \$7}" | tr -d ] > %.total'
