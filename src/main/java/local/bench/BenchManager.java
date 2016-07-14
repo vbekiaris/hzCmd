@@ -1,6 +1,5 @@
 package local.bench;
 
-import global.Utils;
 import local.properties.OrderedProperties;
 
 import java.io.FileInputStream;
@@ -62,17 +61,6 @@ public class BenchManager {
         return false;
     }
 
-
-    public boolean isEmpty() {
-        boolean empty=true;
-        for (BenchMark benchMark : benchMarks.values()) {
-            if ( ! benchMark.isEmpty() ){
-                return false;
-            }
-        }
-        return empty;
-    }
-
     public void popBenchMarks(){
         for (BenchMark benchMark : benchMarks.values()) {
             benchMark.popBenchMark();
@@ -81,11 +69,6 @@ public class BenchManager {
 
     public Collection<BenchMark> getBenchMarks(){
         return benchMarks.values();
-    }
-
-
-    public String getBenchFileName() {
-        return file;
     }
 
 
