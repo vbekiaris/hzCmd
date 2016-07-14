@@ -395,7 +395,7 @@ public class ClusterContainer implements Serializable {
                 ReplyMsg msg = gson.fromJson((String) o, ReplyMsg.class);
                 System.out.println(msg);
 
-                if(msg.error=true){
+                if(msg.error==true){
                     exit=true;
                 }
             }
