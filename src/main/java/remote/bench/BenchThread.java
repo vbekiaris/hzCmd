@@ -31,7 +31,6 @@ class BenchThread implements Callable<ReplyMsg>, Serializable {
         msg.id=Controler.ID;
         msg.benchId=id;
         msg.benchClazz=clazzName;
-        msg.threadId=threadNumber+"";
         try {
             long start = System.currentTimeMillis();
             System.out.println(msg+" started");
@@ -43,6 +42,7 @@ class BenchThread implements Callable<ReplyMsg>, Serializable {
 
         }catch (Throwable e) {
             msg.error=true;
+            msg.threadId=threadNumber+"";
             msg.msg=e.toString();
             return  msg;
         }

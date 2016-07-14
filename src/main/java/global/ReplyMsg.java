@@ -14,8 +14,8 @@ public class ReplyMsg {
         return color +
                 (id==null ? "" : id+" ")+
                 (benchId==null ? "" : benchId+" ")+
-                (threadId==null ? "" : threadId+" ")+
                 (benchClazz==null ? "": benchClazz+" ")+
+                (threadId==null ? "" : "threadid="+threadId+" ")+
                 (msg==null ? "":msg+" ")+
                 Bash.ANSI_RESET;
     }
