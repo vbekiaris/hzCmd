@@ -514,7 +514,7 @@ public class ClusterContainer implements Serializable {
         for (Box box : boxes.getBoxList()) {
             box.downlonad(Installer.REMOTE_HZCMD_ROOT+"/*", destDir+"/"+clusterId);
         }
-        Bash.executeCommand("gcViewerPics "+destDir+"/"+clusterId);
+        Bash.executeCommandWithExitCode("gcViewerPics "+destDir+"/"+clusterId);
         return Bash.findLocalError(destDir+"/"+clusterId);
     }
 
