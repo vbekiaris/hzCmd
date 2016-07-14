@@ -15,7 +15,7 @@ public class ReplyMsg {
                 (id==null ? "" : id+" ")+
                 (benchId==null ? "" : benchId+" ")+
                 (benchClazz==null ? "": benchClazz+" ")+
-                (threadId==null ? "" : "threadid="+threadId+" ")+
+                (threadId==null ? "" : "threadId="+threadId+" ")+
                 (msg==null ? "":msg+" ")+
                 Bash.ANSI_RESET;
     }
