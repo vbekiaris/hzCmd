@@ -29,6 +29,7 @@ public class BenchManager {
         msg.id=Controler.ID;
         msg.benchId=benchId;
         msg.benchClazz=clazz;
+        msg.error=false;
         try {
             BenchContainer benchContainer = new BenchContainer(vendorObject, benchId, clazz);
             benchs.put(benchId, benchContainer);
