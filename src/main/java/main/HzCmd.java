@@ -20,6 +20,8 @@ import java.util.concurrent.TimeUnit;
 
 //print cluster layout info
 
+//JSON msg format,
+//Logging System / std Out put to file
 
 //for getting the total ops from hdr
 //find . -name *.hgrm | xargs -n1 -I% sh -c 'grep "Total count" % | awk "{print \$7}" | tr -d ] > %.total'
@@ -62,7 +64,7 @@ public class HzCmd implements Serializable {
         }
         if(version==null){
             System.out.println(Bash.ANSI_RED + "No version" + Bash.ANSI_RESET);
-            return;
+            System.exit(1);
         }
 
 

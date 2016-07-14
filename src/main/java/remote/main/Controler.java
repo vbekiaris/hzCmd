@@ -1,7 +1,9 @@
 package remote.main;
 
+import com.google.gson.Gson;
 import global.Args;
 import global.NodeType;
+import global.ReplyMsg;
 import mq.MQ;
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
@@ -25,6 +27,7 @@ import remote.command.Cmd;
 public abstract class Controler{
 
     private BenchManager benchManager;
+    private Gson gson = new Gson();
 
     public static final String ID = System.getProperty(Args.ID.name());
     public static final String Q = System.getProperty(Args.Q.name());
@@ -44,14 +47,21 @@ public abstract class Controler{
     }
 
     public void startEmbeddedObject(MessageProducer replyProducer) throws Exception{
+        ReplyMsg msg = new ReplyMsg();
+        msg.id=ID;
+
         try {
             System.out.println("startEmbeddedObject "+replyProducer);
             init(type);
             benchManager = new BenchManager(getVendorObject());
-            MQ.sendReply(replyProducer, ID + " Started on " + InetAddress.getLocalHost().getHostAddress() + " " + jvmPidId + " "+LIB);
+
+            msg.msg = "Started on " + InetAddress.getLocalHost().getHostAddress() + " " + jvmPidId + " "+LIB;
+            MQ.sendReply(replyProducer, gson.toJson(msg));
         }catch (Exception e){
             Utils.recordeException(e);
-            MQ.sendReply(replyProducer, e);
+            msg.error=true;
+            msg.msg = e.toString();
+            MQ.sendReply(replyProducer, gson.toJson(msg));
             throw e;
         }
     }
@@ -85,12 +95,10 @@ public abstract class Controler{
     }
 
     public void warmupBench(MessageProducer replyProducer, String id, int seconds){
-        //benchManager.warmup(replyProducer, id, seconds);
         executor.submit(new WarmupRunner(replyProducer, id, seconds));
     }
 
     public void runBench(MessageProducer replyProducer, String id, int seconds){
-        //benchManager.bench(replyProducer, id, seconds);
         executor.submit(new BenchRunner(replyProducer, id, seconds));
     }
 

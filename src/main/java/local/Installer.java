@@ -40,6 +40,7 @@ public abstract class Installer {
         uploadStuff.add(Bash.find(M2_Repo, "hzCmd-bench-1.0.0.jar\n"));
         uploadStuff.add(Bash.find(M2_Repo, "cache-api-1.0.0.jar"));
 
+        uploadStuff.add(Bash.find(M2_Repo, "gson-2.7.jar"));
         uploadStuff.add(Bash.find(M2_Repo, "jms-api-1.1-rev-1.jar"));
         uploadStuff.add(Bash.find(M2_Repo, "activemq-client-5.13.3.jar"));
         uploadStuff.add(Bash.find(M2_Repo, "geronimo-j2ee-management_1.1_spec-1.0.1.jar"));

@@ -1,6 +1,8 @@
 package remote.bench;
 
+import com.google.gson.Gson;
 import global.BenchType;
+import global.ReplyMsg;
 import mq.MQ;
 import remote.main.Controler;
 
@@ -14,6 +16,7 @@ import java.util.concurrent.*;
 
 public class BenchManager {
 
+    private Gson gson = new Gson();
     private Object vendorObject;
     private Map<String, BenchContainer> benchs = new HashMap();
 
@@ -22,12 +25,19 @@ public class BenchManager {
     }
 
     public void loadClass(MessageProducer replyProducer, String benchId, String clazz) {
+        ReplyMsg msg = new ReplyMsg();
+        msg.id=Controler.ID;
+        msg.benchId=benchId;
+        msg.benchClazz=clazz;
         try {
             BenchContainer benchContainer = new BenchContainer(vendorObject, benchId, clazz);
             benchs.put(benchId, benchContainer);
-            MQ.sendReply(replyProducer, Controler.ID+" "+benchContainer.getId()+" "+clazz+" loaded");
+            msg.msg="Loaded";
+            MQ.sendReply(replyProducer, gson.toJson(msg));
         } catch (Exception e) {
             try {
+                msg.error=true;
+                msg.msg=e.toString();
                 MQ.sendReply(replyProducer, e);
             } catch (JMSException e2) {}
         }

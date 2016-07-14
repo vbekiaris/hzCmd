@@ -2,10 +2,8 @@ package local;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import global.Bash;
-import global.NodeType;
-import global.BenchType;
-import global.Utils;
+import com.google.gson.Gson;
+import global.*;
 
 import javax.jms.JMSException;
 import java.io.*;
@@ -388,14 +386,23 @@ public class ClusterContainer implements Serializable {
 
             if(o==null){
                 System.out.println(Bash.ANSI_RED+"Timeout!"+Bash.ANSI_RESET);
-                //new Exception().printStackTrace();
                 Thread.dumpStack();
                 System.exit(1);
             }
-            if(o instanceof Throwable){
+            if(o instanceof String){
+                Gson gson = new Gson();
+                ReplyMsg msg = gson.fromJson((String) o, ReplyMsg.class);
+                System.out.println(msg);
+
+                if(msg.error=true){
+                    exit=true;
+                }
+            }
+            //OLD
+            else if(o instanceof Throwable){
                 Throwable e = (Throwable) o;
                 System.out.println(Bash.ANSI_RED + e +e.getCause()+Bash.ANSI_RESET);
-                exit=true;
+
             }else{
                 System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
             }
@@ -434,6 +441,12 @@ public class ClusterContainer implements Serializable {
 
         }else{
             System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
+        }
+
+        if(o instanceof String){
+            Gson gson = new Gson();
+            ReplyMsg msg = gson.fromJson((String) o, ReplyMsg.class);
+            System.out.println(msg);
         }
     }
 
