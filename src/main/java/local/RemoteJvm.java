@@ -95,7 +95,8 @@ public abstract class RemoteJvm implements Serializable {
 
         if(properties.getBoolean(HzCmdProperties.JFR, "false") && type == NodeType.Member) {
 
-            String jfrArgs = properties.readPropertie(HzCmdProperties.JFR_ARGS, "-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=duration=15m,dumponexit=true");
+            //String jfrArgs = properties.readPropertie(HzCmdProperties.JFR_ARGS, "-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=duration=15m,dumponexit=true");
+            String jfrArgs = properties.readPropertie(HzCmdProperties.JFR_ARGS, "-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=duration=15m");
 
             jvmArgs += jfrArgs+",filename="+id+".jfr" + " ";
             //jvmArgs += "-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=name="+id+".jfr,settings=debug.jfc -XX:FlightRecorderOptions=defaultrecording=true,disk=true,maxsize=1g,maxage=1h,dumponexit=true,dumponexitpath=./"+id+".jfr" + " ";
@@ -213,7 +214,7 @@ public abstract class RemoteJvm implements Serializable {
     }
 
     public void warmupBench(String taskId, int seconds) throws IOException, InterruptedException, JMSException {
-        MQ.sendObj(Q, new WarmupCmd(taskId, seconds) );
+        MQ.sendObj(Q, new WarmupCmd(taskId, seconds));
     }
 
     public void runBench(String taskId, int seconds) throws IOException, InterruptedException, JMSException {
