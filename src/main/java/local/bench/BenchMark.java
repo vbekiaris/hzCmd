@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Stack;
 
 import static global.Utils.cartesianProduct;
+import static global.Utils.removeLastChar;
+import static global.Utils.timeStringToNanos;
 
 public class BenchMark implements Serializable {
 
@@ -246,8 +248,9 @@ public class BenchMark implements Serializable {
         return Integer.parseInt(getFieldValue(currentBench, HzCmdProperties.BENCH_DURATION) );
     }
 
-    public int getInterval() {
-        return Integer.parseInt(getFieldValue(currentBench, HzCmdProperties.BENCH_INTERVAL) );
+    public long getInterval() {
+        String interval = getFieldValue(currentBench, HzCmdProperties.BENCH_INTERVAL);
+        return timeStringToNanos(interval);
     }
 
     public String getMetaData(){

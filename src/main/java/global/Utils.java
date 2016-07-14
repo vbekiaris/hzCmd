@@ -116,7 +116,7 @@ public abstract class Utils {
         return resultLists;
     }
 
-    public static long someTypeofStringTimeUtilMethod(String timeString) {
+    public static long timeStringToNanos(String timeString) {
 
             Pattern sec = Pattern.compile("[0-9]+s");
             Pattern mil = Pattern.compile("[0-9]+m");
@@ -145,7 +145,6 @@ public abstract class Utils {
             if (matcher.find()) {
                 timeString = timeString.replaceAll("s|m|u|n", "");
                 return Long.parseLong(timeString);
-
             }
 
             return TimeUnit.MILLISECONDS.toNanos(Long.parseLong(timeString));
