@@ -113,7 +113,6 @@ public abstract class Controler{
                 MessageProducer replyProducer = MQ.getReplyProducer();
 
                 System.out.println("MQ msg in = " + obj);
-                System.out.println("MQ replyProducer = " + replyProducer);
 
                 if (obj instanceof Cmd) {
                     ((Cmd) obj).exicute(this, replyProducer);
