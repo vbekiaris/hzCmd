@@ -20,7 +20,6 @@ public class HdrMarker extends BenchMarker {
 
     public void preBench(String fileName){
         outputFileName = fileName;
-        System.out.println("preBench "+outputFileName);
         histogram.reset();
         histogram.setStartTimeStamp(System.nanoTime());
     }
