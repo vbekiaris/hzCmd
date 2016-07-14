@@ -25,6 +25,7 @@ public class CmdLine {
                 .withCommands(
                         Help.class,
                         Aws.class,
+                        Jfr.class,
 
                         SetMemberJvmOps.class, SetClientJvmOps.class, SetJhic.class, SetJhicArgs.class,
                         ClusterInit.class,
