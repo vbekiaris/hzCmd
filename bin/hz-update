@@ -9,7 +9,7 @@ git -C "${HZ_CMD_SRC}" branch
 pull=$(git -C "${HZ_CMD_SRC}" pull || true)
 echo ${pull}
 
-if [ "${pull}" == "Already up-to-date." && -z "$2" ] ; then
+if [ "${pull}" == "Already up-to-date." ] && [ -z "$2" ] ; then
   exit 0
 fi
 
