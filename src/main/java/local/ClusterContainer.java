@@ -379,7 +379,6 @@ public class ClusterContainer implements Serializable {
     }
 
 
-
     public void getResponseExitOnException(String jvmId, long timeOutMillis) throws IOException, InterruptedException, JMSException {
         boolean exit=false;
         for(RemoteJvm jvm : getMatchingJvms(jvmId)){
@@ -390,14 +389,13 @@ public class ClusterContainer implements Serializable {
                 Thread.dumpStack();
                 System.exit(1);
             }
-            if(o instanceof String){
-                Gson gson = new Gson();
-                ReplyMsg msg = gson.fromJson((String) o, ReplyMsg.class);
-                System.out.println(msg);
 
-                if(msg.error==true){
-                    exit=true;
-                }
+            Gson gson = new Gson();
+            ReplyMsg msg = gson.fromJson((String) o, ReplyMsg.class);
+            System.out.println(msg);
+
+            if(msg.error==true){
+                exit=true;
             }
         }
         if(exit){
@@ -415,32 +413,20 @@ public class ClusterContainer implements Serializable {
             System.out.println(Bash.ANSI_RED+"Timeout!"+Bash.ANSI_RESET);
             System.exit(1);
         }
-        if(o instanceof String){
-            Gson gson = new Gson();
-            ReplyMsg msg = gson.fromJson((String) o, ReplyMsg.class);
-            System.out.println(msg);
 
-            if(msg.error=true){
-                System.exit(1);
-            }
+        Gson gson = new Gson();
+        ReplyMsg msg = gson.fromJson((String) o, ReplyMsg.class);
+        System.out.println(msg);
+
+        if(msg.error=true){
+            System.exit(1);
         }
     }
 
     private void printResponse(Object o){
-        if(o instanceof Exception){
-            Exception e = (Exception) o;
-            System.out.println(Bash.ANSI_RED + e +e.getCause()+Bash.ANSI_RESET);
-            e.printStackTrace();
-
-        }else{
-            System.out.println(Bash.ANSI_GREEN + o + Bash.ANSI_RESET);
-        }
-
-        if(o instanceof String){
-            Gson gson = new Gson();
-            ReplyMsg msg = gson.fromJson((String) o, ReplyMsg.class);
-            System.out.println(msg);
-        }
+        Gson gson = new Gson();
+        ReplyMsg msg = gson.fromJson((String) o, ReplyMsg.class);
+        System.out.println(msg);
     }
 
 

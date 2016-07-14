@@ -77,7 +77,7 @@ public abstract class MQ {
 
 
     public static void sendObj(String queueName, Serializable obj) throws JMSException {
-        System.out.println("Send "+" "+queueName+" "+obj);
+        //System.out.println("Send "+" "+queueName+" "+obj);
         MessageProducer producer = getMessageProducer(queueName);
         ObjectMessage msg = session.createObjectMessage();
         msg.setJMSReplyTo(replyToDestination);
