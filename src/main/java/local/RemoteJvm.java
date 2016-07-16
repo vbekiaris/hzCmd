@@ -7,7 +7,6 @@ import local.properties.HzCmdProperties;
 import mq.MQ;
 import global.BenchType;
 import remote.command.*;
-import remote.command.bench.*;
 
 import javax.jms.JMSException;
 import java.io.IOException;
@@ -229,6 +228,11 @@ public abstract class RemoteJvm implements Serializable {
         MQ.sendObj(Q, new SetFieldCmd(taskId, field, value) );
     }
 
+
+    public void removeBench(String taskId) throws IOException, InterruptedException, JMSException {
+        MQ.sendObj(Q, new RemoveBenchCmd(taskId) );
+    }
+
     public Object getResponse(long timeout) throws IOException, InterruptedException, JMSException {
         return MQ.receivReply(timeout);
     }
@@ -321,4 +325,5 @@ public abstract class RemoteJvm implements Serializable {
         int p = Integer.parseInt(pid);
         this.pid = p;
     }
+
 }

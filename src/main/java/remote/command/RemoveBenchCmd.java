@@ -1,7 +1,7 @@
-package remote.command.bench;
+package remote.command;
 
+import global.BenchType;
 import remote.main.Controler;
-import remote.command.Cmd;
 
 import javax.jms.MessageProducer;
 import java.io.Serializable;
@@ -9,23 +9,20 @@ import java.io.Serializable;
 /**
  * Created by danny on 22/01/2016.
  */
-public class InitCmd implements Cmd, Serializable{
+public class RemoveBenchCmd implements Cmd, Serializable{
 
     private String taskId;
 
-    public InitCmd(String taskId){
+    public RemoveBenchCmd(String taskId){
         this.taskId = taskId;
     }
 
     public void exicute(Controler c, MessageProducer replyProducer){
-
-        c.initBench(replyProducer, taskId);
+        c.removeBench(replyProducer, taskId);
     }
 
     @Override
     public String toString() {
-        return "InitCmd{" +
-                "taskId='" + taskId + '\'' +
-                '}';
+        return "RemoveBenchCmd{ taskId='" + taskId + '\'' + '}';
     }
 }

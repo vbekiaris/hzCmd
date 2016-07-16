@@ -1,4 +1,4 @@
-package remote.command.bench;
+package remote.command;
 
 import remote.main.Controler;
 import remote.command.Cmd;
@@ -9,23 +9,26 @@ import java.io.Serializable;
 /**
  * Created by danny on 22/01/2016.
  */
-public class CleanUpCmd implements Cmd, Serializable{
+public class ThreadCountCmd implements Cmd, Serializable{
 
     private String taskId;
+    private int threadCount;
 
-    public CleanUpCmd(String taskId){
+    public ThreadCountCmd(String taskId, int threadCount){
         this.taskId = taskId;
+        this.threadCount = threadCount;
     }
 
     public void exicute(Controler c, MessageProducer replyProducer){
 
-        c.cleanup(replyProducer, taskId);
+        c.setThreadCount(replyProducer, taskId, threadCount);
     }
 
     @Override
     public String toString() {
-        return "CleanUpCmd{" +
+        return "ThreadCountCmd{" +
                 "taskId='" + taskId + '\'' +
+                ", threadCount=" + threadCount +
                 '}';
     }
 }

@@ -1,4 +1,4 @@
-package remote.command.bench;
+package remote.command;
 
 import remote.main.Controler;
 import remote.command.Cmd;
@@ -9,25 +9,25 @@ import java.io.Serializable;
 /**
  * Created by danny on 22/01/2016.
  */
-public class WarmupCmd implements Cmd, Serializable{
+public class MetaDataCmd implements Cmd, Serializable{
 
     private String taskId;
-    private int seconds ;
+    private String metaData;
 
-    public WarmupCmd(String taskId, int seconds){
+    public MetaDataCmd(String taskId, String metaData){
         this.taskId = taskId;
-        this.seconds = seconds;
+        this.metaData = metaData;
     }
 
     public void exicute(Controler c, MessageProducer replyProducer){
 
-        c.warmupBench(replyProducer, taskId, seconds);
+        c.writeMetaData(replyProducer, taskId, metaData);
     }
 
     @Override
     public String toString() {
-        return "WarmupCmd{" +
-                "seconds=" + seconds +
+        return "MetaDataCmd{" +
+                "metaData='" + metaData + '\'' +
                 ", taskId='" + taskId + '\'' +
                 '}';
     }

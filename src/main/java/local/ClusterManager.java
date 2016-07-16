@@ -192,6 +192,18 @@ public class ClusterManager implements Serializable {
         getClusterResponses(clusters, benchManager, Utils.TIMEOUT_2MIN);
     }
 
+    public void removeBench(String id, BenchManager benchManager) throws InterruptedException, JMSException, IOException {
+
+        List<ClusterContainer> clusters = getClusters(id);
+
+        for (ClusterContainer cluster : clusters) {
+            for (BenchMark benchMark : benchManager.getBenchMarks()) {
+                cluster.removeBench(benchMark.getDriver(), benchMark.getId());
+            }
+        }
+
+        getClusterResponses(clusters, benchManager, Utils.TIMEOUT_2MIN);
+    }
 
 
     public List<ClusterContainer> getClusters(String id) {
@@ -214,4 +226,5 @@ public class ClusterManager implements Serializable {
     public Collection<ClusterContainer> getClusters() {
         return clusters.values();
     }
+
 }

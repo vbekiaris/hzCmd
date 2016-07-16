@@ -1,4 +1,4 @@
-package remote.command.bench;
+package remote.command;
 
 import remote.main.Controler;
 import remote.command.Cmd;
@@ -9,25 +9,23 @@ import java.io.Serializable;
 /**
  * Created by danny on 22/01/2016.
  */
-public class RunBenchCmd implements Cmd, Serializable{
+public class CleanUpCmd implements Cmd, Serializable{
 
     private String taskId;
-    private int seconds;
 
-    public RunBenchCmd(String taskId, int seconds){
+    public CleanUpCmd(String taskId){
         this.taskId = taskId;
-        this.seconds = seconds;
     }
 
     public void exicute(Controler c, MessageProducer replyProducer){
-        c.runBench(replyProducer, taskId, seconds);
+
+        c.cleanup(replyProducer, taskId);
     }
 
     @Override
     public String toString() {
-        return "RunBenchCmd{" +
-                "seconds=" + seconds +
-                ", taskId='" + taskId + '\'' +
+        return "CleanUpCmd{" +
+                "taskId='" + taskId + '\'' +
                 '}';
     }
 }

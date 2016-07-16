@@ -1,4 +1,4 @@
-package remote.command.bench;
+package remote.command;
 
 import remote.main.Controler;
 import remote.command.Cmd;

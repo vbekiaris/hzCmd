@@ -1,4 +1,4 @@
-package remote.command.bench;
+package remote.command;
 
 import remote.main.Controler;
 import remote.command.Cmd;
@@ -9,25 +9,24 @@ import java.io.Serializable;
 /**
  * Created by danny on 22/01/2016.
  */
-public class MetaDataCmd implements Cmd, Serializable{
+public class RunBenchCmd implements Cmd, Serializable{
 
     private String taskId;
-    private String metaData;
+    private int seconds;
 
-    public MetaDataCmd(String taskId, String metaData){
+    public RunBenchCmd(String taskId, int seconds){
         this.taskId = taskId;
-        this.metaData = metaData;
+        this.seconds = seconds;
     }
 
     public void exicute(Controler c, MessageProducer replyProducer){
-
-        c.writeMetaData(replyProducer, taskId, metaData);
+        c.runBench(replyProducer, taskId, seconds);
     }
 
     @Override
     public String toString() {
-        return "MetaDataCmd{" +
-                "metaData='" + metaData + '\'' +
+        return "RunBenchCmd{" +
+                "seconds=" + seconds +
                 ", taskId='" + taskId + '\'' +
                 '}';
     }

@@ -234,6 +234,7 @@ public class HzCmd implements Serializable {
             clusterManager.runBench(id, benchManager);
             clusterManager.cleanupBench(id, benchManager);
             clusterManager.writeMetaDataCmd(id, benchManager);
+            clusterManager.removeBench(id, benchManager);
         }
     }
 

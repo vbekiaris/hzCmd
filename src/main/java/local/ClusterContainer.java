@@ -123,6 +123,7 @@ public class ClusterContainer implements Serializable {
         boxes.addBoxes(bm);
     }
 
+
     private class Runner implements Callable<Object> {
 
         private Box box;
@@ -336,6 +337,13 @@ public class ClusterContainer implements Serializable {
         RemoteJvm jvm = getMatchingJvms(jvmId).get(0);
         jvm.cleanupBench(taskId);
     }
+
+    public void removeBench(String jvmId, String taskId) throws IOException, InterruptedException, JMSException {
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
+            jvm.removeBench(taskId);
+        }
+    }
+
 
     public void restart(String jvmId) throws Exception {
         for(RemoteJvm jvm : getMatchingJvms(jvmId)){

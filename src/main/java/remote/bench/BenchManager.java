@@ -29,7 +29,6 @@ public class BenchManager {
         msg.id=Controler.ID;
         msg.benchId=benchId;
         msg.benchClazz=clazz;
-        msg.error=false;
         try {
             BenchContainer benchContainer = new BenchContainer(vendorObject, benchId, clazz);
             benchs.put(benchId, benchContainer);
@@ -45,13 +44,21 @@ public class BenchManager {
     }
 
     public void removeBench(MessageProducer replyProducer, String id) {
+        ReplyMsg msg = new ReplyMsg();
+        msg.id=Controler.ID;
         try {
-            benchs.remove(id);
-            MQ.sendReply(replyProducer, Controler.ID+" removed "+id);
+            BenchContainer removed = benchs.remove(id);
+            msg.benchId=removed.getId();
+            msg.msg="Removed";
+            MQ.sendReply(replyProducer, gson.toJson(msg));
         } catch (Exception e) {
             try {
-                MQ.sendReply(replyProducer, e);
+                msg.error=true;
+                msg.msg=e.toString();
+                MQ.sendReply(replyProducer, gson.toJson(msg));
             } catch (JMSException e2) {}
+        } finally {
+            System.gc();
         }
     }
 

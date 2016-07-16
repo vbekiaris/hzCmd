@@ -100,6 +100,11 @@ public abstract class Controler{
         executor.submit(new BenchRunner(replyProducer, id, seconds));
     }
 
+    public void removeBench(MessageProducer replyProducer, String id) {
+        benchManager.removeBench(replyProducer, id);
+    }
+
+
     public void cleanup(MessageProducer replyProducer, String id) {
         benchManager.cleanUp(replyProducer, id);
     }
