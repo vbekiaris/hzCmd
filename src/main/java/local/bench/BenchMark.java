@@ -257,6 +257,9 @@ public class BenchMark implements Serializable {
         return currentBench.toString();
     }
 
+    public String currentBench_toString(){
+        return currentBench.toString();
+    }
 
 
     @Override

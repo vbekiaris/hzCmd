@@ -227,7 +227,7 @@ public class HzCmd implements Serializable {
 
         while( benchManager.hasBench() ){
             benchManager.popBenchMarks();
-            System.out.println(Bash.ANSI_CYAN+benchManager.getBenchMarks()+Bash.ANSI_RESET);
+            System.out.println(Bash.ANSI_CYAN+benchManager.currentBench_toString()+Bash.ANSI_RESET);
 
             clusterManager.loadBench(id, benchManager);
             clusterManager.setAttributes(id, benchManager);

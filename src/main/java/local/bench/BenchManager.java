@@ -71,6 +71,15 @@ public class BenchManager {
         return benchMarks.values();
     }
 
+    public String currentBench_toString() {
+
+        String str = new String();
+        for (BenchMark benchMark : benchMarks.values()) {
+            str+=benchMark.currentBench_toString()+"\n";
+        }
+        str = str.trim();
+        return str;
+    }
 
     public String toString() {
 
