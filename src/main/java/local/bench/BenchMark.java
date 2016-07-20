@@ -258,7 +258,7 @@ public class BenchMark implements Serializable {
     }
 
     public String currentBench_toString(){
-        return currentBench.toString();
+        return id+" "+clazz+" "+currentBench.toString();
     }
 
 
