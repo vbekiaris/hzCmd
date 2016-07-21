@@ -23,12 +23,18 @@ public class GgJvmFactory implements JvmFactory, Serializable {
         List<String> jars = new ArrayList();
 
         jars.add("ignite-core-"+version+".jar");
-        jars.add("ignite-spring-"+version+".jar");
         jars.add("ignite-indexing-"+version+".jar");
-
-        jars.add("spring-aop-4.1.0.RELEASE.jar");
         jars.add("h2-1.3.175.jar");
 
+        jars.add("ignite-spring-"+version+".jar");
+        jars.add("spring-context-4.1.0.RELEASE.jar");
+        jars.add("spring-jdbc-4.1.0.RELEASE.jar");
+        jars.add("commons-logging-1.1.1.jar");
+        jars.add("spring-aop-4.1.0.RELEASE.jar");
+        jars.add("spring-core-4.1.0.RELEASE.jar");
+        jars.add("spring-tx-4.1.0.RELEASE.jar");
+        jars.add("spring-beans-4.1.0.RELEASE.jar");
+        jars.add("spring-expression-4.1.0.RELEASE.jar");
 
         return jars;
     }
