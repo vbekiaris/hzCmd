@@ -225,11 +225,23 @@ public class ClusterContainer implements Serializable {
         return count;
     }
 
-    public List<RemoteJvm> getMemberBoxes( ) {
+
+    public List<RemoteJvm> getMemberJvms( ) {
         List<RemoteJvm> matching = new ArrayList<RemoteJvm>();
 
         for(RemoteJvm jvm : jvms.values()){
             if ( jvm.isMember() ){
+                matching.add(jvm);
+            }
+        }
+        return matching;
+    }
+
+    public List<RemoteJvm> getClientJvms( ) {
+        List<RemoteJvm> matching = new ArrayList<RemoteJvm>();
+
+        for(RemoteJvm jvm : jvms.values()){
+            if ( jvm.isClient() ){
                 matching.add(jvm);
             }
         }
@@ -348,6 +360,15 @@ public class ClusterContainer implements Serializable {
     public void restart(String jvmId) throws Exception {
         for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             jvm.reStartJvm();
+        }
+    }
+
+    public void renice() throws Exception{
+        for (RemoteJvm remoteJvm : getMemberJvms()) {
+            remoteJvm.renice(-20);
+        }
+        for (RemoteJvm remoteJvm : getClientJvms()) {
+            remoteJvm.renice(-19);
         }
     }
 

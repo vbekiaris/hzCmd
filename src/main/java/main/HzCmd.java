@@ -13,7 +13,6 @@ import mq.MQ;
 
 import javax.jms.JMSException;
 import java.io.*;
-import java.util.concurrent.TimeUnit;
 
 //add box type,  to ip list,  for starting in unix / win
 
@@ -75,12 +74,14 @@ public class HzCmd implements Serializable {
         cluster.addMembers(size.getMemberCount(), version, memberOps, cwdFiles);
 
         JvmFactory jvmFactory = cluster.getJvmFactory();
-        jvmFactory.membersAdded(cluster.getMemberBoxes());
+        jvmFactory.membersAdded(cluster.getMemberJvms());
 
         Thread.sleep(5000);
 
         String clientOps = properties.readPropertie(HzCmdProperties.CLIENT_OPS, "");
         cluster.addClients(size.getClientCount(), version, clientOps, cwdFiles);
+
+        cluster.renice();
 
         System.out.print(cluster);
     }

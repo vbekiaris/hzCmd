@@ -166,6 +166,11 @@ public abstract class RemoteJvm implements Serializable {
         }
     }
 
+    public void renice(int nice) throws IOException, InterruptedException {
+        box.renice(pid, nice);
+    }
+
+
     public boolean isRunning() {
         try {
             if (pid == 0) {
