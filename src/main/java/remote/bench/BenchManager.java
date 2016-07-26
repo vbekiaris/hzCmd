@@ -58,7 +58,7 @@ public class BenchManager {
                 MQ.sendReply(replyProducer, gson.toJson(msg));
             } catch (JMSException e2) {}
         } finally {
-            System.gc();
+            //System.gc();
         }
     }
 
