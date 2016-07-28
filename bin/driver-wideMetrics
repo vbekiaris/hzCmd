@@ -87,7 +87,7 @@ while read line; do
 
   fi
 
-  if (( $(bc <<< "$b < $a * 1.21") == 1 )) ; then
+  if (( $(bc <<< "$b < $a * 0.75") == 1 )) ; then
     slack-post benchmark-improvment WARN \<http://54.87.52.100/~${linkPath}\>
     echo "IMPROVE"
   fi
