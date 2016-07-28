@@ -77,7 +77,13 @@ while read line; do
     chartPath=$(find . -type d -name "${f0}-VS-${f1}")
     echo ${chartPath}
 
-    #slack-post benchmark-regression WARN \<http://54.87.52.100/~jenkins/${f[0]}\>
+    hear=$(pwd)
+    hear=${hear#'/disk1/'}
+    linkPath=${hear}"/"${chartPath}
+    echo ${linkPath}
+
+
+    #slack-post benchmark-regression WARN \<http://54.87.52.100/~${linkPath}\>
     #slack-post benchmark-regression WARN ${f[0]}  ${f[1]}
 
   fi
