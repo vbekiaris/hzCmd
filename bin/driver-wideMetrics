@@ -81,8 +81,8 @@ while read line; do
   echo ${linkPath}
 
 
-  if (( $(bc <<< "$b > $a * 1.13") == 1 )) ; then
-    #slack-post benchmark-regression WARN \<http://54.87.52.100/~${linkPath}\>
+  if (( $(bc <<< "$b > $a * 1.15") == 1 )) ; then
+    slack-post benchmark-regression WARN \<http://54.87.52.100/~${linkPath}\>
     echo ${linkPath}
 
   fi
