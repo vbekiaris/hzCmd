@@ -64,7 +64,7 @@ while read line; do
 
     f0=${f[0]%'-1min-AVG.txt-driverWide.txt'}
     f1=${f[0]%'-1min-AVG.txt-driverWide.txt'}
-    chartPath=(find . -type d -name ${f0}-VS-${f1})
+    chartPath=$(find . -type d -name ${f0}-VS-${f1})
     echo ${chartPath}
 
     #slack-post benchmark-regression WARN \<http://54.87.52.100/~jenkins/${f[0]}\>
