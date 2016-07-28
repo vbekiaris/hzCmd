@@ -68,8 +68,8 @@ while read line; do
     f0=${f0%'-1min-AVG.txt-driverWide.txt'}
     f1=${f1%'-1min-AVG.txt-driverWide.txt'}
 
-    f0=${f0%'./driverWideMetrics/'}
-    f1=${f1%'./driverWideMetrics/'}
+    f0=${f0#'./driverWideMetrics/'}
+    f1=${f1#'./driverWideMetrics/'}
 
     targ="${f0}-VS-${f1}"
     echo ${targ}
