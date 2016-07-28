@@ -62,8 +62,14 @@ while read line; do
 
   if (( $(bc <<< "$b > $a * 1.06") == 1 )) ; then
 
-    f0=${f[0]%'-1min-AVG.txt-driverWide.txt'}
-    f1=${f[0]%'-1min-AVG.txt-driverWide.txt'}
+    f0="${f[0]}"
+    f1="${f[1]}"
+
+    f0=${f0%'-1min-AVG.txt-driverWide.txt'}
+    f1=${f1%'-1min-AVG.txt-driverWide.txt'}
+
+    f0=${f0%'./driverWideMetrics/'}
+    f1=${f1%'./driverWideMetrics/'}
 
     targ="${f0}-VS-${f1}"
     echo ${targ}
