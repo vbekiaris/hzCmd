@@ -82,10 +82,7 @@ while read line; do
     linkPath=${hear}"/"${chartPath}
     echo ${linkPath}
 
-
-    #slack-post benchmark-regression WARN \<http://54.87.52.100/~${linkPath}\>
-    #slack-post benchmark-regression WARN ${f[0]}  ${f[1]}
-
+    slack-post benchmark-regression WARN \<http://54.87.52.100/~${linkPath}\>
   fi
 
 done < a-and-b.txt
