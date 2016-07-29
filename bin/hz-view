@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+targetDir=$1
+match=$2
+
+picDirs=$(find ${targetDir} -maxdepth 10 -type d -name '*bench.csv' | sort)
+
+while read -r picPath; do
+
+ metaFiles=$(find ${picPath} -type f -name '*meta.txt')
+
+ include=0
+ while read -r File; do
+  if grep -q "${match}" "${File}"; then
+    include=1
+  fi
+ done <<< "${metaFiles}"
+
+ 
+ if [ ${include} == 0 ]; then
+  continue
+ fi
+ 
+
+ while read -r metaFile; do
+     f=$(cat ${metaFile})
+     echo "<p>${f}</p>"
+ done <<< "${metaFiles}"
+
+ latency=$(find ${picPath} -type f -name '*-99-latency-percentile.png')
+ through=$(find ${picPath} -type f -name '*1min-rate.png') 
+
+ echo "<a href=\"${through}\">"
+ echo "<img src=\"${through}\" width=\"400\" height=\"300\">"
+ echo "</a>"
+
+ echo "<a href=\"${latency}\">"
+ echo "<img src=\"${latency}\" width=\"400\" height=\"300\">"
+ echo "</a>"
+
+done <<< "${picDirs}"
