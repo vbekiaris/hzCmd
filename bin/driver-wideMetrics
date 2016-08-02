@@ -83,13 +83,14 @@ while read line; do
 
   if (( $(bc <<< "$b > $a * 1.15") == 1 )) ; then
     slack-post benchmark-regression WARN \<http://54.87.52.100/~${linkPath}\>
+    echo ${targ} >> regression.txt
     echo ${linkPath}
 
   fi
 
   if (( $(bc <<< "$b < $a * 0.75") == 1 )) ; then
     slack-post benchmark-improvment WARN \<http://54.87.52.100/~${linkPath}\>
-    echo "IMPROVE"
+    echo ${targ} >> improved.txt
   fi
 
 done < a-and-b.txt
