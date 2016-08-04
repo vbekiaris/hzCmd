@@ -64,7 +64,7 @@ public class BenchContainer {
         }
     }
 
-    public void init(){
+    public void init() throws Exception {
         for (Bench bench : benchObjs) {
             bench.init();
         }

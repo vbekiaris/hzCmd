@@ -87,6 +87,15 @@ public class MetricsMarker extends BenchMarker {
             bench.timeStep();
             context.stop();
         }catch (Exception e){
+
+            if(bench.ignore()!=null){
+                for (Class aClass : bench.ignore()) {
+                    if(aClass.isInstance(e)){
+                        return;
+                    }
+                }
+            }
+
             if(throwException){
                 Utils.recordeException(e);
                 throw e;

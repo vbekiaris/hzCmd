@@ -1,10 +1,13 @@
 package remote.bench;
 
+import java.util.List;
+
 public interface Bench {
-    void init();
+    void init() throws Exception;
     void timeStep()throws Exception;
     void cleanup();
 
+    List<Class> ignore();
 
     boolean isSelfDetermined();
     boolean isRunning();
