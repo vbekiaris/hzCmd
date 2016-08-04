@@ -91,6 +91,7 @@ public class MetricsMarker extends BenchMarker {
             if(bench.ignore()!=null){
                 for (Class aClass : bench.ignore()) {
                     if(aClass.isInstance(e)){
+                        System.out.println("ignored "+aClass.getName());
                         return;
                     }
                 }
