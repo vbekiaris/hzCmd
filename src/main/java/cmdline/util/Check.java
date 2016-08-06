@@ -15,12 +15,16 @@ public class Check extends Command
 
     public void exe(HzCmd hzCmd) {
         try {
+            boolean errorFound=false;
             if(ids==null){
-                hzCmd.printErrors(".*");
+                errorFound = hzCmd.printErrors(".*");
             }else{
                 for (String id : ids) {
-                    hzCmd.printErrors(id);
+                    errorFound = hzCmd.printErrors(id);
                 }
+            }
+            if(errorFound){
+                System.exit(1);
             }
         } catch (Exception e) {
             e.printStackTrace();
