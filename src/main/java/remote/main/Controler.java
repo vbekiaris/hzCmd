@@ -36,7 +36,7 @@ public abstract class Controler{
 
     public final NodeType type;
 
-    private ExecutorService executor = Executors.newFixedThreadPool(3);
+    private ExecutorService executor = Executors.newCachedThreadPool();
 
 
     public Controler(NodeType type) throws Exception {
