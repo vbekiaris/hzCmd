@@ -87,14 +87,11 @@ public class HzCmd implements Serializable {
     }
 
 
-
-
-
-    //getting reply
     public void restart(String id, String version, boolean ee) throws Exception {
         for (ClusterContainer c : clusterManager.getClusters(id)) {
             c.restart(id, version, ee);
         }
+        restartEmbeddedObject(id, id);
     }
 
     public void exit(String id) throws Exception {
@@ -143,6 +140,8 @@ public class HzCmd implements Serializable {
                     c.restart(jvmId, version, ee);
                 }
             }
+
+            restartEmbeddedObject(clusterId, jvmId);
 
             if(iterationDelaySec!=0) {
                 Thread.sleep(iterationDelaySec * 1000);

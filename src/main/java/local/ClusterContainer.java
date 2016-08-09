@@ -356,20 +356,17 @@ public class ClusterContainer implements Serializable {
         }
     }
 
-
     public void restart(String jvmId) throws Exception {
-        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
-            jvm.reStartJvm();
-        }
-    }
+        List<RemoteJvm> members = getMatchingMemberJvms(jvmId);
+        List<RemoteJvm> clients = getMatchingClientJvms(jvmId);
 
-    public void renice() throws Exception{
-        for (RemoteJvm remoteJvm : getMemberJvms()) {
-            remoteJvm.renice(-20);
+        restartJvmList(null, members);
+
+        if(members.size()!=0 && clients.size()!=0){
+            Thread.sleep(5000);
         }
-        for (RemoteJvm remoteJvm : getClientJvms()) {
-            remoteJvm.renice(-19);
-        }
+
+        restartJvmList(null, clients);
     }
 
     public void restart(String jvmId, String version, boolean ee) throws Exception {
@@ -398,15 +395,16 @@ public class ClusterContainer implements Serializable {
                 jvm.reStartJvm(jvmFactory.getVendorLibDir(version), this, brokerIP);
             }
         }
-        for (RemoteJvm jvm : jvms) {
-            jvm.startEmbeddedObject();
-        }
-        for (RemoteJvm jvm : jvms) {
-            Object response = jvm.getResponse(Utils.TIMEOUT_10MIN);
-            printResponse(response);
-        }
     }
 
+    public void renice() throws Exception{
+        for (RemoteJvm remoteJvm : getMemberJvms()) {
+            remoteJvm.renice(-20);
+        }
+        for (RemoteJvm remoteJvm : getClientJvms()) {
+            remoteJvm.renice(-19);
+        }
+    }
 
     public void getResponseExitOnException(String jvmId, long timeOutMillis) throws IOException, InterruptedException, JMSException {
         boolean exit=false;
