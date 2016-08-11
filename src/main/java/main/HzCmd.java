@@ -111,7 +111,7 @@ public class HzCmd implements Serializable {
             c.restartEmbeddedObject(jvmId);
         }
         for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
-            c.getResponseExitOnException(jvmId, Utils.TIMEOUT_10MIN);
+            c.getResponseExitOnException(jvmId, Utils.TIMEOUT_45MIN);
         }
     }
 

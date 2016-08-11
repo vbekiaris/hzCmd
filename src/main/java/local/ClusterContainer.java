@@ -175,7 +175,7 @@ public class ClusterContainer implements Serializable {
             }
 
             for (RemoteJvm remoteJvm : started) {
-                Object response = remoteJvm.getResponse(TimeUnit.SECONDS.toMillis(300));
+                Object response = remoteJvm.getResponse(Utils.TIMEOUT_5MIN);
                 if(response==null){
                     System.out.println(Bash.ANSI_RED+"Timeout waiting for Jvm response"+Bash.ANSI_RESET);
                     System.exit(1);
