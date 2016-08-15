@@ -485,11 +485,28 @@ public class ClusterContainer implements Serializable {
     }
 
     public boolean printErrors(String jvmId) throws IOException, InterruptedException {
+
+        boolean error=false;
+
+        for (Box box : boxes.getBoxList()) {
+            String err = box.findArgs(Installer.REMOTE_HZCMD_ROOT+"/*"+clusterId+"*", "-name exception.txt -o -name *.hprof -o -name *.oome -o -name hs_err_pid* -o -name *core*");
+
+            if(err != null && !err.isEmpty()){
+                System.out.println(this);
+                System.out.println(Bash.ANSI_RED+err+Bash.ANSI_RESET);
+                error = true;
+            }
+
+        }
+        return error;
+
+        /*
         boolean error=false;
         for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             error |= jvm.printErrors();
         }
         return error;
+        */
     }
 
     public void ls(String jvmId) throws IOException, InterruptedException {
