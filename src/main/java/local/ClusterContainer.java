@@ -539,7 +539,7 @@ public class ClusterContainer implements Serializable {
 
     public boolean downlonad(String destDir) throws IOException, InterruptedException {
         for (Box box : boxes.getBoxList()) {
-            box.downlonad(Installer.REMOTE_HZCMD_ROOT+"/*", destDir+"/"+clusterId);
+            box.downlonad(Installer.REMOTE_HZCMD_ROOT+"/*"+clusterId+"*", destDir+"/"+clusterId);
         }
         //Bash.executeCommandWithExitCode("gcViewerPics "+destDir+"/"+clusterId);
         return Bash.findLocalError(destDir+"/"+clusterId);
