@@ -120,6 +120,16 @@ public class MetricsMarker extends BenchMarker {
             }
 
         }catch (Exception e){
+
+            if(bench.ignore()!=null){
+                for (Class aClass : bench.ignore()) {
+                    if(aClass.isInstance(e)){
+                        //System.out.println("ignored "+aClass.getName());
+                        return;
+                    }
+                }
+            }
+
             if(throwException){
                 Utils.recordeException(e);
                 throw e;
@@ -128,6 +138,5 @@ public class MetricsMarker extends BenchMarker {
                 throw e;
             }
         }
-
     }
 }
