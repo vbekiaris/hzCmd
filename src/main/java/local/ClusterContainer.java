@@ -123,6 +123,10 @@ public class ClusterContainer implements Serializable {
         boxes.addBoxes(bm);
     }
 
+    public int getBoxCount() {
+        return boxes.getBoxCount();
+    }
+
 
     private class Runner implements Callable<Object> {
 

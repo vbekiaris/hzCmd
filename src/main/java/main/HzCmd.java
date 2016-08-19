@@ -54,6 +54,11 @@ public class HzCmd implements Serializable {
         ClusterContainer cluster = clusterManager.initCluster(clusterId, type, brokerIP);
         cluster.addUniquBoxes(boxManager);
 
+        if( cluster.getBoxCount() == 0){
+            System.out.println(Bash.ANSI_RED + "Cluster "+cluster.getClusterId() +" running on "+cluster.getBoxCount()+" Boxes" + Bash.ANSI_RESET);
+            System.exit(1);
+        }
+
         Installer.install(cluster.getBoxManager(), cluster.getJvmFactory(), ee, versions, libFiles);
         cluster.addVersions(versions);
         cluster.setMembersOnlyCount(size.dedicatedMemberBox());

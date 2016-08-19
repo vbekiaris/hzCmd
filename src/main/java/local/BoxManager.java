@@ -138,4 +138,8 @@ public class BoxManager implements Serializable {
 
         return str;
     }
+
+    public int getBoxCount() {
+        return boxes.size();
+    }
 }
