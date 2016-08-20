@@ -16,7 +16,7 @@ while read -r line; do
   cd $dir
    for f in "${fields[@]}"; do
 
-    grep Health out.txt | grep -P -oh $f.*?,\|"$timeStr" | sed 's/,$//' | sed 's/,/./g' | awk '/201.*$/ {printf("%s, ", $0); next}1' | sed s/$f// > $f.txt
+    grep -a1 Health out.txt | grep -P -oh $f.*?,\|"$timeStr" | sed 's/,$//' | sed 's/,/./g' | awk '/201.*$/ {printf("%s, ", $0); next}1' | sed s/$f// > $f.txt
 
     done
   cd ${currentDir}
