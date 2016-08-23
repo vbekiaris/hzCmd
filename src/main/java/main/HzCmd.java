@@ -33,6 +33,9 @@ import java.io.*;
 
 //add JFR cmd settings
 
+//add time out settings for stages.
+//add fast exit on exception boolean.
+//add oracal choherance
 
 public class HzCmd implements Serializable {
 
