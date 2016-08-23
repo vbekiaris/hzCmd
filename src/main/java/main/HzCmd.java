@@ -37,6 +37,10 @@ import java.io.*;
 //add fast exit on exception boolean.
 //add oracal choherance
 
+//bounce a random jvm.
+//renice jvm pid, on jvm start,
+
+
 public class HzCmd implements Serializable {
 
     public static volatile boolean saveHzCmd=true;
