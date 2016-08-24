@@ -10,11 +10,9 @@ subnetId="subnet-378d2140"
 placement="hzpc2"
 
 OPTS=`getopt -o : --long  count:,instanceType:,outputFile:,imageId:,region:,key:,subnetId:,placement: -n 'parse-options' -- "$@"` || { echo "Failed parsing options." >&2 ; exit 1; }
+eval set -- "$OPTS"
 
-initCmdArgs () {
- eval set -- "$OPTS"
-
- while true; do
+while true; do
   case "$1" in
     --count ) count="$2"; shift 2 ;;
     --instanceType ) instanceType="$2"; shift 2 ;;
@@ -27,8 +25,7 @@ initCmdArgs () {
     -- ) shift; break ;;
     * ) break ;;
   esac
- done
-}
+done
 
 
 if [ -f "${outputFile}" ]; then
