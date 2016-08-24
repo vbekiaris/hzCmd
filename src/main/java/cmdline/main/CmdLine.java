@@ -1,7 +1,5 @@
 package cmdline.main;
 
-import cmdline.aws.Aws;
-import cmdline.aws.AwsCreate;
 import cmdline.bench.*;
 import cmdline.chart.*;
 import cmdline.redis.Redis;
@@ -24,7 +22,6 @@ public class CmdLine {
                 .withDefaultCommand(Help.class)
                 .withCommands(
                         Help.class,
-                        Aws.class,
                         Jfr.class,
 
                         SetMemberJvmOps.class, SetClientJvmOps.class, SetJhic.class, SetJhicArgs.class,
@@ -46,12 +43,6 @@ public class CmdLine {
 
                         Redis.class
                         );
-
-        builder.withGroup("aws")
-                .withDescription("aws create ec2 instances needs aws ec2 cmd line tools installed")
-                .withDefaultCommand(Help.class)
-                .withCommands(AwsCreate.class);
-
 
         builder.withGroup("chart")
                 .withDescription("chart bench data gnuplot install required")
