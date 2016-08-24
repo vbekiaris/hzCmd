@@ -2,7 +2,16 @@
 
 IMDG bencher
 
-1) Install, you will need a bash shell, git, mvn, and a ~/.bashrc file, hzCmd will install activemq-5.13.3, install gnuplot and add to your path for charts
+1) Install, you will need 
+ 
+ * bash shell
+ * git
+ * mvn 
+ * ~/.bashrc file 
+ * hzCmd will install activemq-5.13.3
+ * install gnuplot and add to your path for charts
+ * killall cmd on remote boxes,  'apt-get install psmisc'  or  'yum install psmisc'
+ 
 
 ```sh
 git clone https://github.com/Danny-Hazelcast/hzCmd.git
