@@ -35,7 +35,7 @@ if [ -f "${outputFile}" ]; then
 
 fi
 
-echo "creating ${count} aws instances"
+echo "getting ${count} aws instances"
 
 tryCount=0
 while (( ${count} > 0 )) ; do
