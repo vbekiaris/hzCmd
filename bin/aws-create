@@ -1,17 +1,15 @@
 #!/usr/bin/env bash
 
+count=${1:-0}
+instanceType=${2:-c4.xlarge}
+outputFile=${3:-a.box}
 
-count=${1:0}
-instanceType=${2:c4.xlarge}
-outputFile=${3:a.box}
+imageId=${4:-ami-08111162}
+region=${5:-us-east-1}
 
-imageId=${4:ami-08111162}
-region=${5:us-east-1}
-
-key=${6:jenkins-ec2-key}
-subnetId=${7:subnet-378d2140}
-placement=${8:hzpc2}
-
+key=${6:-jenkins-ec2-key}
+subnetId=${7:-subnet-378d2140}
+placement=${8:-hzpc2}
 
 
 if [ -f "${outputFile}" ]; then
