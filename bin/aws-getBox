@@ -18,6 +18,8 @@ if ((${rc} != 0)) ; then
   exit ${rc}
 fi
 
-ec2-create-tags $ids --tag "Name=$(pwd)/${outputFile}"
+#ec2-create-tags $ids --tag "Name=$(pwd)/${outputFile}"
+aws ec2 create-tags --resources ${ids} --tags Key=Name,Value="$(pwd)/${outputFile}"
+
 aws ec2 describe-instances --region ${3} --instance-ids ${ids}  --output text --query 'Reservations[*].Instances[*].[PublicIpAddress,PrivateIpAddress,InstanceId]' | tr "\\t" "," >> ${outputFile}
 
