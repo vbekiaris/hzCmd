@@ -35,7 +35,8 @@ if [ -f "${outputFile}" ]; then
 
 fi
 
-echo "getting ${count} aws instances"
+echo "getting ${count} ${instanceType} ${imageId}"
+aws ec2 describe-images --image-ids ${instanceType}
 
 tryCount=0
 while (( ${count} > 0 )) ; do
