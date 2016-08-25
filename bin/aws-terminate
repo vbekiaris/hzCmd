@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-agentsFile=${1:-a.box}
+boxFile=${1:-a.box}
 
-lines=($(cat ${agentsFile}))
+lines=($(cat ${boxFile}))
 
 for line in "${lines[@]}" ; do
 
@@ -11,4 +11,4 @@ for line in "${lines[@]}" ; do
 
 done
 
-echo "" > ${agentsFile}
+rm ${boxFile}
