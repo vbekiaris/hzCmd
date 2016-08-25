@@ -33,6 +33,12 @@ public class BoxManager implements Serializable {
         try {
             String line;
             while( (line=boxFile.readLine()) !=null ){
+
+                if(line==null || line.equals("")){
+                    System.out.println(Bash.ANSI_RED+"line: "+line+" in "+file+" publicIP,privateIP"+Bash.ANSI_RESET);
+                    System.exit(1);
+                }
+
                 addBox(user, line);
             }
         } catch (Exception e) {
@@ -44,6 +50,12 @@ public class BoxManager implements Serializable {
 
     public void addBox(String user, String ipString) throws IOException, InterruptedException  {
         String[] split = ipString.split(",");
+
+        if(split==null || split.length < 2){
+            System.out.println(Bash.ANSI_RED+ipString+" expected publicIP,privateIP"+Bash.ANSI_RESET);
+            System.exit(1);
+        }
+
         Box box = new Box(user, split[0], split[1]);
 
         if (boxes.contains(box) ){
