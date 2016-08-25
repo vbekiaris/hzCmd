@@ -2,12 +2,12 @@
 
 count="1"
 instanceType="c4.xlarge"
-outputFile="a.box"
 imageId="ami-08111162"
 region="us-east-1"
 key="jenkins-ec2-key"
 subnetId="subnet-378d2140"
 placement="hzpc2"
+outputFile="a.box"
 
 OPTS=`getopt -o : --long  count:,instanceType:,outputFile:,imageId:,region:,key:,subnetId:,placement: -n 'parse-options' -- "$@"` || { echo "Failed parsing options." >&2 ; exit 1; }
 eval set -- "$OPTS"
@@ -16,12 +16,12 @@ while true; do
   case "$1" in
     --count ) count="$2"; shift 2 ;;
     --instanceType ) instanceType="$2"; shift 2 ;;
-    --outputFile ) outputFile="$2"; shift 2 ;;
     --imageId ) imageId="$2"; shift 2 ;;
     --region ) region="$2"; shift 2 ;;
     --key ) key="$2"; shift 2  ;;
     --subnetId ) subnetId="$2"; shift 2  ;;
     --placement ) placement="$2"; shift 2  ;;
+    --outputFile ) outputFile="$2"; shift 2 ;;
     -- ) shift; break ;;
     * ) break ;;
   esac
