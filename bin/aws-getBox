@@ -6,7 +6,8 @@ awsArgs="$awsArgs --region ${3} "
 awsArgs="$awsArgs --instance-type ${4} "
 awsArgs="$awsArgs --key ${5} "
 awsArgs="$awsArgs --subnet-id ${6} "
-awsArgs="$awsArgs --placement GroupName=${7} "
+#awsArgs="$awsArgs --placement GroupName=${7} "
+
 awsArgs="$awsArgs --output text "
 
 outputFile=${8}
