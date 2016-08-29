@@ -23,7 +23,7 @@ for line in "${lines[@]}" ; do
     break
    fi
 
-   if (( tests++ > 5 )) ; then
+   if (( tests++ > 6 )) ; then
      echo "$ip ssh failed to connect"
 
      aws ec2 terminate-instances --instance-ids ${id}
