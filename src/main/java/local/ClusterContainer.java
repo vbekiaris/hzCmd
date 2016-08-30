@@ -349,9 +349,10 @@ public class ClusterContainer implements Serializable {
         }
     }
 
-    public void cleanupBench(String jvmId, String taskId) throws IOException, InterruptedException, JMSException {
-        RemoteJvm jvm = getMatchingJvms(jvmId).get(0);
-        jvm.cleanupBench(taskId);
+    public void postPhaseBench(String jvmId, String taskId) throws IOException, InterruptedException, JMSException {
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
+            jvm.postPhaseBench(taskId);
+        }
     }
 
     public void removeBench(String jvmId, String taskId) throws IOException, InterruptedException, JMSException {

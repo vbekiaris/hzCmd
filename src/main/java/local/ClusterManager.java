@@ -162,19 +162,15 @@ public class ClusterManager implements Serializable {
         getClusterResponses(clusters, benchManager, timout);
     }
 
-    public void cleanupBench(String id, BenchManager benchManager) throws InterruptedException, JMSException, IOException {
+    public void postPhaseBench(String id, BenchManager benchManager) throws InterruptedException, JMSException, IOException {
         List<ClusterContainer> clusters = getClusters(id);
 
         for (ClusterContainer cluster : clusters) {
             for (BenchMark benchMark : benchManager.getBenchMarks()) {
-                cluster.cleanupBench(benchMark.getDriver(), benchMark.getId());
+                cluster.postPhaseBench(benchMark.getDriver(), benchMark.getId());
             }
         }
-        for (ClusterContainer cluster : clusters) {
-            for (BenchMark benchMark : benchManager.getBenchMarks()) {
-                cluster.getResponseExitOnExceptionFrom1(benchMark.getDriver(), Utils.TIMEOUT_5MIN);
-            }
-        }
+        getClusterResponses(clusters, benchManager,  Utils.TIMEOUT_5MIN);
     }
 
     public void writeMetaDataCmd(String id, BenchManager benchManager) throws InterruptedException, JMSException, IOException {

@@ -5,7 +5,7 @@ import java.util.List;
 public interface Bench {
     void init() throws Exception;
     void timeStep()throws Exception;
-    void cleanup();
+    void postPhase();
 
     List<Class> ignore();
 

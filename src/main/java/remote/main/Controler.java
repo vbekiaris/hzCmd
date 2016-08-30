@@ -105,8 +105,8 @@ public abstract class Controler{
     }
 
 
-    public void cleanup(MessageProducer replyProducer, String id) {
-        benchManager.cleanUp(replyProducer, id);
+    public void postPhase(MessageProducer replyProducer, String id) {
+        benchManager.postPhase(replyProducer, id);
     }
 
 

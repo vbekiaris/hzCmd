@@ -70,10 +70,10 @@ public class BenchContainer {
         }
     }
 
-    public void cleanUp(){
-        System.out.println(Controler.ID+" "+" cleanUp "+this);
-
-        benchObjs.get(0).cleanup();
+    public void postPhase(){
+        for (Bench bench : benchObjs) {
+            bench.postPhase();
+        }
     }
 
     public void setBenchType(BenchType type, long expectedIntervalNanos, boolean allowException, String outFile){

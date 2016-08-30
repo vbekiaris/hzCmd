@@ -138,14 +138,14 @@ public class BenchManager {
         }
     }
 
-    public void cleanUp(MessageProducer replyProducer, String id){
+    public void postPhase(MessageProducer replyProducer, String id){
         ReplyMsg msg = new ReplyMsg();
         msg.id=Controler.ID;
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
             msg.benchId=benchContainer.getId();
-            msg.msg="cleanUp end";
+            msg.msg="postPhase end";
             try {
-                benchContainer.cleanUp();
+                benchContainer.postPhase();
                 MQ.sendReply(replyProducer, gson.toJson(msg));
             } catch (Exception e) {
                 try {
