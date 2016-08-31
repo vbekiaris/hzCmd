@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+declare -a fields=("operation.genericPriorityQueueSize" "operation.genericQueueSize" "event.eventQueueSize" "operation.invocations.backupTimeouts"\
+                   "operation.operationTimeoutCount" "operation.queueSize" "operation.runningCount" "operation.priorityQueueSize" "operation.invocations.pending"\
+                   "operation.responseQueueSize" "operation.retryCount" "operation.runningCount" "operation.runningGenericCount" "operation.runningPartitionCount"\
+                   "runtime.usedMemory" "cluster.clock.maxClusterTimeDiff" "event.rejectedCount" "gc.majorCount" "gc.majorTime")
+
+files=$(find . -name diagnostics*)
+
+if [[ "$files" == "" ]] ; then
+ exit
+fi
+
+
+currentDir=$(pwd)
+while read -r line; do
+  dir=$(dirname $line)
+  echo $dir
+  cd $dir
+
+   for f in "${fields[@]}"; do
+     rm $f.txt
+   done
+
+   for f in "${fields[@]}"; do
+    echo $f
+    #ls diagnostics* | sort | xargs -n 1 grep  ${f} >> $f.txt
+    grep ${f} diagnostics* > $f.txt
+
+   done
+  cd ${currentDir}
+done <<< "$files"
+
+for f in "${fields[@]}"; do
+  chart-EqualsDelimFile $f.txt $f value
+done
