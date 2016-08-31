@@ -19,9 +19,6 @@ public class Bounce extends Command
     @Option(name = "-iterations", description = "number of iteration default 1")
     public int iterations=1;
 
-    @Option(name = "-initalDelay", description = "initial delay seconds default 0")
-    public int initalDelay=0;
-
     @Option(name = "-restartDelay", description = "restart delay second default 10")
     public int restartDelay=10;
 
@@ -38,10 +35,10 @@ public class Bounce extends Command
     public void exe(HzCmd hzCmd) {
         try {
             if(ids==null){
-                hzCmd.bounce(clusterId, ".*", iterations, initalDelay, restartDelay, iterationDelay, version, ee);
+                hzCmd.bounce(clusterId, ".*", iterations, restartDelay, iterationDelay, version, ee);
             }else{
                 for (String id : ids) {
-                    hzCmd.bounce(clusterId, id, iterations, initalDelay, restartDelay, iterationDelay, version, ee);
+                    hzCmd.bounce(clusterId, id, iterations, restartDelay, iterationDelay, version, ee);
                 }
             }
         } catch (Exception e) {

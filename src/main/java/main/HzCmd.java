@@ -128,13 +128,14 @@ public class HzCmd implements Serializable {
         }
     }
 
-    public void bounce(String clusterId, String jvmId,  int iterations, int initialDelaySec, int restartDelaySec, int iterationDelaySec, String version, boolean ee) throws Exception {
-
-        if(initialDelaySec!=0) {
-            Thread.sleep(initialDelaySec * 1000);
-        }
+    public void bounce(String clusterId, String jvmId,  int iterations, int restartDelaySec, int iterationDelaySec, String version, boolean ee) throws Exception {
 
         for(int i=0; i<iterations; i++){
+
+            if(iterationDelaySec!=0) {
+                Thread.sleep(iterationDelaySec * 1000);
+            }
+
             for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
                 c.kill(jvmId);
             }
@@ -155,10 +156,6 @@ public class HzCmd implements Serializable {
             }
 
             restartEmbeddedObject(clusterId, jvmId);
-
-            if(iterationDelaySec!=0) {
-                Thread.sleep(iterationDelaySec * 1000);
-            }
         }
     }
 
