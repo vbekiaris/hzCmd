@@ -38,7 +38,12 @@ public class Bounce extends Command
                 hzCmd.bounce(clusterId, ".*", iterations, restartDelay, iterationDelay, version, ee);
             }else{
                 for (String id : ids) {
-                    hzCmd.bounce(clusterId, id, iterations, restartDelay, iterationDelay, version, ee);
+
+                    if(id.equals("RandomMember")) {
+                        hzCmd.bounceRandomMember(clusterId, iterations, restartDelay, iterationDelay, version, ee);
+                    }else {
+                        hzCmd.bounce(clusterId, id, iterations, restartDelay, iterationDelay, version, ee);
+                    }
                 }
             }
         } catch (Exception e) {

@@ -22,6 +22,7 @@ public class ClusterContainer implements Serializable {
 
     private BoxManager boxes = new BoxManager();
     private Map<String, RemoteJvm> jvms = new HashMap();
+    private volatile RemoteJvm ephemerialMember;
 
     private Multimap<Box, String> lauchMap;
     private int membersOnlyCount;
@@ -241,6 +242,16 @@ public class ClusterContainer implements Serializable {
         return matching;
     }
 
+    public void nominateRandomMemberJvm( ) {
+        List<RemoteJvm> members = getMemberJvms();
+        Random random = new Random();
+        ephemerialMember = members.get(random.nextInt(members.size()));
+    }
+
+    public RemoteJvm getEphemerialMember(){
+        return ephemerialMember;
+    }
+
     public List<RemoteJvm> getClientJvms( ) {
         List<RemoteJvm> matching = new ArrayList<RemoteJvm>();
 
@@ -436,25 +447,6 @@ public class ClusterContainer implements Serializable {
         }
     }
 
-    public void getResponseExitOnExceptionFrom1(String jvmId, long timeOut) throws IOException, InterruptedException, JMSException {
-
-        RemoteJvm jvm = getMatchingJvms(jvmId).get(0);
-        Object o = jvm.getResponse(timeOut);
-
-        if(o==null){
-            System.out.println(Bash.ANSI_RED+"Timeout!"+Bash.ANSI_RESET);
-            System.exit(1);
-        }
-
-        Gson gson = new Gson();
-        ReplyMsg msg = gson.fromJson((String) o, ReplyMsg.class);
-        System.out.println(msg);
-
-        if(msg.error==true){
-            System.exit(1);
-        }
-    }
-
     private void printResponse(Object o){
         Gson gson = new Gson();
         ReplyMsg msg = gson.fromJson((String) o, ReplyMsg.class);
@@ -504,14 +496,6 @@ public class ClusterContainer implements Serializable {
 
         }
         return error;
-
-        /*
-        boolean error=false;
-        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
-            error |= jvm.printErrors();
-        }
-        return error;
-        */
     }
 
     public void ls(String jvmId) throws IOException, InterruptedException {

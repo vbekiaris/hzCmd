@@ -13,6 +13,8 @@ import mq.MQ;
 
 import javax.jms.JMSException;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 //add box type,  to ip list,  for starting in unix / win
 
@@ -130,16 +132,17 @@ public class HzCmd implements Serializable {
 
     public void bounce(String clusterId, String jvmId,  int iterations, int restartDelaySec, int iterationDelaySec, String version, boolean ee) throws Exception {
 
+        List<ClusterContainer> clusters = clusterManager.getClusters(clusterId);
         for(int i=0; i<iterations; i++){
 
             if(iterationDelaySec!=0) {
                 Thread.sleep(iterationDelaySec * 1000);
             }
 
-            for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
+            for (ClusterContainer c : clusters) {
                 c.kill(jvmId);
             }
-            for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
+            for (ClusterContainer c : clusters) {
                 c.printJvmInfo(jvmId);
             }
 
@@ -147,7 +150,7 @@ public class HzCmd implements Serializable {
                 Thread.sleep(restartDelaySec * 1000);
             }
 
-            for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
+            for (ClusterContainer c : clusters) {
                 if(version==null){
                     c.restart(jvmId);
                 } else {
@@ -158,6 +161,44 @@ public class HzCmd implements Serializable {
             restartEmbeddedObject(clusterId, jvmId);
         }
     }
+
+    public void bounceRandomMember(String clusterId, int iterations, int restartDelaySec, int iterationDelaySec, String version, boolean ee) throws Exception {
+
+        List<ClusterContainer> clusters = clusterManager.getClusters(clusterId);
+
+        for(int i=0; i<iterations; i++){
+
+            if(iterationDelaySec!=0) {
+                Thread.sleep(iterationDelaySec * 1000);
+            }
+
+            for (ClusterContainer c : clusters) {
+                c.nominateRandomMemberJvm();
+            }
+            for (ClusterContainer c : clusters) {
+                c.kill(c.getEphemerialMember().getId());
+            }
+            for (ClusterContainer c : clusters) {
+                c.printJvmInfo(c.getEphemerialMember().getId());
+            }
+
+            if(restartDelaySec!=0) {
+                Thread.sleep(restartDelaySec * 1000);
+            }
+
+            for (ClusterContainer c : clusters) {
+                if(version==null){
+                    c.restart(c.getEphemerialMember().getId());
+                } else {
+                    c.restart(c.getEphemerialMember().getId(), version, ee);
+                }
+            }
+            for (ClusterContainer c : clusters) {
+                restartEmbeddedObject(c.getClusterId(), c.getEphemerialMember().getId());
+            }
+        }
+    }
+
 
 
     public void ls(String id) throws Exception {
