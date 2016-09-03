@@ -1,9 +1,13 @@
 package local;
 
 import global.Bash;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 public abstract class Installer {
@@ -80,13 +84,13 @@ public abstract class Installer {
             List<String> names = jvmFactory.getVendorLibNames(version, ee);
             for (String name : names) {
 
-                //String jar = Bash.findShallow(CWD, name);
-                //if(jar==null || jar.length()==0) {
-                String jar = Bash.find(M2_Repo, name);
-                //}
+                String jar = findFileincwd(name);
+                if(jar==null) {
+                     jar = Bash.find(M2_Repo, name);
+                }
 
                 if(jar==null || jar.length()==0){
-                    System.out.println(Bash.ANSI_RED + "can't find "+version+" jars in "+M2_Repo+Bash.ANSI_RESET);
+                    System.out.println(Bash.ANSI_RED + "can't find "+name+" in cwd or "+M2_Repo+Bash.ANSI_RESET);
                     System.exit(1);
                 }else{
                     System.out.println(Bash.ANSI_YELLOW + "installing "+jar.trim()+ Bash.ANSI_RESET);
@@ -109,4 +113,24 @@ public abstract class Installer {
             }
         }
     }
+
+
+    public static String findFileincwd(String fileName) {
+        try {
+            File root = new File(".");
+            Collection files = FileUtils.listFiles(root, null, true);
+
+            for (Iterator<File> iterator = files.iterator(); iterator.hasNext();) {
+                File file = iterator.next();
+
+                if (file.getName().equals(fileName)){
+                    return file.getAbsolutePath();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
