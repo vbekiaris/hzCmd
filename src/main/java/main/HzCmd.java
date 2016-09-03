@@ -39,9 +39,7 @@ import java.util.List;
 //add fast exit on exception boolean.
 //add oracal choherance
 
-//bounce a random jvm.
-//renice jvm pid, on jvm start,
-//bash set temp var in shell / cmd line
+//renice jvm pid, on jvm start, bash set temp var in shell / cmd line
 
 
 public class HzCmd implements Serializable {
