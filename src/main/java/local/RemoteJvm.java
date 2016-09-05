@@ -225,6 +225,10 @@ public abstract class RemoteJvm implements Serializable {
         MQ.sendObj(Q, new RunBenchCmd(taskId, seconds) );
     }
 
+    public void stopBench(String taskId) throws IOException, InterruptedException, JMSException {
+        MQ.sendObj(Q, new StopBenchCmd(taskId) );
+    }
+
     public void postPhaseBench(String taskId) throws IOException, InterruptedException, JMSException {
         MQ.sendObj(Q, new PostPhaseCmd(taskId) );
     }
@@ -262,7 +266,7 @@ public abstract class RemoteJvm implements Serializable {
     public boolean printErrors() throws IOException, InterruptedException {
         String err = findError();
 
-        if(err != null && !err.isEmpty()){
+        if("".equals(err)){
             System.out.println(this);
             System.out.println(Bash.ANSI_RED+err+Bash.ANSI_RESET);
             return true;

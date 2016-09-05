@@ -1,6 +1,8 @@
 package remote.bench.marker;
 
+import global.AssertionException;
 import remote.bench.Bench;
+import remote.main.Utils;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -36,6 +38,24 @@ public abstract class BenchMarker {
             bw.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    protected void handelException(Bench bench, Exception e) throws Exception {
+        if(bench.ignore()!=null){
+            for (Class aClass : bench.ignore()) {
+                if(aClass.isInstance(e)){
+                    return;
+                }
+            }
+        }
+
+        if(throwException){
+            Utils.recordeException(e);
+            throw e;
+        }
+        if(e instanceof AssertionException){
+            throw e;
         }
     }
 }

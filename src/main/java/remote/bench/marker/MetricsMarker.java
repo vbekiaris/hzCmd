@@ -35,23 +35,15 @@ public class MetricsMarker extends BenchMarker {
         long startTime = System.currentTimeMillis();
         long endTime = startTime + (durationSeconds * 1000);
         if(expectedIntervalNanos==0){
-            if(bench.isSelfDetermined()){
-                selfDeterminedBenchFlatOut(bench);
-            }else{
-                timeBenchFlatOut(bench, endTime);
-            }
+            timeBenchFlatOut(bench, endTime);
         }else{
-            if(bench.isSelfDetermined()) {
-                selfDeterminedBenchInterval(bench);
-            }else{
-                timeBenchInterval(bench, endTime);
-            }
+            timeBenchInterval(bench, endTime);
         }
     }
 
     private void timeBenchFlatOut(Bench bench, long endTime) throws Exception{
         com.codahale.metrics.Timer timer = metrics.timer(outputFileName);
-        while(System.currentTimeMillis() < endTime){
+        while(System.currentTimeMillis() < endTime && bench.isRunning()){
             flatOut(bench, timer);
         }
         metrics.remove(outputFileName);
@@ -59,23 +51,7 @@ public class MetricsMarker extends BenchMarker {
 
     private void timeBenchInterval(Bench bench, long endTime) throws Exception {
         com.codahale.metrics.Timer timer = metrics.timer(outputFileName);
-        while(System.currentTimeMillis() < endTime){
-            interval(bench, timer);
-        }
-        metrics.remove(outputFileName);
-    }
-
-    private void selfDeterminedBenchFlatOut(Bench bench) throws Exception{
-        com.codahale.metrics.Timer timer = metrics.timer(outputFileName);
-        while(bench.isRunning()){
-            flatOut(bench, timer);
-        }
-        metrics.remove(outputFileName);
-    }
-
-    private void selfDeterminedBenchInterval(Bench bench) throws Exception {
-        com.codahale.metrics.Timer timer = metrics.timer(outputFileName);
-        while(bench.isRunning()){
+        while(System.currentTimeMillis() < endTime && bench.isRunning()){
             interval(bench, timer);
         }
         metrics.remove(outputFileName);
@@ -87,23 +63,7 @@ public class MetricsMarker extends BenchMarker {
             bench.timeStep();
             context.stop();
         }catch (Exception e){
-
-            if(bench.ignore()!=null){
-                for (Class aClass : bench.ignore()) {
-                    if(aClass.isInstance(e)){
-                        //System.out.println("ignored "+aClass.getName());
-                        return;
-                    }
-                }
-            }
-
-            if(throwException){
-                Utils.recordeException(e);
-                throw e;
-            }
-            if(e instanceof AssertionException){
-                throw e;
-            }
+            handelException(bench, e);
         }
     }
 
@@ -118,25 +78,9 @@ public class MetricsMarker extends BenchMarker {
             while( System.nanoTime() < nextStart ) {
                 //busy-waiting until the next expected interval
             }
-
         }catch (Exception e){
-
-            if(bench.ignore()!=null){
-                for (Class aClass : bench.ignore()) {
-                    if(aClass.isInstance(e)){
-                        //System.out.println("ignored "+aClass.getName());
-                        return;
-                    }
-                }
-            }
-
-            if(throwException){
-                Utils.recordeException(e);
-                throw e;
-            }
-            if(e instanceof AssertionException){
-                throw e;
-            }
+            handelException(bench, e);
         }
     }
+
 }

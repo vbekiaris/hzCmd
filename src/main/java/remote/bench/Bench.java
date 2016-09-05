@@ -9,7 +9,8 @@ public interface Bench {
 
     List<Class> ignore();
 
-    boolean isSelfDetermined();
+
+    void setRunning(boolean running);
     boolean isRunning();
 
     void setVendorObject(Object vendorObject);

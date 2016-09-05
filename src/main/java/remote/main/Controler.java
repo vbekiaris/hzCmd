@@ -100,6 +100,10 @@ public abstract class Controler{
         executor.submit(new BenchRunner(replyProducer, id, seconds));
     }
 
+    public void stopBench(MessageProducer replyProducer, String id) {
+        benchManager.setRunning(replyProducer, id, false);
+    }
+
     public void removeBench(MessageProducer replyProducer, String id) {
         benchManager.removeBench(replyProducer, id);
     }

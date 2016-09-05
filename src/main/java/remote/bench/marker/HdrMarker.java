@@ -38,44 +38,23 @@ public class HdrMarker extends BenchMarker {
         long startTime = System.currentTimeMillis();
         long endTime = startTime + (durationSeconds * 1000);
         if(expectedIntervalNanos==0){
-            if(bench.isSelfDetermined()){
-                selfDeterminedBenchFlatOut(bench);
-            }else{
-                timeBenchFlatOut(bench, endTime);
-            }
+            timeBenchFlatOut(bench, endTime);
         }else{
-            if(bench.isSelfDetermined()) {
-                selfDeterminedBenchInterval(bench);
-            }else{
-                timeBenchInterval(bench, endTime);
-            }
+            timeBenchInterval(bench, endTime);
         }
     }
 
     private void timeBenchFlatOut(Bench bench, long endTime) throws Exception{
-        while(System.currentTimeMillis() < endTime){
+        while(System.currentTimeMillis() < endTime && bench.isRunning()){
             flatOut(bench);
         }
     }
 
     private void timeBenchInterval(Bench bench, long endTime) throws Exception{
-        while(System.currentTimeMillis() < endTime){
+        while(System.currentTimeMillis() < endTime && bench.isRunning()){
             interval(bench);
         }
     }
-
-    private void selfDeterminedBenchFlatOut(Bench bench) throws Exception{
-        while(bench.isRunning()){
-            flatOut(bench);
-        }
-    }
-
-    private void selfDeterminedBenchInterval(Bench bench) throws Exception{
-        while(bench.isRunning()){
-            interval(bench);
-        }
-    }
-
 
     private void flatOut(Bench bench) throws Exception{
         try {
@@ -86,13 +65,7 @@ public class HdrMarker extends BenchMarker {
             histogram.recordValue(end-start);
 
         }catch (Exception e){
-            if(throwException){
-                Utils.recordeException(e);
-                throw e;
-            }
-            if(e instanceof AssertionException){
-                throw e;
-            }
+            handelException(bench, e);
         }
     }
 
@@ -109,13 +82,7 @@ public class HdrMarker extends BenchMarker {
             }
 
         }catch (Exception e){
-            if(throwException){
-                Utils.recordeException(e);
-                throw e;
-            }
-            if(e instanceof AssertionException){
-                throw e;
-            }
+            handelException(bench, e);
         }
     }
 }

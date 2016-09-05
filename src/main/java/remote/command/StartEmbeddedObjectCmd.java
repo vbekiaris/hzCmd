@@ -12,4 +12,9 @@ public class StartEmbeddedObjectCmd implements Cmd, Serializable{
     public void exicute(Controler c, MessageProducer replyProducer) throws Exception {
         c.startEmbeddedObject(replyProducer);
     }
+
+    @Override
+    public String toString() {
+        return "StartEmbeddedObjectCmd{}";
+    }
 }

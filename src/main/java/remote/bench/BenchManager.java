@@ -176,6 +176,25 @@ public class BenchManager {
         }
     }
 
+    public void setRunning(MessageProducer replyProducer, String benchId, boolean running) {
+        ReplyMsg msg = new ReplyMsg();
+        msg.id=Controler.ID;
+        for (BenchContainer benchContainer : getMatchingBenchContainers(benchId)) {
+            msg.benchId=benchContainer.getId();
+            msg.msg=benchId+" running="+running;
+            try {
+                benchContainer.setRunning(running);
+                //MQ.sendReply(replyProducer, gson.toJson(msg));
+            } catch (Exception e) {
+                try {
+                    msg.error=true;
+                    msg.msg=e.toString();
+                    //MQ.sendReply(replyProducer, gson.toJson(msg));
+                } catch (Exception e2) {}
+            }
+        }
+    }
+
     public void warmup(MessageProducer replyProducer, String id, int sec) {
         run(replyProducer, id, sec, "warmup");
     }

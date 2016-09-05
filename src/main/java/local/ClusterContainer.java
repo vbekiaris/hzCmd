@@ -360,6 +360,12 @@ public class ClusterContainer implements Serializable {
         }
     }
 
+    public void stopBench(String jvmId, String taskId) throws IOException, InterruptedException, JMSException{
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
+            jvm.stopBench(taskId);
+        }
+    }
+
     public void postPhaseBench(String jvmId, String taskId) throws IOException, InterruptedException, JMSException {
         for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             jvm.postPhaseBench(taskId);

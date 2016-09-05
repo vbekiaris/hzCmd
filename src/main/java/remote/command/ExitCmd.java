@@ -12,4 +12,9 @@ public class ExitCmd implements Cmd, Serializable{
     public void exicute(Controler c, MessageProducer replyProducer){
         System.exit(0);
     }
+
+    @Override
+    public String toString() {
+        return "ExitCmd{}";
+    }
 }

@@ -100,6 +100,12 @@ public class BenchContainer {
         benchMarker.setDurationSeconds(seconds);
     }
 
+    public void setRunning(boolean running){
+        for (Bench bench : benchObjs) {
+            bench.setRunning(running);
+        }
+    }
+
     @Override
     public String toString() {
         return "BenchContainer{" +

@@ -128,6 +128,13 @@ public class HzCmd implements Serializable {
         }
     }
 
+    public void stopBench(String clusterId, String jvmId, String benchId) throws Exception {
+        for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
+            c.stopBench(jvmId, benchId);
+        }
+    }
+
+
     public void bounce(String clusterId, String jvmId,  int iterations, int restartDelaySec, int iterationDelaySec, String version, boolean ee) throws Exception {
 
         List<ClusterContainer> clusters = clusterManager.getClusters(clusterId);
