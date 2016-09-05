@@ -28,7 +28,7 @@ public class CmdLine {
                         ClusterInit.class,
 
                         BenchDriver.class, BenchThreads.class, BenchDuration.class, BenchWarmup.class,
-                        BenchTypes.class, BenchRun.class, BenchInterval.class, BenchThrow.class,
+                        BenchTypes.class, BenchRun.class, BenchStop.class, BenchInterval.class, BenchThrow.class,
 
                         Check.class, Wipe.class, Clean.class,
 

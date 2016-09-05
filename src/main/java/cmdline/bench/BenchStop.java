@@ -7,13 +7,13 @@ import main.HzCmd;
 
 import java.util.List;
 
-@com.github.rvesse.airline.annotations.Command(name = "ls", description = "ls the cwd of jvm in cluster")
+@com.github.rvesse.airline.annotations.Command(name = "stop", description = "stop benches")
 public class BenchStop extends Command
 {
     @Option(name = "-id", description = "cluster's to run the stop cmd on, regex on cluster id ")
     public String clusterId=".*";
 
-    @Option(name = "-jvmId", description = "cluster's to run the stop cmd on, regex on cluster id ")
+    @Option(name = "-jvmId", description = "jvmid to run the stop cmd on, regex on jvm id ")
     public String jvmId=".*";
 
     @Arguments(description = "benchmark ids")
