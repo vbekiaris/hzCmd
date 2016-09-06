@@ -18,9 +18,6 @@ import java.util.List;
 
 //add box type,  to ip list,  for starting in unix / win
 
-//if a newer serilization file exists,  dont write a serlization file,  as the state of the world has moved on.
-//needs time stamp in serlization file.
-
 //print cluster layout info
 
 //JSON msg format,
