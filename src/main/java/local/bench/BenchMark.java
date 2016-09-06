@@ -107,12 +107,12 @@ public class BenchMark implements Serializable {
             }
 
             if (warmups.size()==0) {
-                FieldValue fieldValue = properties.getFieldValue(HzCmdProperties.BENCH_WARMUP, "30");
+                FieldValue fieldValue = properties.getFieldValue(HzCmdProperties.BENCH_WARMUP, "0");
                 warmups.addAll(fieldValue.explode());
             }
 
             if (durations.size()==0) {
-                FieldValue fieldValue = properties.getFieldValue(HzCmdProperties.BENCH_DURATION, "60");
+                FieldValue fieldValue = properties.getFieldValue(HzCmdProperties.BENCH_DURATION, "1000001");
                 durations.addAll(fieldValue.explode());
             }
 
