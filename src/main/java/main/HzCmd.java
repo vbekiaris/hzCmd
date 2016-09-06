@@ -44,7 +44,8 @@ import java.util.List;
 
 public class HzCmd implements Serializable {
 
-    public static volatile boolean saveHzCmd=true;
+    private static transient boolean stateModified=false;
+//    public static volatile boolean saveHzCmd=true;
     public static final String serFile = "HzCmd.ser";
     public static final String propertiesFile = "HzCmd.properties";
 
@@ -97,6 +98,7 @@ public class HzCmd implements Serializable {
         cluster.renice();
 
         System.out.print(cluster);
+        stateModified=true;
     }
 
 
@@ -105,6 +107,7 @@ public class HzCmd implements Serializable {
             c.restart(id, version, ee);
         }
         restartEmbeddedObject(id, id);
+        stateModified=true;
     }
 
     public void exit(String id) throws Exception {
@@ -117,6 +120,7 @@ public class HzCmd implements Serializable {
         for (ClusterContainer c : clusterManager.getClusters(id)) {
             c.kill(id);
         }
+        stateModified=true;
     }
 
     public void restartEmbeddedObject(String clusterId, String jvmId) throws Exception {
@@ -165,6 +169,7 @@ public class HzCmd implements Serializable {
 
             restartEmbeddedObject(clusterId, jvmId);
         }
+        stateModified=true;
     }
 
     public void bounceRandomMember(String clusterId, int iterations, int restartDelaySec, int iterationDelaySec, String version, boolean ee) throws Exception {
@@ -202,6 +207,7 @@ public class HzCmd implements Serializable {
                 restartEmbeddedObject(c.getClusterId(), c.getEphemerialMember().getId());
             }
         }
+        stateModified=true;
     }
 
 
@@ -240,10 +246,10 @@ public class HzCmd implements Serializable {
         for (ClusterContainer c : clusterManager.getClusters(id)) {
             c.clean(id);
         }
+        stateModified=true;
     }
 
     public void wipe( ) throws IOException, InterruptedException, JMSException {
-        saveHzCmd=false;
 
         Bash.rmQuite(serFile);
         Bash.rmQuite(propertiesFile);
@@ -260,7 +266,7 @@ public class HzCmd implements Serializable {
     }
 
     public void wipeLocal( ) throws IOException, InterruptedException, JMSException {
-        saveHzCmd=false;
+
         Bash.rmQuite(serFile);
         Bash.rmQuite(propertiesFile);
 
@@ -315,6 +321,7 @@ public class HzCmd implements Serializable {
 
     public void setBrokerIP(String brokerIP) {
         this.brokerIP = brokerIP;
+        stateModified=true;
     }
 
 
@@ -333,7 +340,7 @@ public class HzCmd implements Serializable {
     }
 
     private static void saveHzCmd(HzCmd hzCmd){
-        if(saveHzCmd){
+        if(stateModified){
             try {
                 FileOutputStream fileOut = new FileOutputStream(serFile);
                 ObjectOutputStream out = new ObjectOutputStream(fileOut);
