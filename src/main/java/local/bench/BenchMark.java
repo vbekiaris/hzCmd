@@ -102,7 +102,7 @@ public class BenchMark implements Serializable {
             }
 
             if (threads.size()==0) {
-                FieldValue fieldValue = properties.getFieldValue(HzCmdProperties.BENCH_THREADS, "4");
+                FieldValue fieldValue = properties.getFieldValue(HzCmdProperties.BENCH_THREADS, "1");
                 threads.addAll(fieldValue.explode());
             }
 
