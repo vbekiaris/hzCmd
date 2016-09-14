@@ -42,7 +42,6 @@ import java.util.List;
 public class HzCmd implements Serializable {
 
     private static transient boolean stateModified=false;
-//    public static volatile boolean saveHzCmd=true;
     public static final String serFile = "HzCmd.ser";
     public static final String propertiesFile = "HzCmd.properties";
 
@@ -279,7 +278,7 @@ public class HzCmd implements Serializable {
     }
 
 
-    public void invokeBenchMark(String id, String benchFile) throws Exception {
+    public void invokeBenchMark(String clusterId, String benchFile) throws Exception {
 
         BenchManager benchManager = new BenchManager(benchFile);
         System.out.println(Bash.ANSI_PURPLE+benchManager+Bash.ANSI_RESET);
@@ -288,14 +287,14 @@ public class HzCmd implements Serializable {
             benchManager.popBenchMarks();
             System.out.println(Bash.ANSI_CYAN+benchManager.currentBench_toString()+Bash.ANSI_RESET);
 
-            clusterManager.loadBench(id, benchManager);
-            clusterManager.setAttributes(id, benchManager);
-            clusterManager.initBench(id, benchManager);
-            clusterManager.warmupBench(id, benchManager);
-            clusterManager.runBench(id, benchManager);
-            clusterManager.postPhaseBench(id, benchManager);
-            clusterManager.writeMetaDataCmd(id, benchManager);
-            clusterManager.removeBench(id, benchManager);
+            clusterManager.loadBench(clusterId, benchManager);
+            clusterManager.setAttributes(clusterId, benchManager);
+            clusterManager.initBench(clusterId, benchManager);
+            clusterManager.warmupBench(clusterId, benchManager);
+            clusterManager.runBench(clusterId, benchManager);
+            clusterManager.postPhaseBench(clusterId, benchManager);
+            clusterManager.writeMetaDataCmd(clusterId, benchManager);
+            clusterManager.removeBench(clusterId, benchManager);
         }
     }
 

@@ -93,11 +93,11 @@ public abstract class Controler{
     }
 
     public void warmupBench(MessageProducer replyProducer, String id, int seconds){
-        executor.submit(new WarmupRunner(replyProducer, id, seconds));
+        executor.submit(new Runner(replyProducer, id, seconds, RunStyle.WARMUP));
     }
 
     public void runBench(MessageProducer replyProducer, String id, int seconds){
-        executor.submit(new BenchRunner(replyProducer, id, seconds));
+        executor.submit(new Runner(replyProducer, id, seconds, RunStyle.BENCH));
     }
 
     public void stopBench(MessageProducer replyProducer, String id) {
@@ -108,9 +108,54 @@ public abstract class Controler{
         benchManager.removeBench(replyProducer, id);
     }
 
-
     public void postPhase(MessageProducer replyProducer, String id) {
         benchManager.postPhase(replyProducer, id);
+    }
+
+    public enum RunStyle {
+        WARMUP, BENCH
+    }
+
+    private class Runner implements Callable<Object> {
+
+        private MessageProducer replyProducer;
+        private String id;
+        private int seconds;
+        private RunStyle style;
+
+        public Runner(MessageProducer replyProducer, String id, int seconds, RunStyle style){
+            this.replyProducer=replyProducer;
+            this.id=id;
+            this.seconds=seconds;
+            this.style=style;
+        }
+
+        public Object call() {
+            if (style.equals(RunStyle.WARMUP)){
+                benchManager.warmup(replyProducer, id, seconds);
+            }else if (style.equals(RunStyle.BENCH)){
+                benchManager.bench(replyProducer, id, seconds);
+            }
+            return null;
+        }
+    }
+
+    private static void printProperties(){
+        try {
+            PrintStream ps = new PrintStream(new FileOutputStream("jvm.properties", true));
+
+            Properties p = System.getProperties();
+            Enumeration keys = p.keys();
+            while (keys.hasMoreElements()) {
+                String key = (String)keys.nextElement();
+                String value = (String)p.get(key);
+                ps.println(key + ": " + value);
+            }
+
+            ps.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -133,57 +178,6 @@ public abstract class Controler{
         }
     }
 
-    private class WarmupRunner implements Callable<Object> {
-        private MessageProducer replyProducer;
-        private String id;
-        private int seconds;
-
-        public WarmupRunner(MessageProducer replyProducer, String id, int seconds){
-            this.replyProducer=replyProducer;
-            this.id=id;
-            this.seconds=seconds;
-        }
-
-        public Object call() {
-            benchManager.warmup(replyProducer, id, seconds);
-            return null;
-        }
-    }
-
-    private class BenchRunner implements Callable<Object> {
-        private MessageProducer replyProducer;
-        private String id;
-        private int seconds;
-
-        public BenchRunner(MessageProducer replyProducer, String id, int seconds){
-            this.replyProducer=replyProducer;
-            this.id=id;
-            this.seconds=seconds;
-        }
-
-        public Object call() {
-            benchManager.bench(replyProducer, id, seconds);
-            return null;
-        }
-    }
-
-    private static void printProperties(){
-        try {
-            PrintStream ps = new PrintStream(new FileOutputStream("jvm.properties", true));
-
-            Properties p = System.getProperties();
-            Enumeration keys = p.keys();
-            while (keys.hasMoreElements()) {
-                String key = (String)keys.nextElement();
-                String value = (String)p.get(key);
-                ps.println(key + ": " + value);
-            }
-
-            ps.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
 
     public String toString() {
         return "HzCmd{" +

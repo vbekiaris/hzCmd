@@ -72,6 +72,23 @@
         </dependency>
 
         <dependency>
+            <groupId>coherence</groupId>
+            <artifactId>coherence</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/stash/coherence.jar</systemPath>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/jpox/jpox-tangosol -->
+        <dependency>
+            <groupId>jpox</groupId>
+            <artifactId>jpox-tangosol</artifactId>
+            <version>1.1.9</version>
+        </dependency>
+
+
+        <dependency>
             <groupId>org.apache.ignite</groupId>
             <artifactId>ignite-core</artifactId>
             <version>1.5.0.final</version>
