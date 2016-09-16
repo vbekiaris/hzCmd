@@ -71,6 +71,7 @@
             <version>5.13.3</version>
         </dependency>
 
+        <!--
         <dependency>
             <groupId>coherence</groupId>
             <artifactId>coherence</artifactId>
@@ -78,6 +79,7 @@
             <scope>system</scope>
             <systemPath>${basedir}/stash/coherence.jar</systemPath>
         </dependency>
+        -->
 
 
         <!-- https://mvnrepository.com/artifact/jpox/jpox-tangosol -->
