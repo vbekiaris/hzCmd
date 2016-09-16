@@ -29,7 +29,7 @@ public class RedisControler extends Controler {
             jedisClusterNodes.add(new HostAndPort("127.0.0.1", RedisJvmFactory.redisMemberPort));
 
             GenericObjectPoolConfig poolConfig = new GenericObjectPoolConfig();
-
+            poolConfig.setMaxTotal(64);
             jedisCluster = new JedisCluster(jedisClusterNodes, poolConfig);
 
             System.out.println(jedisCluster);
