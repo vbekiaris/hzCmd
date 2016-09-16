@@ -27,7 +27,7 @@ public class RedisJvmFactory implements JvmFactory, Serializable {
     public List<String> getVendorLibNames(String version, boolean ee) {
         List<String> jars = new ArrayList();
 
-        jars.add("jedis-2.8.0.jar");
+        jars.add("jedis-2.8.1.jar");
         jars.add("commons-pool2-2.3.jar");
         return jars;
     }
