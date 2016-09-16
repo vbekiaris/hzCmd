@@ -13,7 +13,7 @@ import java.util.List;
 
 public class RemoteRedisMember extends RemoteJvm {
 
-    public static final String version="3.0.7";
+    public static final String version="3.2.3";
 
     public RemoteRedisMember(Box box, NodeType type, String id, String clusterId) throws IOException, InterruptedException {
         super(box, type, id, clusterId);
@@ -49,7 +49,6 @@ public class RemoteRedisMember extends RemoteJvm {
         }
 
         beforeJvmStart(myCluster);
-
 
         //System.out.println( box.ssh("sudo yum install -y expect") );
         System.out.println( box.ssh("sudo yum install -y gcc-c++") );
