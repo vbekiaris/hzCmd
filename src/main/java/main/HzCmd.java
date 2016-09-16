@@ -38,6 +38,9 @@ import java.util.List;
 
 //renice jvm pid, on jvm start, bash set temp var in shell / cmd line
 
+//in benchMarker.java file,  play with the default duration if its set to 0
+//if the seconds duration is 0  then set to max int,  if default seconds valuse is allways 0
+
 
 public class HzCmd implements Serializable {
 

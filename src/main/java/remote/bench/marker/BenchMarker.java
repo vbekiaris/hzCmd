@@ -21,6 +21,7 @@ public abstract class BenchMarker {
         this.throwException = throwException;
     }
 
+    //if the seconds duration is 0  then set to max int,  if default seconds valuse is allways 0
     public void setDurationSeconds(int seconds){
         durationSeconds=seconds;
     }
