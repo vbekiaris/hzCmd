@@ -6,6 +6,7 @@ import local.ClusterContainer;
 import local.RemoteJvm;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -24,7 +25,7 @@ public class RemoteJedisJvm extends RemoteJvm {
 
     @Override
     public List<String> stuffToPutInDir() throws Exception {
-        return null;
+        return Collections.emptyList();
     }
 
     public void beforeJvmStart(ClusterContainer myCluster) throws Exception {
