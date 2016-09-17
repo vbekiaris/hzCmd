@@ -244,6 +244,7 @@ public class HzCmd implements Serializable {
     public void clean(String id) throws Exception {
         for (ClusterContainer c : clusterManager.getClusters(id)) {
             c.clean(id);
+            c.drainQ();
         }
         stateModified=true;
     }
