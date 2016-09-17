@@ -1,9 +1,7 @@
 package remote.bench.marker;
 
-import global.AssertionException;
 import org.HdrHistogram.ConcurrentHistogram;
 import org.HdrHistogram.Histogram;
-import remote.main.Utils;
 import remote.bench.Bench;
 
 import java.io.*;

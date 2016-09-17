@@ -2,8 +2,6 @@ package remote.bench.marker;
 
 import com.codahale.metrics.CsvReporter;
 import com.codahale.metrics.MetricRegistry;
-import global.AssertionException;
-import remote.main.Utils;
 import remote.bench.Bench;
 
 import java.io.File;
