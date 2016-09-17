@@ -112,7 +112,7 @@ public class BenchMark implements Serializable {
             }
 
             if (durations.size()==0) {
-                FieldValue fieldValue = properties.getFieldValue(HzCmdProperties.BENCH_DURATION, "1000001");
+                FieldValue fieldValue = properties.getFieldValue(HzCmdProperties.BENCH_DURATION, "0");
                 durations.addAll(fieldValue.explode());
             }
 
