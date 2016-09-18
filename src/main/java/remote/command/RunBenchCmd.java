@@ -12,9 +12,9 @@ import java.io.Serializable;
 public class RunBenchCmd implements Cmd, Serializable{
 
     private String taskId;
-    private int seconds;
+    private long seconds;
 
-    public RunBenchCmd(String taskId, int seconds){
+    public RunBenchCmd(String taskId, long seconds){
         this.taskId = taskId;
         this.seconds = seconds;
     }

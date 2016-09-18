@@ -21,6 +21,8 @@ import static global.Utils.myIp;
 
 public class ClusterManager implements Serializable {
 
+    private int TWO_MIN_AS_SECONDS = 120;
+
     private Map<String, ClusterContainer> clusters = new HashMap();
 
     public ClusterManager() { }
@@ -55,7 +57,8 @@ public class ClusterManager implements Serializable {
     private void getClusterResponses(List<ClusterContainer> clusters, BenchManager benchManager, long timeOut) throws InterruptedException, JMSException, IOException{
         for (ClusterContainer cluster : clusters) {
             for (BenchMark benchMark : benchManager.getBenchMarks()) {
-                cluster.getResponseExitOnException(benchMark.getDriver(), timeOut);
+
+                cluster.getResponseExitOnException(benchMark.getDriver(), benchManager, timeOut);
             }
         }
     }
@@ -107,7 +110,7 @@ public class ClusterManager implements Serializable {
         for (ClusterContainer cluster : clusters) {
             for (BenchMark benchMark : benchManager.getBenchMarks()) {
                 for (FieldValue fieldValue : benchMark.getAttributes()) {
-                    cluster.getResponseExitOnException(benchMark.getDriver(), Utils.TIMEOUT_2MIN);
+                    cluster.getResponseExitOnException(benchMark.getDriver(), benchManager, Utils.TIMEOUT_2MIN);
                 }
             }
         }
@@ -129,16 +132,16 @@ public class ClusterManager implements Serializable {
 
         for (ClusterContainer cluster : clusters) {
             for (BenchMark benchMark : benchManager.getBenchMarks()) {
-                if(benchMark.getWarmup()!=0){
-                    cluster.warmupBench(benchMark.getDriver(), benchMark.getId(), benchMark.getWarmup());
+                if(benchMark.getWarmupSeconds()!=0){
+                    cluster.warmupBench(benchMark.getDriver(), benchMark.getId(), benchMark.getWarmupSeconds());
                 }
             }
         }
         for (ClusterContainer cluster : clusters) {
             for (BenchMark benchMark : benchManager.getBenchMarks()) {
-                if(benchMark.getWarmup()!=0){
-                    long timout = TimeUnit.SECONDS.toMillis(benchMark.getWarmup()+120);
-                    cluster.getResponseExitOnException(benchMark.getDriver(), timout);
+                if(benchMark.getWarmupSeconds()!=0){
+                    long timout = TimeUnit.SECONDS.toMillis(benchMark.getWarmupSeconds() + TWO_MIN_AS_SECONDS);
+                    cluster.getResponseExitOnException(benchMark.getDriver(), benchManager, timout);
                 }
             }
         }
@@ -147,18 +150,12 @@ public class ClusterManager implements Serializable {
     public void runBench(String id, BenchManager benchManager) throws InterruptedException, JMSException, IOException {
         List<ClusterContainer> clusters = getClusters(id);
 
-
-        int maxDuration = 0;
         for (ClusterContainer cluster : clusters) {
             for (BenchMark benchMark : benchManager.getBenchMarks()) {
-
-                if(maxDuration < benchMark.getDuration()){
-                    maxDuration = benchMark.getDuration();
-                }
-                cluster.runBench(benchMark.getDriver(), benchMark.getId(), benchMark.getDuration());
+                cluster.runBench(benchMark.getDriver(), benchMark.getId(), benchMark.getDurationSeconds());
             }
         }
-        long timout = TimeUnit.SECONDS.toMillis(maxDuration+120);
+        long timout = TimeUnit.SECONDS.toMillis(benchManager.getMaxDurationSeconds() + TWO_MIN_AS_SECONDS);
         getClusterResponses(clusters, benchManager, timout);
     }
 

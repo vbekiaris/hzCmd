@@ -7,6 +7,7 @@ import remote.main.Utils;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 
 public abstract class BenchMarker {
@@ -14,17 +15,17 @@ public abstract class BenchMarker {
     protected boolean throwException =false;
     protected long expectedIntervalNanos=0;
     protected String outputFileName;
-    protected int durationSeconds;
+    protected long durationSeconds;
 
     public BenchMarker(long expectedIntervalNanos, boolean throwException){
         this.expectedIntervalNanos = expectedIntervalNanos;
         this.throwException = throwException;
     }
 
-    public void setDurationSeconds(int seconds){
+    public void setDurationSeconds(long seconds){
         durationSeconds=seconds;
         if(durationSeconds==0){
-            durationSeconds=31536000;
+            durationSeconds = TimeUnit.DAYS.toSeconds(365);
         }
     }
 

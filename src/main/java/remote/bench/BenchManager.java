@@ -195,22 +195,22 @@ public class BenchManager {
         }
     }
 
-    public void warmup(MessageProducer replyProducer, String id, int sec) {
-        run(replyProducer, id, sec, "warmup");
+    public void warmup(MessageProducer replyProducer, String id, long seconds) {
+        run(replyProducer, id, seconds, "warmup");
     }
 
-    public void bench(MessageProducer replyProducer, String id, int sec) {
-        run(replyProducer, id, sec, "bench");
+    public void bench(MessageProducer replyProducer, String id, long seconds) {
+        run(replyProducer, id, seconds, "bench");
     }
 
-    private void run(MessageProducer replyProducer, String id, int sec, String fileNamePostFix){
+    private void run(MessageProducer replyProducer, String id, long seconds, String fileNamePostFix){
 
         List<BenchThread> threads = new ArrayList();
         Map<String, Integer> benchResults = new HashMap();
 
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
             benchContainer.preBench(fileNamePostFix);
-            benchContainer.setDuration(sec);
+            benchContainer.setDurationSeconds(seconds);
             threads.addAll( benchContainer.getThreads() );
             benchResults.put(benchContainer.getId(), benchContainer.getThreadCount());
         }

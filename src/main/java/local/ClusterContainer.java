@@ -4,6 +4,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
 import global.*;
+import local.bench.BenchManager;
 
 import javax.jms.JMSException;
 import java.io.*;
@@ -348,13 +349,13 @@ public class ClusterContainer implements Serializable {
         }
     }
 
-    public void warmupBench(String jvmId,  String taskId, int seconds) throws IOException, InterruptedException, JMSException {
+    public void warmupBench(String jvmId,  String taskId, long seconds) throws IOException, InterruptedException, JMSException {
         for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             jvm.warmupBench(taskId, seconds);
         }
     }
 
-    public void runBench(String jvmId,  String taskId, int seconds) throws IOException, InterruptedException, JMSException {
+    public void runBench(String jvmId,  String taskId, long seconds) throws IOException, InterruptedException, JMSException {
         for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             jvm.runBench(taskId, seconds);
         }
@@ -428,14 +429,19 @@ public class ClusterContainer implements Serializable {
         }
     }
 
-    public void getResponseExitOnException(String jvmId, long timeOutMillis) throws IOException, InterruptedException, JMSException {
+    public void getResponseExitOnException(String jvmId, BenchManager benchManager, long timeOutMillis) throws IOException, InterruptedException, JMSException {
         boolean exit=false;
         for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             Object o = jvm.getResponse(timeOutMillis);
 
             if(o==null){
-                System.out.println(Bash.ANSI_RED+"Timeout!"+Bash.ANSI_RESET);
-                Thread.dumpStack();
+                System.out.println(Bash.ANSI_RED+"Timeout! clusterId="+this.getClusterId()+" drivers="+jvmId+" timeoutSeconds="+TimeUnit.MILLISECONDS.toSeconds(timeOutMillis)+Bash.ANSI_RESET);
+
+                if(benchManager!=null) {
+                    System.out.println(Bash.ANSI_RED + benchManager.getFileName() + Bash.ANSI_RESET);
+                    System.out.println(Bash.ANSI_RED + benchManager.currentBench_toString() + Bash.ANSI_RESET);
+                }
+                System.out.println(Bash.ANSI_RED+this+Bash.ANSI_RESET);
                 System.exit(1);
             }
 
@@ -494,7 +500,7 @@ public class ClusterContainer implements Serializable {
         for (Box box : boxes.getBoxList()) {
             String err = box.findArgs(Installer.REMOTE_HZCMD_ROOT+"/*"+clusterId+"*", "-name exception.txt -o -name *.hprof -o -name *.oome -o -name hs_err_pid* -o -name *core*");
 
-            if(err != null && !err.isEmpty()){
+            if(err != null && !"".equals(err)){
                 System.out.println(this);
                 System.out.println(Bash.ANSI_RED+err+Bash.ANSI_RESET);
                 error = true;

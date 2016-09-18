@@ -3,9 +3,9 @@ package local.bench;
 import local.properties.OrderedProperties;
 
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 
 public class BenchManager {
@@ -91,9 +91,26 @@ public class BenchManager {
         return str;
     }
 
-    public static void main(String[] args) throws InterruptedException, IOException {
-        BenchManager benchManager = new BenchManager("config.properties");
-        System.out.println(benchManager);
+
+    public long getMaxDurationSeconds() {
+
+        for (BenchMark benchMark : getBenchMarks()) {
+            if(benchMark.getDurationSeconds() == 0){
+                return TimeUnit.DAYS.toSeconds(365);
+            }
+        }
+
+        long maxDuration=0;
+        for (BenchMark benchMark : getBenchMarks()) {
+            if(maxDuration < benchMark.getDurationSeconds()){
+                maxDuration = benchMark.getDurationSeconds();
+            }
+        }
+
+        return maxDuration;
     }
 
+    public String getFileName() {
+        return file;
+    }
 }

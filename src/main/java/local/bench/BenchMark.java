@@ -240,11 +240,11 @@ public class BenchMark implements Serializable {
         return Integer.parseInt(getFieldValue(currentBench, HzCmdProperties.BENCH_THREADS));
     }
 
-    public int getWarmup() {
+    public long getWarmupSeconds() {
         return Integer.parseInt(getFieldValue(currentBench, HzCmdProperties.BENCH_WARMUP) );
     }
 
-    public int getDuration() {
+    public long getDurationSeconds() {
         return Integer.parseInt(getFieldValue(currentBench, HzCmdProperties.BENCH_DURATION) );
     }
 

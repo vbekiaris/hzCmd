@@ -12,9 +12,9 @@ import java.io.Serializable;
 public class WarmupCmd implements Cmd, Serializable{
 
     private String taskId;
-    private int seconds ;
+    private long seconds ;
 
-    public WarmupCmd(String taskId, int seconds){
+    public WarmupCmd(String taskId, long seconds){
         this.taskId = taskId;
         this.seconds = seconds;
     }

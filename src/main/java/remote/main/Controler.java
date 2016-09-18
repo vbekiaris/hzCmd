@@ -92,11 +92,11 @@ public abstract class Controler{
         benchManager.init(replyProducer, id);
     }
 
-    public void warmupBench(MessageProducer replyProducer, String id, int seconds){
+    public void warmupBench(MessageProducer replyProducer, String id, long seconds){
         executor.submit(new Runner(replyProducer, id, seconds, RunStyle.WARMUP));
     }
 
-    public void runBench(MessageProducer replyProducer, String id, int seconds){
+    public void runBench(MessageProducer replyProducer, String id, long seconds){
         executor.submit(new Runner(replyProducer, id, seconds, RunStyle.BENCH));
     }
 
@@ -120,10 +120,10 @@ public abstract class Controler{
 
         private MessageProducer replyProducer;
         private String id;
-        private int seconds;
+        private long seconds;
         private RunStyle style;
 
-        public Runner(MessageProducer replyProducer, String id, int seconds, RunStyle style){
+        public Runner(MessageProducer replyProducer, String id, long seconds, RunStyle style){
             this.replyProducer=replyProducer;
             this.id=id;
             this.seconds=seconds;

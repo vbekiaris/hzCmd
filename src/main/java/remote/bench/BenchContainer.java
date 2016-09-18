@@ -96,7 +96,7 @@ public class BenchContainer {
         benchMarker.postBench();
     }
 
-    public void setDuration(int seconds){
+    public void setDurationSeconds(long seconds){
         benchMarker.setDurationSeconds(seconds);
     }
 
