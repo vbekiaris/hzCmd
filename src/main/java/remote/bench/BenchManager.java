@@ -5,6 +5,7 @@ import global.BenchType;
 import global.ReplyMsg;
 import mq.MQ;
 import remote.main.Controler;
+import remote.main.Utils;
 
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
@@ -130,6 +131,7 @@ public class BenchManager {
                 MQ.sendReply(replyProducer, gson.toJson(msg));
             } catch (Exception e) {
                 try {
+                    Utils.recordeException(e);
                     msg.error=true;
                     msg.msg=e.toString();
                     MQ.sendReply(replyProducer, gson.toJson(msg));
