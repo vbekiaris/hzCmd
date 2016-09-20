@@ -37,6 +37,7 @@ public class BenchManager {
             MQ.sendReply(replyProducer, gson.toJson(msg));
         } catch (Exception e) {
             try {
+                Utils.recordeException(e);
                 msg.error=true;
                 msg.msg=e.toString();
                 MQ.sendReply(replyProducer, gson.toJson(msg));
@@ -54,6 +55,7 @@ public class BenchManager {
             MQ.sendReply(replyProducer, gson.toJson(msg));
         } catch (Exception e) {
             try {
+                Utils.recordeException(e);
                 msg.error=true;
                 msg.msg=e.toString();
                 MQ.sendReply(replyProducer, gson.toJson(msg));
@@ -74,6 +76,7 @@ public class BenchManager {
                 MQ.sendReply(replyProducer, gson.toJson(msg));
             } catch (Exception e) {
                 try {
+                    Utils.recordeException(e);
                     msg.error=true;
                     msg.msg=e.toString();
                     MQ.sendReply(replyProducer, gson.toJson(msg));
@@ -93,6 +96,7 @@ public class BenchManager {
                 MQ.sendReply(replyProducer, gson.toJson(msg));
             } catch (Exception e) {
                 try {
+                    Utils.recordeException(e);
                     msg.error=true;
                     msg.msg=e.toString();
                     MQ.sendReply(replyProducer, gson.toJson(msg));
@@ -112,6 +116,7 @@ public class BenchManager {
                 MQ.sendReply(replyProducer, gson.toJson(msg));
             } catch (Exception e) {
                 try {
+                    Utils.recordeException(e);
                     msg.error=true;
                     msg.msg=e.toString();
                     MQ.sendReply(replyProducer, gson.toJson(msg));
@@ -151,6 +156,7 @@ public class BenchManager {
                 MQ.sendReply(replyProducer, gson.toJson(msg));
             } catch (Exception e) {
                 try {
+                    Utils.recordeException(e);
                     msg.error=true;
                     msg.msg=e.toString();
                     MQ.sendReply(replyProducer, gson.toJson(msg));
@@ -170,6 +176,7 @@ public class BenchManager {
                 MQ.sendReply(replyProducer, gson.toJson(msg));
             } catch (Exception e) {
                 try {
+                    Utils.recordeException(e);
                     msg.error=true;
                     msg.msg=e.toString();
                     MQ.sendReply(replyProducer, gson.toJson(msg));
@@ -189,6 +196,7 @@ public class BenchManager {
                 //MQ.sendReply(replyProducer, gson.toJson(msg));
             } catch (Exception e) {
                 try {
+                    Utils.recordeException(e);
                     msg.error=true;
                     msg.msg=e.toString();
                     //MQ.sendReply(replyProducer, gson.toJson(msg));
