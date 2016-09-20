@@ -441,7 +441,6 @@ public class ClusterContainer implements Serializable {
                     System.out.println(Bash.ANSI_RED + benchManager.getFileName() + Bash.ANSI_RESET);
                     System.out.println(Bash.ANSI_RED + benchManager.currentBench_toString() + Bash.ANSI_RESET);
                 }
-                System.out.println(Bash.ANSI_RED+this+Bash.ANSI_RESET);
                 System.exit(1);
             }
 
