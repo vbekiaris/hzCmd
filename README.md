@@ -29,9 +29,9 @@ hz
 
 ssh $(whoami)@127.0.0.1 'pwd'
 
-hz-bench-get hz/put
+hz-bench-get hz
 
-cd put
+cd hz/put
 
 ./go
 ```
