@@ -1,6 +1,5 @@
 # HzCmd
 
-IMDG bencher
 
 1) Install, you will need 
  
@@ -37,7 +36,7 @@ cd hz/put
 ```
 
 
-2) setup aws cli
+3) setup aws cli
 
 http://docs.aws.amazon.com/cli/latest/userguide/installing.html
 ```
@@ -54,25 +53,25 @@ Default output format [None]: ENTER
 ```
 
 
-3) Create aws ec2 instances 
+4) Create aws ec2 instances 
 ```
     aws-create  --key yourKeyName --count 1  --instanceType c4.xlarge  --imageId ami-08111162  --region us-east-1  --subnetId subnet-378d2140  --placement hzpc2  --outputFile a.box
 ```
 
 
-4) terminate aws ec2 instances 
+5) terminate aws ec2 instances 
 ```
     aws-terminate a.box
 ```
 
 
-5) get the latest version of hzCmd
+6) update to the latest version of hzCmd
 ```
     hz-update
 ```
 
 
-6) get the latest version of hzCmd benchMarks/tests
+7) update to the latest version of hzCmd benchMarks/tests
 ```
     hz-bench-update
 ```
