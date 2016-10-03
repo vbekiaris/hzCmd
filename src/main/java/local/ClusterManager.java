@@ -6,6 +6,7 @@ import global.Utils;
 import local.bench.BenchManager;
 import local.bench.BenchMark;
 import local.bench.FieldValue;
+import vendor.coherence.CoherenceJvmFactory;
 import vendor.gem.GemJvmFactory;
 import vendor.gg.GgJvmFactory;
 import vendor.hz.HzJvmFactory;
@@ -47,6 +48,9 @@ public class ClusterManager implements Serializable {
                     break;
                 case RED:
                     cluster = new ClusterContainer(id, brokerIP, new RedisJvmFactory());
+                    break;
+                case CO:
+                    cluster = new ClusterContainer(id, brokerIP, new CoherenceJvmFactory());
                     break;
             }
             clusters.put(cluster.getClusterId(), cluster);
