@@ -12,8 +12,8 @@ import remote.main.Controler;
 
 public class CoherenceControler extends Controler {
 
-    private DefaultCacheServer dcs;
-    private NamedCache cache;
+    private DefaultCacheServer cacheServer;
+    //private NamedCache cache;
 
     public CoherenceControler(NodeType type) throws Exception {
         super(type);
@@ -23,12 +23,14 @@ public class CoherenceControler extends Controler {
             DefaultConfigurableCacheFactory factory;
             factory = new DefaultConfigurableCacheFactory("coherence-cache-config.xml");
 
-            dcs = new DefaultCacheServer(factory);
-            dcs.startAndMonitor(5000);
+            cacheServer = new DefaultCacheServer(factory);
+            //cacheServer.startAndMonitor(5000);
+            cacheServer.startDaemon();
+
         }
         else{
-            CacheFactory.ensureCluster();
-            cache = CacheFactory.getCache("cache_name");
+            //CacheFactory.ensureCluster();
+            //cache = CacheFactory.getCache("cache_name");
         }
 
     }
@@ -38,6 +40,9 @@ public class CoherenceControler extends Controler {
     }
 
     public Object getVendorObject(){
+        if(type.equals(NodeType.Member)){
+            return cacheServer;
+        }
         return null;
     }
 }
