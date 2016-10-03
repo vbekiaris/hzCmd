@@ -12,16 +12,24 @@ import remote.main.Controler;
 
 public class CoherenceControler extends Controler {
 
-    private NamedCache cache = CacheFactory.getCache();
+    private DefaultCacheServer dcs;
+    private NamedCache cache;
 
     public CoherenceControler(NodeType type) throws Exception {
         super(type);
 
-        DefaultConfigurableCacheFactory factory;
-        factory = new DefaultConfigurableCacheFactory("my-cache-config.xml");
+        if (type == NodeType.Member) {
 
-        DefaultCacheServer dcs = new DefaultCacheServer(factory);
-        dcs.startAndMonitor(5000);
+            DefaultConfigurableCacheFactory factory;
+            factory = new DefaultConfigurableCacheFactory("my-cache-config.xml");
+
+            dcs = new DefaultCacheServer(factory);
+            dcs.startAndMonitor(5000);
+        }
+        else{
+            //CacheFactory.ensureCluster();
+            NamedCache cache = CacheFactory.getCache("cache_name");
+        }
 
     }
 
