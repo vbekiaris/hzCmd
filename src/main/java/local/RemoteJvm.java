@@ -111,7 +111,10 @@ public abstract class RemoteJvm implements Serializable {
             stuffToCpIntoDir += "cp "+s+" "+dir+" ; ";
         }
 
-        launchCmd = "mkdir -p "+dir+"; "+stuffToCpIntoDir+" cd "+dir+" ; nohup java "+jhicAgent+" -cp \"" + Installer.REMOTE_HZCMD_LIB_FULL_PATH+"/*" + ":" +vendorLibDir+"/*"+":"+Installer.REMOTE_HZCMD_LIB_FULL_PATH+"/" + "\" " + jvmArgs + " " + jvmOptions + " " + classToRun + " >> " + outFile + " 2>&1 & echo $! "+id+" ; cd - > /dev/null";
+        //launchCmd = "mkdir -p "+dir+"; "+stuffToCpIntoDir+" cd "+dir+" ; nohup java "+jhicAgent+" -cp \"" + Installer.REMOTE_HZCMD_LIB_FULL_PATH+"/*" + ":" +vendorLibDir+"/*"+":"+Installer.REMOTE_HZCMD_LIB_FULL_PATH+"/" + "\" " + jvmArgs + " " + jvmOptions + " " + classToRun + " >> " + outFile + " 2>&1 & echo $! "+id+" ; cd - > /dev/null";
+
+        launchCmd = "mkdir -p "+dir+"; "+stuffToCpIntoDir+" cd "+dir+" ; nohup java "+jhicAgent+" -cp \"" + dir+":"+Installer.REMOTE_HZCMD_LIB_FULL_PATH+"/*" + ":" +vendorLibDir+"/*" + "\" " + jvmArgs + " " + jvmOptions + " " + classToRun + " >> " + outFile + " 2>&1 & echo $! "+id+" ; cd - > /dev/null";
+
 
         return launchCmd;
     }
