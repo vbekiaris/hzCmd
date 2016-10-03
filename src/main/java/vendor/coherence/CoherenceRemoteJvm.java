@@ -28,7 +28,7 @@ public class CoherenceRemoteJvm extends RemoteJvm {
 
         List<String> upStuff = new ArrayList<String>();
 
-        upStuff.add("tangosol-coherence-override-dev.xml");
+        upStuff.add("tangosol-coherence-override.xml");
         upStuff.add("coherence-cache-config.xml");
         return upStuff;
     }
@@ -38,6 +38,6 @@ public class CoherenceRemoteJvm extends RemoteJvm {
     }
 
     public String setJvmStartOptions(Box thisBox, ClusterContainer myCluster) throws Exception {
-        return null;
+        return "-Dtangosol.coherence.override=tangosol-coherence-override.xml";
     }
 }
