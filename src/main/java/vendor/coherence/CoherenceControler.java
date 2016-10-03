@@ -21,13 +21,13 @@ public class CoherenceControler extends Controler {
         if (type == NodeType.Member) {
 
             DefaultConfigurableCacheFactory factory;
-            factory = new DefaultConfigurableCacheFactory("my-cache-config.xml");
+            factory = new DefaultConfigurableCacheFactory("coherence-cache-config.xml");
 
             dcs = new DefaultCacheServer(factory);
             dcs.startAndMonitor(5000);
         }
         else{
-            //CacheFactory.ensureCluster();
+            CacheFactory.ensureCluster();
             NamedCache cache = CacheFactory.getCache("cache_name");
         }
 
