@@ -13,6 +13,9 @@
 
 
         <dependency>
+            <groupId>org.coherence</groupId>
+            <artifactId>coherence</artifactId>
+            <version>1</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/stash/coherence.jar</systemPath>
         </dependency>
