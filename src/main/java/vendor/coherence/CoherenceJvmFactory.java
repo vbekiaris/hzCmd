@@ -30,17 +30,15 @@ public class CoherenceJvmFactory implements JvmFactory, Serializable {
 
     public List<String> stuffToUpload(ClusterContainer myCluster) throws Exception{
 
-        //CoherenceXml.makeMemberXml(myCluster);
-        //CoherenceXml.makeClientXml(myCluster);
+        CoherenceXml.makeMemberXml(myCluster);
 
         List<String> upStuff = new ArrayList<String>();
 
 
 
-        upStuff.add("tangosol-coherence-override.xml");
+        //upStuff.add("tangosol-coherence-override.xml");
         upStuff.add("coherence-cache-config.xml");
-
-        //upStuff.add(CoherenceXml.clientXmlFileForCluster(myCluster));
+        upStuff.add(CoherenceXml.memberXmlFileForCluster(myCluster));
 
         return upStuff;
     }
