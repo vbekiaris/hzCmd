@@ -28,7 +28,7 @@ public class CoherenceRemoteJvm extends RemoteJvm {
 
         List<String> upStuff = new ArrayList<String>();
 
-        upStuff.add("tangosol-coherence-override.xml");
+        upStuff.add("tangosol-coherence-override-dev.xml");
         upStuff.add("coherence-cache-config.xml");
         return upStuff;
     }

@@ -37,7 +37,7 @@ public class CoherenceJvmFactory implements JvmFactory, Serializable {
 
 
 
-        upStuff.add("tangosol-coherence-override.xml");
+        upStuff.add("tangosol-coherence-override-dev.xml");
         upStuff.add("coherence-cache-config.xml");
 
         //upStuff.add(CoherenceXml.clientXmlFileForCluster(myCluster));
