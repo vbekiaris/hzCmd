@@ -8,7 +8,14 @@
     <artifactId>hzCmd</artifactId>
     <version>1.0.1</version>
 
+
     <dependencies>
+
+
+        <dependency>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/stash/coherence.jar</systemPath>
+        </dependency>
 
         <dependency>
             <groupId>com.hazelcast</groupId>
