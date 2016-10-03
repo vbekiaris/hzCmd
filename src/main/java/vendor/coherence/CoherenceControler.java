@@ -28,7 +28,7 @@ public class CoherenceControler extends Controler {
         }
         else{
             CacheFactory.ensureCluster();
-            NamedCache cache = CacheFactory.getCache("cache_name");
+            cache = CacheFactory.getCache("cache_name");
         }
 
     }
