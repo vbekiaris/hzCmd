@@ -36,10 +36,14 @@ public class CoherenceXml {
             Element address = document.createElement("address");
             address.setTextContent(box.pri);
 
+            Element port = document.createElement("port");
+            address.setTextContent("8088");
+
             Element socket = document.createElement("socket-address");
             socket.setAttribute("id", id+"");
             id++;
             socket.appendChild(address);
+            socket.appendChild(port);
 
             document.getElementsByTagName("well-known-addresses").item(0).appendChild(socket);
         }
@@ -49,7 +53,7 @@ public class CoherenceXml {
     }
 
 
-    private static Document getDocument(String file) throws ParserConfigurationException, SAXException, IOException {
+    public static Document getDocument(String file) throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         return documentBuilder.parse(file);
@@ -68,6 +72,28 @@ public class CoherenceXml {
 
     public static String memberXmlFileForCluster(ClusterContainer m ){
         return xmlDir+"/"+m.getClusterId()+"/"+ FILE;
+    }
+
+    public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException, TransformerException {
+
+
+        Document document = getDocument(FILE);
+
+        int id=1;
+
+            Element address = document.createElement("address");
+            address.setTextContent("0.0.0.0.1");
+
+            Element socket = document.createElement("socket-address");
+            socket.setAttribute("id", id+"");
+            id++;
+            socket.appendChild(address);
+
+            document.getElementsByTagName("well-known-addresses").item(0).appendChild(socket);
+
+
+       writeXmlFile(document, "res.txt");
+
     }
 
 }
