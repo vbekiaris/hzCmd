@@ -13,10 +13,13 @@ import remote.main.Controler;
 public class CoherenceControler extends Controler {
 
     private DefaultCacheServer cacheServer;
-    //private NamedCache cache;
+    private NamedCache cache;
 
     public CoherenceControler(NodeType type) throws Exception {
         super(type);
+    }
+
+    public void init(NodeType type) throws Exception {
 
         if (type == NodeType.Member) {
 
@@ -29,13 +32,11 @@ public class CoherenceControler extends Controler {
 
         }
         else{
-            //CacheFactory.ensureCluster();
-            //cache = CacheFactory.getCache("cache_name");
+            CacheFactory.ensureCluster();
+            cache = CacheFactory.getCache("cache_name");
+            cache.put("hello", "world");
+            System.out.println( cache.get("hello") );
         }
-
-    }
-
-    public void init(NodeType type) throws Exception {
 
     }
 
