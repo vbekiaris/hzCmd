@@ -37,7 +37,7 @@ public class CoherenceXml {
             address.setTextContent(box.pri);
 
             Element port = document.createElement("port");
-            address.setTextContent("8088");
+            port.setTextContent("8088");
 
             Element socket = document.createElement("socket-address");
             socket.setAttribute("id", id+"");
