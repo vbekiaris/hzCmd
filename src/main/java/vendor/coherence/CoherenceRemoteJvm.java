@@ -38,6 +38,11 @@ public class CoherenceRemoteJvm extends RemoteJvm {
     }
 
     public String setJvmStartOptions(Box thisBox, ClusterContainer myCluster) throws Exception {
-        return "-Dtangosol.coherence.override=tangosol-coherence-override.xml";
+
+        if (isMember()){
+            return "-Dtangosol.coherence.override=tangosol-coherence-override.xml";
+        }
+        return "-Dtangosol.coherence.override=tangosol-coherence-override.xml "+"-Dtangosol.coherence.distributed.localstorage=false";
+
     }
 }
