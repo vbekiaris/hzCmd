@@ -29,13 +29,14 @@ public class CoherenceControler extends Controler {
             cacheServer = new DefaultCacheServer(factory);
             //cacheServer.startAndMonitor(5000);
             cacheServer.startDaemon();
-
         }
         else{
+            /*
             CacheFactory.ensureCluster();
             cache = CacheFactory.getCache("cache_name");
             cache.put("hello", "world");
             System.out.println( cache.get("hello") );
+            */
         }
 
     }
