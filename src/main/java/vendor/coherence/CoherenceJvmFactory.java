@@ -23,7 +23,7 @@ public class CoherenceJvmFactory implements JvmFactory, Serializable {
     public List<String> getVendorLibNames(String version, boolean ee) {
         List<String> jars = new ArrayList();
 
-        jars.add("coherence" + ".jar");
+        jars.add("coherence-"+version+".jar");
 
         return jars;
     }
