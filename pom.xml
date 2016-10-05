@@ -11,13 +11,10 @@
 
     <dependencies>
 
-
         <dependency>
-            <groupId>org.coherence</groupId>
+            <groupId>com.coherence</groupId>
             <artifactId>coherence</artifactId>
-            <version>1</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/stash/coherence.jar</systemPath>
+            <version>12.2.1</version>
         </dependency>
 
         <dependency>
@@ -81,17 +78,6 @@
             <version>5.13.3</version>
         </dependency>
 
-        <!--
-        <dependency>
-            <groupId>coherence</groupId>
-            <artifactId>coherence</artifactId>
-            <version>1.0.0</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/stash/coherence.jar</systemPath>
-        </dependency>
-        -->
-
-
         <!-- https://mvnrepository.com/artifact/jpox/jpox-tangosol -->
         <dependency>
             <groupId>jpox</groupId>
@@ -152,6 +138,7 @@
             <id>qa</id>
             <build>
                 <plugins>
+
                     <plugin>
                         <artifactId>maven-dependency-plugin</artifactId>
                         <executions>
@@ -166,6 +153,7 @@
                             </execution>
                         </executions>
                     </plugin>
+
                 </plugins>
             </build>
         </profile>
