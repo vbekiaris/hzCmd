@@ -31,6 +31,7 @@ public class CoherenceControler extends Controler {
             cacheServer.startDaemon();
         }
         else{
+            CacheFactory.ensureCluster();
             /*
             CacheFactory.ensureCluster();
             cache = CacheFactory.getCache("cache_name");
