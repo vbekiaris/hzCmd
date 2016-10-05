@@ -9,6 +9,7 @@ echo "export ACTIVE_MQ_BIN=$(pwd)/apache-activemq-5.13.3/bin" >> ~/.bashrc
 echo 'PATH=${PATH}:${ACTIVE_MQ_BIN}' >> ~/.bashrc
 
 cd hzCmd
+mvn install:install-file -Dfile=stash/coherence.jar -DgroupId=com.coherence -DartifactId=coherence -Dversion=12.2.1 -Dpackaging=jar
 mvn clean install dependency:copy-dependencies
 echo "export HZ_CMD_SRC=$(pwd)" >> ~/.bashrc
 echo "export HZ_CMD=$(pwd)/bin" >> ~/.bashrc
