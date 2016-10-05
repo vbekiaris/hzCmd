@@ -28,7 +28,7 @@ public class CoherenceControler extends Controler {
 
             cacheServer = new DefaultCacheServer(factory);
             //cacheServer.startAndMonitor(5000);
-            cacheServer.startDaemon(15000);
+            cacheServer.startDaemon();
 
         }
         else{
