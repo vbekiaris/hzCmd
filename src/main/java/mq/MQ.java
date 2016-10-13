@@ -28,6 +28,7 @@ public abstract class MQ {
 
     private static final String brokerIp = System.getProperty(Args.MQIP.name(), "localhost");
 
+    //private static final String brokerUri = "tcp://"+brokerIp+":61616?jms.watchTopicAdvisories=false";
     private static final String brokerUri = "tcp://"+brokerIp+":61616";
 
 

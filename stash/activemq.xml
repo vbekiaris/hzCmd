@@ -37,7 +37,13 @@
     <!--
         The <broker> element is used to configure the ActiveMQ broker.
     -->
-    <broker xmlns="http://activemq.apache.org/schema/core" brokerName="localhost" dataDirectory="${activemq.data}" deleteAllMessagesOnStartup="true">
+    <broker xmlns="http://activemq.apache.org/schema/core"
+            brokerName="localhost"
+            dataDirectory="${activemq.data}"
+            deleteAllMessagesOnStartup="true"
+            cacheTempDestinations="true"
+            timeBeforePurgeTempDestinations="20000">
+
 
         <destinationPolicy>
             <policyMap>
@@ -122,7 +128,9 @@
             <bean xmlns="http://www.springframework.org/schema/beans" class="org.apache.activemq.hooks.SpringContextHook" />
         </shutdownHooks>
 
+
     </broker>
+
 
     <!--
         Enable web consoles, REST and Ajax APIs and demos
