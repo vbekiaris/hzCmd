@@ -32,25 +32,16 @@ public class MetricsMarker extends BenchMarker {
     public void bench(Bench bench) throws Exception{
         long startTime = System.currentTimeMillis();
         long endTime = startTime + (durationSeconds * 1000);
+
+        com.codahale.metrics.Timer timer = metrics.timer(outputFileName);
         if(expectedIntervalNanos==0){
-            timeBenchFlatOut(bench, endTime);
+            while(System.currentTimeMillis() < endTime && bench.isRunning()){
+                flatOut(bench, timer);
+            }
         }else{
-            timeBenchInterval(bench, endTime);
-        }
-    }
-
-    private void timeBenchFlatOut(Bench bench, long endTime) throws Exception{
-        com.codahale.metrics.Timer timer = metrics.timer(outputFileName);
-        while(System.currentTimeMillis() < endTime && bench.isRunning()){
-            flatOut(bench, timer);
-        }
-        metrics.remove(outputFileName);
-    }
-
-    private void timeBenchInterval(Bench bench, long endTime) throws Exception {
-        com.codahale.metrics.Timer timer = metrics.timer(outputFileName);
-        while(System.currentTimeMillis() < endTime && bench.isRunning()){
-            interval(bench, timer);
+            while(System.currentTimeMillis() < endTime && bench.isRunning()){
+                interval(bench, timer);
+            }
         }
         metrics.remove(outputFileName);
     }

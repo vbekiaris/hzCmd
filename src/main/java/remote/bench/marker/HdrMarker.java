@@ -36,23 +36,17 @@ public class HdrMarker extends BenchMarker {
         long startTime = System.currentTimeMillis();
         long endTime = startTime + (durationSeconds * 1000);
         if(expectedIntervalNanos==0){
-            timeBenchFlatOut(bench, endTime);
+            while(System.currentTimeMillis() < endTime && bench.isRunning()){
+                flatOut(bench);
+            }
         }else{
-            timeBenchInterval(bench, endTime);
+            while(System.currentTimeMillis() < endTime && bench.isRunning()){
+                interval(bench);
+            }
         }
     }
 
-    private void timeBenchFlatOut(Bench bench, long endTime) throws Exception{
-        while(System.currentTimeMillis() < endTime && bench.isRunning()){
-            flatOut(bench);
-        }
-    }
 
-    private void timeBenchInterval(Bench bench, long endTime) throws Exception{
-        while(System.currentTimeMillis() < endTime && bench.isRunning()){
-            interval(bench);
-        }
-    }
 
     private void flatOut(Bench bench) throws Exception{
         try {

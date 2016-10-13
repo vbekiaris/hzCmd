@@ -265,7 +265,6 @@ public class BenchManager {
 
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
             benchContainer.postBench();
-            System.out.println("post "+benchContainer);
         }
     }
 
