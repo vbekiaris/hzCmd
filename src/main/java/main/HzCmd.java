@@ -94,7 +94,7 @@ public class HzCmd implements Serializable {
 
         cluster.renice();
 
-        System.out.print(cluster);
+        //System.out.print(cluster);
         stateModified=true;
     }
 
