@@ -1,6 +1,14 @@
 # HzCmd
 
 
+Docker https://hub.docker.com/r/dannyhazelcast/hzcmd/ ready to go container 
+```
+    docker pull dannyhazelcast/hzcmd
+    
+    sudo docker run -p 61616:61616 -it dannyhazelcast/hzcmd /bin/bash
+```
+
+
 1) Install, you will need 
  
  * bash shell
