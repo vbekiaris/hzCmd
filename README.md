@@ -71,9 +71,12 @@ Default output format [None]: ENTER
 
 7) Create aws ec2 instances 
 ```
-    aws-create  --key yourKeyName --count 1  --instanceType c4.xlarge  --imageId ami-08111162  --region us-east-1  --subnetId subnet-378d2140  --placement hzpc2  --outputFile a.box
+    aws-create  --key yourAwsKey --count 1  --instanceType c4.xlarge  --imageId ami-08111162  --region us-east-1  --subnetId subnet-378d2140  --placement hzpc2  --outputFile a.box
 ```
-
+   if all the default values listed explicitly above are avaliable to you.
+```
+    aws-create --key yourAwsKey
+```
 
 8) terminate aws ec2 instances 
 ```
