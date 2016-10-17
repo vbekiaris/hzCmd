@@ -7,7 +7,7 @@ import main.HzCmd;
 
 import java.util.List;
 
-@com.github.rvesse.airline.annotations.Command(name = "run", description = "run a benchmark")
+@com.github.rvesse.airline.annotations.Command(name = "submit", description = "submit a benchmark")
 public class BenchSubmit extends Command
 {
     @Option(name = "-id", description = "cluster's to run the benchmarks, regex on cluster id ")
