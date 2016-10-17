@@ -99,23 +99,23 @@ public class HzCmd implements Serializable {
     }
 
 
-    public void restart(String id, String version, boolean ee) throws Exception {
-        for (ClusterContainer c : clusterManager.getClusters(id)) {
-            c.restart(id, version, ee);
+    public void restart(String clusterId, String jvmId, String version, boolean ee) throws Exception {
+        for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
+            c.restart(jvmId, version, ee);
         }
-        restartEmbeddedObject(id, id);
+        restartEmbeddedObject(clusterId, jvmId);
         stateModified=true;
     }
 
-    public void exit(String id) throws Exception {
-        for (ClusterContainer c : clusterManager.getClusters(id)) {
-            c.exit(id);
+    public void exit(String clusterId, String jvmId) throws Exception {
+        for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
+            c.exit(jvmId);
         }
     }
 
-    public void kill(String id) throws Exception {
-        for (ClusterContainer c : clusterManager.getClusters(id)) {
-            c.kill(id);
+    public void kill(String clusterId, String jvmId) throws Exception {
+        for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
+            c.kill(jvmId);
         }
         stateModified=true;
     }
@@ -209,15 +209,15 @@ public class HzCmd implements Serializable {
 
 
 
-    public void ls(String id) throws Exception {
-        for (ClusterContainer c : clusterManager.getClusters(id)) {
-            c.ls(id);
+    public void ls(String clusterId, String jvmId) throws Exception {
+        for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
+            c.ls(jvmId);
         }
     }
 
-    public void tail(String id) throws Exception {
-        for (ClusterContainer c : clusterManager.getClusters(id)) {
-            c.tail(id);
+    public void tail(String clusterId, String jvmId) throws Exception {
+        for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
+            c.tail(jvmId);
         }
     }
 

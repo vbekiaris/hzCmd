@@ -10,16 +10,19 @@ import java.util.List;
 @com.github.rvesse.airline.annotations.Command(name = "tail", description = "tail std out of jvm in cluster")
 public class Tail extends Command
 {
+    @Option(name = "-id", description = "cluster id")
+    public String id=".*";
+
     @Arguments(description = "jvm id default .*")
     public List<String> ids;
 
     public void exe(HzCmd hzCmd) {
         try {
             if(ids==null){
-                hzCmd.tail(".*");
+                hzCmd.tail(id, ".*");
             }else{
-                for (String id : ids) {
-                    hzCmd.tail(id);
+                for (String jvmids : ids) {
+                    hzCmd.tail(id, jvmids);
                 }
             }
         } catch (Exception e) {

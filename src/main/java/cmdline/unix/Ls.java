@@ -10,16 +10,19 @@ import java.util.List;
 @com.github.rvesse.airline.annotations.Command(name = "ls", description = "ls the cwd of jvm in cluster")
 public class Ls extends Command
 {
+    @Option(name = "-id", description = "cluster id")
+    public String id=".*";
+
     @Arguments(description = "jvm id default .*")
     public List<String> ids;
 
     public void exe(HzCmd hzCmd) {
         try {
             if(ids==null){
-                hzCmd.ls(".*");
+                hzCmd.ls(id, ".*");
             }else{
-                for (String id : ids) {
-                    hzCmd.ls(id);
+                for (String jvmids : ids) {
+                    hzCmd.ls(id, jvmids);
                 }
             }
         } catch (Exception e) {

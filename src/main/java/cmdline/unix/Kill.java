@@ -10,20 +10,24 @@ import java.util.List;
 @com.github.rvesse.airline.annotations.Command(name = "kill", description = "kill -9 jvm in cluster")
 public class Kill extends Command
 {
+    @Option(name = "-id", description = "cluster id")
+    public String id=".*";
+
     @Arguments(description = "jvm id default .*")
     public List<String> ids;
 
     public void exe(HzCmd hzCmd) {
         try {
             if(ids==null){
-                hzCmd.kill(".*");
+                hzCmd.kill(id, ".*");
             }else{
-                for (String id : ids) {
-                    hzCmd.kill(id);
+                for (String jvmId : ids) {
+                    hzCmd.kill(id, jvmId);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 }

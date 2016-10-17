@@ -16,6 +16,9 @@ public class Restart extends Command
     @Option(name = "-ee", description = "ee version")
     public boolean ee=false;
 
+    @Option(name = "-id", description = "cluster id")
+    public String id=".*";
+
     @Arguments(description = "jvm id default .*")
     public List<String> ids;
 
@@ -23,10 +26,10 @@ public class Restart extends Command
     public void exe(HzCmd hzCmd) {
         try {
             if(ids==null){
-                hzCmd.restart(".*", version, ee);
+                hzCmd.restart(id, ".*", version, ee);
             }else{
-                for (String id : ids) {
-                    hzCmd.restart(id, version, ee);
+                for (String jvmids : ids) {
+                    hzCmd.restart(id, jvmids, version, ee);
                 }
             }
         } catch (Exception e) {
