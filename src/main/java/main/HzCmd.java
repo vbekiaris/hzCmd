@@ -117,6 +117,9 @@ public class HzCmd implements Serializable {
         for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
             c.kill(jvmId);
         }
+        for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
+            c.printJvmInfo(jvmId);
+        }
         stateModified=true;
     }
 
