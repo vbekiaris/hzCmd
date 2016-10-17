@@ -18,6 +18,7 @@ import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import remote.bench.BenchManager;
 import global.BenchType;
@@ -100,6 +101,21 @@ public abstract class Controler{
         executor.submit(new Runner(replyProducer, id, seconds, RunStyle.BENCH));
     }
 
+    public void submitBench(MessageProducer replyProducer, String taskId, long seconds) {
+        executor.submit(new RunnerNoReply(taskId, seconds));
+
+        ReplyMsg result = new ReplyMsg();
+        result.id = ID;
+        result.msg = "submitted";
+
+        Gson gson = new Gson();
+        try {
+            MQ.sendReply(replyProducer, gson.toJson(result));
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void stopBench(MessageProducer replyProducer, String id) {
         benchManager.setRunning(replyProducer, id, false);
     }
@@ -136,6 +152,22 @@ public abstract class Controler{
             }else if (style.equals(RunStyle.BENCH)){
                 benchManager.bench(replyProducer, id, seconds);
             }
+            return null;
+        }
+    }
+
+    private class RunnerNoReply implements Callable<Object> {
+
+        private String id;
+        private long seconds;
+
+        public RunnerNoReply(String id, long seconds){
+            this.id=id;
+            this.seconds=seconds;
+        }
+
+        public Object call() {
+            benchManager.submitBench(id, seconds);
             return null;
         }
     }

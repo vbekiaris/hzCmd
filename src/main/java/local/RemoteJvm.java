@@ -228,6 +228,10 @@ public abstract class RemoteJvm implements Serializable {
         MQ.sendObj(Q, new RunBenchCmd(taskId, seconds) );
     }
 
+    public void submitBench(String taskId, long seconds) throws IOException, InterruptedException, JMSException {
+        MQ.sendObj(Q, new SubmitBenchCmd(taskId, seconds) );
+    }
+
     public void stopBench(String taskId) throws IOException, InterruptedException, JMSException {
         MQ.sendObj(Q, new StopBenchCmd(taskId) );
     }

@@ -268,6 +268,45 @@ public class BenchManager {
         }
     }
 
+    public void submitBench(String id, long seconds) {
+        submit(id, seconds, "bench");
+    }
+
+    private void submit(String id, long seconds, String fileNamePostFix){
+
+        List<BenchThread> threads = new ArrayList();
+        Map<String, Integer> benchResults = new HashMap();
+
+        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            benchContainer.preBench(fileNamePostFix);
+            benchContainer.setDurationSeconds(seconds);
+            threads.addAll( benchContainer.getThreads() );
+            benchResults.put(benchContainer.getId(), benchContainer.getThreadCount());
+        }
+
+        ExecutorService threadPool = Executors.newFixedThreadPool(threads.size());
+        CompletionService<ReplyMsg> service = new ExecutorCompletionService(threadPool);
+
+        for (BenchThread thread : threads) {
+            service.submit(thread);
+        }
+        threadPool.shutdown();
+
+        for (int i = 0; i < threads.size(); i++) {
+            try {
+                Future<ReplyMsg> future = service.take();
+                future.get();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
+            benchContainer.postBench();
+        }
+    }
+
+
     private List<BenchContainer> getMatchingBenchContainers(String id) {
         List<BenchContainer> matching = new ArrayList();
 
@@ -278,4 +317,5 @@ public class BenchManager {
         }
         return matching;
     }
+
 }

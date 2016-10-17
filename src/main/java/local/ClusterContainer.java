@@ -130,6 +130,7 @@ public class ClusterContainer implements Serializable {
     }
 
 
+
     private class Runner implements Callable<Object> {
 
         private Box box;
@@ -360,6 +361,13 @@ public class ClusterContainer implements Serializable {
             jvm.runBench(taskId, seconds);
         }
     }
+
+    public void submitBench(String jvmId,  String taskId, long seconds) throws IOException, InterruptedException, JMSException {
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
+            jvm.submitBench(taskId, seconds);
+        }
+    }
+
 
     public void stopBench(String jvmId, String taskId) throws IOException, InterruptedException, JMSException{
         for(RemoteJvm jvm : getMatchingJvms(jvmId)){

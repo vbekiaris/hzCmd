@@ -300,6 +300,19 @@ public class HzCmd implements Serializable {
         }
     }
 
+    public void submitBenchMark(String clusterId, String benchFile) throws Exception {
+
+        BenchManager benchManager = new BenchManager(benchFile);
+
+        benchManager.popBenchMarks();
+        System.out.println(Bash.ANSI_CYAN+benchManager.currentBench_toString()+Bash.ANSI_RESET);
+
+        clusterManager.loadBench(clusterId, benchManager);
+        clusterManager.setAttributes(clusterId, benchManager);
+        clusterManager.initBench(clusterId, benchManager);
+        clusterManager.submitBench(clusterId, benchManager);
+        clusterManager.writeMetaDataCmd(clusterId, benchManager);
+    }
 
 
     public void scpUp(String id, String src, String dst) throws IOException, InterruptedException {
@@ -412,4 +425,5 @@ public class HzCmd implements Serializable {
     public void hdrRegresionCheck(String dir, String red, String blue) throws IOException, InterruptedException {
         Bash.executeCommand("driver-wideHdr "+dir+" "+red+" "+blue);
     }
+
 }

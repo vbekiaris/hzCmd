@@ -163,6 +163,19 @@ public class ClusterManager implements Serializable {
         getClusterResponses(clusters, benchManager, timout);
     }
 
+
+    public void submitBench(String id, BenchManager benchManager) throws InterruptedException, JMSException, IOException {
+        List<ClusterContainer> clusters = getClusters(id);
+
+        for (ClusterContainer cluster : clusters) {
+            for (BenchMark benchMark : benchManager.getBenchMarks()) {
+                cluster.submitBench(benchMark.getDriver(), benchMark.getId(), benchMark.getDurationSeconds());
+            }
+        }
+        getClusterResponses(clusters, benchManager, TWO_MIN_AS_SECONDS);
+    }
+
+
     public void postPhaseBench(String id, BenchManager benchManager) throws InterruptedException, JMSException, IOException {
         List<ClusterContainer> clusters = getClusters(id);
 
