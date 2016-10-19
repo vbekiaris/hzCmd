@@ -92,7 +92,7 @@ public class HzCmd implements Serializable {
         String clientOps = properties.readPropertie(HzCmdProperties.CLIENT_OPS, "");
         cluster.addClients(size.getClientCount(), version, clientOps, cwdFiles);
 
-        cluster.renice();
+        //cluster.renice();
 
         //System.out.print(cluster);
         stateModified=true;
