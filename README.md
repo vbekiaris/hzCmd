@@ -17,12 +17,10 @@ Getting Started with HzCmd using:
 ```
 
 
-2)  AWS image ready to go
+2)  AWS image ready to go https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#LaunchInstanceWizard:ami=ami-a26c3db5
 ```
-    ami-a26c3db5
-    launch instance into security group with port 61616 open for incomming connections.
+    launch ami-a26c3db5 instance into security group with port 61616 open for TCP
 ````
-
 
 
 3)  Install, you will need 
