@@ -153,10 +153,15 @@ public abstract class Bash {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
-        String line;
-        while ((line = reader.readLine())!= null) {
-            System.out.println(Bash.ANSI_PURPLE+line+Bash.ANSI_RESET);
+        while (true) {
+            String line;
+            if ((line = reader.readLine())!= null) {
+                System.out.println(Bash.ANSI_PURPLE+line+Bash.ANSI_RESET);
+                continue;
+            }
+            Thread.sleep(50);
         }
+
     }
 
 }
