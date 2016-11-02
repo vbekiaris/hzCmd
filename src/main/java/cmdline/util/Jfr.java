@@ -27,6 +27,7 @@ public class Jfr extends Command
                 for (String arg : args) {
                     argsStr +=arg+" ";
                 }
+                argsStr = argsStr.trim();
                 properties.writePropertie(HzCmdProperties.JFR_ARGS, argsStr);
             }
 

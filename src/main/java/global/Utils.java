@@ -2,6 +2,7 @@ package global;
 
 import com.google.common.escape.Escaper;
 import com.google.common.escape.Escapers;
+import local.properties.HzCmdProperties;
 
 
 import java.net.*;
@@ -167,33 +168,14 @@ public abstract class Utils {
     }
 
 
-    public static void main(String[] args) {
-
-        double valueSize = 1000;
-        //double keyDomain = 100000000;
-        double keyDomain = 50000000;
-
-        double backups = 1;
-
-        double clusterSize = 4;
-
-        //double partitions = 271;
-        double partitions = 2711;
+    public static void main(String[] args) throws IOException {
 
 
-        double totalDataGB = valueSize * keyDomain * (backups + 1) / 1073741824;
+        HzCmdProperties properties = new HzCmdProperties();
+        String s = properties.readPropertie(HzCmdProperties.JFR_ARGS, "default");
 
-        double perMember = totalDataGB / clusterSize;
-
-        double perPartition = totalDataGB / partitions;
-
-        double keysPerPartition = keyDomain / partitions;
-
-        System.out.println("GB data      =" + totalDataGB);
-        System.out.println("GB per Member=" + perMember);
-        System.out.println("GB per Partition=" + perPartition);
-
-
-        System.out.println("keys per Partition=" + keysPerPartition);
+        System.out.println(s);
     }
+
+
 }
