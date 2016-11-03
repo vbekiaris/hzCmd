@@ -56,12 +56,12 @@ public abstract class Controler{
             msg.msg = "Started on " + InetAddress.getLocalHost().getHostAddress() +" "+ jvmPidId +" "+ LIB;
 
             MQ.sendReply(replyProducer, GSON.toJson(msg));
-        }catch (Exception e){
+        }catch (Throwable e){
             Utils.recordeException(e);
             msg.error=true;
             msg.msg = e.toString();
             MQ.sendReply(replyProducer, GSON.toJson(msg));
-            throw e;
+            System.exit(1);
         }
     }
 

@@ -187,7 +187,7 @@ public class ClusterContainer implements Serializable {
                     System.out.println(Bash.ANSI_RED+"Timeout waiting for Jvm response"+Bash.ANSI_RESET);
                     System.exit(1);
                 }
-                printResponse(response);
+                printResponseExitOnError(response);
             }
             return started;
         }
@@ -466,11 +466,17 @@ public class ClusterContainer implements Serializable {
         }
     }
 
-    private void printResponse(Object o){
+
+    private void printResponseExitOnError(Object o){
         Gson gson = new Gson();
         ReplyMsg msg = gson.fromJson((String) o, ReplyMsg.class);
         System.out.println(msg);
+        if(msg.error==true){
+            System.out.println(Bash.ANSI_RED+"EXIT 1"+Bash.ANSI_RESET);
+            System.exit(1);
+        }
     }
+
 
 
 

@@ -31,7 +31,7 @@ public abstract class Utils {
         }
     }
 
-    public static void recordeException(Exception e) {
+    public static void recordeException(Throwable e) {
         e.printStackTrace();
         try {
             PrintStream ps = new PrintStream(new FileOutputStream("exception.txt", true));
