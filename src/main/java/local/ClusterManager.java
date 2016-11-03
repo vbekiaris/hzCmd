@@ -137,6 +137,11 @@ public class ClusterManager implements Serializable {
         for (ClusterContainer cluster : clusters) {
             for (BenchMark benchMark : benchManager.getBenchMarks()) {
                 if(benchMark.getWarmupSeconds()!=0){
+
+                    //i could get a list of unique drives, which will run the benchmarks hear.
+                    //invoking warmupBench 1 time on each driver using Benchmark ID *,
+                    //however what about the warmup duration if they are diffrent ?
+                    //I could make a list of Unique   <DriverID,warmupSeconds>   tupple
                     cluster.warmupBench(benchMark.getDriver(), benchMark.getId(), benchMark.getWarmupSeconds());
                 }
             }

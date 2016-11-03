@@ -218,6 +218,14 @@ public class BenchManager {
         List<BenchThread> threads = new ArrayList();
         Map<String, Integer> benchResults = new HashMap();
 
+
+
+        //but the command to run the bench and its duration is the same.
+        //i should set the bench warmup duration and runnning duration before hand.
+        //this i can start all benchmarts at 1 time, with ID as star.
+        //then i can set the time out on the other side at the max of the durations.
+
+
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
             benchContainer.preBench(fileNamePostFix);
             benchContainer.setDurationSeconds(seconds);
@@ -237,6 +245,9 @@ public class BenchManager {
         }
         threadPool.shutdown();
 
+        //we send a reply for EACH thread IF its's and Exception
+        //else we count the number of thread which have eneded
+        //and for each all thread of a benchID, and send 1 reply.
         for (int i = 0; i < threads.size(); i++) {
             try {
                 Future<ReplyMsg> future = service.take();
