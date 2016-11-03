@@ -16,29 +16,13 @@ import java.io.*;
 import java.util.List;
 
 //add box type,  to ip list,  for starting in unix / win
-
 //print cluster layout info
 
 //JSON msg format,
-//Logging System / std Out put to file
 //https://github.com/fusesource/jansi  terminal colors
 
 //for getting the total ops from hdr
 //find . -name *.hgrm | xargs -n1 -I% sh -c 'grep "Total count" % | awk "{print \$7}" | tr -d ] > %.total'
-
-//for auto gcviewer pics
-//find . -name verbosegc.log | xargs -n1 -I% sh -c "java -jar $(find ~/.m2 -name gcviewer-1.34.1.jar) % %.csv %.png"
-
-//add JFR cmd settings
-
-//add time out settings for stages.
-//add fast exit on exception boolean.
-//add oracal choherance
-
-//renice jvm pid, on jvm start, bash set temp var in shell / cmd line
-
-//in benchMarker.java file,  play with the default duration if its set to 0
-
 
 public class HzCmd implements Serializable {
 
