@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+targetDir=${1:-.}
+match=${2:-*}
+
+gcPics=$(find ${targetDir} -name 'verbosegc.log.png' | grep ${match} | sort)
+
+while read -r gcPic; do
+
+ echo "<p>${gcPic}</p>"
+
+ echo "<a href=\"${gcPic}\">"
+ echo "<img src=\"${gcPic}\" width=\"400\" height=\"300\">"
+ echo "</a>"
+
+done <<< "${gcPics}"
