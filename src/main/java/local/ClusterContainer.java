@@ -500,9 +500,27 @@ public class ClusterContainer implements Serializable {
         }
     }
 
+    public void freeze(String jvmId) throws IOException, InterruptedException {
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
+            jvm.freeze();
+        }
+    }
+
+    public void unfreeze(String jvmId) throws IOException, InterruptedException {
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
+            jvm.unfreeze();
+        }
+    }
+
     public void printJvmInfo(String jvmId) throws IOException, InterruptedException {
         for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             System.out.println(jvm);
+        }
+    }
+
+    public void printJvmInfo(String msg, String jvmId) throws IOException, InterruptedException {
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
+            System.out.println(msg+" "+jvm);
         }
     }
 

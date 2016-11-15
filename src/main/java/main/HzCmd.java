@@ -196,6 +196,35 @@ public class HzCmd implements Serializable {
 
 
 
+    public void freeze(String clusterId, String jvmId,  int iterations, int restartDelaySec, int iterationDelaySec) throws Exception {
+
+        List<ClusterContainer> clusters = clusterManager.getClusters(clusterId);
+        for(int i=0; i<iterations; i++){
+
+            if(iterationDelaySec!=0) {
+                Thread.sleep(iterationDelaySec * 1000);
+            }
+
+            for (ClusterContainer c : clusters) {
+                c.freeze(jvmId);
+            }
+            for (ClusterContainer c : clusters) {
+                c.printJvmInfo("frozen", jvmId);
+            }
+
+            if(restartDelaySec!=0) {
+                Thread.sleep(restartDelaySec * 1000);
+            }
+
+            for (ClusterContainer c : clusters) {
+                c.unfreeze(jvmId);
+            }
+        }
+    }
+
+
+
+
     public void ls(String clusterId, String jvmId) throws Exception {
         for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
             c.ls(jvmId);
