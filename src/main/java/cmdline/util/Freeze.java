@@ -32,9 +32,8 @@ public class Freeze extends Command
                 hzCmd.freeze(clusterId, ".*", iterations, restartDelay, iterationDelay);
             }else{
                 for (String id : ids) {
-
                     if(id.equals("RandomMember")) {
-                        //hzCmd.freeze(clusterId, iterations, restartDelay, iterationDelay);
+                        hzCmd.freezeRandomMember(clusterId, iterations, restartDelay, iterationDelay);
                     }else {
                         hzCmd.freeze(clusterId, id, iterations, restartDelay, iterationDelay);
                     }
