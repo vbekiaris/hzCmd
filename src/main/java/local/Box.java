@@ -55,11 +55,11 @@ public class Box implements Serializable{
         return ssh("kill -9 "+pid);
     }
 
-    public String freez(int pid) throws IOException, InterruptedException {
+    public String freeze(int pid) throws IOException, InterruptedException {
         return ssh("kill -STOP "+pid);
     }
 
-    public String unfreez(int pid) throws IOException, InterruptedException {
+    public String unfreeze(int pid) throws IOException, InterruptedException {
         return ssh("kill -CONT "+pid);
     }
 

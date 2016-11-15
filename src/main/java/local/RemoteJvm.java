@@ -166,12 +166,12 @@ public abstract class RemoteJvm implements Serializable {
         }
     }
 
-    public void freez() throws IOException, InterruptedException {
-        box.freez(pid);
+    public void freeze() throws IOException, InterruptedException {
+        box.freeze(pid);
     }
 
-    public void unfreez() throws IOException, InterruptedException {
-        box.unfreez(pid);
+    public void unfreeze() throws IOException, InterruptedException {
+        box.unfreeze(pid);
     }
 
 
