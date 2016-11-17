@@ -109,11 +109,7 @@ public abstract class Controler{
         result.msg = "submitted";
 
         Gson gson = new Gson();
-        try {
-            MQ.sendReply(replyProducer, gson.toJson(result));
-        } catch (JMSException e) {
-            e.printStackTrace();
-        }
+        MQ.sendReply(replyProducer, gson.toJson(result));
     }
 
     public void stopBench(MessageProducer replyProducer, String id) {
