@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Stack;
 
 import static global.Utils.cartesianProduct;
-import static global.Utils.removeLastChar;
 import static global.Utils.timeStringToNanos;
 
 public class BenchMark implements Serializable {
@@ -85,7 +84,7 @@ public class BenchMark implements Serializable {
             return;
         }
 
-        if(fieldValue.field.equals(HzCmdProperties.BENCH_THROW)){
+        if(fieldValue.field.equals(HzCmdProperties.BENCH_RECORD_EXCEPTION)){
             throwException.addAll(fieldValue.explode());
             return;
         }
@@ -127,7 +126,7 @@ public class BenchMark implements Serializable {
             }
 
             if (throwException.size()==0) {
-                FieldValue fieldValue = properties.getFieldValue(HzCmdProperties.BENCH_THROW, "true");
+                FieldValue fieldValue = properties.getFieldValue(HzCmdProperties.BENCH_RECORD_EXCEPTION, "true");
                 throwException.addAll(fieldValue.explode());
             }
 
@@ -200,7 +199,7 @@ public class BenchMark implements Serializable {
         temp.addAll(currentBench);
 
         getRemoveField(temp, HzCmdProperties.BENCH_DRIVER);
-        getRemoveField(temp, HzCmdProperties.BENCH_THROW);
+        getRemoveField(temp, HzCmdProperties.BENCH_RECORD_EXCEPTION);
         getRemoveField(temp, HzCmdProperties.BENCH_TYPE);
         getRemoveField(temp, HzCmdProperties.BENCH_THREADS);
         getRemoveField(temp, HzCmdProperties.BENCH_WARMUP);
@@ -227,8 +226,8 @@ public class BenchMark implements Serializable {
         return getFieldValue(currentBench, HzCmdProperties.BENCH_DRIVER);
     }
 
-    public boolean getThrowException() {
-        return Boolean.parseBoolean( getFieldValue(currentBench, HzCmdProperties.BENCH_THROW) );
+    public boolean isRecordException() {
+        return Boolean.parseBoolean( getFieldValue(currentBench, HzCmdProperties.BENCH_RECORD_EXCEPTION) );
     }
 
     public BenchType getBenchType() {

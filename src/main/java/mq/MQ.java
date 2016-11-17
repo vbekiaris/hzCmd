@@ -2,6 +2,7 @@ package mq;
 
 import global.Args;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import remote.main.Utils;
 
 import javax.jms.*;
 import java.io.Serializable;
@@ -78,7 +79,6 @@ public abstract class MQ {
 
 
     public static void sendObj(String queueName, Serializable obj) throws JMSException {
-        //System.out.println("Send "+" "+queueName+" "+obj);
         MessageProducer producer = getMessageProducer(queueName);
         ObjectMessage msg = session.createObjectMessage();
         msg.setJMSReplyTo(replyToDestination);
@@ -87,17 +87,20 @@ public abstract class MQ {
     }
 
 
-    public static void sendReply(MessageProducer replyProducer, Serializable obj) throws JMSException {
-        ObjectMessage msg = session.createObjectMessage();
-        msg.setObject( obj);
-        replyProducer.send(msg);
+    public static void sendReply(MessageProducer replyProducer, Serializable obj) {
+
+       for(int i=0; i<3; i++) {
+            try {
+                ObjectMessage msg = session.createObjectMessage();
+                msg.setObject( obj);
+                replyProducer.send(msg);
+                return;
+            } catch (JMSException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-
-    public static Object receivReply( ) throws JMSException {
-        ObjectMessage objMsg = (ObjectMessage) replyConsumer.receive();
-        return objMsg.getObject();
-    }
 
     public static Object receivReply(long timeOut) throws JMSException {
         ObjectMessage objMsg = (ObjectMessage) replyConsumer.receive(timeOut);

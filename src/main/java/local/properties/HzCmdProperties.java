@@ -22,12 +22,10 @@ public class HzCmdProperties extends OrderedProperties {
 
     public static final String GC_LOG = "GC_LOG";
 
-    public static final String BENCH_NUMBER = "BENCH_NUMBER";
-
     public static final String BENCH_DRIVER = "driver";
     public static final String BENCH_DURATION = "duration";
     public static final String BENCH_INTERVAL = "interval";
-    public static final String BENCH_THROW = "throw";
+    public static final String BENCH_RECORD_EXCEPTION = "recordException";
     public static final String BENCH_TYPE = "type";
     public static final String BENCH_THREADS = "threads";
     public static final String BENCH_WARMUP = "warmup";

@@ -77,8 +77,8 @@ public abstract class Controler{
         benchManager.setThreadCount(replyProducer, id, threadCount);
     }
 
-    public void setBenchType(MessageProducer replyProducer, String id, BenchType type, long intervalNanos, boolean allowException, String outFile) {
-        benchManager.setBenchType(replyProducer, id, type, intervalNanos, allowException, outFile);
+    public void setBenchType(MessageProducer replyProducer, String id, BenchType type, long intervalNanos, boolean recordException, String outFile) {
+        benchManager.setBenchType(replyProducer, id, type, intervalNanos, recordException, outFile);
     }
 
     public void setField(MessageProducer replyProducer, String id, String field, String value){

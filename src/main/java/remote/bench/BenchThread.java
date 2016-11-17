@@ -44,7 +44,7 @@ class BenchThread implements Callable<ReplyMsg>, Serializable {
             msg.error=true;
             msg.threadId=threadNumber+"";
             msg.msg=e.toString();
-            return  msg;
+            return msg;
         }
         return msg;
     }

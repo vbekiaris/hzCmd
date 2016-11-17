@@ -14,8 +14,8 @@ public class MetricsMarker extends BenchMarker {
     private int reportSecondsInterval = 5;
     private CsvReporter csvReporter;
 
-    public MetricsMarker(long expectedIntervalNanos, boolean allowException ){
-        super(expectedIntervalNanos, allowException);
+    public MetricsMarker(long expectedIntervalNanos, boolean recordException){
+        super(expectedIntervalNanos, recordException);
     }
 
     public void preBench(String fileName){

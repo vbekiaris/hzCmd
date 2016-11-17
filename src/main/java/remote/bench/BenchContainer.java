@@ -76,14 +76,14 @@ public class BenchContainer {
         }
     }
 
-    public void setBenchType(BenchType type, long expectedIntervalNanos, boolean allowException, String outFile){
+    public void setBenchType(BenchType type, long expectedIntervalNanos, boolean recordException, String outFile){
         outputFileName=outFile;
         switch (type){
             case Metrics:
-                benchMarker = new MetricsMarker(expectedIntervalNanos, allowException);
+                benchMarker = new MetricsMarker(expectedIntervalNanos, recordException);
                 break;
             case Hdr :
-                benchMarker = new HdrMarker(expectedIntervalNanos, allowException);
+                benchMarker = new HdrMarker(expectedIntervalNanos, recordException);
                 break;
         }
     }

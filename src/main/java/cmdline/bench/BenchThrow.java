@@ -11,7 +11,7 @@ import java.util.List;
 
 import static global.Utils.commarDilinate;
 
-@com.github.rvesse.airline.annotations.Command(name = "throw", description = "[true|false] default true")
+@com.github.rvesse.airline.annotations.Command(name = "recordException", description = "[true|false] default true")
 public class BenchThrow extends Command implements Serializable{
 
     @Arguments(description = "throw Exception")
@@ -20,6 +20,6 @@ public class BenchThrow extends Command implements Serializable{
 
     public void exe(HzCmd hzCmd) throws IOException {
         HzCmdProperties props = new HzCmdProperties();
-        props.writePropertie(HzCmdProperties.BENCH_THROW, commarDilinate(throwException));
+        props.writePropertie(HzCmdProperties.BENCH_RECORD_EXCEPTION, commarDilinate(throwException));
     }
 }

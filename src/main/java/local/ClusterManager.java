@@ -98,7 +98,7 @@ public class ClusterManager implements Serializable {
         for (ClusterContainer cluster : clusters) {
             for (BenchMark benchMark : benchManager.getBenchMarks()) {
                 String fileName = cluster.getClusterId() + "_" + cluster.getVersionsString() + "_" + benchMark.getId() + "_" + benchMark.getClazz() + "_" + benchMark.getNumber();
-                cluster.setBenchType(benchMark.getDriver(), benchMark.getId(), benchMark.getBenchType(), benchMark.getInterval(), benchMark.getThrowException(), fileName);
+                cluster.setBenchType(benchMark.getDriver(), benchMark.getId(), benchMark.getBenchType(), benchMark.getInterval(), benchMark.isRecordException(), fileName);
             }
         }
         getClusterResponses(clusters, benchManager, Utils.TIMEOUT_2MIN);

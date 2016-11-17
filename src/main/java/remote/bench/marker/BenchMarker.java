@@ -1,6 +1,5 @@
 package remote.bench.marker;
 
-import global.AssertionException;
 import remote.bench.Bench;
 import remote.main.Utils;
 
@@ -12,14 +11,14 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class BenchMarker {
 
-    protected boolean throwException =false;
+    protected boolean recordException = true;
     protected long expectedIntervalNanos=0;
     protected String outputFileName;
     protected long durationSeconds;
 
-    public BenchMarker(long expectedIntervalNanos, boolean throwException){
+    public BenchMarker(long expectedIntervalNanos, boolean recordException){
         this.expectedIntervalNanos = expectedIntervalNanos;
-        this.throwException = throwException;
+        this.recordException = recordException;
     }
 
     public void setDurationSeconds(long seconds){
@@ -46,6 +45,7 @@ public abstract class BenchMarker {
     }
 
     protected void handelException(Bench bench, Exception e) throws Exception {
+
         if(bench.ignore()!=null){
             for (Class aClass : bench.ignore()) {
                 if(aClass.isInstance(e)){
@@ -54,12 +54,10 @@ public abstract class BenchMarker {
             }
         }
 
-        if(throwException){
+        if(recordException){
             Utils.recordeException(e);
-            throw e;
         }
-        if(e instanceof AssertionException){
-            throw e;
-        }
+
+        throw e;
     }
 }

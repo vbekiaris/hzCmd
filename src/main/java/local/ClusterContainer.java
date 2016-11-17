@@ -326,9 +326,9 @@ public class ClusterContainer implements Serializable {
     }
 
 
-    public void setBenchType(String jvmId, String taskId, BenchType type, long intervalNanos, boolean allowException, String outFile) throws IOException, InterruptedException, JMSException{
+    public void setBenchType(String jvmId, String taskId, BenchType type, long intervalNanos, boolean recordException, String outFile) throws IOException, InterruptedException, JMSException{
         for(RemoteJvm jvm : getMatchingJvms(jvmId)){
-            jvm.setBenchType(taskId, type, intervalNanos, allowException, outFile);
+            jvm.setBenchType(taskId, type, intervalNanos, recordException, outFile);
         }
     }
 

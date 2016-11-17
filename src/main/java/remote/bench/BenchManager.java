@@ -36,12 +36,10 @@ public class BenchManager {
             msg.msg="Loaded";
             MQ.sendReply(replyProducer, gson.toJson(msg));
         } catch (Exception e) {
-            try {
-                Utils.recordeException(e);
-                msg.error=true;
-                msg.msg=e.toString();
-                MQ.sendReply(replyProducer, gson.toJson(msg));
-            } catch (JMSException e2) {}
+            Utils.recordeException(e);
+            msg.error=true;
+            msg.msg=e.toString();
+            MQ.sendReply(replyProducer, gson.toJson(msg));
         }
     }
 
@@ -54,14 +52,10 @@ public class BenchManager {
             msg.msg="Removed";
             MQ.sendReply(replyProducer, gson.toJson(msg));
         } catch (Exception e) {
-            try {
-                Utils.recordeException(e);
-                msg.error=true;
-                msg.msg=e.toString();
-                MQ.sendReply(replyProducer, gson.toJson(msg));
-            } catch (JMSException e2) {}
-        } finally {
-            //System.gc();
+            Utils.recordeException(e);
+            msg.error=true;
+            msg.msg=e.toString();
+            MQ.sendReply(replyProducer, gson.toJson(msg));
         }
     }
 
@@ -75,12 +69,10 @@ public class BenchManager {
                 benchContainer.createBenchObjects(threadCount);
                 MQ.sendReply(replyProducer, gson.toJson(msg));
             } catch (Exception e) {
-                try {
-                    Utils.recordeException(e);
-                    msg.error=true;
-                    msg.msg=e.toString();
-                    MQ.sendReply(replyProducer, gson.toJson(msg));
-                } catch (JMSException e2) {}
+                Utils.recordeException(e);
+                msg.error=true;
+                msg.msg=e.toString();
+                MQ.sendReply(replyProducer, gson.toJson(msg));
             }
         }
     }
@@ -95,12 +87,10 @@ public class BenchManager {
                 benchContainer.writeMetaData(metaData);
                 MQ.sendReply(replyProducer, gson.toJson(msg));
             } catch (Exception e) {
-                try {
-                    Utils.recordeException(e);
-                    msg.error=true;
-                    msg.msg=e.toString();
-                    MQ.sendReply(replyProducer, gson.toJson(msg));
-                } catch (JMSException e2) {}
+                Utils.recordeException(e);
+                msg.error=true;
+                msg.msg=e.toString();
+                MQ.sendReply(replyProducer, gson.toJson(msg));
             }
         }
     }
@@ -115,12 +105,10 @@ public class BenchManager {
                 benchContainer.setField(field, value);
                 MQ.sendReply(replyProducer, gson.toJson(msg));
             } catch (Exception e) {
-                try {
-                    Utils.recordeException(e);
-                    msg.error=true;
-                    msg.msg=e.toString();
-                    MQ.sendReply(replyProducer, gson.toJson(msg));
-                } catch (JMSException e2) {}
+                Utils.recordeException(e);
+                msg.error=true;
+                msg.msg=e.toString();
+                MQ.sendReply(replyProducer, gson.toJson(msg));
             }
         }
     }
@@ -135,12 +123,10 @@ public class BenchManager {
                 benchContainer.init();
                 MQ.sendReply(replyProducer, gson.toJson(msg));
             } catch (Exception e) {
-                try {
-                    Utils.recordeException(e);
-                    msg.error=true;
-                    msg.msg=e.toString();
-                    MQ.sendReply(replyProducer, gson.toJson(msg));
-                } catch (JMSException e2) {}
+                Utils.recordeException(e);
+                msg.error=true;
+                msg.msg=e.toString();
+                MQ.sendReply(replyProducer, gson.toJson(msg));
             }
         }
     }
@@ -155,32 +141,28 @@ public class BenchManager {
                 benchContainer.postPhase();
                 MQ.sendReply(replyProducer, gson.toJson(msg));
             } catch (Exception e) {
-                try {
-                    Utils.recordeException(e);
-                    msg.error=true;
-                    msg.msg=e.toString();
-                    MQ.sendReply(replyProducer, gson.toJson(msg));
-                } catch (JMSException e2) {}
+                Utils.recordeException(e);
+                msg.error=true;
+                msg.msg=e.toString();
+                MQ.sendReply(replyProducer, gson.toJson(msg));
             }
         }
     }
 
-    public void setBenchType(MessageProducer replyProducer, String id, BenchType type, long expectedIntervalNanos, boolean allowException, String outFile){
+    public void setBenchType(MessageProducer replyProducer, String id, BenchType type, long expectedIntervalNanos, boolean recordException, String outFile){
         ReplyMsg msg = new ReplyMsg();
         msg.id=Controler.ID;
         for (BenchContainer benchContainer : getMatchingBenchContainers(id)) {
             msg.benchId=benchContainer.getId();
-            msg.msg="BenchType="+type+" intervalNanos="+expectedIntervalNanos+" throwException="+allowException+" outFile="+outFile;
+            msg.msg="BenchType="+type+" intervalNanos="+expectedIntervalNanos+" recordException="+recordException+" outFile="+outFile;
             try {
-                benchContainer.setBenchType(type, expectedIntervalNanos, allowException, outFile);
+                benchContainer.setBenchType(type, expectedIntervalNanos, recordException, outFile);
                 MQ.sendReply(replyProducer, gson.toJson(msg));
             } catch (Exception e) {
-                try {
-                    Utils.recordeException(e);
-                    msg.error=true;
-                    msg.msg=e.toString();
-                    MQ.sendReply(replyProducer, gson.toJson(msg));
-                } catch (JMSException e2) {}
+                Utils.recordeException(e);
+                msg.error=true;
+                msg.msg=e.toString();
+                MQ.sendReply(replyProducer, gson.toJson(msg));
             }
         }
     }
@@ -193,14 +175,10 @@ public class BenchManager {
             msg.msg=benchId+" running="+running;
             try {
                 benchContainer.setRunning(running);
-                //MQ.sendReply(replyProducer, gson.toJson(msg));
             } catch (Exception e) {
-                try {
-                    Utils.recordeException(e);
-                    msg.error=true;
-                    msg.msg=e.toString();
-                    //MQ.sendReply(replyProducer, gson.toJson(msg));
-                } catch (Exception e2) {}
+                Utils.recordeException(e);
+                msg.error=true;
+                msg.msg=e.toString();
             }
         }
     }
@@ -217,8 +195,6 @@ public class BenchManager {
 
         List<BenchThread> threads = new ArrayList();
         Map<String, Integer> benchResults = new HashMap();
-
-
 
         //but the command to run the bench and its duration is the same.
         //i should set the bench warmup duration and runnning duration before hand.
@@ -254,11 +230,7 @@ public class BenchManager {
                 ReplyMsg result = future.get();
 
                 if (result.error) {
-                    try {
-                        MQ.sendReply(replyProducer, gson.toJson(result));
-                    } catch (JMSException e1) {
-                        e1.printStackTrace();
-                    }
+                    MQ.sendReply(replyProducer, gson.toJson(result));
                 }
                 else {
                     int count = benchResults.get(result.benchId) - 1;
@@ -268,7 +240,6 @@ public class BenchManager {
                         MQ.sendReply(replyProducer, gson.toJson(result));
                     }
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
