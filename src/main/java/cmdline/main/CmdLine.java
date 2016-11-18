@@ -32,7 +32,7 @@ public class CmdLine {
 
                         Check.class, Wipe.class, Clean.class,
 
-                        Ls.class, Tail.class,
+                        Ls.class, Tail.class, Bash.class,
                         Kill.class, Exit.class, Restart.class, RestartEmbedded.class, Bounce.class, Freeze.class,
 
                         Download.class, UploadLib.class,
