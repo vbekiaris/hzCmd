@@ -107,6 +107,12 @@ public class HzCmd implements Serializable {
         stateModified=true;
     }
 
+    public void bashCmd(String clusterId, String jvmId, String cmd) throws Exception {
+        for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
+            c.bashCmd(jvmId, cmd);
+        }
+    }
+
     public void restartEmbeddedObject(String clusterId, String jvmId) throws Exception {
         for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
             c.restartEmbeddedObject(jvmId);

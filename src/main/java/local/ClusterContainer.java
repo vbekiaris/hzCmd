@@ -500,6 +500,12 @@ public class ClusterContainer implements Serializable {
         }
     }
 
+    public void bashCmd(String jvmId, String cmd) throws IOException, InterruptedException {
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
+            jvm.bashCmd(cmd);
+        }
+    }
+
     public void freeze(String jvmId) throws IOException, InterruptedException {
         for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             jvm.freeze();

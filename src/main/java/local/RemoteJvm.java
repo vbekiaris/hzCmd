@@ -166,6 +166,10 @@ public abstract class RemoteJvm implements Serializable {
         }
     }
 
+    public void bashCmd(String cmd) throws IOException, InterruptedException {
+       box.ssh(cmd);
+    }
+
     public void freeze() throws IOException, InterruptedException {
         box.freeze(pid);
     }
