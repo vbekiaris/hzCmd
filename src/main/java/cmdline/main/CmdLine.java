@@ -41,7 +41,9 @@ public class CmdLine {
 
                         Broker.class,
 
-                        Redis.class
+                        Redis.class,
+
+                        Wan.class
                         );
 
         builder.withGroup("chart")
