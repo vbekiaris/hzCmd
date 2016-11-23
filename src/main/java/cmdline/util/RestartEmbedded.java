@@ -21,7 +21,7 @@ public class RestartEmbedded extends Command
     public void exe(HzCmd hzCmd) {
         try {
             if(ids==null){
-                hzCmd.restartEmbeddedObject(".*", ".*");
+                hzCmd.restartEmbeddedObject(id, ".*");
             }else{
                 for (String jvmId : ids) {
                     hzCmd.restartEmbeddedObject(id, jvmId);
