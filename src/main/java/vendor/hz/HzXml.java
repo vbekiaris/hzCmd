@@ -56,33 +56,6 @@ public class HzXml {
     }
 
 
-    /*
-    *
-    *
-    *   <wan-replication name="wanReplication">
-
-        <wan-publisher group-name="group1">
-            <class-name>com.hazelcast.enterprise.wan.replication.WanNoDelayReplication</class-name>
-            <properties>
-            <property name="group.password">pass</property>
-            <property name="endpoints">10.0.0.234,10.0.0.233,</property>
-            </properties>
-        </wan-publisher>
-
-        <wan-publisher group-name="group2">
-            <class-name>com.hazelcast.enterprise.wan.replication.WanNoDelayReplication</class-name>
-            <properties>
-            <property name="group.password">pass</property>
-            <property name="endpoints">10.0.0.232,10.0.0.237,</property>
-            </properties>
-        </wan-publisher>
-
-    </wan-replication>
-    *
-    *
-    * */
-
-
     public static void wanReplication(ClusterContainer a,  ClusterContainer b) throws Exception{
 
         final String classImpleName="com.hazelcast.enterprise.wan.replication.WanNoDelayReplication";
@@ -123,28 +96,6 @@ public class HzXml {
 
 
 
-    /*
-    <wan-replication name="wanReplication">
-        <target-cluster group-name="group2" group-password="pass">
-            <replication-impl>
-                com.hazelcast.enterprise.wan.replication.WanNoDelayReplication
-            </replication-impl>
-            <end-points>
-                <address>10.0.0.162</address>
-                <address>10.0.0.163</address>
-            </end-points>
-        </target-cluster>
-        <target-cluster group-name="group3" group-password="pass">
-            <replication-impl>
-                com.hazelcast.enterprise.wan.replication.WanNoDelayReplication
-            </replication-impl>
-            <end-points>
-                <address>10.0.0.161</address>
-                <address>10.0.0.166</address>
-            </end-points>
-        </target-cluster>
-    </wan-replication>
-    */
 
     public static void makeClientXml(ClusterContainer m) throws Exception{
 
