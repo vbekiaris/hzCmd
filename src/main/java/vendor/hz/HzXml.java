@@ -56,32 +56,67 @@ public class HzXml {
     }
 
 
-    public static void wanReplication(ClusterContainer a,  ClusterContainer b, String name, String repImpl) throws Exception{
+    /*
+    *
+    *
+    *   <wan-replication name="wanReplication">
+
+        <wan-publisher group-name="group1">
+            <class-name>com.hazelcast.enterprise.wan.replication.WanNoDelayReplication</class-name>
+            <properties>
+            <property name="group.password">pass</property>
+            <property name="endpoints">10.0.0.234,10.0.0.233,</property>
+            </properties>
+        </wan-publisher>
+
+        <wan-publisher group-name="group2">
+            <class-name>com.hazelcast.enterprise.wan.replication.WanNoDelayReplication</class-name>
+            <properties>
+            <property name="group.password">pass</property>
+            <property name="endpoints">10.0.0.232,10.0.0.237,</property>
+            </properties>
+        </wan-publisher>
+
+    </wan-replication>
+    *
+    *
+    * */
+
+
+    public static void wanReplication(ClusterContainer a,  ClusterContainer b) throws Exception{
+
+        final String classImpleName="com.hazelcast.enterprise.wan.replication.WanNoDelayReplication";
 
         Document document = getDocument(memberXmlFileForCluster(a));
 
-        Element wan = document.createElement("wan-replication");
-        wan.setAttribute("name", name);
+        Element wanReplication = document.createElement("wan-replication");
+        wanReplication.setAttribute("name", "wanReplication");
 
-        Element target = document.createElement("target-cluster");
-        target.setAttribute("group-name", b.getClusterId());
-        target.setAttribute("group-password", b.getClusterId());
+        Element wanPublisher = document.createElement("wan-publisher");
+        wanPublisher.setAttribute("group-name", a.getClusterId()+"-"+b.getClusterId());
 
-        Element rep = document.createElement("replication-impl");
-        rep.setTextContent(repImpl);
+        Element className = document.createElement("class-name");
+        className.setTextContent(classImpleName);
 
-        Element end = document.createElement("end-points");
-        for (Box box : b.getBoxManager().getBoxList()) {
-            Element address = document.createElement("address");
-            address.setTextContent(box.pri);
-            end.appendChild(address);
-        }
+        Element properties = document.createElement("properties");
 
-        wan.appendChild(target);
-        target.appendChild(rep);
-        target.appendChild(end);
 
-        document.getFirstChild().appendChild(wan);
+        Element propertyPassword = document.createElement("property");
+        propertyPassword.setAttribute("name", "group.password");
+        propertyPassword.setTextContent(b.getClusterId());
+
+        Element propertyEndpoints = document.createElement("property");
+        propertyEndpoints.setAttribute("name", "endpoints");
+        propertyEndpoints.setTextContent(b.getPublicMemberIps());
+
+
+        wanReplication.appendChild(wanPublisher);
+        wanPublisher.appendChild(className);
+        wanPublisher.appendChild(properties);
+        properties.appendChild(propertyPassword);
+        properties.appendChild(propertyEndpoints);
+
+        document.getFirstChild().appendChild(wanReplication);
 
         writeXmlFile(document, memberXmlFileForCluster(a));
     }

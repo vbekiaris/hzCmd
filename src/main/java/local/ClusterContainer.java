@@ -306,6 +306,15 @@ public class ClusterContainer implements Serializable {
         return all;
     }
 
+    public String getPublicMemberIps() {
+
+        String ips = new String();
+        for (RemoteJvm remoteJvm : getMemberJvms()) {
+            ips += remoteJvm.getBox().pub+",";
+        }
+
+        return ips;
+    }
 
     public void restartEmbeddedObject(String jvmId) throws IOException, InterruptedException, JMSException{
         for(RemoteJvm jvm : getMatchingJvms(jvmId)){

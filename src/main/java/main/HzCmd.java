@@ -10,6 +10,7 @@ import local.properties.HzCmdProperties;
 import global.Bash;
 import global.ClusterType;
 import mq.MQ;
+import vendor.hz.HzXml;
 
 import javax.jms.JMSException;
 import java.io.*;
@@ -366,6 +367,18 @@ public class HzCmd implements Serializable {
         clusterManager.writeMetaDataCmd(clusterId, benchManager);
     }
 
+    public void wanXml(List<String> ids) throws Exception {
+        String srcId = ids.remove(0);
+        for (ClusterContainer srcCluster : clusterManager.getClusters(srcId)) {
+
+            for (String targetClustersId : ids) {
+
+                ClusterContainer targetCluster = clusterManager.getClusters(targetClustersId).get(0);
+                HzXml.wanReplication(srcCluster, targetCluster);
+            }
+        }
+
+    }
 
     public void scpUp(String id, String src, String dst) throws IOException, InterruptedException {
         for (ClusterContainer c : clusterManager.getClusters(id)) {
