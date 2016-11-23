@@ -370,14 +370,12 @@ public class HzCmd implements Serializable {
     public void wanXml(List<String> ids) throws Exception {
         String srcId = ids.remove(0);
         for (ClusterContainer srcCluster : clusterManager.getClusters(srcId)) {
-
             for (String targetClustersId : ids) {
-
                 ClusterContainer targetCluster = clusterManager.getClusters(targetClustersId).get(0);
                 HzXml.wanReplication(srcCluster, targetCluster);
             }
+            srcCluster.uploadToMemberCwd( HzXml.memberXmlFileForCluster(srcCluster) );
         }
-
     }
 
     public void scpUp(String id, String src, String dst) throws IOException, InterruptedException {

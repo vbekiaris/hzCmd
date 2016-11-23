@@ -279,6 +279,9 @@ public abstract class RemoteJvm implements Serializable {
         return box.findArgs(dir, "-name exception.txt -o -name *.hprof -o -name *.oome -o -name hs_err_pid*");
     }
 
+    public void uploadToCwd(String src) throws IOException, InterruptedException {
+        box.upload(src, dir);
+    }
 
     public boolean printErrors() throws IOException, InterruptedException {
         String err = findError();
