@@ -6,7 +6,7 @@ import main.HzCmd;
 
 import java.util.List;
 
-@com.github.rvesse.airline.annotations.Command(name = "wam", description = "init hz wan rep xml")
+@com.github.rvesse.airline.annotations.Command(name = "wan", description = "init hz wan rep xml")
 public class Wan extends Command
 {
     @Arguments(description = "cluster id's")
