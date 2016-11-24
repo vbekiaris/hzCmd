@@ -283,6 +283,11 @@ public abstract class RemoteJvm implements Serializable {
         box.upload(src, dir);
     }
 
+    public void uploadToUserRootDir(String src) throws IOException, InterruptedException {
+        box.upload(src, ".");
+    }
+
+
     public boolean printErrors() throws IOException, InterruptedException {
         String err = findError();
 

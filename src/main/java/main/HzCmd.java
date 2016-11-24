@@ -375,6 +375,7 @@ public class HzCmd implements Serializable {
                 HzXml.wanReplication(srcCluster, targetCluster);
             }
             srcCluster.uploadToMemberCwd( HzXml.memberXmlFileForCluster(srcCluster) );
+            srcCluster.uploadToMemberBoxUserRootDir( HzXml.memberXmlFileForCluster(srcCluster) );
         }
     }
 

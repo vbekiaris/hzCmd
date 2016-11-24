@@ -312,6 +312,13 @@ public class ClusterContainer implements Serializable {
         }
     }
 
+    public void uploadToMemberBoxUserRootDir(String src) throws Exception{
+        for (RemoteJvm remoteJvm : getMemberJvms()) {
+            remoteJvm.uploadToUserRootDir(src);
+        }
+    }
+
+
     public String getPublicMemberIps() {
 
         String ips = new String();
