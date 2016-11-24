@@ -58,7 +58,7 @@ public class HzXml {
 
     public static void wanReplication(ClusterContainer a,  ClusterContainer b) throws Exception{
 
-        final String classImpleName="com.hazelcast.enterprise.wan.replication.WanNoDelayReplication";
+        final String classImpleName="com.hazelcast.enterprise.wan.replication.WanBatchReplication";
 
         Document document = getDocument(memberXmlFileForCluster(a));
 
