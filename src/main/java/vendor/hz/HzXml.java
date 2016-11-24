@@ -62,6 +62,7 @@ public class HzXml {
 
         Document document = getDocument(memberXmlFileForCluster(a));
 
+
         Element wanReplication = document.createElement("wan-replication");
         wanReplication.setAttribute("name", "wanReplication");
 
@@ -89,7 +90,11 @@ public class HzXml {
         properties.appendChild(propertyPassword);
         properties.appendChild(propertyEndpoints);
 
-        document.getFirstChild().appendChild(wanReplication);
+        if(document.getElementsByTagName("wan-replication").getLength() > 0){
+            document.getElementsByTagName("wan-replication").item(0).appendChild(wanPublisher);
+        }else {
+            document.getFirstChild().appendChild(wanReplication);
+        }
 
         writeXmlFile(document, memberXmlFileForCluster(a));
     }
