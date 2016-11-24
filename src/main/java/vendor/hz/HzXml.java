@@ -66,7 +66,7 @@ public class HzXml {
         wanReplication.setAttribute("name", "wanReplication");
 
         Element wanPublisher = document.createElement("wan-publisher");
-        wanPublisher.setAttribute("group-name", a.getClusterId()+"-"+b.getClusterId());
+        wanPublisher.setAttribute("group-name", b.getClusterId());
 
         Element className = document.createElement("class-name");
         className.setTextContent(classImpleName);
