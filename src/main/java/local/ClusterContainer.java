@@ -575,6 +575,13 @@ public class ClusterContainer implements Serializable {
         }
     }
 
+    public void ip(String jvmId) {
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
+            System.out.println(jvm.getBox().pub);
+        }
+    }
+
+
     public void cat(String jvmId) throws IOException, InterruptedException {
         for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             System.out.println(jvm);

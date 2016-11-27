@@ -268,6 +268,13 @@ public class HzCmd implements Serializable {
         }
     }
 
+    public void ip(String clusterId, String jvmId) throws Exception {
+        for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
+            c.ip(jvmId);
+        }
+    }
+
+
     public void tail(String clusterId, String jvmId) throws Exception {
         for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
             c.tail(jvmId);

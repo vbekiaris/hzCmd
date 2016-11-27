@@ -43,7 +43,7 @@ public class CmdLine {
 
                         Redis.class,
 
-                        Wan.class
+                        Wan.class, Ip.class
                         );
 
         builder.withGroup("chart")
