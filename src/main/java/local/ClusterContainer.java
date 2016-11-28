@@ -559,7 +559,6 @@ public class ClusterContainer implements Serializable {
             String err = box.findArgs(Installer.REMOTE_HZCMD_ROOT+"/*"+clusterId+"*", "-name exception.txt -o -name *.hprof -o -name *.oome -o -name hs_err_pid* -o -name *core*");
 
             if(err != null && !"".equals(err)){
-                System.out.println(this);
                 System.out.println(Bash.ANSI_RED+err+Bash.ANSI_RESET);
                 error = true;
             }
