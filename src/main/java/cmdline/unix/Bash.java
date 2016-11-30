@@ -1,4 +1,4 @@
-package cmdline.util;
+package cmdline.unix;
 
 import cmdline.base.Command;
 import com.github.rvesse.airline.annotations.Arguments;
