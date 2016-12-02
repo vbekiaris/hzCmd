@@ -1,3 +1,6 @@
 #!/usr/bin/env bash
 
-find $1 -name verbosegc.log | xargs -n1 -I% sh -c "java -jar $(find ~/.m2 -name gcviewer-1.34.1.jar) % %.txt %.png"
+dir=${1:-.}
+match=${2:-.*}
+
+find "${dir}" -name verbosegc.log |  grep "${match}" | xargs -n1 -I% sh -c "java -jar $(find ~/.m2 -name gcviewer-1.34.1.jar) % %.txt %.png"
