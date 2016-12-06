@@ -22,6 +22,7 @@ public class BenchRun extends Command
 
             if(benchMarkFiles==null){
                 System.out.println(Bash.ANSI_RED + "-id "+clusterId+" NO benchmark files given" + Bash.ANSI_RESET);
+                System.out.println(Bash.ANSI_RED + "EXIT 1" + Bash.ANSI_RESET);
                 System.exit(1);
             }
 
