@@ -3,6 +3,7 @@ package cmdline.bench;
 import cmdline.base.Command;
 import com.github.rvesse.airline.annotations.Arguments;
 import com.github.rvesse.airline.annotations.Option;
+import global.Bash;
 import main.HzCmd;
 
 import java.util.List;
@@ -18,6 +19,12 @@ public class BenchRun extends Command
 
     public void exe(HzCmd hzCmd) {
         try {
+
+            if(benchMarkFiles==null){
+                System.out.println(Bash.ANSI_RED + "-id "+clusterId+" NO benchmark files given" + Bash.ANSI_RESET);
+                System.exit(1);
+            }
+
             for (String bench : benchMarkFiles) {
                 hzCmd.invokeBenchMark(clusterId, bench);
             }
