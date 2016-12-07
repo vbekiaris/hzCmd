@@ -9,6 +9,9 @@ Getting Started with HzCmd using:
    * Install
 
 
+your host box, needs port `61616` open to accept incoming tcp ip connection on port `61616`
+
+
 1)  Docker https://hub.docker.com/r/dannyhazelcast/hzcmd/ ready to go container 
 ```
     docker pull dannyhazelcast/hzcmd
