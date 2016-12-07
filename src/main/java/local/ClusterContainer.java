@@ -449,13 +449,12 @@ public class ClusterContainer implements Serializable {
         List<RemoteJvm> members = getMatchingMemberJvms(jvmId);
         List<RemoteJvm> clients = getMatchingClientJvms(jvmId);
 
-        restartJvmList(version, members);
-
         HzCmdProperties properties = new HzCmdProperties();
 
         String memberOps = properties.readPropertie(HzCmdProperties.MEMBER_OPS, "");
         for (RemoteJvm jvm : members) {
             String launch = jvm.startJvm(memberOps, jvm.getVendorLibDir(),  this,  brokerIP);
+            System.out.println("launch: " + launch);
             jvm.launchJvm(launch);
         }
 
