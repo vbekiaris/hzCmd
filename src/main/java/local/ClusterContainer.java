@@ -5,6 +5,7 @@ import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
 import global.*;
 import local.bench.BenchManager;
+import local.properties.HzCmdProperties;
 
 import javax.jms.JMSException;
 import java.io.*;
@@ -438,6 +439,37 @@ public class ClusterContainer implements Serializable {
 
         restartJvmList(version, clients);
     }
+
+    public void reLaunch(String jvmId, String version, boolean ee) throws Exception {
+        if (version != null && !containsVersion(version)) {
+            Installer.installVendorLib(boxes, jvmFactory, ee, version);
+            addVersion(version);
+        }
+
+        List<RemoteJvm> members = getMatchingMemberJvms(jvmId);
+        List<RemoteJvm> clients = getMatchingClientJvms(jvmId);
+
+        restartJvmList(version, members);
+
+        HzCmdProperties properties = new HzCmdProperties();
+
+        String memberOps = properties.readPropertie(HzCmdProperties.MEMBER_OPS, "");
+        for (RemoteJvm jvm : members) {
+            String launch = jvm.startJvm(memberOps, jvm.getVendorLibDir(),  this,  brokerIP);
+            jvm.launchJvm(launch);
+        }
+
+        if(members.size()!=0 && clients.size()!=0){
+            Thread.sleep(5000);
+        }
+
+        String clientOps = properties.readPropertie(HzCmdProperties.CLIENT_OPS, "");
+        for (RemoteJvm jvm : clients) {
+            String launch = jvm.startJvm(clientOps, jvm.getVendorLibDir(),  this,  brokerIP);
+            jvm.launchJvm(launch);
+        }
+    }
+
 
     private void restartJvmList(String version, List<RemoteJvm> jvms) throws Exception{
         for (RemoteJvm jvm : jvms) {

@@ -143,7 +143,7 @@ public abstract class RemoteJvm implements Serializable {
         launchJvm(launchCmd);
     }
 
-    private void launchJvm(String launch) throws IOException, InterruptedException {
+    public void launchJvm(String launch) throws IOException, InterruptedException {
         String launchRes = box.ssh(launch);
 
         String delim = " \n";
@@ -358,6 +358,10 @@ public abstract class RemoteJvm implements Serializable {
     public void setPid(String pid) {
         int p = Integer.parseInt(pid);
         this.pid = p;
+    }
+
+    public String getVendorLibDir() {
+        return vendorLibDir;
     }
 
 }
