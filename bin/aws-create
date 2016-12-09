@@ -40,6 +40,10 @@ if (( ${count} > 0 )) ; then
  aws ec2 describe-images --image-ids ${imageId}
 fi
 
+if (( ${count} == 0 )) ; then
+  exit 0
+fi
+
 tryCount=0
 while (( ${count} > 0 )) ; do
 
