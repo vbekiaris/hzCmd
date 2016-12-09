@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-targetDir=${1:-.}
-match=${2:-*}
+targetDir=${1:-'.'}
+match=${2:-'.*'}
 
 gcPics=$(find ${targetDir} -name 'verbosegc.log.png' | grep ${match} | sort)
 
