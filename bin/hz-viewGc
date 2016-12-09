@@ -3,7 +3,7 @@
 targetDir=${1:-'.'}
 match=${2:-'.*'}
 
-gcPics=$(find . -name 'verbosegc.log.png' | grep ${match} | sort)
+gcPics=$(find . -name 'verbosegc.log.png' | grep '.*' | sort)
 
 while read -r gcPic; do
 
