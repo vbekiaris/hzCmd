@@ -1,14 +1,22 @@
 #!/usr/bin/env bash
 
-boxFile=${1:-a.box}
+boxFiles="$@"
 
-lines=($(cat ${boxFile}))
+if [ $# -eq 0 ]; then
+    boxFiles="a.box"
+fi
 
-for line in "${lines[@]}" ; do
+for boxFile in "${boxFiles}"; do
 
- id=$(echo ${line} | awk -F',' '{print $3}' )
- aws ec2 terminate-instances --instance-ids ${id}
+ lines=($(cat ${boxFile}))
+
+ for line in "${lines[@]}" ; do
+
+  id=$(echo ${line} | awk -F',' '{print $3}' )
+  aws ec2 terminate-instances --instance-ids ${id}
+
+ done
+
+ rm ${boxFile}
 
 done
-
-rm ${boxFile}
