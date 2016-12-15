@@ -55,6 +55,11 @@ public class Box implements Serializable{
         return ssh("kill -9 "+pid);
     }
 
+    public String jmapHisto(int pid, String file) throws IOException, InterruptedException {
+        return ssh("jmap -histo:live,file="+file+" "+pid);
+    }
+
+
     public String freeze(int pid) throws IOException, InterruptedException {
         return ssh("kill -STOP "+pid);
     }

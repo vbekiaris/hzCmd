@@ -29,6 +29,8 @@ public abstract class RemoteJvm implements Serializable {
 
     protected final String dir;
 
+    protected int jmap_histogram_count=1;
+
     protected String vendorLibDir;
 
     private String launchCmd;
@@ -160,10 +162,12 @@ public abstract class RemoteJvm implements Serializable {
     }
 
     public void kill() throws IOException, InterruptedException {
-        if (pid != 0) {
-            box.killHard(pid);
-            pid = 0;
-        }
+        box.killHard(pid);
+    }
+
+    public void jmapHisto() throws IOException, InterruptedException {
+        box.jmapHisto(pid, id+"_histo_"+jmap_histogram_count+".txt");
+        jmap_histogram_count++;
     }
 
     public void bashCmd(String cmd) throws IOException, InterruptedException {

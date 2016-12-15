@@ -131,7 +131,6 @@ public class ClusterContainer implements Serializable {
     }
 
 
-
     private class Runner implements Callable<Object> {
 
         private Box box;
@@ -549,6 +548,12 @@ public class ClusterContainer implements Serializable {
     public void kill(String jvmId) throws IOException, InterruptedException {
         for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             jvm.kill();
+        }
+    }
+
+    public void jmapHisto(String jvmId) throws IOException, InterruptedException {
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
+            jvm.jmapHisto();
         }
     }
 
