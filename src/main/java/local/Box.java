@@ -56,7 +56,7 @@ public class Box implements Serializable{
     }
 
     public String jmapHisto(int pid, String file) throws IOException, InterruptedException {
-        return ssh("jmap -histo:live,file="+file+" "+pid);
+        return ssh("jmap -histo "+pid+" >> "+file);
     }
 
 
