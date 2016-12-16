@@ -59,6 +59,10 @@ public class Box implements Serializable{
         return ssh("jmap -histo "+pid+" >> "+file);
     }
 
+    public String jmapHprof(int pid, String file) throws IOException, InterruptedException {
+        return ssh("jmap -dump:file="+file+",format=b "+pid);
+    }
+
 
     public String freeze(int pid) throws IOException, InterruptedException {
         return ssh("kill -STOP "+pid);
@@ -133,7 +137,6 @@ public class Box implements Serializable{
                 ", pri=" + pri +
                 '}';
     }
-
 
 }
 

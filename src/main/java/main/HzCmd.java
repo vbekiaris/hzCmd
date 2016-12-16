@@ -124,6 +124,13 @@ public class HzCmd implements Serializable {
         stateModified=true;
     }
 
+    public void jmapHprof(String clusterId, String jvmId) throws Exception {
+        for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
+            c.jmapHprof(jvmId);
+        }
+        stateModified=true;
+    }
+
     public void bashCmd(String clusterId, String jvmId, String cmd) throws Exception {
         for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
             c.bashCmd(jvmId, cmd);

@@ -30,6 +30,7 @@ public abstract class RemoteJvm implements Serializable {
     protected final String dir;
 
     protected int jmap_histogram_count=1;
+    protected int jmap_hprof_count=1;
 
     protected String vendorLibDir;
 
@@ -169,6 +170,12 @@ public abstract class RemoteJvm implements Serializable {
         box.jmapHisto(pid, dir+"/jmap_histogram"+jmap_histogram_count+".txt");
         jmap_histogram_count++;
     }
+
+    public void jmapHprof() throws IOException, InterruptedException {
+        box.jmapHprof(pid, dir+"/"+id+"_"+jmap_hprof_count+".hprof");
+        jmap_hprof_count++;
+    }
+
 
     public void bashCmd(String cmd) throws IOException, InterruptedException {
         String out = box.ssh(cmd);
