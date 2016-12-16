@@ -166,7 +166,7 @@ public abstract class RemoteJvm implements Serializable {
     }
 
     public void jmapHisto() throws IOException, InterruptedException {
-        box.jmapHisto(pid, dir+"/"+id+"_histo"+jmap_histogram_count+".txt");
+        box.jmapHisto(pid, dir+"/jmap_histogram"+jmap_histogram_count+".txt");
         jmap_histogram_count++;
     }
 
