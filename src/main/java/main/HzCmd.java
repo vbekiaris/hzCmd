@@ -283,7 +283,7 @@ public class HzCmd implements Serializable {
     }
 
 
-    public void memberCount(String clusterId, String jvmids) {
+    public void memberCount(String clusterId) {
         for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
             System.out.println(c.getMemberCount());
         }

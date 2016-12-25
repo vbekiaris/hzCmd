@@ -13,18 +13,11 @@ public class MemberCount extends Command
     @Option(name = "-id", description = "cluster id")
     public String id=".*";
 
-    @Arguments(description = "jvm id default .*")
-    public List<String> ids;
-
     public void exe(HzCmd hzCmd) {
         try {
-            if(ids==null){
-                hzCmd.memberCount(id, ".*");
-            }else{
-                for (String jvmids : ids) {
-                    hzCmd.memberCount(id, jvmids);
-                }
-            }
+
+            hzCmd.memberCount(id);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
