@@ -289,6 +289,12 @@ public class HzCmd implements Serializable {
         }
     }
 
+    public void randMemberId(String clusterId) {
+        for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
+            System.out.println(c.randMemberId());
+        }
+    }
+
     public void ls(String clusterId, String jvmId) throws Exception {
         for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
             c.ls(jvmId);

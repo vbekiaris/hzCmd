@@ -222,6 +222,14 @@ public class ClusterContainer implements Serializable {
         return count;
     }
 
+    public String randMemberId( ) {
+
+        List<RemoteJvm> members = getMemberJvms();
+        Random random = new Random();
+        RemoteJvm memberJvm = members.get(random.nextInt(members.size()));
+        return memberJvm.getId();
+    }
+
     public int getClientCount( ) {
         int count=0;
         for(RemoteJvm jvm : jvms.values()){
