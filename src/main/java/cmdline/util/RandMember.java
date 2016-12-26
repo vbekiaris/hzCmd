@@ -13,7 +13,7 @@ public class RandMember extends Command
     public void exe(HzCmd hzCmd) {
         try {
 
-            hzCmd.memberCount(id);
+            hzCmd.randMemberId(id);
 
         } catch (Exception e) {
             e.printStackTrace();
