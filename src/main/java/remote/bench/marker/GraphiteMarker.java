@@ -27,7 +27,7 @@ public class GraphiteMarker extends BenchMarker {
 
         final Graphite graphite = new Graphite(new InetSocketAddress(graphiteServer, graphitePort));
         reporter = GraphiteReporter.forRegistry(metrics)
-                .prefixedWith(fileName)
+                //.prefixedWith(fileName)
                 .convertRatesTo(TimeUnit.SECONDS)
                 .convertDurationsTo(TimeUnit.MILLISECONDS)
                 .filter(MetricFilter.ALL)
