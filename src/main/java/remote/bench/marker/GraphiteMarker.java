@@ -4,6 +4,7 @@ import com.codahale.metrics.MetricFilter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.graphite.Graphite;
 import com.codahale.metrics.graphite.GraphiteReporter;
+import global.Args;
 import remote.bench.Bench;
 
 import java.net.InetSocketAddress;
@@ -27,7 +28,7 @@ public class GraphiteMarker extends BenchMarker {
 
         final Graphite graphite = new Graphite(new InetSocketAddress(graphiteServer, graphitePort));
         reporter = GraphiteReporter.forRegistry(metrics)
-                //.prefixedWith(fileName)
+                .prefixedWith( System.getProperty(Args.ID.name()))
                 .convertRatesTo(TimeUnit.SECONDS)
                 .convertDurationsTo(TimeUnit.MILLISECONDS)
                 .filter(MetricFilter.ALL)
