@@ -44,7 +44,7 @@ public class GraphiteMarker extends BenchMarker {
         long startTime = System.currentTimeMillis();
         long endTime = startTime + (durationSeconds * 1000);
 
-        com.codahale.metrics.Timer timer = metrics.timer(outputFileName);
+        com.codahale.metrics.Timer timer = metrics.timer(bench.getClass().getName());
         if(expectedIntervalNanos==0){
             while(System.currentTimeMillis() < endTime && bench.isRunning()){
                 flatOut(bench, timer);
@@ -54,7 +54,7 @@ public class GraphiteMarker extends BenchMarker {
                 interval(bench, timer);
             }
         }
-        metrics.remove(outputFileName);
+        metrics.remove(bench.getClass().getName());
     }
 
     private void flatOut(Bench bench, com.codahale.metrics.Timer timer) throws Exception{
