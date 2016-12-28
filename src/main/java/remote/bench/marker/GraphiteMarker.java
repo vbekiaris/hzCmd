@@ -15,7 +15,7 @@ public class GraphiteMarker extends BenchMarker {
     private static MetricRegistry metrics = new MetricRegistry();
     private int reportSecondsInterval = 5;
     private GraphiteReporter reporter;
-    private String graphiteServer = "graphite.example.com";
+    private String graphiteServer = "10.212.1.107";
     private int graphitePort = 2003;
 
     public GraphiteMarker(long expectedIntervalNanos, boolean recordException){

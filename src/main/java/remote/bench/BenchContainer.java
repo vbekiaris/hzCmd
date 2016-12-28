@@ -1,7 +1,7 @@
 package remote.bench;
 
 import global.BenchType;
-import remote.main.Controler;
+import remote.bench.marker.GraphiteMarker;
 import remote.main.Utils;
 import remote.bench.marker.BenchMarker;
 import remote.bench.marker.HdrMarker;
@@ -84,6 +84,9 @@ public class BenchContainer {
                 break;
             case Hdr :
                 benchMarker = new HdrMarker(expectedIntervalNanos, recordException);
+                break;
+            case Graphite:
+                benchMarker = new GraphiteMarker(expectedIntervalNanos, recordException);
                 break;
         }
     }
