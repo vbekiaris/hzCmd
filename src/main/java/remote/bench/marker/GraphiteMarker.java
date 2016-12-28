@@ -18,9 +18,11 @@ public class GraphiteMarker extends BenchMarker {
     private GraphiteReporter reporter;
     private String graphiteServer = "10.212.1.107";
     private int graphitePort = 2003;
+    private String id;
 
-    public GraphiteMarker(long expectedIntervalNanos, boolean recordException){
+    public GraphiteMarker(long expectedIntervalNanos, boolean recordException, String id){
         super(expectedIntervalNanos, recordException);
+        this.id=id;
     }
 
     public void preBench(String fileName){
@@ -44,7 +46,7 @@ public class GraphiteMarker extends BenchMarker {
         long startTime = System.currentTimeMillis();
         long endTime = startTime + (durationSeconds * 1000);
 
-        com.codahale.metrics.Timer timer = metrics.timer(bench.getClass().getName());
+        com.codahale.metrics.Timer timer = metrics.timer(bench.getClass().getName()+"."+id);
         if(expectedIntervalNanos==0){
             while(System.currentTimeMillis() < endTime && bench.isRunning()){
                 flatOut(bench, timer);
@@ -54,7 +56,7 @@ public class GraphiteMarker extends BenchMarker {
                 interval(bench, timer);
             }
         }
-        metrics.remove(bench.getClass().getName());
+        metrics.remove(bench.getClass().getName()+"."+id);
     }
 
     private void flatOut(Bench bench, com.codahale.metrics.Timer timer) throws Exception{

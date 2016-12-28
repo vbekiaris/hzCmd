@@ -86,7 +86,7 @@ public class BenchContainer {
                 benchMarker = new HdrMarker(expectedIntervalNanos, recordException);
                 break;
             case Graphite:
-                benchMarker = new GraphiteMarker(expectedIntervalNanos, recordException);
+                benchMarker = new GraphiteMarker(expectedIntervalNanos, recordException, id);
                 break;
         }
     }
