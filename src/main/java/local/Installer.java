@@ -52,6 +52,8 @@ public abstract class Installer {
 
 
         uploadStuff.add(Bash.find(M2_Repo, "metrics-core-3.1.1.jar"));
+        uploadStuff.add(Bash.find(M2_Repo, "metrics-graphite-3.0.2.jar"));
+
         uploadStuff.add(Bash.find(M2_Repo, "HdrHistogram-2.1.9.jar"));
 
         uploadStuff.add(Bash.find(M2_Repo, "log4j-1.2.17.jar"));
