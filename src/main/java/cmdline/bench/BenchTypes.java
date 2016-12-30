@@ -10,10 +10,10 @@ import java.util.List;
 
 import static global.Utils.commarDilinate;
 
-@com.github.rvesse.airline.annotations.Command(name = "type", description = "type of benchmark tool used to measure")
+@com.github.rvesse.airline.annotations.Command(name = "marker", description = "type of benchmark tool used to measure")
 public class BenchTypes extends Command {
 
-    @Arguments(description = "[Metrics|Hdr] default Metrics")
+    @Arguments(description = "[Metrics|Hdr|Graphite] default Metrics")
     public List<String> types;
 
 
