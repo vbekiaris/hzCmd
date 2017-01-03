@@ -2,6 +2,7 @@ package main;
 
 import cmdline.main.CmdLine;
 import cmdline.base.Command;
+import com.github.rvesse.airline.parser.errors.ParseException;
 import com.github.rvesse.airline.parser.errors.ParseOptionMissingValueException;
 import global.ClusterSize;
 import global.Utils;
@@ -491,8 +492,9 @@ public class HzCmd implements Serializable {
         Runnable r = null;
         try{
             r = parser.parse(args);
-        }catch (ParseOptionMissingValueException e){
-            System.out.println(Bash.ANSI_RED+e.getOptionTitle() +" "+e.getMessage()+Bash.ANSI_RESET);
+
+        }catch (ParseException e){
+            System.out.println(Bash.ANSI_RED+" error passing "+args+" "+e.getMessage()+Bash.ANSI_RESET);
             System.exit(1);
         }
 
