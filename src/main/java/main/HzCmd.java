@@ -16,6 +16,7 @@ import vendor.hz.HzXml;
 
 import javax.jms.JMSException;
 import java.io.*;
+import java.util.Arrays;
 import java.util.List;
 
 //add box type,  to ip list,  for starting in unix / win
@@ -494,7 +495,7 @@ public class HzCmd implements Serializable {
             r = parser.parse(args);
 
         }catch (ParseException e){
-            System.out.println(Bash.ANSI_RED+" error passing "+args+" "+e.getMessage()+Bash.ANSI_RESET);
+            System.out.println(Bash.ANSI_RED+" error passing "+ Arrays.toString(args)+" "+e.getMessage()+Bash.ANSI_RESET);
             System.exit(1);
         }
 
