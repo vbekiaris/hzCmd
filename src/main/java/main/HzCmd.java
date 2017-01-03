@@ -495,7 +495,7 @@ public class HzCmd implements Serializable {
             r = parser.parse(args);
 
         }catch (ParseException e){
-            System.out.println(Bash.ANSI_RED+" error passing ");
+            System.out.println(Bash.ANSI_RED+"Error Passing");
             for (String arg : args) {
                 System.out.print(arg+" ");
             }
