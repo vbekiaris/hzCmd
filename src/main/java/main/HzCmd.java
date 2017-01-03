@@ -488,7 +488,7 @@ public class HzCmd implements Serializable {
 
         com.github.rvesse.airline.Cli<Runnable> parser = CmdLine.getParser();
 
-        Runnable r;
+        Runnable r = null;
         try{
             r = parser.parse(args);
         }catch (ParseOptionMissingValueException e){
