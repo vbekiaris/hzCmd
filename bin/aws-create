@@ -2,7 +2,8 @@
 
 count="1"
 instanceType="c4.xlarge"
-imageId="ami-08111162"
+imageId="ami-9be6f38c"
+#"ami-08111162"
 region="us-east-1"
 key="jenkins-ec2-key"
 subnetId="subnet-378d2140"
