@@ -5,6 +5,6 @@ user=${2:-$(whoami)}
 
 for boxFile in *.box; do
 
-forCsvColApply "${file}" sshCmd "${cmd}" "${user}"
+forCsvColApply "${boxFile}" sshCmd "${cmd}" "${user}"
 
 done
