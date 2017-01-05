@@ -240,6 +240,9 @@ public class ClusterContainer implements Serializable {
         return count;
     }
 
+    public Collection<RemoteJvm> getAllJvms(){
+        return jvms.values();
+    }
 
     public List<RemoteJvm> getMemberJvms( ) {
         List<RemoteJvm> matching = new ArrayList<RemoteJvm>();
@@ -509,8 +512,8 @@ public class ClusterContainer implements Serializable {
                     System.out.println(Bash.ANSI_RED + benchManager.currentBench_toString() + Bash.ANSI_RESET);
                 }
 
-                for(RemoteJvm jvmStack : getMatchingJvms(jvmId)){
-                    jvmStack.jstack("timeOut.jstack");
+                for(RemoteJvm allJvmStack : getAllJvms()){
+                    allJvmStack.jstack("timeout_stack.txt");
                 }
 
                 System.exit(1);
