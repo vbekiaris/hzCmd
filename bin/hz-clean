@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-for boxFile in *.box; do
-  hz-ssh ${boxFile} 'sudo killall -9 java' $1
-  hz-ssh ${boxFile} 'rm -r hz-root' $1
-done
+user=${1:-$(whoami)}
+
+hz-ssh 'sudo killall -9 java' $user
+hz-ssh 'rm -r hz-root' $user
