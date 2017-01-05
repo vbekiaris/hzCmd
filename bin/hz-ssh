@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
-file=$1
-cmd=$2
-user=${3:-$(whoami)}
+cmd=$1
+user=${2:-$(whoami)}
+
+for boxFile in *.box; do
 
 forCsvColApply "${file}" sshCmd "${cmd}" "${user}"
+
+done
