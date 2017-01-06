@@ -13,4 +13,4 @@ if [ "${pull}" == "Already up-to-date." ] && [ -z "$2" ] ; then
   exit 0
 fi
 
-mvn -f "${HAZELCAST_HOME}" clean install -DskipTest
+mvn -f "${HAZELCAST_HOME}" clean install -DskipTests

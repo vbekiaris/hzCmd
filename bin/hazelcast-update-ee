@@ -6,11 +6,6 @@ fi
 
 git -C "${HAZELCAST_EE_HOME}" branch
 
-pull=$(git -C "${HAZELCAST_EE_HOME}" pull || true)
-echo ${pull}
+git -C "${HAZELCAST_EE_HOME}" pull || true
 
-if [ "${pull}" == "Already up-to-date." ] && [ -z "$2" ] ; then
-  exit 0
-fi
-
-mvn -f "${HAZELCAST_EE_HOME}" clean install -DskipTest
+mvn -f "${HAZELCAST_EE_HOME}" clean install -DskipTests
