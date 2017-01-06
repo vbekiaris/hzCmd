@@ -5,7 +5,6 @@ import com.github.rvesse.airline.annotations.Option;
 import main.HzCmd;
 
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static global.Utils.rangeMap;
 
