@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+targetDir=${1:-'.'}
+match=${2:-'.*'}
+
+gclogs=$(find . -name 'verbosegc.log' | grep '.*' | sort)
+
+while read -r gclog; do
+
+  echo -e "${gclog} "
+  curl -X POST --data-binary @${gclog} http://api.gceasy.io/analyzeGC?apiKey=${GCEASY_KEY} --header "Content-Type:text" | python -c "import sys, json; print json.load(sys.stdin)['graphURL']"
+
+done <<< "${gclogs}"
