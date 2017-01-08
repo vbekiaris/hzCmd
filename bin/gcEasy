@@ -7,7 +7,7 @@ gclogs=$(find . -name 'verbosegc.log' | grep '.*' | sort)
 
 while read -r gclog; do
 
-  echo -e "${gclog} "
-  curl -X POST --data-binary @${gclog} http://api.gceasy.io/analyzeGC?apiKey=${GCEASY_KEY} --header "Content-Type:text" | python -c "import sys, json; print json.load(sys.stdin)['graphURL']"
+  echo -e "${gclog} " >> gcEasy.txt
+  curl -X POST --data-binary @${gclog} http://api.gceasy.io/analyzeGC?apiKey=${GCEASY_KEY} --header "Content-Type:text" | python -c "import sys, json; print json.load(sys.stdin)['graphURL']" >> gcEasy.txt
 
 done <<< "${gclogs}"
