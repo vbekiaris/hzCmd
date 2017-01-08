@@ -3,7 +3,7 @@
 targetDir=${1:-'.'}
 match=${2:-'.*'}
 
-gclogs=$(find . -name 'verbosegc.log' | grep '.*' | sort)
+gclogs=$(find . -name 'verbosegc.log' | grep "${match}" | sort)
 
 while read -r gclog; do
 
