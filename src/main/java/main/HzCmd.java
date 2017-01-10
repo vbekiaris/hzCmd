@@ -124,15 +124,20 @@ public class HzCmd implements Serializable {
         for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
             c.jmapHisto(jvmId);
         }
-        stateModified=true;
     }
 
     public void jmapHprof(String clusterId, String jvmId) throws Exception {
         for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
             c.jmapHprof(jvmId);
         }
-        stateModified=true;
     }
+
+    public void flame(String clusterId, String jvmId, int seconds) throws Exception {
+        for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
+            c.flame(seconds, jvmId);
+        }
+    }
+
 
     public void bashCmd(String clusterId, String jvmId, String cmd) throws Exception {
         for (ClusterContainer c : clusterManager.getClusters(clusterId)) {

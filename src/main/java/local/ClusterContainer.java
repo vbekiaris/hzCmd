@@ -585,6 +585,12 @@ public class ClusterContainer implements Serializable {
         }
     }
 
+    public void flame(int seconds, String jvmId) throws IOException, InterruptedException {
+        for(RemoteJvm jvm : getMatchingJvms(jvmId)){
+            jvm.flame(seconds);
+        }
+    }
+
     public void freeze(String jvmId) throws IOException, InterruptedException {
         for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             jvm.freeze();

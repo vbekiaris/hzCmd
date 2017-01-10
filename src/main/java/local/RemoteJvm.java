@@ -182,6 +182,10 @@ public abstract class RemoteJvm implements Serializable {
         System.out.println(out);
     }
 
+    public void flame(int seconds) throws IOException, InterruptedException {
+        box.flame(seconds, pid, dir);
+    }
+
     public void freeze() throws IOException, InterruptedException {
         box.freeze(pid);
     }
