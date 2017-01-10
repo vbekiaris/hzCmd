@@ -89,7 +89,7 @@ public class Box implements Serializable{
     }
 
     public String flame(int seconds, int pid, String dir) throws IOException, InterruptedException {
-        return ssh("cd "+dir+"; export PERF_RECORD_SECONDS="+seconds+"; nohup perf-java-flames "+pid+" -a &");
+        return ssh("cd "+dir+"; export PERF_RECORD_SECONDS="+seconds+"; perf-java-flames "+pid+" -a");
     }
 
     public String find(String dir, String name) throws IOException, InterruptedException {
