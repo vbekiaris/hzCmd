@@ -567,6 +567,11 @@ public class ClusterContainer implements Serializable {
         }
     }
 
+    public void killAll() throws IOException, InterruptedException {
+        boxes.killAllJava();
+    }
+
+
     public void jmapHisto(String jvmId) throws IOException, InterruptedException {
         for(RemoteJvm jvm : getMatchingJvms(jvmId)){
             jvm.jmapHisto();

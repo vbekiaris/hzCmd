@@ -35,7 +35,7 @@ public class CmdLine {
 
 
                         Ls.class, Tail.class, Bash.class,
-                        Kill.class, Exit.class, ReLaunch.class, Restart.class, RestartEmbedded.class, Bounce.class, Freeze.class,
+                        Kill.class, KillAll.class, Exit.class, ReLaunch.class, Restart.class, RestartEmbedded.class, Bounce.class, Freeze.class,
 
                         Download.class, UploadLib.class, Rand.class,
 
