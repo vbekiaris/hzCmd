@@ -691,7 +691,7 @@ public class ClusterContainer implements Serializable {
     public boolean downlonad(String destDir) throws IOException, InterruptedException {
         for (Box box : boxes.getBoxList()) {
             box.downlonad(Installer.REMOTE_HZCMD_ROOT+"/*"+clusterId+"*", destDir+"/"+clusterId);
-            box.downlonad(Installer.REMOTE_HZCMD_BOX_DATA, destDir+"/"+Installer.REMOTE_HZCMD_BOX_DATA);
+            box.downlonad(Installer.REMOTE_HZCMD_BOX_DATA, destDir+"/box-data");
         }
         return Bash.findLocalError(destDir+"/"+clusterId);
     }
