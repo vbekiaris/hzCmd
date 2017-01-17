@@ -147,7 +147,7 @@ public class HzCmd implements Serializable {
 
     public void startDstat() throws Exception {
         for (ClusterContainer c : clusterManager.getClusters()) {
-            c.getBoxManager().startDstat();
+            c.startDstat();
         }
     }
 

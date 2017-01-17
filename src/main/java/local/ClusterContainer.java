@@ -27,7 +27,7 @@ public class ClusterContainer implements Serializable {
     private volatile RemoteJvm ephemerialMember;
 
     private Multimap<Box, String> lauchMap;
-    private int membersOnlyCount;
+    private int membersOnlyCount=0;
     private int memberCount=0;
     private int clientCount=0;
     private String brokerIP;
@@ -571,6 +571,20 @@ public class ClusterContainer implements Serializable {
         boxes.killAllJava();
     }
 
+    public void startDstat() throws IOException, InterruptedException {
+
+        if(membersOnlyCount==0){
+            boxes.startDstat();
+        }else {
+            List<Box> boxList = boxes.getBoxList();
+            for (int i=0; i<membersOnlyCount; i++) {
+                boxList.get(i).startDstat("memberBox-");
+            }
+            for (int i=membersOnlyCount; i<boxList.size(); i++) {
+                boxList.get(i).startDstat();
+            }
+        }
+    }
 
     public void jmapHisto(String jvmId) throws IOException, InterruptedException {
         for(RemoteJvm jvm : getMatchingJvms(jvmId)){
