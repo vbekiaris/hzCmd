@@ -98,3 +98,6 @@ plot-csv ${filePattern} 34 ${title} paging-out
 
 plot-csv ${filePattern} 35 ${title} disk-total-read
 plot-csv ${filePattern} 36 ${title} disk-total-writ
+
+mkdir -p dstat-chart
+mv *.png dstat-chart || true
