@@ -5,19 +5,19 @@ b=$2
 title=$3
 keyState=${4:-on}
 
-chartCompair-realTime ${a} ${b} 2 ${title}   count ${keyState}
-chartCompair-realTime ${a} ${b} 13 ${title}  ops-perSec-mean-rate ${keyState}
-chartCompair-realTime ${a} ${b} 14 ${title}  ops-perSec-1min-rate ${keyState}
-chartCompair-realTime ${a} ${b} 15 ${title}  ops-perSec-5min-rate ${keyState}
-chartCompair-realTime ${a} ${b} 16 ${title}  ops-perSec-15min-rate ${keyState}
+chart-compairRealTime ${a} ${b} 2 ${title}   count ${keyState}
+chart-compairRealTime ${a} ${b} 13 ${title}  ops-perSec-mean-rate ${keyState}
+chart-compairRealTime ${a} ${b} 14 ${title}  ops-perSec-1min-rate ${keyState}
+chart-compairRealTime ${a} ${b} 15 ${title}  ops-perSec-5min-rate ${keyState}
+chart-compairRealTime ${a} ${b} 16 ${title}  ops-perSec-15min-rate ${keyState}
 
-chartCompair-realTime ${a} ${b} 5 ${title}  min-latency ${keyState}
-chartCompair-realTime ${a} ${b} 3 ${title}  max-latency ${keyState}
-chartCompair-realTime ${a} ${b} 4 ${title}  mean-latency ${keyState}
-chartCompair-realTime ${a} ${b} 6 ${title}  stdDev-latency ${keyState}
+chart-compairRealTime ${a} ${b} 5 ${title}  min-latency ${keyState}
+chart-compairRealTime ${a} ${b} 3 ${title}  max-latency ${keyState}
+chart-compairRealTime ${a} ${b} 4 ${title}  mean-latency ${keyState}
+chart-compairRealTime ${a} ${b} 6 ${title}  stdDev-latency ${keyState}
 
-chartCompair-realTime ${a} ${b} 8 ${title}   75-latency-percentile ${keyState}
-chartCompair-realTime ${a} ${b} 9 ${title}   95-latency-percentile ${keyState}
-chartCompair-realTime ${a} ${b} 10 ${title}  98-latency-percentile ${keyState}
-chartCompair-realTime ${a} ${b} 11 ${title}  99-latency-percentile ${keyState}
-chartCompair-realTime ${a} ${b} 12 ${title}  999-latency-percentile ${keyState}
+chart-compairRealTime ${a} ${b} 8 ${title}   75-latency-percentile ${keyState}
+chart-compairRealTime ${a} ${b} 9 ${title}   95-latency-percentile ${keyState}
+chart-compairRealTime ${a} ${b} 10 ${title}  98-latency-percentile ${keyState}
+chart-compairRealTime ${a} ${b} 11 ${title}  99-latency-percentile ${keyState}
+chart-compairRealTime ${a} ${b} 12 ${title}  999-latency-percentile ${keyState}
