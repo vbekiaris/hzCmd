@@ -106,7 +106,7 @@ public class Box implements Serializable{
 
 
     public String startDstat() throws IOException, InterruptedException {
-        return ssh("cd "+Installer.REMOTE_HZCMD_BOX_DATA+"; nohup dstat -tciymn --socket --tcp -rsgd --output dstat.csv > /dev/null &");
+        return ssh("cd "+Installer.REMOTE_HZCMD_BOX_DATA+"; nohup dstat -tciymn --socket --tcp -rsgd --output dstat.csv 1 > /dev/null &");
     }
 
     public String stopDstat() throws IOException, InterruptedException {
