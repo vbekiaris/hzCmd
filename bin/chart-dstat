@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
-filePattern=${1:-*dstat.csv}
-title=${2:-dstat}
+
+path=${1:-output}
+filePattern=${2:-*dstat.csv}
+title=${3:-dstat}
+
+cd ${path} || exit 0
+
 
 	##  THE command      dstat -tciymn --socket --tcp -rsgd
 
