@@ -16,10 +16,10 @@ public class Dstat extends Command
 
     public void exe(HzCmd hzCmd) {
         try {
-            if(ids.size()==1) {
-                hzCmd.stopDstat();
-            }else {
+            if(ids==null) {
                 hzCmd.startDstat();
+            }else {
+                hzCmd.stopDstat();
             }
         } catch (Exception e) {
             e.printStackTrace();
