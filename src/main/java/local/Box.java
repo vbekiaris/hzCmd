@@ -110,7 +110,7 @@ public class Box implements Serializable{
     }
 
     public String stopDstat() throws IOException, InterruptedException {
-        return ssh("killall -9 dstat");
+        return ssh("sudo killall -9 dstat");
     }
 
     public String grep(String arg) throws IOException, InterruptedException {
