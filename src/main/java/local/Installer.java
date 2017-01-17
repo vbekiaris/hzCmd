@@ -35,7 +35,7 @@ public abstract class Installer {
     public static void installCore(BoxManager boxes) throws IOException, InterruptedException {
         System.out.println(Bash.ANSI_YELLOW + "Installing core" + Bash.ANSI_RESET);
 
-        boxes.mkdir(REMOTE_HZCMD_ROOT_LIB);
+        boxes.mkdir(REMOTE_HZCMD_ROOT_LIB+" "+REMOTE_HZCMD_BOX_DATA);
 
         List<String> uploadStuff = new ArrayList<String>();
 
