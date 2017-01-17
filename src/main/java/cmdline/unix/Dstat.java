@@ -11,17 +11,16 @@ import java.util.List;
 public class Dstat extends Command
 {
 
-    @Arguments(description = "add arument to stop dstat")
+    @Arguments(description = "add arg to stop dstat")
     public List<String> ids;
 
     public void exe(HzCmd hzCmd) {
         try {
-
             if(ids.size()==1) {
                 hzCmd.stopDstat();
+            }else {
+                hzCmd.startDstat();
             }
-            hzCmd.startDstat();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
