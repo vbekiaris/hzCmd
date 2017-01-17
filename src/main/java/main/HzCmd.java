@@ -3,7 +3,6 @@ package main;
 import cmdline.main.CmdLine;
 import cmdline.base.Command;
 import com.github.rvesse.airline.parser.errors.ParseException;
-import com.github.rvesse.airline.parser.errors.ParseOptionMissingValueException;
 import global.ClusterSize;
 import global.Utils;
 import local.*;
@@ -16,7 +15,6 @@ import vendor.hz.HzXml;
 
 import javax.jms.JMSException;
 import java.io.*;
-import java.util.Arrays;
 import java.util.List;
 
 //add box type,  to ip list,  for starting in unix / win
@@ -135,6 +133,19 @@ public class HzCmd implements Serializable {
     public void flame(String clusterId, String jvmId, int seconds) throws Exception {
         for (ClusterContainer c : clusterManager.getClusters(clusterId)) {
             c.flame(seconds, jvmId);
+        }
+    }
+
+
+    public void startDstat() throws Exception {
+        for (ClusterContainer c : clusterManager.getClusters()) {
+            c.getBoxManager().startDstat();
+        }
+    }
+
+    public void stopDstat() throws Exception {
+        for (ClusterContainer c : clusterManager.getClusters()) {
+            c.getBoxManager().stopDstat();
         }
     }
 
@@ -327,6 +338,7 @@ public class HzCmd implements Serializable {
         for (ClusterContainer c : clusterManager.getClusters()) {
             errorFound |= c.downlonad(dir);
         }
+
         if(errorFound){
             System.exit(1);
         }

@@ -104,6 +104,15 @@ public class Box implements Serializable{
          streamSsh("tail -f "+arg);
     }
 
+
+    public String startDstat() throws IOException, InterruptedException {
+        return ssh("cd "+Installer.REMOTE_HZCMD_BOX_DATA+"; nohup dstat -tciymn --socket --tcp -rsgd --output startDstat.csv > /dev/null &");
+    }
+
+    public String stopDstat() throws IOException, InterruptedException {
+        return ssh("killall -9 dstat");
+    }
+
     public String grep(String arg) throws IOException, InterruptedException {
 
         return ssh("grep " + escapeQuotes(arg));
@@ -141,7 +150,6 @@ public class Box implements Serializable{
                 ", pri=" + pri +
                 '}';
     }
-
 
 }
 

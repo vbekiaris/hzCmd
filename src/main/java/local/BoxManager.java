@@ -128,6 +128,18 @@ public class BoxManager implements Serializable {
         }
     }
 
+    public void startDstat() throws IOException, InterruptedException {
+        for (Box box : boxes) {
+            box.startDstat();
+        }
+    }
+
+    public void stopDstat() throws IOException, InterruptedException {
+        for (Box box : boxes) {
+            box.stopDstat();
+        }
+    }
+
     public int size(){return boxes.size();}
 
     @Override
@@ -154,4 +166,6 @@ public class BoxManager implements Serializable {
     public int getBoxCount() {
         return boxes.size();
     }
+
+
 }

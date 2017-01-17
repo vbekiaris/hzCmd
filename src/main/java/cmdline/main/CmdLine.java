@@ -30,7 +30,9 @@ public class CmdLine {
                         BenchDriver.class, BenchThreads.class, BenchDuration.class, BenchWarmup.class,
                         BenchTypes.class, BenchRun.class, BenchSubmit.class, BenchStop.class, BenchInterval.class, BenchThrow.class,
 
-                        Check.class, Wipe.class, Clean.class, Histo.class, Hprof.class, MemberCount.class, RandMember.class, Flame.class,
+                        Check.class, Wipe.class, Clean.class, Histo.class, Hprof.class, MemberCount.class, RandMember.class, Flame.class, Dstat.class,
+
+
 
                         Ls.class, Tail.class, Bash.class,
                         Kill.class, Exit.class, ReLaunch.class, Restart.class, RestartEmbedded.class, Bounce.class, Freeze.class,

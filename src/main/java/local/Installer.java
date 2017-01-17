@@ -14,6 +14,7 @@ public abstract class Installer {
 
     public static final String REMOTE_HZCMD_ROOT = "hz-root";
     public static final String REMOTE_HZCMD_ROOT_LIB = REMOTE_HZCMD_ROOT+"/" + "lib";
+    public static final String REMOTE_HZCMD_BOX_DATA = REMOTE_HZCMD_ROOT+"/" + "box-data";
 
     public static final String REMOTE_HZCMD_ROOT_FULL_PATH ="$HOME/"+REMOTE_HZCMD_ROOT;
     public static final String REMOTE_HZCMD_LIB_FULL_PATH = "$HOME/"+ REMOTE_HZCMD_ROOT_LIB;
