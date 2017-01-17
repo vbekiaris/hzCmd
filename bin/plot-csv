@@ -22,6 +22,8 @@ set xlabel "Time"
 set ylabel "${yAxisTitle}"
 set title "${title}"
 
+set yrange [0:*]
+
 set terminal png enhanced size 1280,1024
 set output "${title}-${yAxisTitle}.png"
 set key left top
