@@ -34,6 +34,15 @@ public class ClusterSize {
     }
 
     public  int dedicatedMemberBox( ){
+
+        Pattern pattern = Pattern.compile("D[0-9]+");
+        Matcher matcher = pattern.matcher(code);
+        if (matcher.find())
+        {
+            String intStr = matcher.group().substring(1);
+            return Integer.parseInt(intStr);
+        }
+
         if ( code.contains("D") ){
             return getMemberCount();
         }
